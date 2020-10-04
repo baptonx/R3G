@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="16:23:22:394">13/02/2020 16:23:22</date>
+  <exercise time="16:23:22:395">Exercice 11</exercise>
+  <task>
+    <letter>
+      <trace>
+        <start time="16:24:11:075"></start>
+        <time time="16:24:11:076">Apparition du bouton de validation</time>
+        <end time="16:24:15:682"></end>
+      </trace>
+      <trace>
+        <start time="16:24:17:729"></start>
+        <end time="16:24:17:848"></end>
+      </trace>
+      <trace>
+        <start time="16:24:18:563"></start>
+        <end time="16:24:20:354"></end>
+      </trace>
+      <trace>
+        <start time="16:24:21:262"></start>
+        <end time="16:24:24:607"></end>
+      </trace>
+      <trace>
+        <start time="16:24:25:255"></start>
+        <end time="16:24:26:694"></end>
+      </trace>
+      <trace>
+        <start time="16:24:27:747"></start>
+        <end time="16:24:32:329"></end>
+      </trace>
+      <click time="16:24:34:030">Clic gomme</click>
+      <trace>
+        <start time="16:24:36:599"></start>
+        <time time="16:24:36:600">Apparition du bouton de validation</time>
+        <end time="16:24:42:507"></end>
+      </trace>
+      <trace>
+        <start time="16:24:43:721"></start>
+        <end time="16:24:46:791"></end>
+      </trace>
+      <trace>
+        <start time="16:24:47:471"></start>
+        <end time="16:24:48:866"></end>
+      </trace>
+      <trace>
+        <start time="16:24:49:700"></start>
+        <end time="16:24:53:995"></end>
+      </trace>
+      <trace>
+        <start time="16:24:58:001"></start>
+        <end time="16:25:00:582"></end>
+      </trace>
+      <trace>
+        <start time="16:25:03:356"></start>
+        <end time="16:25:03:637"></end>
+      </trace>
+      <trace>
+        <start time="16:25:04:086"></start>
+        <end time="16:25:09:917"></end>
+      </trace>
+      <trace>
+        <start time="16:25:12:012"></start>
+        <end time="16:25:14:289"></end>
+      </trace>
+      <click time="16:25:24:210">Clic bouton validation</click>
+    </letter>
+  </task>
+</root>

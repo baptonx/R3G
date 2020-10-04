@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="16:44:44:592">13/02/2020 16:44:44</date>
+  <exercise time="16:44:44:637">Exercice 11</exercise>
+  <task>
+    <exercise time="16:44:51:592">Exercice 12</exercise>
+    <task>
+      <exercise time="16:45:22:167">Exercice 12</exercise>
+      <task />
+      <exercise time="16:47:16:651">Exercice 12</exercise>
+      <task />
+    </task>
+  </task>
+</root>

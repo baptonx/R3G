@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="14:59:19:526">13/02/2020 14:59:19</date>
+  <exercise time="14:59:19:527">Exercice 11</exercise>
+  <task>
+    <letter>
+      <trace>
+        <start time="14:59:34:362"></start>
+        <time time="14:59:34:362">Apparition du bouton de validation</time>
+        <end time="14:59:37:072"></end>
+      </trace>
+      <trace>
+        <start time="14:59:38:969"></start>
+        <end time="14:59:40:613"></end>
+      </trace>
+      <trace>
+        <start time="14:59:40:823"></start>
+        <end time="14:59:40:882"></end>
+      </trace>
+      <trace>
+        <start time="14:59:40:901"></start>
+        <end time="14:59:41:568"></end>
+      </trace>
+      <trace>
+        <start time="14:59:41:944"></start>
+        <end time="14:59:42:004"></end>
+      </trace>
+      <trace>
+        <start time="14:59:42:023"></start>
+        <end time="14:59:44:750"></end>
+      </trace>
+      <trace>
+        <start time="14:59:45:164"></start>
+        <end time="14:59:47:273"></end>
+      </trace>
+      <trace>
+        <start time="14:59:47:632"></start>
+        <end time="14:59:47:829"></end>
+      </trace>
+      <click time="14:59:49:425">Clic bouton validation</click>
+    </letter>
+  </task>
+  <end_screen>
+    <exercise time="15:11:28:123">Exercice 11</exercise>
+    <task>
+      <click time="15:13:20:194">Zone non cliquable</click>
+      <click time="15:13:21:918">Zone non cliquable</click>
+      <tutoriel time="15:15:25:208">start</tutoriel>
+      <click time="15:15:25:208">Clic mascotte</click>
+      <tutoriel time="15:15:42:138">end</tutoriel>
+      <tutoriel time="15:16:18:089">start</tutoriel>
+      <click time="15:16:18:089">Clic mascotte</click>
+      <tutoriel time="15:16:35:053">end</tutoriel>
+      <exercise time="15:17:43:816">Exercice 12</exercise>
+      <task>
+        <click time="15:17:49:626">Clic mascotte</click>
+      </task>
+      <exercise time="15:18:39:336">Exercice 12</exercise>
+      <task>
+        <click time="15:18:42:577">Clic mascotte</click>
+        <click time="15:19:21:026">Clic mascotte</click>
+        <click time="15:19:47:702">Clic mascotte</click>
+      </task>
+      <exercise time="15:21:32:573">Exercice 12</exercise>
+      <task />
+      <exercise time="15:21:59:151">Exercice 12</exercise>
+      <task />
+    </task>
+  </end_screen>
+</root>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="16:57:23:496">13/02/2020 16:57:23</date>
+  <exercise time="16:57:23:497">Exercice 11</exercise>
+  <task>
+    <exercise time="16:57:30:279">Exercice 12</exercise>
+    <task>
+      <exercise time="16:57:37:680">Exercice 12</exercise>
+      <task>
+        <exercise time="16:57:49:457">Exercice 12</exercise>
+        <task>
+          <exercise time="16:58:06:993">Exercice 12</exercise>
+          <task>
+            <exercise time="16:58:29:268">Exercice 12</exercise>
+            <task>
+              <exercise time="16:58:36:128">Exercice 12</exercise>
+              <task>
+                <exercise time="16:58:47:332">Exercice 12</exercise>
+                <task>
+                  <exercise time="16:58:49:422">Exercice 12</exercise>
+                  <task>
+                    <exercise time="16:58:55:878">Exercice 12</exercise>
+                    <task />
+                  </task>
+                </task>
+              </task>
+            </task>
+          </task>
+        </task>
+      </task>
+    </task>
+  </task>
+</root>
