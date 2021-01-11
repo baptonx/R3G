@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="11:46:05:252">13/02/2020 11:46:05</date>
+  <exercise time="11:46:05:252">Exercice 11</exercise>
+  <task>
+    <click time="11:46:06:578">Clic sac</click>
+    <history>
+      <start time="11:46:06:646">Apparition de l'historique</start>
+      <click time="11:46:06:770">Clic tache historique</click>
+      <click time="11:46:08:759">Clic calepin</click>
+    </history>
+    <exercise time="11:46:13:320">Exercice 12</exercise>
+    <task />
+    <exercise time="11:46:17:694">Exercice 12</exercise>
+    <task>
+      <exercise time="11:46:20:399">Exercice 12</exercise>
+      <task>
+        <click time="11:46:21:170">Clic sac</click>
+        <history>
+          <start time="11:46:21:262">Apparition de l'historique</start>
+          <click time="11:46:21:582">Clic tache historique</click>
+          <click time="11:46:22:718">Clic calepin</click>
+        </history>
+        <exercise time="14:32:25:469">Exercice 11</exercise>
+        <task>
+          <click time="14:33:02:568">Zone non cliquable</click>
+          <click time="14:33:15:874">Zone non cliquable</click>
+          <click time="14:33:36:720">Zone non cliquable</click>
+          <click time="14:33:38:372">Zone non cliquable</click>
+          <exercise time="14:40:18:536">Exercice 12</exercise>
+          <task />
+          <exercise time="14:41:49:414">Exercice 12</exercise>
+          <task />
+          <exercise time="14:42:40:398">Exercice 12</exercise>
+          <task />
+          <exercise time="14:43:08:775">Exercice 12</exercise>
+          <task />
+        </task>
+      </task>
+    </task>
+  </task>
+</root>

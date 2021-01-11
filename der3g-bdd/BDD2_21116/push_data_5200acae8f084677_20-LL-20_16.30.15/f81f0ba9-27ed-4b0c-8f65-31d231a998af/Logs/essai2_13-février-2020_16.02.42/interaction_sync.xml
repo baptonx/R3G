@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="16:02:42:362">13/02/2020 16:02:42</date>
+  <exercise time="16:02:42:362">Exercice 11</exercise>
+  <task>
+    <letter>
+      <trace>
+        <start time="16:02:48:918"></start>
+        <time time="16:02:48:918">Apparition du bouton de validation</time>
+        <end time="16:02:52:971"></end>
+      </trace>
+      <trace>
+        <start time="16:02:53:783"></start>
+        <end time="16:02:53:835"></end>
+      </trace>
+      <trace>
+        <start time="16:02:53:856"></start>
+        <end time="16:02:59:897"></end>
+      </trace>
+      <trace>
+        <start time="16:03:00:669"></start>
+        <end time="16:03:03:022"></end>
+      </trace>
+      <trace>
+        <start time="16:03:03:660"></start>
+        <end time="16:03:04:561"></end>
+      </trace>
+      <trace>
+        <start time="16:03:05:099"></start>
+        <end time="16:03:05:160"></end>
+      </trace>
+      <trace>
+        <start time="16:03:05:183"></start>
+        <end time="16:03:09:384"></end>
+      </trace>
+      <trace>
+        <start time="16:03:10:205"></start>
+        <end time="16:03:11:708"></end>
+      </trace>
+      <click time="16:03:13:495">Clic bouton validation</click>
+    </letter>
+  </task>
+  <end_screen>
+    <exercise time="16:12:26:092">Exercice 11</exercise>
+    <task>
+      <exercise time="16:13:23:544">Exercice 11</exercise>
+      <task>
+        <click time="16:14:17:543">Zone non cliquable</click>
+        <click time="16:14:18:846">Zone non cliquable</click>
+        <click time="16:14:21:023">Zone non cliquable</click>
+        <click time="16:14:30:749">Zone non cliquable</click>
+        <exercise time="16:17:11:937">Exercice 12</exercise>
+        <task>
+          <click time="16:17:21:159">Clic mascotte</click>
+          <click time="16:18:18:558">Zone non cliquable</click>
+        </task>
+        <exercise time="16:20:10:550">Exercice 12</exercise>
+        <task>
+          <click time="16:20:36:413">Zone non cliquable</click>
+          <click time="16:20:37:273">Zone non cliquable</click>
+          <click time="16:20:38:494">Zone non cliquable</click>
+          <click time="16:20:38:904">Zone non cliquable</click>
+          <click time="16:20:39:169">Zone non cliquable</click>
+          <click time="16:20:39:489">Zone non cliquable</click>
+          <click time="16:20:39:801">Zone non cliquable</click>
+          <click time="16:20:40:068">Zone non cliquable</click>
+          <click time="16:20:40:446">Zone non cliquable</click>
+          <click time="16:20:41:147">Zone non cliquable</click>
+          <click time="16:20:41:590">Zone non cliquable</click>
+          <click time="16:20:41:914">Zone non cliquable</click>
+          <click time="16:20:43:262">Zone non cliquable</click>
+          <click time="16:20:43:476">Zone non cliquable</click>
+          <click time="16:20:43:764">Zone non cliquable</click>
+          <click time="16:20:44:011">Zone non cliquable</click>
+          <click time="16:20:44:294">Zone non cliquable</click>
+          <click time="16:20:44:553">Zone non cliquable</click>
+          <click time="16:20:44:770">Zone non cliquable</click>
+          <click time="16:20:53:117">Zone non cliquable</click>
+          <click time="16:20:53:416">Zone non cliquable</click>
+          <click time="16:20:53:669">Zone non cliquable</click>
+          <click time="16:20:53:931">Zone non cliquable</click>
+          <click time="16:20:54:184">Zone non cliquable</click>
+          <click time="16:20:56:533">Zone non cliquable</click>
+          <click time="16:20:56:829">Zone non cliquable</click>
+          <click time="16:21:52:836">Zone non cliquable</click>
+          <click time="16:22:05:270">Zone non cliquable</click>
+          <click time="16:22:42:435">Zone non cliquable</click>
+          <click time="16:32:58:303">Zone non cliquable</click>
+        </task>
+      </task>
+    </task>
+  </end_screen>
+</root>

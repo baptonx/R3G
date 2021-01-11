@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <date time="14:59:04:488">13/02/2020 14:59:04</date>
+  <exercise time="14:59:04:489">Exercice 11</exercise>
+  <task>
+    <letter>
+      <trace>
+        <start time="14:59:11:805"></start>
+        <time time="14:59:11:805">Apparition du bouton de validation</time>
+        <end time="14:59:12:429"></end>
+      </trace>
+      <trace>
+        <start time="14:59:13:026"></start>
+        <end time="14:59:15:732"></end>
+      </trace>
+      <trace>
+        <start time="14:59:16:670"></start>
+        <end time="14:59:17:266"></end>
+      </trace>
+      <trace>
+        <start time="14:59:18:541"></start>
+        <end time="14:59:19:041"></end>
+      </trace>
+      <trace>
+        <start time="14:59:20:336"></start>
+        <end time="14:59:21:143"></end>
+      </trace>
+      <trace>
+        <start time="14:59:21:683"></start>
+        <end time="14:59:22:292"></end>
+      </trace>
+      <trace>
+        <start time="14:59:22:658"></start>
+        <end time="14:59:22:902"></end>
+      </trace>
+      <trace>
+        <start time="14:59:24:574"></start>
+        <end time="14:59:26:548"></end>
+      </trace>
+      <trace>
+        <start time="14:59:27:114"></start>
+        <end time="14:59:27:665"></end>
+      </trace>
+      <trace>
+        <start time="14:59:28:239"></start>
+        <end time="14:59:28:470"></end>
+      </trace>
+      <trace>
+        <start time="14:59:29:134"></start>
+        <end time="14:59:30:218"></end>
+      </trace>
+      <trace>
+        <start time="14:59:30:511"></start>
+        <end time="14:59:30:709"></end>
+      </trace>
+      <click time="14:59:32:400">Clic bouton validation</click>
+    </letter>
+  </task>
+  <end_screen />
+</root>
