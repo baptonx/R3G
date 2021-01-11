@@ -1,7 +1,0 @@
-build-front:
- image: node:12.13
- stage: build
- script:
- - cd R3GAngular
- - npm install
- - npm run ng build
