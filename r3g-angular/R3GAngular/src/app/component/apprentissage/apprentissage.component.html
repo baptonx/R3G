@@ -1,0 +1,10 @@
+<mat-form-field appearance="fill">
+    <mat-label>Choix du modèle</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-icon aria-hidden="false" aria-label="Add circle">add_circle</mat-icon>
+  <div><button mat-flat-button>Lancer l'évaluation</button></div>
+

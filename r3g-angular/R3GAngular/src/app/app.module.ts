@@ -10,7 +10,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableauExplorationComponent } from './tableau-exploration/tableau-exploration.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { ApprentissageComponent } from './component/apprentissage/apprentissage.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     AnnotationComponent,
     ExplorationComponent,
     EvaluationComponent,
-    TableauExplorationComponent
+    TableauExplorationComponent,
+    ApprentissageComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +31,13 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     BrowserAnimationsModule,
     MatTableModule,
     MatButtonModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule
+    
+
   ],
   providers: [],
   bootstrap: [AppComponent]
