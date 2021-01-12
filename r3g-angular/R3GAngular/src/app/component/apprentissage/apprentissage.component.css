@@ -2,4 +2,24 @@
     opacity: 0.75;
     font-size: 0.75em;
   }
- 
+  .tab-container{
+    display:inline-block;
+    position: relative;
+    left:15%;
+    width: 30%;
+    padding: 20px;
+    min-width:100px;
+    background-color: #444444;
+    color: white;
+  }
+  .mat-app-background {
+    background-color: #303030;
+    color: #fff;
+    position: relative;
+}
+.add-circle{
+  margin-left: 10px;
+}
+.btn{
+  background-color: #303030;
+}

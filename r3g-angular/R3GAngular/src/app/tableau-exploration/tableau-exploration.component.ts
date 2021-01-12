@@ -35,7 +35,7 @@ export class TableauExplorationComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    //this.dataSource.paginator = this.paginator;
   }
 
 }

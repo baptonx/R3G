@@ -9,9 +9,9 @@ import {FormControl} from '@angular/forms';
   styleUrls: ['./apprentissage.component.css']
 })
 export class ApprentissageComponent implements OnInit {
-  toppings = new FormControl();
+  modeles = new FormControl();
 
-  toppingList: string[] = ['Modèle 1','Modèle 2','Modèle 3'];
+  modelesList: string[] = ['Modèle 1','Modèle 2','Modèle 3'];
   constructor() { }
 
   ngOnInit(): void {

@@ -1,10 +1,14 @@
+<div class="tab-container">
 <mat-form-field appearance="fill">
-    <mat-label>Choix du modèle</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <mat-label>Choisir un modèle</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let m of modelesList" [value]="m">
+      {{m}}
+    </mat-option>
+  </mat-select>
 
-  <mat-icon aria-hidden="false" aria-label="Add circle">add_circle</mat-icon>
-  <div><button mat-flat-button>Lancer l'évaluation</button></div>
+</mat-form-field>
+<mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle'>add_circle</mat-icon>
+<div><button mat-flat-button class='btn'>Lancer l'évaluation</button></div>
 
+</div>
