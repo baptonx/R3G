@@ -6,6 +6,8 @@
   min-width:700px;
   box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.5);
   padding: 10px;
+  background-color: #444444;
+  color: white;
 }
 table{
   width:100%;
@@ -15,5 +17,6 @@ table{
   position: absolute;
   right:0px;
   text-align: right;
-  margin-right:10px
+  margin-right:10px;
+  margin-bottom:10px;
 }

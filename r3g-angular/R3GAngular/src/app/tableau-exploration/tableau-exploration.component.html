@@ -1,13 +1,9 @@
-<p>tableau-exploration works!</p>
 <div class="tab-container">
   <div>
     <span>Filtres : </span>
     <div class="align-right"><button mat-raised-button id="ajouter-un-filtre">Ajouter un filtre</button></div>
   </div>
-  <table mat-table mat-paginator [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
+  <table mat-table [dataSource]="dataSource">
 
     <!-- Position Column -->
     <ng-container matColumnDef="position">
@@ -36,5 +32,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>

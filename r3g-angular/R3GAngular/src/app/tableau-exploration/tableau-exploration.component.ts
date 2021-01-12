@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 
@@ -28,15 +28,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './tableau-exploration.component.html',
   styleUrls: ['./tableau-exploration.component.css']
 })
-export class TableauExplorationComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+export class TableauExplorationComponent implements AfterViewInit {
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-
-
-  ngOnInit() {
-   this.dataSource.paginator = this.paginator;
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
 }
