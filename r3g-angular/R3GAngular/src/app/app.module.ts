@@ -15,6 +15,11 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import { ApprentissageComponent } from './component/apprentissage/apprentissage.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DialogCSVComponent } from './component/dialog-csv/dialog-csv.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,8 @@ import {MatIconModule} from '@angular/material/icon';
     ExplorationComponent,
     EvaluationComponent,
     TableauExplorationComponent,
-    ApprentissageComponent
+    ApprentissageComponent,
+    DialogCSVComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +41,11 @@ import {MatIconModule} from '@angular/material/icon';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
     
 
   ],

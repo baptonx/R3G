@@ -1,0 +1,86 @@
+<div mat-dialog-content>
+<h2>Pour générer des compinaisons [Start,End,Dot]. Exemple : [1,10,1]</h2>
+    <mat-form-field class="mat-form">
+        <p>modeVox</p>
+      <input matInput value=24>
+    </mat-form-field>
+  
+    <mat-form-field  class="mat-form">
+        <p>modeLabel</p>
+      <input matInput value=0>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>batch</p>
+      <input matInput value=3>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>denseSize</p>
+      <input matInput value=5>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>denseDropout</p>
+      <input matInput value=0.4>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>nbFeatureMap</p>
+      <input matInput value=2>
+    </mat-form-field>
+
+
+    <mat-form-field  class="mat-form">
+        <p>nbFeatureMap</p>
+      <input matInput value=2>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>dropoutVal</p>
+      <input matInput value=0.6>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill"  class="mat-form">
+        <p>doGlu</p>
+        <mat-select [(value)]="data.doList[0]">
+          <mat-option *ngFor="let elt of data.doList" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+      
+      </mat-form-field>
+    
+    <mat-form-field appearance="fill"  class="mat-form">
+        <p>doBatchNormalisation</p>
+        <mat-select [(value)]="data.listBN[0]">
+          <mat-option *ngFor="let elt of data.listBN" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+     
+    </mat-form-field>
+
+    <mat-form-field appearance="fill"  class="mat-form">
+        <p>sideBySide</p>
+        <mat-select [(value)]="data.sBs[0]">
+          <mat-option *ngFor="let elt of data.sBs" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+     
+    </mat-form-field>
+
+    <mat-form-field appearance="fill"  class="mat-form">
+        <p> doMultiStream</p>
+        <mat-select [(value)]="data.listMS[0]">
+          <mat-option *ngFor="let elt of data.listMS" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+     
+    </mat-form-field>
+
+  
+</div>
+  
