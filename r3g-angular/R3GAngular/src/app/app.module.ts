@@ -8,14 +8,21 @@ import { ExplorationComponent } from './module/exploration/exploration.component
 import { EvaluationComponent } from './module/evaluation/evaluation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableauExplorationComponent } from './tableau-exploration/tableau-exploration.component';
-import {MatTableModule} from "@angular/material/table";
-import {MatButtonModule} from "@angular/material/button";
+import {MatTableModule} from '@angular/material/table';
+import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
-import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { ApprentissageComponent } from './component/apprentissage/apprentissage.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
+import {RouterModule, Routes} from '@angular/router';
 
+const appRoutes: Routes = [
+  { path: 'annotation', component: AnnotationComponent },
+  { path: 'evaluation', component: EvaluationComponent },
+  { path: 'exploration', component: ExplorationComponent },
+  { path: '', component: ExplorationComponent}
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,8 +42,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatIconModule
-    
+    MatIconModule,
+    RouterModule.forRoot(appRoutes)
+
 
   ],
   providers: [],

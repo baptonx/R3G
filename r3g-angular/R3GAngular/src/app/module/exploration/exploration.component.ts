@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {Router} from '@angular/router';
 @Component({
   selector: 'app-exploration',
   templateUrl: './exploration.component.html',
@@ -7,9 +7,18 @@ import {FormControl} from '@angular/forms';
 })
 
 export class ExplorationComponent implements OnInit {
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
+  toAnnotation(): void{
+    this.router.navigate(['annotation']).then();
+  }
+  toExploration(): void{
+    this.router.navigate(['exploration']).then();
 
+  }
+  toEvaluation(): void{
+    this.router.navigate(['evaluation']).then();
+  }
 }
