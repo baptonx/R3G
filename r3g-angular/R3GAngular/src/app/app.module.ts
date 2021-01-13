@@ -19,6 +19,7 @@ import {RouterModule, Routes} from '@angular/router';
 import { DialogCSVComponent } from './component/dialog-csv/dialog-csv.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -50,6 +51,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     
 
     RouterModule.forRoot(appRoutes)

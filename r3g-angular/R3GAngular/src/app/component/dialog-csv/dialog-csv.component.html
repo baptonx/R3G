@@ -11,8 +11,13 @@
     </mat-form-field>
 
     <mat-form-field  class="mat-form">
-        <p>batch</p>
+        <p>batchSize</p>
       <input matInput value=3>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>dropoutVal</p>
+      <input matInput value=0.6>
     </mat-form-field>
 
     <mat-form-field  class="mat-form">
@@ -32,8 +37,38 @@
 
 
     <mat-form-field  class="mat-form">
-        <p>nbFeatureMap</p>
-      <input matInput value=2>
+        <p>treshCudi</p>
+      <input matInput value=1.0>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>toleranceTresholdMoveCuDi</p>
+      <input matInput value=0.1>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>lossWeigthWindow</p>
+      <input matInput value=0.01>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>lossWeigthClass</p>
+      <input matInput value=1>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p> weigthBGclass</p>
+      <input matInput value=0.01>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>weigthBGreg</p>
+      <input matInput value=0.01>
+    </mat-form-field>
+
+    <mat-form-field  class="mat-form">
+        <p>nb_epoch</p>
+      <input matInput value=1>
     </mat-form-field>
 
     <mat-form-field  class="mat-form">
@@ -41,7 +76,12 @@
       <input matInput value=0.6>
     </mat-form-field>
 
-    <mat-form-field appearance="fill"  class="mat-form">
+    <mat-form-field  class="mat-form">
+        <p>dropoutVal</p>
+      <input matInput value=0.6>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="mat-form">
         <p>doGlu</p>
         <mat-select [(value)]="data.doList[0]">
           <mat-option *ngFor="let elt of data.doList" [value]="elt">
