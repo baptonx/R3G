@@ -11,4 +11,19 @@ body {
     float: right;
     margin: 8px;
   }
-  
+.lien-container{
+  position: absolute;
+  margin-left: -200px;
+  bottom: 0;
+  left: 50%;
+}
+.btn{
+  color: #eeeeee;
+  font-size: 20px;
+}
+.btn-not-on{
+  background-color: blue;
+}
+.btn-on{
+  background-color: darkblue;
+}
