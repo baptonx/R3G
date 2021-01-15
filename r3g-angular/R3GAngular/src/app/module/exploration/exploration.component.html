@@ -9,17 +9,12 @@
 
   <div class="example-sidenav-content">
     <button type="button" mat-button (click)="drawer.toggle()">
-      Toggle sidenav
+      Séquences sélectionnées
     </button>
 
   </div>
 <div class="tab-container">
 <app-tableau-expl></app-tableau-expl>
 </div>
-<div align="center" class="lien-container" >
-<button mat-raised-button class="btn btn-not-on" (click)="toAnnotation()">Annotation</button>
-<button mat-raised-button class="btn btn-on"  (click)="toExploration()">Exploration</button>
-<button mat-raised-button class="btn btn-not-on"  (click)="toEvaluation()">Evaluation</button>
-</div>
-
+  <app-navigation-modules></app-navigation-modules>
 </mat-drawer-container>

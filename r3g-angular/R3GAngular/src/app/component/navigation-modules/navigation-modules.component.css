@@ -1,0 +1,22 @@
+.btn{
+  color: #eeeeee;
+  font-size: 20px;
+}
+.btn-not-on{
+  background-color: #222222;
+}
+.btn-on{
+  background-color: #555555;
+}
+.btn-on:hover{
+}
+.lien-container{
+  display: inline;
+  flex: auto;
+  transform: translateY(50%) scaleY(0.3);
+  transition: 100ms;
+}
+.lien-container:hover{
+   transform: scaleY(1);
+  transition: 100ms;
+ }

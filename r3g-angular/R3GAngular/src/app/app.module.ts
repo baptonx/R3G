@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { TableauExplComponent } from './component/tableau-expl/tableau-expl.component';
+import { NavigationModulesComponent } from './component/navigation-modules/navigation-modules.component';
 
 
 const appRoutes: Routes = [
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
     EvaluationComponent,
     ApprentissageComponent,
     DialogCSVComponent,
-    TableauExplComponent
+    TableauExplComponent,
+    NavigationModulesComponent
   ],
   imports: [
     BrowserModule,

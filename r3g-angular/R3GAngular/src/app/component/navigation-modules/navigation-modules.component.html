@@ -1,0 +1,5 @@
+<div align="center" class="lien-container" >
+  <button mat-raised-button class="btn {{this.getMod()===1?'btn-on':'btn-not-on'}}" (click)="toAnnotation()">Annotation</button>
+  <button mat-raised-button class="btn {{this.getMod()===2?'btn-on':'btn-not-on'}}"  (click)="toExploration()">Exploration</button>
+  <button mat-raised-button class="btn {{this.getMod()===3?'btn-on':'btn-not-on'}}"  (click)="toEvaluation()">Evaluation</button>
+</div>
