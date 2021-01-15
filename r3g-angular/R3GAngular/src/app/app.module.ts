@@ -7,7 +7,6 @@ import { AnnotationComponent } from './module/annotation/annotation.component';
 import { ExplorationComponent } from './module/exploration/exploration.component';
 import { EvaluationComponent } from './module/evaluation/evaluation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TableauExplorationComponent } from './tableau-exploration/tableau-exploration.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
@@ -20,6 +19,9 @@ import { DialogCSVComponent } from './component/dialog-csv/dialog-csv.component'
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { TableauExplComponent } from './component/tableau-expl/tableau-expl.component';
+
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -33,9 +35,9 @@ const appRoutes: Routes = [
     AnnotationComponent,
     ExplorationComponent,
     EvaluationComponent,
-    TableauExplorationComponent,
     ApprentissageComponent,
-    DialogCSVComponent
+    DialogCSVComponent,
+    TableauExplComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    
+    MatSidenavModule,
+
 
     RouterModule.forRoot(appRoutes)
 
