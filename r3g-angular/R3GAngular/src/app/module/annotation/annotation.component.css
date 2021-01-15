@@ -9,8 +9,8 @@
   font-size: 20px;
 }
 .btn-not-on{
-  background-color: blue;
+  background-color: #222222;
 }
 .btn-on{
-  background-color: darkblue;
+  background-color: #555555;
 }
