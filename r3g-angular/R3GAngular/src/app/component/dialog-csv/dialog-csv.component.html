@@ -1,85 +1,18 @@
-<div mat-dialog-content>
+<div mat-dialog-content #dialog>
 <h2>Pour générer des compinaisons [Start,End,Dot]. Exemple : [1,10,1]</h2>
+
+
+<ng-container *ngFor="let eltName of this.data.hyperparametersNumber">
     <mat-form-field class="mat-form">
-        <p>modeVox</p>
-      <input matInput value=24>
-    </mat-form-field>
+      <p>{{eltName}}</p>
+    <input matInput value={{this.data.hyperparametersNumberVal[this.data.hyperparametersNumber.indexOf(eltName)]}}>
+  </mat-form-field>
+  </ng-container>
+
   
-    <mat-form-field  class="mat-form">
-        <p>modeLabel</p>
-      <input matInput value=0>
-    </mat-form-field>
 
-    <mat-form-field  class="mat-form">
-        <p>batchSize</p>
-      <input matInput value=3>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>dropoutVal</p>
-      <input matInput value=0.6>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>denseSize</p>
-      <input matInput value=5>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>denseDropout</p>
-      <input matInput value=0.4>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>nbFeatureMap</p>
-      <input matInput value=2>
-    </mat-form-field>
-
-
-    <mat-form-field  class="mat-form">
-        <p>treshCudi</p>
-      <input matInput value=1.0>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>toleranceTresholdMoveCuDi</p>
-      <input matInput value=0.1>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>lossWeigthWindow</p>
-      <input matInput value=0.01>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>lossWeigthClass</p>
-      <input matInput value=1>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p> weigthBGclass</p>
-      <input matInput value=0.01>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>weigthBGreg</p>
-      <input matInput value=0.01>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>nb_epoch</p>
-      <input matInput value=1>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>dropoutVal</p>
-      <input matInput value=0.6>
-    </mat-form-field>
-
-    <mat-form-field  class="mat-form">
-        <p>dropoutVal</p>
-      <input matInput value=0.6>
-    </mat-form-field>
+</div>
+<div>
 
     <mat-form-field appearance="fill" class="mat-form">
         <p>doGlu</p>
@@ -93,7 +26,7 @@
     
     <mat-form-field appearance="fill"  class="mat-form">
         <p>doBatchNormalisation</p>
-        <mat-select [(value)]="data.listBN[0]">
+        <mat-select  #doBatchNM [(value)]="data.listBN[0]">
           <mat-option *ngFor="let elt of data.listBN" [value]="elt">
             {{elt}}
           </mat-option>
@@ -120,6 +53,70 @@
         </mat-select>
      
     </mat-form-field>
+
+    <mat-form-field appearance="fill"  class="mat-form">
+      <p>doNormKMA</p>
+      <mat-select [(value)]="data.doNormKMA[0]">
+        <mat-option *ngFor="let elt of data.doNormKMA" [value]="elt">
+          {{elt}}
+        </mat-option>
+      </mat-select>
+   
+  </mat-form-field>
+
+  <mat-form-field appearance="fill"  class="mat-form">
+    <p>evalPredict</p>
+    <mat-select [(value)]="data.evalPredict[0]">
+      <mat-option *ngFor="let elt of data.evalPredict" [value]="elt">
+        {{elt}}
+      </mat-option>
+    </mat-select>
+ 
+</mat-form-field>
+
+
+
+
+<mat-form-field appearance="fill"  class="mat-form">
+  <p>useWo0</p>
+  <mat-select [(value)]="data.useWo0[0]">
+    <mat-option *ngFor="let elt of data.useWo0" [value]="elt">
+      {{elt}}
+    </mat-option>
+  </mat-select>
+
+</mat-form-field>
+
+
+  
+<mat-form-field appearance="fill"  class="mat-form">
+  <p>trainWithGTReg</p>
+  <mat-select [(value)]="data.trainWithGTReg[0]">
+    <mat-option *ngFor="let elt of data.trainWithGTReg" [value]="elt">
+      {{elt}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+  <mat-form-field appearance="fill"  class="mat-form">
+    <p>doReorientationFor2Sk</p>
+    <mat-select [(value)]="data.doReorientationFor2Sk[0]">
+      <mat-option *ngFor="let elt of data.doReorientationFor2Sk" [value]="elt">
+        {{elt}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+    
+    <mat-form-field appearance="fill"  class="mat-form">
+      <p>maxPoolSpatial</p>
+      <mat-select [(value)]="data.maxPoolSpatial[0]">
+        <mat-option *ngFor="let elt of data.maxPoolSpatial" [value]="elt">
+          {{elt}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <p><button mat-flat-button class='btn' (click)="saveCSV()" cdkFocusInitial>Générer les hyperparamètres</button></p>
 
   
 </div>
