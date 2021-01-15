@@ -5,6 +5,7 @@
   .tab-container{
     display:inline-block;
     position: relative;
+    margin-top: 20px;
     left:15%;
     width: 30%;
     padding: 20px;

@@ -11,6 +11,7 @@ h2{
 }
 .mat-form{
     margin-right: 10px;
+    
 }
 ::ng-deep .mat-focused .mat-form-field-label {
     /*change color of label*/

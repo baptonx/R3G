@@ -21,10 +21,13 @@ export class ApprentissageComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogCSVComponent, {
       data: {
         hyperparametersNumber:["modeVox","modeLabel","batchSize","dropoutVal","denseSize","denseDropout",
-        "nbFeatureMap","treshCudi","toleranceTresholdMoveCuDi","lossWeigthWindow","lossWeigthClass",
-         "weigthBGclass","weigthBGreg","nb_epoch"],
-         hyperparametersNumberVal:[24,0,3,0.6,5,0.4,2,1.0,0.1,0.01,1,0.01,0.01,1],
-          
+        "nbFeatureMap","dilatationsRates","treshCudi","toleranceTresholdMoveCuDi","lossWeigthWindow","lossWeigthClass",
+         "weigthBGclass","weigthBGreg","nb_epoch","valid_part"],
+         hyperparametersNumberVal:["24","0","3","0.6","5","0.4","2","[1,2,4,8,16]","1.0","0.1","0.01","1","0.01","0.01","1","0.2"],
+         hyperparametersNumber2:["doGlu","doBatchNormalisation","sideBySide","doMultiStream","doNormKMA","evalPredict","useWo0","trainWithGTReg",
+        "doReorientationFor2Sk","maxPoolSpatial"],
+        hyperparametersNumberVal2:[ ['true', '1', 't', "doglu"],['true', '1', 't', "doglu"],['true', '1', 't', "dosbs", "sbs", "sidebyside"]
+      ,['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't']],
         doList: ['true', '1', 't', "doglu"],
         listBN: ['true', '1', 't', "doglu"],
         sBs:['true', '1', 't', "dosbs", "sbs", "sidebyside"],
@@ -50,7 +53,9 @@ export class ApprentissageComponent implements OnInit {
 }
 export interface DialogData {
   hyperparametersNumber:Array<string>
-  hyperparametersNumberVal:Array<Number>
+  hyperparametersNumberVal:Array<string>
+  hyperparametersNumber2:Array<string>
+  hyperparametersNumberVal2:Array<Array<string>>
   doList: Array<string>
   sBs:Array<string>
   listBN:Array<string>

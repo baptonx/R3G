@@ -1,121 +1,43 @@
 <div mat-dialog-content #dialog>
-<h2>Pour générer des compinaisons [Start,End,Dot]. Exemple : [1,10,1]</h2>
+<h2>Pour générer des compinaisons Start,End,Dot. Exemple : 1,10,1</h2>
 
 
 <ng-container *ngFor="let eltName of this.data.hyperparametersNumber">
     <mat-form-field class="mat-form">
       <p>{{eltName}}</p>
-    <input matInput value={{this.data.hyperparametersNumberVal[this.data.hyperparametersNumber.indexOf(eltName)]}}>
+    <input matInput [(ngModel)]="this.data.hyperparametersNumberVal[this.data.hyperparametersNumber.indexOf(eltName)]">
   </mat-form-field>
   </ng-container>
 
-  
+   
 
 </div>
 <div>
-
+  <ng-container *ngFor="let eltName of this.data.hyperparametersNumber2">
     <mat-form-field appearance="fill" class="mat-form">
-        <p>doGlu</p>
-        <mat-select [(value)]="data.doList[0]">
-          <mat-option *ngFor="let elt of data.doList" [value]="elt">
-            {{elt}}
-          </mat-option>
-        </mat-select>
-      
-      </mat-form-field>
-    
-    <mat-form-field appearance="fill"  class="mat-form">
-        <p>doBatchNormalisation</p>
-        <mat-select  #doBatchNM [(value)]="data.listBN[0]">
-          <mat-option *ngFor="let elt of data.listBN" [value]="elt">
-            {{elt}}
-          </mat-option>
-        </mat-select>
-     
-    </mat-form-field>
-
-    <mat-form-field appearance="fill"  class="mat-form">
-        <p>sideBySide</p>
-        <mat-select [(value)]="data.sBs[0]">
-          <mat-option *ngFor="let elt of data.sBs" [value]="elt">
-            {{elt}}
-          </mat-option>
-        </mat-select>
-     
-    </mat-form-field>
-
-    <mat-form-field appearance="fill"  class="mat-form">
-        <p> doMultiStream</p>
-        <mat-select [(value)]="data.listMS[0]">
-          <mat-option *ngFor="let elt of data.listMS" [value]="elt">
-            {{elt}}
-          </mat-option>
-        </mat-select>
-     
-    </mat-form-field>
-
-    <mat-form-field appearance="fill"  class="mat-form">
-      <p>doNormKMA</p>
-      <mat-select [(value)]="data.doNormKMA[0]">
-        <mat-option *ngFor="let elt of data.doNormKMA" [value]="elt">
-          {{elt}}
-        </mat-option>
-      </mat-select>
-   
-  </mat-form-field>
-
-  <mat-form-field appearance="fill"  class="mat-form">
-    <p>evalPredict</p>
-    <mat-select [(value)]="data.evalPredict[0]">
-      <mat-option *ngFor="let elt of data.evalPredict" [value]="elt">
-        {{elt}}
-      </mat-option>
-    </mat-select>
- 
-</mat-form-field>
-
-
-
-
-<mat-form-field appearance="fill"  class="mat-form">
-  <p>useWo0</p>
-  <mat-select [(value)]="data.useWo0[0]">
-    <mat-option *ngFor="let elt of data.useWo0" [value]="elt">
-      {{elt}}
-    </mat-option>
-  </mat-select>
-
-</mat-form-field>
-
-
-  
-<mat-form-field appearance="fill"  class="mat-form">
-  <p>trainWithGTReg</p>
-  <mat-select [(value)]="data.trainWithGTReg[0]">
-    <mat-option *ngFor="let elt of data.trainWithGTReg" [value]="elt">
-      {{elt}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-  <mat-form-field appearance="fill"  class="mat-form">
-    <p>doReorientationFor2Sk</p>
-    <mat-select [(value)]="data.doReorientationFor2Sk[0]">
-      <mat-option *ngFor="let elt of data.doReorientationFor2Sk" [value]="elt">
-        {{elt}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-    
-    <mat-form-field appearance="fill"  class="mat-form">
-      <p>maxPoolSpatial</p>
-      <mat-select [(value)]="data.maxPoolSpatial[0]">
-        <mat-option *ngFor="let elt of data.maxPoolSpatial" [value]="elt">
+      <p>{{eltName}}</p>
+      <mat-select [(ngModel)]="this.data.hyperparametersNumberVal2[this.data.hyperparametersNumber2.indexOf(eltName)][0]">
+        <mat-option *ngFor="let elt of this.data.hyperparametersNumberVal2[this.data.hyperparametersNumber2.indexOf(eltName)]" [value]="elt">
           {{elt}}
         </mat-option>
       </mat-select>
     </mat-form-field>
+  </ng-container>
+  <mat-form-field class="mat-form">
+    <p>subFolderFit</p>
+  <input matInput>
+</mat-form-field>
+
+<mat-form-field class="mat-form">
+  <p>pathWeight</p>
+<input matInput >
+</mat-form-field>
 
 
+<p> <mat-form-field class="example-full-width">
+  <mat-label>Nom du fichier</mat-label>
+  <textarea matInput  #fileName ></textarea>
+</mat-form-field></p>
     <p><button mat-flat-button class='btn' (click)="saveCSV()" cdkFocusInitial>Générer les hyperparamètres</button></p>
 
   
