@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {FormControl} from '@angular/forms';
 @Component({
   selector: 'app-exploration',
   templateUrl: './exploration.component.html',
@@ -8,6 +9,7 @@ import {Router} from '@angular/router';
 
 export class ExplorationComponent implements OnInit {
   constructor(private router: Router) { }
+  showFiller = false;
 
   ngOnInit(): void {
   }

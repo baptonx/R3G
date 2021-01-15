@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableauExplorationComponent } from './tableau-exploration.component';
+import { TableauExplComponent } from './tableau-expl.component';
 
-describe('TableauExplorationComponent', () => {
-  let component: TableauExplorationComponent;
-  let fixture: ComponentFixture<TableauExplorationComponent>;
+describe('TableauExplComponent', () => {
+  let component: TableauExplComponent;
+  let fixture: ComponentFixture<TableauExplComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableauExplorationComponent ]
+      declarations: [ TableauExplComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableauExplorationComponent);
+    fixture = TestBed.createComponent(TableauExplComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

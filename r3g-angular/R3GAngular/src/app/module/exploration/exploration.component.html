@@ -1,8 +1,25 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side" position="end">
+    <p>Auto-resizing sidenav</p>
+    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+    <button (click)="showFiller = !showFiller" mat-raised-button>
+      Toggle extra text
+    </button>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <button type="button" mat-button (click)="drawer.toggle()">
+      Toggle sidenav
+    </button>
+
+  </div>
 <div class="tab-container">
-<app-tableau-exploration></app-tableau-exploration>
+<app-tableau-expl></app-tableau-expl>
 </div>
 <div align="center" class="lien-container" >
 <button mat-raised-button class="btn btn-not-on" (click)="toAnnotation()">Annotation</button>
 <button mat-raised-button class="btn btn-on"  (click)="toExploration()">Exploration</button>
 <button mat-raised-button class="btn btn-not-on"  (click)="toEvaluation()">Evaluation</button>
 </div>
+
+</mat-drawer-container>
