@@ -1,10 +1,8 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side" position="end">
-    <p>Auto-resizing sidenav</p>
-    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-    <button (click)="showFiller = !showFiller" mat-raised-button>
-      Toggle extra text
-    </button>
+    <div *ngFor="let sequence of this.selectedSeq; index as i"[className]="'sequenceSel'">
+      <span>{{sequence}}</span><span class="deleteSeq" (click)="deleteSeq(i)">x</span>
+    </div>
   </mat-drawer>
 
   <div class="example-sidenav-content">

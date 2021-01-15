@@ -41,3 +41,19 @@ app-navigation-modules{
   z-index: 1;
   bottom:0;
 }
+.sequenceSel{
+  width:15em ;
+  height:30px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(255,255,255,0.12);
+  border-bottom-width: 1px;
+  padding-top: 5px;
+}
+.deleteSeq{
+  position:absolute;
+  right: 25px;
+}
+.deleteSeq:hover{
+  color: dodgerblue;
+  cursor:pointer;
+}

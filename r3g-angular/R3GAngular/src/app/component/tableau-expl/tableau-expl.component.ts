@@ -2,15 +2,15 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 
-export interface PeriodicElement {
+export interface sequencesTab {
   name: string;
   position: number;
   weight: number;
   symbol: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+let ELEMENT_DATA: sequencesTab[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'}, // Faire une classe séquence
   {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
   {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
   {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
@@ -38,12 +38,18 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./tableau-expl.component.css']
 })
 export class TableauExplComponent implements AfterViewInit {
-
+  selectionListe = new Array<boolean>(ELEMENT_DATA.length);
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<sequencesTab>(ELEMENT_DATA);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator= this.paginator;
+  }
+
+  selection(i: number): void{
+    this.selectionListe[i] = !this.selectionListe[i];
+    console.log(this.selectionListe);
+    console.log(i);
   }
 }
