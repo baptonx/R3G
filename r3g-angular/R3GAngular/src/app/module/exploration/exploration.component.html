@@ -4,7 +4,7 @@
   <mat-drawer #drawer class="example-sidenav" mode="side" position="end">
       <mat-form-field>
       <mat-label>Filtrer</mat-label>
-      <input (keydown)="notifierSeq()" #inputFiltre matInput placeholder="Ex. Sequence 1">
+      <input #inputFiltre matInput placeholder="Ex. Sequence 1">
     </mat-form-field>
 
     <div *ngFor="let sequence of this.selectedSeq; index as i">
