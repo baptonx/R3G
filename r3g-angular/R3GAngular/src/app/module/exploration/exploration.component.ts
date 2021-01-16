@@ -11,7 +11,6 @@ import {MatInput} from "@angular/material/input";
 
 export class ExplorationComponent implements OnInit {
   selectedSeq: Array<string>//Contient les indices des séquences sélectionnées
-  selectedSeqHidden: Array<boolean>;
   @ViewChild("inputFiltre") inputFiltre! : MatInput;
   constructor() {
     this.selectedSeq = ['sequence 1', 'sequence 2', 'sequence 3','sequence 4', 'sequence 5', 'sequence 6','sequence 7', 'sequence 8', 'sequence 9', 'sequence 10'];
