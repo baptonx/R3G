@@ -57,3 +57,6 @@ app-navigation-modules{
   color: dodgerblue;
   cursor:pointer;
 }
+.selectedSeqHidden{
+  display:none;
+}

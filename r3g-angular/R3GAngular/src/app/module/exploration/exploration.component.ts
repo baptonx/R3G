@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
+import {MatInput} from "@angular/material/input";
 
 @Component({
   selector: 'app-exploration',
@@ -10,14 +11,25 @@ import {FormControl} from '@angular/forms';
 
 export class ExplorationComponent implements OnInit {
   selectedSeq: Array<string>//Contient les indices des séquences sélectionnées
+  selectedSeqHidden: Array<boolean>;
+  @ViewChild("inputFiltre") inputFiltre! : MatInput;
   constructor() {
-    this.selectedSeq = ['sequence 1', 'sequence 2', 'sequence 3','sequence 4', 'sequence 5', 'sequence 6','sequence 7', 'sequence 8', 'sequence 9',];
+    this.selectedSeq = ['sequence 1', 'sequence 2', 'sequence 3','sequence 4', 'sequence 5', 'sequence 6','sequence 7', 'sequence 8', 'sequence 9', 'sequence 10'];
+    this.selectedSeqHidden = [false, false, false, false, false, false, false, false, false, false ];
   }
-  showFiller = false;
 
   ngOnInit(): void {
   }
   deleteSeq(i: number): void{
     this.selectedSeq.splice(i,1);
+    this.selectedSeqHidden.splice(i,1);
+  }
+
+  predicat(value: string) {
+    return value.includes(this.inputFiltre.value);
+  }
+
+  notifierSeq(): void {
+    this.selectedSeq.forEach((value, index) => this.selectedSeqHidden[index] = value.includes(this.inputFiltre.value));
   }
 }

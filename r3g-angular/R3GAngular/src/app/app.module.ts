@@ -22,6 +22,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { TableauExplComponent } from './component/tableau-expl/tableau-expl.component';
 import { NavigationModulesComponent } from './component/navigation-modules/navigation-modules.component';
+import {MatSortModule} from "@angular/material/sort";
+
 
 
 const appRoutes: Routes = [
@@ -59,7 +61,8 @@ const appRoutes: Routes = [
     MatSidenavModule,
 
 
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MatSortModule
 
   ],
   providers: [],

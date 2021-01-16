@@ -1,18 +1,32 @@
 <mat-drawer-container class="example-container" autosize>
+
+
   <mat-drawer #drawer class="example-sidenav" mode="side" position="end">
-    <div *ngFor="let sequence of this.selectedSeq; index as i"[className]="'sequenceSel'">
+      <mat-form-field>
+      <mat-label>Filtrer</mat-label>
+      <input (keydown)="notifierSeq()" #inputFiltre matInput placeholder="Ex. Sequence 1">
+    </mat-form-field>
+
+    <div *ngFor="let sequence of this.selectedSeq; index as i">
+      <ng-container *ngIf="sequence.includes(inputFiltre.value); else elseBlock">
+        <div [className]="'sequenceSel'">
       <span>{{sequence}}</span><span class="deleteSeq" (click)="deleteSeq(i)">x</span>
+        </div>
+      </ng-container>
+      <ng-template #elseBlock style="display: none"></ng-template>
     </div>
   </mat-drawer>
+
 
   <div class="example-sidenav-content">
     <button type="button" mat-button (click)="drawer.toggle()">
       Séquences sélectionnées
     </button>
-
   </div>
+
 <div class="tab-container">
 <app-tableau-expl></app-tableau-expl>
 </div>
+
   <app-navigation-modules></app-navigation-modules>
 </mat-drawer-container>
