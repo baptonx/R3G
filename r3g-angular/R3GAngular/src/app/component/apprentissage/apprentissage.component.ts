@@ -28,16 +28,8 @@ export class ApprentissageComponent implements OnInit {
         "doReorientationFor2Sk","maxPoolSpatial"],
         hyperparametersNumberVal2:[ ['true', '1', 't', "doglu"],['true', '1', 't', "doglu"],['true', '1', 't', "dosbs", "sbs", "sidebyside"]
       ,['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't']],
-        doList: ['true', '1', 't', "doglu"],
-        listBN: ['true', '1', 't', "doglu"],
-        sBs:['true', '1', 't', "dosbs", "sbs", "sidebyside"],
-        listMS:['true', '1', 't'],
-        doNormKMA:['true', '1', 't'],
-        evalPredict:['true', '1', 't'],
-        useWo0: ['true', '1', 't'],
-        trainWithGTReg:['true', '1', 't'],
-        doReorientationFor2Sk:['true', '1', 't'],
-        maxPoolSpatial: ['true', '1', 't'],
+      defaultVal:[['t'],['1'],['1'],['1'],['t'],['t'],['1'],['t'],['1'],['t']],
+      
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -56,14 +48,6 @@ export interface DialogData {
   hyperparametersNumberVal:Array<string>
   hyperparametersNumber2:Array<string>
   hyperparametersNumberVal2:Array<Array<string>>
-  doList: Array<string>
-  sBs:Array<string>
-  listBN:Array<string>
-  listMS:Array<string>
-  doNormKMA:Array<string>
-  evalPredict:Array<string>
-  useWo0:Array<string>
-  trainWithGTReg:Array<string>
-  doReorientationFor2Sk:Array<string>
-  maxPoolSpatial: Array<string>
+  defaultVal:Array<Array<string>>
+
 } 

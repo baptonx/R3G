@@ -1,5 +1,5 @@
 <div mat-dialog-content #dialog>
-<h2>Pour générer des compinaisons Start,End,Dot. Exemple : 1,10,1</h2>
+<h2>Pour générer des combinaisons Start,End,Dot. Exemple : 1,10,1</h2>
 
 
 <ng-container *ngFor="let eltName of this.data.hyperparametersNumber">
@@ -16,21 +16,21 @@
   <ng-container *ngFor="let eltName of this.data.hyperparametersNumber2">
     <mat-form-field appearance="fill" class="mat-form">
       <p>{{eltName}}</p>
-      <mat-select [(ngModel)]="this.data.hyperparametersNumberVal2[this.data.hyperparametersNumber2.indexOf(eltName)][0]">
+      <mat-select [(ngModel)]="this.data.defaultVal[this.data.hyperparametersNumber2.indexOf(eltName)]" multiple>
         <mat-option *ngFor="let elt of this.data.hyperparametersNumberVal2[this.data.hyperparametersNumber2.indexOf(eltName)]" [value]="elt">
           {{elt}}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </ng-container>
-  <mat-form-field class="mat-form">
+  <mat-form-field class="mat-form" >
     <p>subFolderFit</p>
-  <input matInput>
+  <input matInput #subFolder>
 </mat-form-field>
 
-<mat-form-field class="mat-form">
+<mat-form-field class="mat-form" >
   <p>pathWeight</p>
-<input matInput >
+<input matInput #pathWeight>
 </mat-form-field>
 
 
