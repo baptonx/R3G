@@ -21,8 +21,4 @@ export class ExplorationComponent implements OnInit {
   deleteSeq(i: number): void{
     this.selectedSeq.splice(i,1);
   }
-
-  predicat(value: string) {
-    return value.includes(this.inputFiltre.value);
-  }
 }

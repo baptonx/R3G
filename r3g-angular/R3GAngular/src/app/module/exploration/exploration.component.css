@@ -1,20 +1,14 @@
 .tab-container{
   margin-top: 50px;
+  min-height:80vh;
 }
-.example-container {
-  width: 500px;
-  height: 300px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+.navbar-spacer{
+  width: 2%;
 }
-
-.example-sidenav-content {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
+.bouton-menu{
+  width:100%;
 }
-
-.example-sidenav {
+.onglet-sequences-selectionnees {
   padding: 20px;
 }
 .lien-container{
@@ -23,11 +17,11 @@
   bottom: 0;
   left: 50%;
 }
-.example-container{
+.ongletBDD{
   width:100%;
-  height: 100%;
+  height: 300%;
 }
-.example-sidenav-content{
+.bouton-sidenav{
   position:absolute;
   right:0;
   width:auto;
@@ -41,6 +35,9 @@ app-navigation-modules{
   z-index: 1;
   bottom:0;
 }
+mat-toolbar{
+  color:white;
+}
 .sequenceSel{
   width:15em ;
   height:30px;
@@ -51,7 +48,7 @@ app-navigation-modules{
 }
 .deleteSeq{
   position:absolute;
-  right: 25px;
+  right: 40px;
 }
 .deleteSeq:hover{
   color: dodgerblue;

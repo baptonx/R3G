@@ -33,6 +33,6 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" [className]="this.selectionListe[row.position]?'tab-line tab-line-selected':'tab-line tab-line-not-selected'"  (click)="selection(row.position)"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
 </div>
 

@@ -1,7 +1,62 @@
-<mat-drawer-container class="example-container" autosize>
+
+<mat-toolbar>
+  <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawerExplo.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Exploration</span>
+  <span class="navbar-spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menuAffichage" aria-label="Example icon-button with a menu">
+    <span>Affichage</span>
+  </button>
+  <mat-menu #menuAffichage="matMenu">
+    <button mat-menu-item>
+      <span>Vidéo</span>
+    </button>
+    <button mat-menu-item>
+      <span>Squelette sans transformation</span>
+    </button>
+    <button mat-menu-item disabled>
+      <span>Squelette normalisé</span>
+    </button>
+    <button mat-menu-item>
+    <span>Squelette voxélisé</span>
+  </button>
+  </mat-menu>
+</mat-toolbar>
+
+<mat-drawer-container autosize>
+  <mat-drawer #drawerExplo mode="side">
+    <mat-list>
+      <button class="bouton-menu" mat-button>
+        <mat-list-item>Créer une colonne</mat-list-item>
+      </button>
+      <mat-divider></mat-divider>
+      <button class="bouton-menu" mat-button>
+        <mat-list-item>Sauvegarder la BDD</mat-list-item>
+      </button>
+      <mat-divider></mat-divider>
+      <button class="bouton-menu" mat-button>
+        <mat-list-item>Importer une BDD</mat-list-item>
+      </button>
+      <mat-divider></mat-divider>
+      <button class="bouton-menu" mat-button>
+       <mat-list-item>Charger une IA</mat-list-item>
+      </button>
+      <mat-divider></mat-divider>
+      <button class="bouton-menu" mat-button>
+        <mat-list-item>Exporter les séquences sélectionnées</mat-list-item>
+      </button>
+      <mat-divider></mat-divider>
+    </mat-list>
+  </mat-drawer>
+
+<mat-tab-group animationDuration="0ms" dynamicHeight>
+  <mat-tab  class="ongletBDD" label="Base de données">
+
+<mat-drawer-container autosize>
 
 
-  <mat-drawer #drawer class="example-sidenav" mode="side" position="end">
+  <mat-drawer #drawerSeq class="onglet-sequences-selectionnees" mode="side" position="end">
       <mat-form-field>
       <mat-label>Filtrer</mat-label>
       <input #inputFiltre matInput placeholder="Ex. Sequence 1">
@@ -18,8 +73,8 @@
   </mat-drawer>
 
 
-  <div class="example-sidenav-content">
-    <button type="button" mat-button (click)="drawer.toggle()">
+  <div class="bouton-sidenav">
+    <button type="button" mat-button (click)="drawerSeq.toggle()">
       Séquences sélectionnées
     </button>
   </div>
@@ -28,5 +83,10 @@
 <app-tableau-expl></app-tableau-expl>
 </div>
 
-  <app-navigation-modules></app-navigation-modules>
+
 </mat-drawer-container>
+  </mat-tab>
+  <mat-tab label="Graphique">Graphique</mat-tab>
+</mat-tab-group>
+</mat-drawer-container>
+<app-navigation-modules></app-navigation-modules>
