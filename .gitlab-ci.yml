@@ -3,5 +3,5 @@ build-front:
  stage: build
  script:
  - cd r3g-angular/R3GAngular
- - npm install
+ - npm install --save three
  - npm run ng build
