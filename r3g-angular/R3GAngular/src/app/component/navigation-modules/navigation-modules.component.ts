@@ -15,11 +15,11 @@ export class NavigationModulesComponent implements OnInit {
       case 'annotation':
         NavigationModulesComponent.mod=1;
         break
-      case 'exploration':
-        NavigationModulesComponent.mod=2;
+      case 'evaluation':
+        NavigationModulesComponent.mod=3;
         break
       default:
-        NavigationModulesComponent.mod=3;
+        NavigationModulesComponent.mod=2;
     }
   }
 

@@ -34,31 +34,38 @@ export class DialogCSVComponent implements OnInit {
 
   // Remplissage de la liste, avec gestion des combinaisons souhaitées
   fillList():void{
-    this.data.hyperparametersNumberVal.forEach(elt=>{
-      if( elt.includes(",") && !elt.includes("[")){
-        this.list.push(this.toList(elt))
+    this.data.orderVal.forEach(i=>{
+      if(i<=15){
+        var elt=this.data.hyperparametersNumberVal[i]
+        if( elt.includes(",") && !elt.includes("[")){
+          this.list.push(this.toList(elt))
+        }
+        else{
+          var tmp=[]
+          tmp.push(elt)
+          this.list.push(tmp)
+        }
       }
       else{
-        var tmp=[]
-        tmp.push(elt)
-        this.list.push(tmp)
-      }
+        var eltList=this.data.defaultVal[i-16]
+        this.list.push(eltList)
+        }
     })
-    this.data.defaultVal.forEach(elt=>{
-      this.list.push(elt)
-    })
+   
   }
 
   // Permet de modifier le nom pour chaque élément de la grande liste, afin qu'il match avec le csv type de william
   changeName():void{
-    for(var i=0;i<this.list.length;i++){
+    this.data.orderVal.forEach(i=>{
       for(var j=0;j<this.list[i].length;j++){
-        if(i<=15) this.list[i][j]=this.data.hyperparametersNumber[i]+"="+this.list[i][j]
-        else{
-          this.list[i][j]=this.data.hyperparametersNumber2[i-16]+"="+this.list[i][j]
-        }
+      if(i<=15) {
+        this.list[i][j]=this.data.hyperparametersNumber[i]+"="+this.list[i][j]
       }
-    }
+      else{
+        this.list[i][j]=this.data.hyperparametersNumber2[i-16]+"="+this.list[i][j]
+      }
+    }})
+   
     var folder=this.subFolder?.nativeElement.value!
     var path=this.pathWeight?.nativeElement.value!
     if(folder!==''){
@@ -72,6 +79,7 @@ export class DialogCSVComponent implements OnInit {
   saveCSV():void{
 
     this.fillList();
+    console.log(this.list)
     this.changeName();
 
 

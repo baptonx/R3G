@@ -29,6 +29,7 @@ export class ApprentissageComponent implements OnInit {
         hyperparametersNumberVal2:[ ['true', '1', 't', "doglu"],['true', '1', 't', "doglu"],['true', '1', 't', "dosbs", "sbs", "sidebyside"]
       ,['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't']],
       defaultVal:[['t'],['1'],['1'],['1'],['t'],['t'],['1'],['t'],['1'],['t']],
+      orderVal:[0,1,2,16,3,17,18,19,4,5,6,7,8,9,20,10,11,21,22,23,12,13,14,15,24,25]
       
       }
     });
@@ -49,5 +50,6 @@ export interface DialogData {
   hyperparametersNumber2:Array<string>
   hyperparametersNumberVal2:Array<Array<string>>
   defaultVal:Array<Array<string>>
+  orderVal:Array<number>
 
 } 
