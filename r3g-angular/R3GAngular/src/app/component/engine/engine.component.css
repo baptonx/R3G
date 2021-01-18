@@ -8,20 +8,6 @@
   z-index: -1;
 }
 
-
-
-
-/*****************************************************
- * node_modules imports
- *****************************************************/
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
-
-/*****************************************************
- * project imports
- *****************************************************/
-@import 'variables';
-@import 'mixins';
-
 /*****************************************************
  * styles
  *****************************************************/
@@ -37,9 +23,10 @@ body {
   color: white;
 }
 
-.engine-wrapper{
+.engine-wrapper {
   position: absolute;
   z-index: 0;
+}
 
 #renderCanvas {
   touch-action: none;
@@ -47,7 +34,6 @@ body {
 
 #renderCanvas:focus {
   outline: none;
-}
 }
 
 *[data-diagram] {
@@ -73,8 +59,8 @@ p {
 .ui-wrapper {
   position: absolute;
 
-* {
-  z-index: 10;
-}
+  * {
+    z-index: 10;
+  }
 }
 
