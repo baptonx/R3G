@@ -33,8 +33,10 @@ export class DialogCSVComponent implements OnInit {
   // Remplissage de la liste, avec gestion des combinaisons souhaitées
   fillList():void{
     this.data.orderVal.forEach(i=>{
+   
       if(i<=15){
         var elt=this.data.hyperparametersNumberVal[i]
+        console.log(elt)
         if( elt.includes(",") && !elt.includes("[")){
           this.list.push(this.toList(elt))
         }
@@ -47,22 +49,27 @@ export class DialogCSVComponent implements OnInit {
       else{
         var eltList=this.data.defaultVal[i-16]
         this.list.push(eltList)
+        
         }
     })
-   
+ 
   }
 
   // Permet de modifier le nom pour chaque élément de la grande liste, afin qu'il match avec le csv type de william
   changeName():void{
-    this.data.orderVal.forEach(i=>{
+   
+  
+      for(var i=0;i<this.list.length;i++){
       for(var j=0;j<this.list[i].length;j++){
-      if(i<=15) {
-        this.list[i][j]=this.data.hyperparametersNumber[i]+"="+this.list[i][j]
+      if(this.data.orderVal[i]<=15) {
+        this.list[i][j]=this.data.hyperparametersNumber[this.data.orderVal[i]]+"="+this.list[i][j]
       }
       else{
-        this.list[i][j]=this.data.hyperparametersNumber2[i-16]+"="+this.list[i][j]
+        console.log(this.data.hyperparametersNumber2[this.data.orderVal[i]-16])
+        this.list[i][j]=this.data.hyperparametersNumber2[this.data.orderVal[i]-16]+"="+this.list[i][j]
       }
-    }})
+    }
+    }
    
     var folder=this.subFolder?.nativeElement.value!
     var path=this.pathWeight?.nativeElement.value!
@@ -75,15 +82,15 @@ export class DialogCSVComponent implements OnInit {
     
   }
   saveCSV():void{
-
+  
     this.fillList();
-    console.log(this.list)
-    this.changeName();
 
+    this.changeName();
+    console.log(this.list)
 
     // Creation du CSV grâce à l'attribut this.list
 var inCsv = cartesianProduct(this.list);
-console.log(this.list)
+
   let csvContent = "data:text/csv;charset=utf-8," 
       + inCsv.map((e: any[]) => e.join(";")).join("\n2\n");
       var encodedUri = encodeURI(csvContent);
