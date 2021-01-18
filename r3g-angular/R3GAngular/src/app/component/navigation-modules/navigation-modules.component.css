@@ -4,19 +4,26 @@
 }
 .btn-not-on{
   background-color: #222222;
+  transform: translateY(10%);
+  transition: 100ms;
 }
+
+.btn-not-on:hover{
+  transform: translateY(0%);
+}
+
 .btn-on{
   background-color: #555555;
+  transform: translateY(10%);
+  transition: 100ms;
 }
 .btn-on:hover{
+  transform: translateY(0%);
 }
 .lien-container{
   display: inline;
   flex: auto;
-  transform: translateY(50%) scaleY(0.3);
-  transition: 100ms;
 }
 .lien-container:hover{
-   transform: scaleY(1);
   transition: 100ms;
  }

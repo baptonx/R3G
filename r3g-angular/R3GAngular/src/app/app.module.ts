@@ -22,12 +22,11 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { TableauExplComponent } from './component/tableau-expl/tableau-expl.component';
 import { NavigationModulesComponent } from './component/navigation-modules/navigation-modules.component';
-import {MatSortModule} from "@angular/material/sort";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatTabsModule} from "@angular/material/tabs";
+import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatListModule} from "@angular/material/list";
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTabsModule} from '@angular/material/tabs';
+import {EngineComponent} from './component/engine/engine.component';
 
 
 const appRoutes: Routes = [
@@ -45,7 +44,8 @@ const appRoutes: Routes = [
     ApprentissageComponent,
     DialogCSVComponent,
     TableauExplComponent,
-    NavigationModulesComponent
+    NavigationModulesComponent,
+    EngineComponent
   ],
   imports: [
     BrowserModule,
@@ -63,15 +63,13 @@ const appRoutes: Routes = [
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
-    MatToolbarModule,
-    MatTabsModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatListModule,
 
 
     RouterModule.forRoot(appRoutes),
-    MatSortModule
+    MatListModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatTabsModule
 
   ],
   providers: [],

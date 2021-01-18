@@ -1,4 +1,3 @@
-
 <mat-toolbar>
   <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawerExplo.toggle()">
     <mat-icon>menu</mat-icon>
@@ -19,8 +18,8 @@
       <span>Squelette normalisé</span>
     </button>
     <button mat-menu-item>
-    <span>Squelette voxélisé</span>
-  </button>
+      <span>Squelette voxélisé</span>
+    </button>
   </mat-menu>
 </mat-toolbar>
 
@@ -40,7 +39,7 @@
       </button>
       <mat-divider></mat-divider>
       <button class="bouton-menu" mat-button>
-       <mat-list-item>Charger une IA</mat-list-item>
+        <mat-list-item>Charger une IA</mat-list-item>
       </button>
       <mat-divider></mat-divider>
       <button class="bouton-menu" mat-button>
@@ -50,43 +49,44 @@
     </mat-list>
   </mat-drawer>
 
-<mat-tab-group animationDuration="0ms" dynamicHeight>
-  <mat-tab  class="ongletBDD" label="Base de données">
+  <mat-tab-group animationDuration="0ms" dynamicHeight>
+    <mat-tab class="ongletBDD" label="Base de données">
 
-<mat-drawer-container autosize>
+      <mat-drawer-container autosize>
 
 
-  <mat-drawer #drawerSeq class="onglet-sequences-selectionnees" mode="side" position="end">
-      <mat-form-field>
-      <mat-label>Filtrer</mat-label>
-      <input #inputFiltre matInput placeholder="Ex. Sequence 1">
-    </mat-form-field>
+        <mat-drawer #drawerSeq class="onglet-sequences-selectionnees" mode="side" position="end">
+          <mat-form-field>
+            <mat-label>Filtrer</mat-label>
+            <input #inputFiltre matInput placeholder="Ex. Sequence 1">
+          </mat-form-field>
 
-    <div *ngFor="let sequence of this.selectedSeq; index as i">
-      <ng-container *ngIf="sequence.includes(inputFiltre.value); else elseBlock">
-        <div [className]="'sequenceSel'">
-      <span>{{sequence}}</span><span class="deleteSeq" (click)="deleteSeq(i)">x</span>
+          <div *ngFor="let sequence of this.selectedSeq; index as i">
+            <ng-container *ngIf="sequence.includes(inputFiltre.value); else elseBlock">
+              <div [className]="'sequenceSel'">
+                <span>{{sequence}}</span><span class="deleteSeq" (click)="deleteSeq(i)">x</span>
+              </div>
+            </ng-container>
+            <ng-template #elseBlock style="display: none"></ng-template>
+          </div>
+        </mat-drawer>
+
+
+        <div class="bouton-sidenav">
+          <button type="button" mat-button (click)="drawerSeq.toggle()">
+            Séquences sélectionnées
+          </button>
         </div>
-      </ng-container>
-      <ng-template #elseBlock style="display: none"></ng-template>
-    </div>
-  </mat-drawer>
+
+        <div class="tab-container">
+          <app-tableau-expl></app-tableau-expl>
+        </div>
 
 
-  <div class="bouton-sidenav">
-    <button type="button" mat-button (click)="drawerSeq.toggle()">
-      Séquences sélectionnées
-    </button>
-  </div>
-
-<div class="tab-container">
-<app-tableau-expl></app-tableau-expl>
-</div>
-
-
+      </mat-drawer-container>
+    </mat-tab>
+    <mat-tab label="Graphique">Graphique</mat-tab>
+  </mat-tab-group>
 </mat-drawer-container>
-  </mat-tab>
-  <mat-tab label="Graphique">Graphique</mat-tab>
-</mat-tab-group>
-</mat-drawer-container>
+
 <app-navigation-modules></app-navigation-modules>
