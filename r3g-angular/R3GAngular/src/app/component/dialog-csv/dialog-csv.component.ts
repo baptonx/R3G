@@ -1,8 +1,6 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatLabel } from '@angular/material/form-field';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
-import { MatSelect } from '@angular/material/select';
 import { DialogData } from '../apprentissage/apprentissage.component';
 
 @Component({
