@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 import {ElementRef, Injectable, NgZone, OnDestroy} from '@angular/core';
 
 interface MaScene {

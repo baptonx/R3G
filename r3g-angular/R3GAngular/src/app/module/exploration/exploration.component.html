@@ -1,3 +1,4 @@
+<div style="height: 100%">
 <mat-toolbar>
   <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawerExplo.toggle()">
     <mat-icon>menu</mat-icon>
@@ -23,7 +24,7 @@
   </mat-menu>
 </mat-toolbar>
 
-<mat-drawer-container autosize>
+<mat-drawer-container style="height: 100%">
   <mat-drawer #drawerExplo mode="side">
     <mat-list>
       <button class="bouton-menu" mat-button>
@@ -34,8 +35,8 @@
         <mat-list-item>Sauvegarder la BDD</mat-list-item>
       </button>
       <mat-divider></mat-divider>
-      <button class="bouton-menu" mat-button>
-        <mat-list-item>Importer une BDD<input type="file" id="picker" name="fileList" webkitdirectory multiple></mat-list-item>
+      <button class="bouton-menu" (click)="fileList.click()"  mat-button>
+        <mat-list-item>Importer une BDD<input hidden #fileList type="file" id="picker" name="fileList" webkitdirectory multiple></mat-list-item>
       </button>
       <mat-divider></mat-divider>
       <button class="bouton-menu" mat-button>
@@ -70,22 +71,20 @@
           </div>
         </mat-drawer>
 
+          <div class="bouton-sidenav">
+            <button type="button" mat-button (click)="drawerSeq.toggle()">
+              Séquences sélectionnées
+            </button>
+          </div>
 
-        <div class="bouton-sidenav">
-          <button type="button" mat-button (click)="drawerSeq.toggle()">
-            Séquences sélectionnées
-          </button>
-        </div>
-
-        <div class="tab-container">
-          <app-tableau-expl></app-tableau-expl>
-        </div>
-
+          <div class="tab-container">
+            <app-tableau-expl></app-tableau-expl>
+          </div>
 
       </mat-drawer-container>
     </mat-tab>
     <mat-tab label="Graphique">Graphique</mat-tab>
   </mat-tab-group>
 </mat-drawer-container>
-
+</div>
 <app-navigation-modules></app-navigation-modules>
