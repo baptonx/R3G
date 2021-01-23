@@ -1,16 +1,16 @@
 build-front:
-    image: node:12.13
-    stage: build
-    script:
-        - cd r3g-angular/R3GAngular
-        - npm install --save three
-        - npm run ng build
+  image: node:12.13
+  stage: build
+  script:
+    - cd r3g-angular/R3GAngular
+    - npm install --save three
+    - npm run ng build
 
- build-back:
-    image: python:latest
-    stage: build
-    script:
-        - cd r3g-flask
-        - pip install wandb
-        - pip install flask
-        - py Server.py
+build-back:
+  image: python:latest
+  stage: build
+  script:
+    - cd r3g-flask
+    - pip install wandb
+    - pip install flask
+    - py Server.py
