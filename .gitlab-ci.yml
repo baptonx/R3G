@@ -16,5 +16,5 @@ build-back:
     - pip install numpy
     - pip install Pillow
     - pip install matplotlib
-    - wandb login
+    - wandb login 041f848335f8b0cc034a549438bfd49bd2d229e7
     - python3 Server.py
