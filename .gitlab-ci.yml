@@ -13,5 +13,7 @@ build-back:
     - cd r3g-flask
     - pip install wandb
     - pip install flask
-    - pip install -r requirements.txt
+    - pip install numpy
+    - pip install Pillow
+    - pip install matplotlib
     - python3 Server.py
