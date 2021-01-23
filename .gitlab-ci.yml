@@ -7,7 +7,7 @@ build-front:
         - npm run ng build
 
  build-back:
-    image: python:3.7
+    image: python:latest
     stage: build
     script:
         - cd r3g-flask
