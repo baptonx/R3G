@@ -13,4 +13,4 @@ build-back:
     - cd r3g-flask
     - pip install wandb
     - pip install flask
-    - py Server.py
+    - python3 Server.py
