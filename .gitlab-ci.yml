@@ -5,3 +5,12 @@ build-front:
  - cd r3g-angular/R3GAngular
  - npm install --save three
  - npm run ng build
+
+ build-back:
+ image: python:3.7
+ stage: build
+ script:
+ - cd r3g-flask/R3GAngular
+ - pip install wandb
+ - pip install flask
+ - py Server.py
