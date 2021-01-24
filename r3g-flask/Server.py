@@ -20,11 +20,11 @@ def index():
     runs = api.runs("recoprecoce-intui")
     name_list = []
     for run in runs:
-        if run.state == 'finished':
+        if run.state == 'finished' and run.tags.count('GLU_Rpz')>0:
             name_list.append(run.name)
     return json.dumps(name_list)
 
 
 if __name__ == "__main__":
-    #app.run()
-    startWandb()
+    app.run()
+    #startWandb()
