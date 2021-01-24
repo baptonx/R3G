@@ -7,7 +7,7 @@ import {EngineService} from "./engine.service";
   styleUrls: ['./engine.component.css'],
   providers: [EngineService]
 })
-export class EngineComponent implements OnInit, OnDestroy {
+export class EngineComponent implements OnInit {
 
   showFiller = false;
 
@@ -17,9 +17,6 @@ export class EngineComponent implements OnInit, OnDestroy {
   @ViewChild('box', {static: true})
   public box!: ElementRef<HTMLCanvasElement>;
 
-  @ViewChild('pyramid', {static: true})
-  public pyramid!: ElementRef<HTMLCanvasElement>;
-
   public listElementHTML: Array<ElementRef<HTMLCanvasElement>> = [];
 
   constructor(private engServ: EngineService) {
@@ -27,14 +24,9 @@ export class EngineComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
-    this.listElementHTML.push(this.pyramid);
 
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML);
     this.engServ.animate();
-  }
-
-  ngOnDestroy(): void {
-    //this.engServ.sceneElements = [];
   }
 
 }

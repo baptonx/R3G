@@ -4,7 +4,6 @@ import {ElementRef, Injectable, NgZone, OnDestroy} from '@angular/core';
 interface MaScene {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
-  mesh: THREE.Mesh;
 }
 
 interface MaSceneElement {
@@ -34,26 +33,30 @@ export class EngineService implements OnDestroy {
     this.frameId = 0;
 
     this.canvas = canvas.nativeElement;
-    this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true});
+    this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
 
-
-    const x1 = this.getRandomInt(255);
-    const x2 = this.getRandomInt(255);
-    const x3 = this.getRandomInt(255);
     const sceneInitFunctionsByName = {
       ['box']: () => {
-        let {scene, camera, mesh} = this.makeScene('rgb('+x1+','+x2+','+x3+')');
-        const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-        const material = new THREE.MeshPhongMaterial({color: 'red'});
-        mesh = new THREE.Mesh(geometry, material);
+        const {scene, camera} = this.makeScene('rgb(30,30,30)');
+        const geometry = new THREE.BoxBufferGeometry(0.1, 0.1, 0.1);
+        const material = new THREE.MeshPhongMaterial({color: 'white'});
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.x = -1;
         scene.add(mesh);
+
+        const mesh2 = new THREE.Mesh(geometry, material);
+        mesh2.position.x = 1;
+        scene.add(mesh2);
+
         return (rect: DOMRect) => {
+          mesh2.position.x -= 0.001;
+          mesh.position.x += 0.001;
           mesh.rotation.y += 0.01;
           camera.aspect = rect.width / rect.height;
           camera.updateProjectionMatrix();
           this.renderer.render(scene, camera);
         };
-      },
+      }/*,
       ['pyramid']: () => {
         let {scene, camera, mesh} = this.makeScene('black');
         const radius = .8;
@@ -72,23 +75,24 @@ export class EngineService implements OnDestroy {
           camera.updateProjectionMatrix();
           this.renderer.render(scene, camera);
         };
-      },
+      },*/
     };
 
     for (const element of listElementHtml) {
       const sceneName = element.nativeElement.dataset.diagram;
+      // let key: 'box'|'pyramid' = 'box';
+      let key: 'box' = 'box';
       if (sceneName === 'box') {
-        const key: 'box' = 'box';
-        const sceneInitFunction: () => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
-        const sceneRenderFunction = sceneInitFunction();
-        this.addScene(element, sceneRenderFunction);
+        key = 'box';
       }
+      /*
       else if (sceneName === 'pyramid') {
-        const key: 'pyramid' = 'pyramid';
-        const sceneInitFunction: () => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
-        const sceneRenderFunction = sceneInitFunction();
-        this.addScene(element, sceneRenderFunction);
+        key = 'pyramid';
       }
+       */
+      const sceneInitFunction: () => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
+      const sceneRenderFunction = sceneInitFunction();
+      this.addScene(element, sceneRenderFunction);
     }
   }
 
@@ -105,9 +109,9 @@ export class EngineService implements OnDestroy {
     const fov = 45;
     const aspect = 2;  // the canvas default
     const near = 0.1;
-    const far = 5;
+    const far = 10;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 1, 2);
+    camera.position.set(0, 1, 5);
     camera.lookAt(0, 0, 0);
 
     {
@@ -117,8 +121,7 @@ export class EngineService implements OnDestroy {
       light.position.set(-1, 2, 4);
       scene.add(light);
     }
-    const mesh = new THREE.Mesh();
-    return {scene, camera, mesh};
+    return {scene, camera};
   }
 
   public resizeRendererToDisplaySize(): boolean {
@@ -177,7 +180,7 @@ export class EngineService implements OnDestroy {
         this.render();
       } else {
         window.addEventListener('DOMContentLoaded', () => {
-          //this.render();
+          this.render();
         });
       }
     });
