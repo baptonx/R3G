@@ -92,6 +92,7 @@ export class DialogCSVComponent implements OnInit {
 var inCsv = cartesianProduct(this.list);
 
   let csvContent = "data:text/csv;charset=utf-8," 
+  +("1GT\n")
       + inCsv.map((e: any[]) => e.join(";")).join("\n2\n");
       var encodedUri = encodeURI(csvContent);
 var link = document.createElement("a");

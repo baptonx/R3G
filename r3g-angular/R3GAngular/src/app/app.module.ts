@@ -27,7 +27,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {EngineComponent} from './component/engine/engine.component';
-
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -69,7 +69,8 @@ const appRoutes: Routes = [
     MatListModule,
     MatMenuModule,
     MatToolbarModule,
-    MatTabsModule
+    MatTabsModule,
+    HttpClientModule,
 
   ],
   providers: [],

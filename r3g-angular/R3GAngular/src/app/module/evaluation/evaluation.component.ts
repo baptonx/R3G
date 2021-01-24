@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,8 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EvaluationComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
   }
+
+  ngAfterViewInit():void{
+    
+    console.log("ok")
+    this.http.get<Array<string>>('/models/getAllNames' , {}).subscribe((returnedData: any) => console.log(returnedData));
+    
+}
 }

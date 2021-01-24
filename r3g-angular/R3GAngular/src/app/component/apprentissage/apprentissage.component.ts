@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
@@ -15,7 +16,7 @@ export class ApprentissageComponent implements OnInit {
   modeles = new FormControl();
 
   modelesList: string[] = ['Modèle 1','Modèle 2','Modèle 3'];
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,public http:HttpClient) { }
 
   openDialog():void{
     const dialogRef = this.dialog.open(DialogCSVComponent, {
@@ -26,9 +27,9 @@ export class ApprentissageComponent implements OnInit {
          hyperparametersNumberVal:["24","0","3","0.6","5","0.4","2","[1,2,4,8,16]","1.0","0.1","0.01","1","0.01","0.01","1","0.2"],
          hyperparametersNumber2:["doGlu","doBatchNormalisation","sideBySide","doMultiStream","doNormKMA","evalPredict","useWo0","trainWithGTReg",
         "doReorientationFor2Sk","maxPoolSpatial"],
-        hyperparametersNumberVal2:[ ['true', '1', 't', "doglu"],['true', '1', 't', "doglu"],['true', '1', 't', "dosbs", "sbs", "sidebyside"]
-      ,['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't'],['true', '1', 't']],
-      defaultVal:[['t'],['1'],['1'],['1'],['t'],['t'],['1'],['t'],['1'],['t']],
+        hyperparametersNumberVal2:[ ['true','false'], ['true','false'], ['true','false']
+      , ['true','false'], ['true','false'], ['true','false'], ['true','false'], ['true','false'], ['true','false'], ['true','false'], ['true','false']],
+      defaultVal:[['true'],['false'],['false'],['false'],['true'],['true'],['false'],['true'],['false'],['true']],
       orderVal:[0,1,2,16,3,17,18,19,4,5,6,7,8,9,20,10,11,21,22,23,12,13,14,15,24,25]
       
       }
@@ -41,6 +42,10 @@ export class ApprentissageComponent implements OnInit {
 
   ngOnInit(): void {
     
+  }
+
+  ngAfterViewInit():void{
+    this.http.get<Array<string>>('/models/getAllNames' , {}).subscribe((returnedData: any) => this.modelesList=returnedData);
   }
 
 }
