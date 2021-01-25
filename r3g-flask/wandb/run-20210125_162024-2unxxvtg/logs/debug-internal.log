@@ -1,0 +1,6 @@
+2021-01-25 16:20:26,965 INFO    MainThread:19096 [internal.py:wandb_internal():64] W&B internal server running at pid: 19096
+2021-01-25 16:20:28,001 WARNING MainThread:19096 [internal.py:is_dead():287] Internal process exiting, parent pid 18136 disappeared
+2021-01-25 16:20:28,002 ERROR   MainThread:19096 [internal.py:wandb_internal():114] Internal process shutdown.
+2021-01-25 16:20:29,012 INFO    SenderThread:19096 [sender.py:finish():756] shutting down sender
+2021-01-25 16:20:29,013 INFO    HandlerThread:19096 [handler.py:finish():274] shutting down handler
+2021-01-25 16:20:29,014 INFO    MainThread:19096 [internal.py:handle_exit():139] Internal process exited

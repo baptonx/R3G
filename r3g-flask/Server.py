@@ -15,7 +15,8 @@ def startWandb():
     print(np.asarray(image))
 
 
-@app.route('/models/getAllNames')
+#Cette route permet de récupérer la liste des modèles disponible sur Wandb, après filtration (Requete GET)
+@app.route('/models/getModelsNames')
 def index():
     runs = api.runs("recoprecoce-intui")
     name_list = []
@@ -26,5 +27,6 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run()
-    #startWandb()
+    #app.run()
+    startWandb()
+
