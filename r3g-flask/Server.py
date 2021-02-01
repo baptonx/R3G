@@ -4,6 +4,9 @@ from flask import Flask
 import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
+from os import listdir, walk
+from os.path import isfile, join
+import re
 
 
 app = Flask(__name__)
@@ -14,7 +17,20 @@ def startWandb():
     image=Image.open("FilesResult/DetailedConfusionsMatrix/confMatrixAt0.png")
     print(np.asarray(image))
 
-
+def test():
+    p = re.compile(r'.*[.](?=inkml$)[^.]*$')
+    listeFichiers = []
+    for path, dirs, files in walk("./"):
+        print(dirs)
+        for filename in files:
+            if p.match(filename):
+                print(path+'/'+filename)
+            #print(fichiers)
+            #for file in fichiers :
+             #   if p.match(file):
+              #      listeFichiers.extend(file)
+   # print(listeFichiers)
+    
 #Cette route permet de récupérer la liste des modèles disponible sur Wandb, après filtration (Requete GET)
 @app.route('/models/getModelsNames')
 def index():
@@ -25,8 +41,15 @@ def index():
             name_list.append(run.name)
     return json.dumps(name_list)
 
+#cette route permet de recuperer l'ensemble des noms des fichiers
+@app.route('/models/getMetaData')
+def index2():
+    fichiers = [f for f in listdir("./") if isfile(join("./", f))]
+    return json.dumps(fichiers)
+
 
 if __name__ == "__main__":
-    #app.run()
+    test()
+    app.run()
     startWandb()
 
