@@ -7,7 +7,7 @@
     position: relative;
     margin-top: 20px;
     left:15%;
-    width: 30%;
+    width: 40%;
     padding: 20px;
     min-width:100px;
     background-color: #444444;
@@ -39,4 +39,19 @@
 ::ng-deep.mat-form-field-ripple {
  /*change color of underline when focused*/
  background-color: white !important;;
+}
+.container {
+  margin-top: 20px;
+  justify-content: space-between;
+  align-content: space-between;
+}
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
+  color: white;
+}
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow  {
+  color: white;
 }

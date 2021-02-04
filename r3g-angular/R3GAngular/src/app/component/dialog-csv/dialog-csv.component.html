@@ -4,8 +4,8 @@
 
 <ng-container *ngFor="let eltName of this.data.hyperparametersNumber">
     <mat-form-field class="mat-form">
-      <p>{{eltName}}</p>
-    <input matInput [(ngModel)]="this.data.hyperparametersNumberVal[this.data.hyperparametersNumber.indexOf(eltName)]">
+      <p>{{eltName.name}}</p>
+    <input matInput [(ngModel)]="this.data.hyperparametersNumber[this.data.hyperparametersNumber.indexOf(eltName)].value">
   </mat-form-field>
   </ng-container>
 
@@ -13,11 +13,11 @@
 
 </div>
 <div>
-  <ng-container *ngFor="let eltName of this.data.hyperparametersNumber2">
+  <ng-container *ngFor="let eltName of this.data.hyperparametersBool">
     <mat-form-field appearance="fill" class="mat-form">
-      <p>{{eltName}}</p>
-      <mat-select [(ngModel)]="this.data.defaultVal[this.data.hyperparametersNumber2.indexOf(eltName)]" multiple>
-        <mat-option *ngFor="let elt of this.data.hyperparametersNumberVal2[this.data.hyperparametersNumber2.indexOf(eltName)]" [value]="elt">
+      <p>{{eltName.name}}</p>
+      <mat-select [(ngModel)]="this.data.hyperparametersBool[this.data.hyperparametersBool.indexOf(eltName)].value" multiple>
+        <mat-option *ngFor="let elt of ['true','false']" [value]="elt">
           {{elt}}
         </mat-option>
       </mat-select>

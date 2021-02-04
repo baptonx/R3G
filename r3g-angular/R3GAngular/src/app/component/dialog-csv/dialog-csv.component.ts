@@ -35,7 +35,7 @@ export class DialogCSVComponent implements OnInit {
     this.data.orderVal.forEach(i=>{
    
       if(i<=15){
-        var elt=this.data.hyperparametersNumberVal[i]
+        var elt=this.data.hyperparametersNumber[i].value
         console.log(elt)
         if( elt.includes(",") && !elt.includes("[")){
           this.list.push(this.toList(elt))
@@ -47,7 +47,7 @@ export class DialogCSVComponent implements OnInit {
         }
       }
       else{
-        var eltList=this.data.defaultVal[i-16]
+        var eltList=this.data.hyperparametersBool[i-16].value
         this.list.push(eltList)
         
         }
@@ -62,11 +62,11 @@ export class DialogCSVComponent implements OnInit {
       for(var i=0;i<this.list.length;i++){
       for(var j=0;j<this.list[i].length;j++){
       if(this.data.orderVal[i]<=15) {
-        this.list[i][j]=this.data.hyperparametersNumber[this.data.orderVal[i]]+"="+this.list[i][j]
+        this.list[i][j]=this.data.hyperparametersNumber[this.data.orderVal[i]].name+"="+this.list[i][j]
       }
       else{
-        console.log(this.data.hyperparametersNumber2[this.data.orderVal[i]-16])
-        this.list[i][j]=this.data.hyperparametersNumber2[this.data.orderVal[i]-16]+"="+this.list[i][j]
+        console.log(this.data.hyperparametersBool[this.data.orderVal[i]-16])
+        this.list[i][j]=this.data.hyperparametersBool[this.data.orderVal[i]-16].name+"="+this.list[i][j]
       }
     }
     }

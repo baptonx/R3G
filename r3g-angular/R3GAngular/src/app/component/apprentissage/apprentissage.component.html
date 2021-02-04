@@ -8,7 +8,10 @@
   </mat-select>
 
 </mat-form-field>
-<mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle' (click)="openDialog()">add_circle</mat-icon>
-<div><button mat-flat-button class='btn'>Lancer l'évaluation</button></div>
+<mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle'>add_circle</mat-icon>
 
+<div class="container flex">
+  <div><button mat-flat-button class='btn'>Lancer l'évaluation</button></div>
+  <div><button mat-flat-button class='btn' (click)="openDialog()">Générer les hyperparamètres</button></div>
 </div>
+
