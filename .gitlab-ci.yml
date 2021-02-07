@@ -1,3 +1,20 @@
+docker:
+  image: docker:19.03.12
+  variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+  services:
+    - docker:19.03.12-dind
+
+  before_script:
+    - docker info
+
+  build:
+  stage: build
+  script:
+    - cd r3g-flask
+    - docker build -t r3g-flask .
+
 build-front:
   image: node:12.13
   stage: build
@@ -18,3 +35,5 @@ build-back:
     - pip install matplotlib
     - wandb login 041f848335f8b0cc034a549438bfd49bd2d229e7
     - python3 Test.py
+
+
