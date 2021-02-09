@@ -2,8 +2,8 @@
 <mat-form-field appearance="fill">
   <mat-label>Choisir un modèle</mat-label>
   <mat-select>
-    <mat-option *ngFor="let m of modelesList" [value]="m">
-      {{m}}
+    <mat-option *ngFor="let m of modelesList" [value]="m.name">
+      {{m.name}}
     </mat-option>
   </mat-select>
 
@@ -15,3 +15,4 @@
   <div><button mat-flat-button class='btn' (click)="openDialog()">Générer les hyperparamètres</button></div>
 </div>
 
+</div>
