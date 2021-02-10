@@ -1,0 +1,8 @@
+_ModeVoxel1feat50_Dense50
+dilatRates:ListWrapper([1, 2, 4, 8, 16, 32, 64, 1, 2, 4, 8, 16, 32, 64])
+bestValidLoss:0.8965204
+nbEpoch:275
+Res on test : [0.5130682693173488, 4.477052, 0.4682978, 0.8483072, 0.70992965]
+Total params: 317,934
+Trainable params: 317,010
+Non-trainable params: 924

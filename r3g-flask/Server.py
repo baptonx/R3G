@@ -1,21 +1,29 @@
+import os
+
 import wandb
 import json
 from flask import Flask
-import numpy as np
-from PIL import Image
-from matplotlib import pyplot as plt
 from os import listdir, walk
 from os.path import isfile, join
 import re
 
+from Class.Model import Model
 
 app = Flask(__name__)
 api = wandb.Api()
-def startWandb():
-    run = api.run("recoprecoce-intui/36mcvs8u")
-    im = run.file("FilesResult/DetailedConfusionsMatrix/confMatrixAt0.png").download(replace=True)
-    image=Image.open("FilesResult/DetailedConfusionsMatrix/confMatrixAt0.png")
-    print(np.asarray(image))
+
+
+#On télécharge tous les fichiers liés aux hyperparamètres d'un model. C'est essentiel pour évaluer une séquence
+def downloadHyperparameters():
+    runs = api.runs("recoprecoce-intui")
+    for run in runs:
+        if not os.path.exists("Hyperparameters/" + run.id):
+            if run.state == 'finished' and run.tags.count('Liu') > 0:
+                for file in run.files():
+                    if file.name=="best_val_loss_epochs.txt":
+                        file.download("Hyperparameters/"+run.id, replace=True)
+
+
 
 def test():
     p = re.compile(r'.*[.](?=inkml$)[^.]*$')
@@ -37,8 +45,10 @@ def index():
     runs = api.runs("recoprecoce-intui")
     name_list = []
     for run in runs:
-        if run.state == 'finished' and run.tags.count('GLU_Rpz')>0:
-            name_list.append(run.name)
+        if run.state == 'finished' and run.tags.count('Liu')>0:
+            file = api.run("recoprecoce-intui/"+run.id).file("best_val_loss_epochs.txt")
+            m = Model(run.id, run.name)
+            name_list.append(m.__dict__)
     return json.dumps(name_list)
 
 #cette route permet de recuperer l'ensemble des noms des fichiers
@@ -49,7 +59,7 @@ def index2():
 
 
 if __name__ == "__main__":
-    test()
-    app.run()
-    startWandb()
+    #test()
+    downloadHyperparameters()
+    app.run(host='0.0.0.0')
 
