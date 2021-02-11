@@ -1,8 +1,34 @@
-<div mat-dialog-content #dialog>
+<div class='dialog' mat-dialog-content #dialog>
 
-    <button type="button" mat-raised-button (click)="fileInput.click()">Hyperparamètres</button>
+
+ 
+      <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Sélection des Hyperparamètres</ng-template> 
+    <button class='btn' type="button" mat-raised-button (click)="fileInput.click()">{{this.fileCSV}}</button>
     <input hidden (change)='openFile($event)' #fileInput type="file" id="file">
-
-
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" label="Sélection des séquences">
+          <form [formGroup]="secondFormGroup">
+            <app-tableau-expl></app-tableau-expl>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Création du modèle</ng-template>
+          <div>
+            <button class='btn' type="button" mat-raised-button>Lancer l'apprentissage</button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+        
     
 </div>
