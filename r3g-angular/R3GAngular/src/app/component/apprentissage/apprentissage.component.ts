@@ -7,6 +7,7 @@ import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool
 import { HyperparameterNumber } from 'src/app/class/evaluation/hyperparameter-number';
 import { Model } from 'src/app/class/evaluation/model';
 import {DialogCSVComponent} from '../dialog-csv/dialog-csv.component';
+import { DialogLearningComponent } from '../dialog-learning/dialog-learning.component';
 
 
 @Component({
@@ -25,6 +26,12 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
 
   // Séparation des hyperparametres en 2 catégories, ceux qui prennent des valeurs numériques et ceux qui prennent des boolean
   // orderVal pour ordonner les hyperparametres dans le csv, et qu'il match avec le format de william
+
+  openLearning():void{
+    const DialogRef = this.dialog.open(DialogLearningComponent,{
+      data:{}
+    })
+  }
   openDialog(): void{
     const dialogRef = this.dialog.open(DialogCSVComponent, {
       data: {

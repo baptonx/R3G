@@ -28,6 +28,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {EngineComponent} from './component/engine/engine.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DialogLearningComponent } from './component/dialog-learning/dialog-learning.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     DialogCSVComponent,
     TableauExplComponent,
     NavigationModulesComponent,
-    EngineComponent
+    EngineComponent,
+    DialogLearningComponent
   ],
   imports: [
     BrowserModule,
