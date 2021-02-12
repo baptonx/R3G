@@ -1,0 +1,11 @@
+_ModeVoxel11_GT_Dropout30feat15_Dense100
+oarId:274994
+argv:['modeVox=11', 'modeLabel=0', 'batch=3', 'doGlu=t', 'dropout=0.3', 'doBN=f', 'sBs=f', 'doMulStr=f', 'dense=100', 'dnseDropout=0.3', 'featMap=15', 'dilats=[1,2,4,8,16,32,64,1,2,4,8,16,32,64]', 'treshCuDi=0', 'tol=0', 'normKMA=t', 'lossWWin=0.01', 'lossWClass=1', 'pred=t', 'wo0=f', 'learnGTReg=t', 'weiBG=0.05', 'weiBGReg=0.01', 'nbEpoch=1570', 'validPart=0.1', 'reorient=f', 'mPoolSpa=t', 'FolderFit=Vox2SqKMA']
+dilatRates:ListWrapper([1, 2, 4, 8, 16, 32, 64, 1, 2, 4, 8, 16, 32, 64])
+bestValidLoss:0.8437581
+nbEpoch:1461
+metrics name: ['loss', 'output_1_loss', 'output_2_loss', 'output_2_sparse_categorical_accuracy', 'output_2_accuracyWo0']
+Res on test: [2.0923474840819836, 176.5563, 0.3267845, 0.80570686, 0.7811035]
+Total params: 211,672.0
+Trainable params: 211,672
+Non-trainable params: 0.0
