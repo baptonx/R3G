@@ -1,5 +1,5 @@
 build-front:
-  image: node:12.13
+  image: node:12.13-alpine
   stage: build
   script:
     - cd r3g-angular/R3GAngular
