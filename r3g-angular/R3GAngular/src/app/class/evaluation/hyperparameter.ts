@@ -4,7 +4,6 @@ export abstract class Hyperparameter {
 
     constructor(n:string){
         this.name=n;
-      
     }
 
 }
