@@ -1,15 +1,9 @@
-.tab-container{
-  margin-top: 50px;
-  min-height:80vh;
-}
+
 .navbar-spacer{
   width: 2%;
 }
 .bouton-menu{
   width:100%;
-}
-.onglet-sequences-selectionnees {
-  padding: 20px;
 }
 .lien-container{
   position: absolute;
@@ -19,16 +13,9 @@
 }
 .ongletBDD{
   width:100%;
-  height: 300%;
 }
 .picker{
 
-}
-.bouton-sidenav{
-  position:absolute;
-  right:0;
-  width:auto;
-  height:5%;
 }
 app-navigation-modules{
   display:flex;
@@ -41,22 +28,6 @@ app-navigation-modules{
 mat-toolbar{
   color:white;
 }
-.sequenceSel{
-  width:15em ;
-  height:30px;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(255,255,255,0.12);
-  border-bottom-width: 1px;
-  padding-top: 5px;
-}
-.deleteSeq{
-  position:absolute;
-  right: 40px;
-}
-.deleteSeq:hover{
-  color: dodgerblue;
-  cursor:pointer;
-}
-.selectedSeqHidden{
-  display:none;
+app-tableau-expl{
+  height:200%;
 }

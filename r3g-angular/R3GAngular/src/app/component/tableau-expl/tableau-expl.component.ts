@@ -1,12 +1,14 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
+import {MatInput} from "@angular/material/input";
 
 export interface sequencesTab {
   name: string;
   position: number;
   weight: number;
   symbol: string;
+  [key: string]: any
 }
 
 let ELEMENT_DATA: sequencesTab[] = [
@@ -37,11 +39,24 @@ let ELEMENT_DATA: sequencesTab[] = [
   templateUrl: './tableau-expl.component.html',
   styleUrls: ['./tableau-expl.component.css']
 })
-export class TableauExplComponent implements AfterViewInit {
+export class TableauExplComponent implements AfterViewInit, OnInit {
+  selectedSeq: Array<string>; // Contient les indices des séquences sélectionnées
+  @ViewChild('inputFiltre') inputFiltre!: MatInput;
   selectionListe = new Array<boolean>(ELEMENT_DATA.length);
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<sequencesTab>(ELEMENT_DATA);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+
+  constructor() {
+    this.selectedSeq = ['sequence 1', 'sequence 2', 'sequence 3', 'sequence 4', 'sequence 5', 'sequence 6', 'sequence 7', 'sequence 8', 'sequence 9', 'sequence 10'];
+  }
+
+  ngOnInit(): void {
+  }
+  deleteSeq(i: number): void{
+    this.selectedSeq.splice(i,1);
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -51,5 +66,8 @@ export class TableauExplComponent implements AfterViewInit {
     this.selectionListe[i] = !this.selectionListe[i];
     console.log(this.selectionListe);
     console.log(i);
+  }
+
+  tournerBouton() {
   }
 }

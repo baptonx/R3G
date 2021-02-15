@@ -9,7 +9,7 @@ import {HttpClient} from '@angular/common/http';
 })
 
 
-export class ExplorationComponent implements OnInit, AfterViewInit {
+export class ExplorationComponent implements OnInit {
   selectedSeq: Array<string>; // Contient les indices des séquences sélectionnées
   @ViewChild('inputFiltre') inputFiltre!: MatInput;
   picker = document.getElementById('picker');
@@ -19,8 +19,12 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    /*// @ts-ignore
-    this.picker.addEventListener('change', e => {
+  }
+  /*
+  importBase(): void{
+
+    // @ts-ignore
+    picker.addEventListener('change', e => {
       // @ts-ignore
       for (const file of Array.from(e.target.files)) {
         const item = document.createElement('li');
@@ -29,8 +33,8 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
         // @ts-ignore
         listing.appendChild(item);
       }
-    });*/
-  }
+    });
+  }*/
   deleteSeq(i: number): void{
     this.selectedSeq.splice(i, 1);
   }

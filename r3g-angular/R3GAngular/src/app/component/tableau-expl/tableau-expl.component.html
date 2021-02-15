@@ -1,3 +1,45 @@
+<mat-drawer-container style="height: 200%">
+  <mat-drawer #drawerSeq class="onglet-sequences-selectionnees" mode="side" position="end">
+    <mat-form-field>
+      <mat-label>Filtrer</mat-label>
+      <input #inputFiltre matInput placeholder="Ex. Sequence 1">
+    </mat-form-field>
+
+    <table mat-table [dataSource]="this.selectedSeq">
+      <ng-container matColumnDef="sequenceName">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let sequence" class="nameSelectedSequence"> {{sequence}} </td>
+      </ng-container>
+      <ng-container matColumnDef="barChart">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let sequence"> <mat-icon class="sequenceSelectedIcon"> bar_chart</mat-icon> </td>
+      </ng-container>
+      <ng-container matColumnDef="deleteSequence">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let sequence"> <mat-icon class="sequenceSelectedIcon">delete_outline</mat-icon> </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="['sequenceName','barChart','deleteSequence']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['sequenceName','barChart','deleteSequence'];"></tr>
+    </table>
+    <!--
+    <div *ngFor="let sequence of this.selectedSeq; index as i">
+      <ng-container *ngIf="sequence.includes(inputFiltre.value); else elseBlock">
+        <div [className]="'sequenceSel'">
+          <mat-list-item><div><span>{{sequence}}</span>   <span class="deleteSeq" (click)="deleteSeq(i)">x</span></div></mat-list-item>
+        </div>
+      </ng-container>
+      <ng-template #elseBlock style="display: none"></ng-template>
+    </div>
+    -->
+  </mat-drawer>
+
+  <div class="bouton-sidenav">
+    <button type="button" mat-button (click)="drawerSeq.toggle() ; tournerBouton()">
+      <mat-icon id="icone_bouton_sequences_selectionnees">arrow_back_ios</mat-icon>
+    </button>
+  </div>
+
+
 <div class="tab-container">
   <div>
     <span>Filtres : </span>
@@ -35,4 +77,5 @@
 
   <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
 </div>
+</mat-drawer-container>
 
