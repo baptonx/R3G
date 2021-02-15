@@ -6,6 +6,7 @@ from flask import Flask
 from os import listdir, walk
 from os.path import isfile, join
 import re
+import xml.etree.ElementTree as ET
 
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
@@ -14,6 +15,7 @@ app = Flask(__name__)
 api = wandb.Api()
 runs = api.runs("recoprecoce-intui")
 model_list=[]
+liste_fichier_inkml = []
 
 
 #On télécharge tous les fichiers liés aux hyperparamètres d'un model. C'est essentiel pour évaluer une séquence
@@ -28,15 +30,24 @@ def downloadHyperparameters():
 
 
 
-def test():
+def recherche_fichier_inkml():
     p = re.compile(r'.*[.](?=inkml$)[^.]*$')
-    listeFichiers = []
-    for path, dirs, files in walk("./"):
-        print(dirs)
+    for path, dirs, files in walk(".\BDD"):
         for filename in files:
             if p.match(filename):
-                print(path+'/'+filename)
-            #print(fichiers)
+                liste_fichier_inkml.append(path+'\\'+filename)
+    print(liste_fichier_inkml)
+
+def ouverture_fichier_inkml(index):
+    print(liste_fichier_inkml[index])
+    tree=ET.parse(liste_fichier_inkml[index])
+    root = tree.getroot()
+    for child in root:
+         print(child.tag, child.attrib)
+         for children in child:
+             print(children.tag, children.attrib, children.text)
+         
+                #print(fichiers)
             #for file in fichiers :
              #   if p.match(file):
               #      listeFichiers.extend(file)
@@ -86,7 +97,8 @@ def index2():
 
 
 if __name__ == "__main__":
-    #test()
+    #recherche_fichier_inkml()
+    #ouverture_fichier_inkml(2)
     downloadHyperparameters()
     startAPIWandb()
     app.run(host='0.0.0.0')
