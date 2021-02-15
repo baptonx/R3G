@@ -30,7 +30,9 @@ import {EngineComponent} from './component/engine/engine.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogLearningComponent } from './component/dialog-learning/dialog-learning.component';
 import {MatStepperModule} from '@angular/material/stepper';
-
+import { TrainSeqComponent } from './component/train-seq/train-seq.component';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -48,7 +50,8 @@ const appRoutes: Routes = [
     TableauExplComponent,
     NavigationModulesComponent,
     EngineComponent,
-    DialogLearningComponent
+    DialogLearningComponent,
+    TrainSeqComponent
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,8 @@ const appRoutes: Routes = [
     MatInputModule,
     MatSidenavModule,
     MatStepperModule,
+    MatRadioModule,
+    MatCheckboxModule,
 
 
     RouterModule.forRoot(appRoutes),

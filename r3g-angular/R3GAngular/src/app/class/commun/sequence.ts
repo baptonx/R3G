@@ -13,7 +13,7 @@ export class Sequence {
     this.metaDonnees = new Map();
     this.traceNormal = new Array<Array<number>>();
     this.traceVoxel = new Array<Array<number>>();
-    this.isTrain = false;
+    this.isTrain = true;
     this.isTest = false;
   }
 
