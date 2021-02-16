@@ -25,5 +25,8 @@ export class Sequence {
 
   }
 
+  equals(seq: Sequence): boolean{
+    return this.id === seq.id;
+  }
 
 }

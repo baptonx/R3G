@@ -32,24 +32,6 @@ table{
   height:50px;
 }
 
-.sequenceSel{
-  width:15em ;
-  height:30px;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(255,255,255,0.12);
-  border-bottom-width: 1px;
-  padding-top: 5px;
-}
-.sequenceSelectedIcon:hover{
-  color: dodgerblue;
-  cursor:pointer;
-}
-.nameSelectedSequence{
-  padding-right: 10px;
-}
-.selectedSeqHidden{
-  display:none;
-}
 notRotatedButton{
   transform: rotate(0deg);
   transition: 100ms;
