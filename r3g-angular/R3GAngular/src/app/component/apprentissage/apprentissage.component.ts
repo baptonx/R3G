@@ -55,6 +55,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      console.log(this.modelesList)
     });
   }
 
@@ -63,6 +64,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void{
     this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+
   }
 
 }

@@ -6,7 +6,7 @@
         <mat-step [stepControl]="firstFormGroup">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Sélection des Hyperparamètres</ng-template> 
-    <button class='btn' type="button" mat-raised-button (click)="fileInput.click()">{{this.fileCSV}}</button>
+    <button class='btn' type="button" mat-raised-button (click)="fileInput.click()">{{this.fileCSVName}}</button>
     <input hidden (change)='openFile($event)' #fileInput type="file" id="file">
             <div>
               <button mat-button matStepperNext>Next</button>
@@ -25,7 +25,13 @@
         <mat-step>
           <ng-template matStepLabel>Création du modèle</ng-template>
           <div>
-            <button class='btn' type="button" mat-raised-button>Lancer l'apprentissage</button>
+            <mat-form-field class="example-full-width">
+              <mat-label>Nom du modèle</mat-label>
+              <textarea matInput  #modelName ></textarea>
+            </mat-form-field>
+          </div>
+          <div>
+            <button class='btn' type="button" mat-raised-button (click)='startLearning()'>Lancer l'apprentissage</button>
           </div>
         </mat-step>
       </mat-horizontal-stepper>
