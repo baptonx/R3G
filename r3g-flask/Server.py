@@ -62,11 +62,11 @@ def recherche_fichier_inkml():
         for filename in files:
             if p_1.match(filename):
                 LISTE_FICHIER_INKML.append(path+'\\'+filename)
-    print LISTE_FICHIER_INKML
+    print (LISTE_FICHIER_INKML)
 
 def ouverture_fichier_inkml(index):
     """Contenu du fichier inkml."""
-    print LISTE_FICHIER_INKML[index]
+    print (LISTE_FICHIER_INKML[index])
     tree = ET.parse(LISTE_FICHIER_INKML[index])
     root = tree.getroot()
     for child in root:
