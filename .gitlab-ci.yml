@@ -15,6 +15,8 @@ build-back:
     - pip install flask
     - wandb login 041f848335f8b0cc034a549438bfd49bd2d229e7
     - pip install pylint --upgrade
-    - pylint Server.py
+    - pylint server.py
+    - pylint test.py
+    - python3 test.py
 
 
