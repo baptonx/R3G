@@ -30,9 +30,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   updateAll(): void{
-    console.log("updating");
+    console.log(this.explService.sequences);
     this.displayedColumns = Object.keys(this.explService.sequences[0]);
-    this.dataSource = new MatTableDataSource<sequencesTab>([{id:"1",position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'}]);
+    this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
   }
 
   ngOnInit(): void {

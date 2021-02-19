@@ -31,12 +31,10 @@
   <table mat-table matSort [dataSource]="dataSource">
 
     <!--Position Column-->
-    <ng-container  *ngFor="let colName of displayedColumns">
-    <ng-container matColumnDef="{{colName}}">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{colName}} </th>
-      <td mat-cell *matCellDef="let element"> {{element[colName]}} </td>
-    </ng-container>
-    </ng-container>
+      <ng-container *ngFor="let colName of displayedColumns" matColumnDef="{{colName}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{colName}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[colName]}} </td>
+      </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" [className]="this.selectionListe[row.position]?'tab-line tab-line-selected':'tab-line tab-line-not-selected'"  (click)="selection(row.position)"></tr>
