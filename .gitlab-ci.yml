@@ -17,6 +17,7 @@ build-back:
     - pip install Pillow
     - pip install matplotlib
     - wandb login 041f848335f8b0cc034a549438bfd49bd2d229e7
-    - python3 Test.py
+    - pip install pylint-gitlab
+    - pylint Server.py
 
 
