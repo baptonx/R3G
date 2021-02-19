@@ -1,16 +1,16 @@
 export class Sequence {
   id: string;
-  metaDonnees: Map<string, any>;
+  metaDonnees: object;
   pathVideoRGB: string;
   traceNormal: Array<Array<number>>;
   traceVoxel: Array<Array<number>>;
   isTrain: boolean;
   isTest: boolean;
 
-  constructor(id: string, pathVideoRgb: string = ''){
+  constructor(id: string, pathVideoRGB: string = '', metadonnee: object = {}){
     this.id = id;
-    this.pathVideoRGB = pathVideoRgb;
-    this.metaDonnees = new Map();
+    this.pathVideoRGB = pathVideoRGB;
+    this.metaDonnees = metadonnee;
     this.traceNormal = new Array<Array<number>>();
     this.traceVoxel = new Array<Array<number>>();
     this.isTrain = true;
