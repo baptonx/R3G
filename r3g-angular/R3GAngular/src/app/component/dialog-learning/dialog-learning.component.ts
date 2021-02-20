@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
-import { DialogErrorComponent } from '../dialog-error/dialog-error.component';
+
 
 @Component({
   selector: 'app-dialog-learning',
@@ -137,10 +137,6 @@ changeMode(i:number):void{
   }
 }
 
-openDialog(): void{
-  const dialogRef = this.dialog.open(DialogErrorComponent, {
-    data: {
-    }
-  });
-}
+
+
 }
