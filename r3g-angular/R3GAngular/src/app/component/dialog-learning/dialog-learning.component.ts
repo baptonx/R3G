@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
+import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
+import { DialogErrorComponent } from '../dialog-error/dialog-error.component';
 
 @Component({
   selector: 'app-dialog-learning',
@@ -19,9 +22,15 @@ export class DialogLearningComponent implements OnInit {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   file:File | undefined;
+  isManual:boolean;
+  isCrossVal:boolean;
+  isProtocole:boolean
 
-  constructor(private _formBuilder: FormBuilder, public http:HttpClient) {
+  constructor(private _formBuilder: FormBuilder, public http:HttpClient,public serviceSeq:SequencesChargeesService,public dialog:MatDialog) {
     this.fileCSVName="Hyperparamètres";
+    this.isManual=false;
+    this.isCrossVal=false;
+    this.isProtocole=false;
   }
 
   ngOnInit(): void {
@@ -43,7 +52,6 @@ export class DialogLearningComponent implements OnInit {
 
   
   startLearning(){
-    this.chooseSequence();
     if(this.file!=undefined){
     const formData: FormData = new FormData();
     formData.append('file', this.file, this.file.name);
@@ -51,21 +59,42 @@ export class DialogLearningComponent implements OnInit {
     this.http.post('/models/uploadFile/'+name,formData).subscribe(
       (response: any) => {
           console.log(response)
+          let fileSeq=this.chooseSequence();
+          const sequences: FormData = new FormData();
+          sequences.append('file', fileSeq, fileSeq.name);
+          this.http.post('/models/uploadFile/'+name,sequences).subscribe(
+            (response: any) => {
+                console.log(response)
+            },
+            (error: any) => {
+                console.log(error)
+            });
       },
       (error: any) => {
           console.log(error)
       });
+
+   
     }
   }
 
-  chooseSequence(){
+  chooseSequence():File{
     let csvContent = "data:text/csv;charset=utf-8," 
     +("Sequence1\n");
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    document.body.appendChild(link); 
-    console.log(link);
+    let train=['Train\n']
+    let test=['\n','Test\n']
+    this.serviceSeq.sequences.forEach(seq=>{
+      if(seq.isTrain){
+        train.push(seq.id)
+        train.push(';')
+      }
+      else{
+        test.push(seq.id)
+        test.push(';')
+      }
+    })
+    let file = new File(train.concat(test), 'hello_world.txt', {type: 'text/plain'});
+    return file
   }
   
 
@@ -85,5 +114,33 @@ export class DialogLearningComponent implements OnInit {
         reader.readAsText(input.files[index]);
         this.fileCSVName=input.files[index].name;
     };
+}
+
+changeMode(i:number):void{
+  switch(i){
+    case 1:
+      this.isManual=false;
+      this.isProtocole=true;
+      this.isCrossVal=false;
+      break;
+    case 2:
+      this.isManual=true;
+      this.isProtocole=false;
+      this.isCrossVal=false;
+      break;
+    case 3:
+      this.isManual=false;
+      this.isProtocole=false;
+      this.isCrossVal=true;
+      break;
+
+  }
+}
+
+openDialog(): void{
+  const dialogRef = this.dialog.open(DialogErrorComponent, {
+    data: {
+    }
+  });
 }
 }

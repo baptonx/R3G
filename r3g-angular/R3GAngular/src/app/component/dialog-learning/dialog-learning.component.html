@@ -2,7 +2,7 @@
 
 
  
-      <mat-horizontal-stepper [linear]="isLinear" #stepper>
+      <mat-horizontal-stepper [linear]="isLinear" #stepper >
         <mat-step [stepControl]="firstFormGroup">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Sélection des Hyperparamètres</ng-template> 
@@ -15,7 +15,12 @@
         </mat-step>
         <mat-step [stepControl]="secondFormGroup" label="Sélection des séquences">
           <form [formGroup]="secondFormGroup">
-            <app-train-seq></app-train-seq>
+            <div class='container flex'>
+            <button class='btn' type="button" mat-raised-button (click)='changeMode(1)' id='protocole'>Protocole</button>
+            <button class='btn' type="button" mat-raised-button (click)='changeMode(2)' id='manual'>Répartition manuelle</button>
+            <button class='btn' type="button" mat-raised-button (click)='changeMode(3)' id='crossValid'>Validation croisée</button>
+          </div>
+            <app-train-seq *ngIf="this.isManual"></app-train-seq>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext>Next</button>
@@ -23,7 +28,7 @@
           </form>
         </mat-step>
         <mat-step>
-          <ng-template matStepLabel>Création du modèle</ng-template>
+          <ng-template matStepLabel>Création du modèle et lancement de l'apprentissage</ng-template>
           <div>
             <mat-form-field class="example-full-width">
               <mat-label>Nom du modèle</mat-label>
