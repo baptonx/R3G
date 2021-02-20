@@ -14,11 +14,11 @@ export class ExplorationComponent implements OnInit {
   @ViewChild('inputFiltre') inputFiltre!: MatInput;
   picker = document.getElementById('picker');
   listing = document.getElementById('listing');
+
   constructor(private http: HttpClient, public bdd: BddService) {
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   /*
   importBase(): void{
 

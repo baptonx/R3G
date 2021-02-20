@@ -46,3 +46,7 @@ notRotatedButton{
   width:auto;
   height:5%;
 }
+.w-50{
+  width: 50px;
+  padding-top: 10px;
+}
