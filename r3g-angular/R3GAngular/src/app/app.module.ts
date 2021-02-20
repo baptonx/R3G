@@ -34,7 +34,6 @@ import { TrainSeqComponent } from './component/train-seq/train-seq.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SequencesChargeesComponent } from './component/sequences-chargees/sequences-chargees.component';
-import { DialogErrorComponent } from './component/dialog-error/dialog-error.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
