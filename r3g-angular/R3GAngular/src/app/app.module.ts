@@ -53,7 +53,7 @@ const appRoutes: Routes = [
     EngineComponent,
     DialogLearningComponent,
     TrainSeqComponent,
-    SequencesChargeesComponent
+    SequencesChargeesComponent,
   ],
   imports: [
     BrowserModule,
