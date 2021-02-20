@@ -55,7 +55,6 @@ const appRoutes: Routes = [
     DialogLearningComponent,
     TrainSeqComponent,
     SequencesChargeesComponent,
-    DialogErrorComponent
   ],
   imports: [
     BrowserModule,
