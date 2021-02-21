@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {sequencesTab, TableauExplService} from "../../service/tableau-expl.service";
+import {VisualisationExploService} from "../../service/visualisation-explo.service";
 
 
 
@@ -21,7 +22,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   //subscription: Subscription;
 
 
-  constructor(public explService: TableauExplService) {
+  constructor(public explService: TableauExplService, public visuService: VisualisationExploService) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
     //this.subscription = this.explService.onMessage().subscribe(() => {
       this.updateAll();

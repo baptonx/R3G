@@ -28,5 +28,10 @@ app-navigation-modules{
 mat-toolbar{
   color:white;
 }
-app-tableau-expl{
+app-visualitation-explo{
+  position: fixed;
+  z-index:1;
+  bottom: 0;
+  width: 100%;
+  color: #303030;
 }

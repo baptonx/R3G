@@ -1,0 +1,27 @@
+.head-panel{
+  height: 15px;
+  background-color: #222222;
+  cursor: row-resize;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  text-align: right;
+}
+.button-header{
+  color:white;
+  position: absolute;
+  top:-12px;
+  right:5px;
+}
+.icon-header{
+  font-size: 15px;
+}
+.body-panel{
+  background-color: #555555;
+  display: flex;
+}
+.affichage{
+  background-color:white;
+  width: 100px;
+  height: 160px;
+  margin: 50px;
+}
