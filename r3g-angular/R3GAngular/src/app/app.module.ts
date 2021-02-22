@@ -35,6 +35,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SequencesChargeesComponent } from './component/sequences-chargees/sequences-chargees.component';
 import { VisualitationExploComponent } from './component/visualitation-explo/visualitation-explo.component';
+import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -56,6 +57,7 @@ const appRoutes: Routes = [
     TrainSeqComponent,
     SequencesChargeesComponent,
     VisualitationExploComponent,
+    ProtocoleSeqComponent,
   ],
   imports: [
     BrowserModule,

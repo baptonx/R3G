@@ -20,6 +20,7 @@
             <button class='btn' type="button" mat-raised-button (click)='changeMode(2)' id='manual'>Répartition manuelle</button>
             <button class='btn' type="button" mat-raised-button (click)='changeMode(3)' id='crossValid'>Validation croisée</button>
           </div>
+            <app-protocole-seq *ngIf="this.isProtocole"></app-protocole-seq>
             <app-train-seq *ngIf="this.isManual"></app-train-seq>
             <div>
               <button mat-button matStepperPrevious>Back</button>

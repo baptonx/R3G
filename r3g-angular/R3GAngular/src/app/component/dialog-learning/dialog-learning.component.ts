@@ -136,7 +136,4 @@ changeMode(i:number):void{
 
   }
 }
-
-
-
 }

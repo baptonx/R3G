@@ -1,3 +1,8 @@
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Séquence1" #input>
+</mat-form-field>
+
 <table mat-table matSort [dataSource]="dataSource">
 
     <!-- Position Column -->
