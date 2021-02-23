@@ -2,8 +2,7 @@
 
 import os
 import json
-from os import listdir, walk
-from os.path import isfile, join
+from os import walk
 import re
 import xml.etree.ElementTree as ET
 from flask import Flask, request, flash, redirect
@@ -64,13 +63,13 @@ def recherche_fichier_inkml():
                 LISTE_FICHIER_INKML[filename] = path+'\\'+filename
     print(LISTE_FICHIER_INKML)
 
-def get_meta_Donnee(filename):
+def get_meta_donnee(filename):
     """Contenu du fichier inkml."""
     filepath = LISTE_FICHIER_INKML[filename]
     name = filename
-    format_Donnee = {}
+    format_donnee = {}
     capteur = {}
-    user= {}
+    user = {}
     annotations = {}
     donnees = {}
     others = {}
@@ -83,38 +82,39 @@ def get_meta_Donnee(filename):
 ##         print(child.tag, child.attrib)
 ##         for children in child:
 ##             print(children.tag, children.attrib, children.text)
-         if (child.tag == "{http://www.w3.org/2003/InkML}traceFormat") :
+        if child.tag == "{http://www.w3.org/2003/InkML}traceFormat":
             for children in child:
-                format_Donnee[children.attrib['name']] = children.attrib['type']
-         elif (child.tag == "{http://www.w3.org/2003/InkML}annotationXML") :
-            if (child.attrib == {'type': 'Capteur'}):
+                format_donnee[children.attrib['name']] = children.attrib['type']
+        elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+            if child.attrib == {'type': 'Capteur'}:
                 for children in child:
-                     capteur[children.attrib['type']] = children.text
-            if (child.attrib == {'type': 'User'}):
+                    capteur[children.attrib['type']] = children.text
+            if child.attrib == {'type': 'User'}:
                 for children in child:
-                     user[children.attrib['type']] = children.text
-            if (child.attrib == {'type': 'actions'}):
+                    user[children.attrib['type']] = children.text
+            if child.attrib == {'type': 'actions'}:
                 action = {}
-                nb_annotation+=1
+                nb_annotation += 1
                 for children in child:
-                     action[children.attrib['type']]= children.text
+                    action[children.attrib['type']] = children.text
                 annotations[nb_annotation] = action
-            else :
-                other = {}  ##rÃ©cupere les annotations non implÃ©menter(autres que capteur, user, action)
-                nb_others+=1
+            else:
+##rÃ©cupere les annotations non implÃ©menter(autres que capteur, user, action)
+                other = {}
+                nb_others += 1
                 for children in child:
-                     other[children.attrib['type']]= children.text
+                    other[children.attrib['type']] = children.text
                 others[child.attrib['type']] = other
-         elif (child.tag == "{http://www.w3.org/2003/InkML}traceGroup") :
+        elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             for children in child:
-                if (children.tag == "{http://www.w3.org/2003/InkML}trace"):
+                if children.tag == "{http://www.w3.org/2003/InkML}trace":
                     dict_final = []
                     dict_1 = children.text.split(", ")
-                    for point in dict_1: 
+                    for point in dict_1:
                         tab_2 = point.split(" ")
                         dict_final.append(tab_2)
                     donnees[nb_articulations] = dict_final
-                    nb_articulations+=1
+                    nb_articulations += 1
 
 ##    print(filepath)
 ##    print(format_Donnee)
@@ -123,11 +123,11 @@ def get_meta_Donnee(filename):
 ##    print(annotations)
 ##    print(donnees)
 ##    print(others)
-    struct_metaDonnee =[name, format_Donnee, user, capteur, others]
-    print(struct_metaDonnee)
-    return struct_metaDonnee
+    struct_metadonnee = [name, format_donnee, user, capteur, others]
+    print(struct_metadonnee)
+    return struct_metadonnee
 
-def get_Donnee(filename):
+def get_donnee(filename):
     """Contenu du fichier inkml."""
     filepath = LISTE_FICHIER_INKML[filename]
     donnees = {}
@@ -135,16 +135,16 @@ def get_Donnee(filename):
     root = tree.getroot()
     nb_articulations = 0
     for child in root:
-         if (child.tag == "{http://www.w3.org/2003/InkML}traceGroup") :
+        if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             for children in child:
-                if (children.tag == "{http://www.w3.org/2003/InkML}trace"):
+                if children.tag == "{http://www.w3.org/2003/InkML}trace":
                     dict_final = []
                     dict_1 = children.text.split(", ")
-                    for point in dict_1: 
+                    for point in dict_1:
                         tab_2 = point.split(" ")
                         dict_final.append(tab_2)
                     donnees[nb_articulations] = dict_final
-                    nb_articulations+=1
+                    nb_articulations += 1
 
     print(donnees)
     return donnees
@@ -212,18 +212,20 @@ def upload_file(name):
 
 
 @APP.route('/models/getMetaDonnee')
-def getMetaDonne():
-    meta_Donnees = []
+def route_get_meta_donne():
+    """Permet de télécharger l'ensemble des méta_donnée"""
+    meta_donnees = []
     recherche_fichier_inkml()
     for fichier in LISTE_FICHIER_INKML:
-        meta_Donnees.append(get_meta_Donnee(fichier))
-    return json.dumps(meta_Donnees)
+        meta_donnees.append(get_meta_donnee(fichier))
+    return json.dumps(meta_donnees)
 
 #cette route permet de recuperer la sÃ©quence du fichier namefichier
 @APP.route('/models/getDonnee/<namefichier>')
-def getSequence(namefichier):
+def route_get_sequence(namefichier):
+    """Permet de télécharger donnée a partir du nom de fichier """
     recherche_fichier_inkml()
-    return json.dumps(get_Donnee(namefichier))
+    return json.dumps(get_donnee(namefichier))
 
 
 if __name__ == "__main__":
@@ -233,4 +235,3 @@ if __name__ == "__main__":
     start_api_wandb()
     download_weights("ra6r8k85")
     APP.run(host='0.0.0.0')
-    
