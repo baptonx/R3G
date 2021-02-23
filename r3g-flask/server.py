@@ -64,6 +64,8 @@ def recherche_fichier_inkml():
     print(LISTE_FICHIER_INKML)
 
 def get_meta_donnee(filename):
+    # pylint: disable-msg=too-many-locals
+    # pylint: disable-msg=too-many-branches
     """Contenu du fichier inkml."""
     filepath = LISTE_FICHIER_INKML[filename]
     name = filename
