@@ -17,7 +17,7 @@ APP = Flask(__name__)
 API = wandb.Api()
 RUNS = API.runs("recoprecoce-intui")
 MODEL_LIST = []
-LISTE_FICHIER_INKML = []
+LISTE_FICHIER_INKML = {}
 
 UPLOAD_FOLDER = './Upload'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -61,23 +61,93 @@ def recherche_fichier_inkml():
     for path, _, files in walk("./BDD"):
         for filename in files:
             if p_1.match(filename):
-                LISTE_FICHIER_INKML.append(path+'\\'+filename)
-    print (LISTE_FICHIER_INKML)
+                LISTE_FICHIER_INKML[filename] = path+'\\'+filename
+    print(LISTE_FICHIER_INKML)
 
-def ouverture_fichier_inkml(index):
+def get_meta_Donnee(filename):
     """Contenu du fichier inkml."""
-    print (LISTE_FICHIER_INKML[index])
-    tree = ET.parse(LISTE_FICHIER_INKML[index])
+    filepath = LISTE_FICHIER_INKML[filename]
+    name = filename
+    format_Donnee = {}
+    capteur = {}
+    user= {}
+    annotations = {}
+    donnees = {}
+    others = {}
+    tree = ET.parse(filepath)
     root = tree.getroot()
+    nb_annotation = 0
+    nb_articulations = 0
+    nb_others = 0
     for child in root:
-        print(child.tag, child.attrib)
-        for children in child:
-            print(children.tag, children.attrib, children.text)
-                #print(fichiers)
-            #for file in fichiers :
-             #   if p.match(file):
-              #      listeFichiers.extend(file)
-   # print(listeFichiers)
+##         print(child.tag, child.attrib)
+##         for children in child:
+##             print(children.tag, children.attrib, children.text)
+         if (child.tag == "{http://www.w3.org/2003/InkML}traceFormat") :
+            for children in child:
+                format_Donnee[children.attrib['name']] = children.attrib['type']
+         elif (child.tag == "{http://www.w3.org/2003/InkML}annotationXML") :
+            if (child.attrib == {'type': 'Capteur'}):
+                for children in child:
+                     capteur[children.attrib['type']] = children.text
+            if (child.attrib == {'type': 'User'}):
+                for children in child:
+                     user[children.attrib['type']] = children.text
+            if (child.attrib == {'type': 'actions'}):
+                action = {}
+                nb_annotation+=1
+                for children in child:
+                     action[children.attrib['type']]= children.text
+                annotations[nb_annotation] = action
+            else :
+                other = {}  ##rÃ©cupere les annotations non implÃ©menter(autres que capteur, user, action)
+                nb_others+=1
+                for children in child:
+                     other[children.attrib['type']]= children.text
+                others[child.attrib['type']] = other
+         elif (child.tag == "{http://www.w3.org/2003/InkML}traceGroup") :
+            for children in child:
+                if (children.tag == "{http://www.w3.org/2003/InkML}trace"):
+                    dict_final = []
+                    dict_1 = children.text.split(", ")
+                    for point in dict_1: 
+                        tab_2 = point.split(" ")
+                        dict_final.append(tab_2)
+                    donnees[nb_articulations] = dict_final
+                    nb_articulations+=1
+
+##    print(filepath)
+##    print(format_Donnee)
+##    print(user)
+##    print(capteur)
+##    print(annotations)
+##    print(donnees)
+##    print(others)
+    struct_metaDonnee =[name, format_Donnee, user, capteur, others]
+    print(struct_metaDonnee)
+    return struct_metaDonnee
+
+def get_Donnee(filename):
+    """Contenu du fichier inkml."""
+    filepath = LISTE_FICHIER_INKML[filename]
+    donnees = {}
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+    nb_articulations = 0
+    for child in root:
+         if (child.tag == "{http://www.w3.org/2003/InkML}traceGroup") :
+            for children in child:
+                if (children.tag == "{http://www.w3.org/2003/InkML}trace"):
+                    dict_final = []
+                    dict_1 = children.text.split(", ")
+                    for point in dict_1: 
+                        tab_2 = point.split(" ")
+                        dict_final.append(tab_2)
+                    donnees[nb_articulations] = dict_final
+                    nb_articulations+=1
+
+    print(donnees)
+    return donnees
 
 
 def start_api_wandb():
@@ -141,11 +211,19 @@ def upload_file(name):
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
 
-@APP.route('/models/getMetaData')
-def index2():
-    """Cette route permet de recuperer l'ensemble des noms des fichiers."""
-    fichiers = [f for f in listdir("./") if isfile(join("./", f))]
-    return json.dumps(fichiers)
+@APP.route('/models/getMetaDonnee')
+def getMetaDonne():
+    meta_Donnees = []
+    recherche_fichier_inkml()
+    for fichier in LISTE_FICHIER_INKML:
+        meta_Donnees.append(get_meta_Donnee(fichier))
+    return json.dumps(meta_Donnees)
+
+#cette route permet de recuperer la sÃ©quence du fichier namefichier
+@APP.route('/models/getDonnee/<namefichier>')
+def getSequence(namefichier):
+    recherche_fichier_inkml()
+    return json.dumps(get_Donnee(namefichier))
 
 
 if __name__ == "__main__":
