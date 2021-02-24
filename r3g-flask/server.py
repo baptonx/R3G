@@ -70,8 +70,6 @@ def get_meta_donnee(filename):
     filepath = LISTE_FICHIER_INKML[filename]
     name = filename
     format_donnee = {}
-    capteur = {}
-    user = {}
     annotations = {}
     donnees = {}
     others = {}
