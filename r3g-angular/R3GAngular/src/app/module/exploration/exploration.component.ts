@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatInput} from '@angular/material/input';
-import {HttpClient} from '@angular/common/http';
-import {BddService} from "../../service/bdd.service";
-import {VisualisationExploService} from "../../service/visualisation-explo.service";
+import {BddService} from '../../service/bdd.service';
+import {VisualisationExploService} from '../../service/visualisation-explo.service';
 
 @Component({
   selector: 'app-exploration',
@@ -11,15 +10,17 @@ import {VisualisationExploService} from "../../service/visualisation-explo.servi
 })
 
 
-export class ExplorationComponent implements OnInit {
+export class ExplorationComponent implements OnInit, AfterViewInit {
   @ViewChild('inputFiltre') inputFiltre!: MatInput;
   picker = document.getElementById('picker');
   listing = document.getElementById('listing');
 
-  constructor(private http: HttpClient, public bdd: BddService, public visuService: VisualisationExploService) {
+  constructor(public bdd: BddService, public visuService: VisualisationExploService) {
+    this.bdd.setMetaData();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
   /*
   importBase(): void{
 
@@ -37,7 +38,7 @@ export class ExplorationComponent implements OnInit {
   }*/
 
   ngAfterViewInit(): void {
-    this.http.get<Array<string>>('/models/getMetaData' , {}).subscribe((returnedData: any) => console.log(returnedData));
+    this.bdd.setMetaData();
   }
 
 }

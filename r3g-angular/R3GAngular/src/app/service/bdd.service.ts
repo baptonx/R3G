@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import {Sequence} from "../class/commun/sequence";
 import {TableauExplService} from "./tableau-expl.service";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BddService {
   sequences: Sequence[];
-  constructor(public tableauExpl: TableauExplService) {
-    this.sequences =[
+  constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
+    this.sequences = [
       new Sequence("1","",{position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'}), // Faire une classe séquence
       new Sequence("2","",{position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'}),
       new Sequence("3","",{position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'}),
@@ -35,5 +36,27 @@ export class BddService {
 
   notifyTableauService(): void{
     this.tableauExpl.updateAll(this.sequences);
+  }
+
+  setMetaData(): void{
+
+    class MetaDonnees{
+      meta_donnees: MetaDonnee[] | undefined;
+    }
+    class MetaDonnee {
+      name: string | undefined;
+      formatdonnee: object | undefined;
+      meta_Donnee: object | undefined;
+    }
+
+    this.http.get<Array<string>>('/models/getMetaDonnee' , {}).subscribe((returnedData: any) => {
+      this.sequences = [];
+      for (let key in returnedData) {
+        console.log(returnedData[key])
+        this.sequences.push(new Sequence(key,"",returnedData[key]) );
+      }
+      this.notifyTableauService();
+    });
+
   }
 }

@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
+from Class.MetaDonnees import MetaDonnees
 
 APP = Flask(__name__)
 API = wandb.Api()
@@ -88,12 +89,6 @@ def get_meta_donnee(filename):
             for children in child:
                 format_donnee[children.attrib['name']] = children.attrib['type']
         elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-            if child.attrib == {'type': 'Capteur'}:
-                for children in child:
-                    capteur[children.attrib['type']] = children.text
-            if child.attrib == {'type': 'User'}:
-                for children in child:
-                    user[children.attrib['type']] = children.text
             if child.attrib == {'type': 'actions'}:
                 action = {}
                 nb_annotation += 1
@@ -121,12 +116,9 @@ def get_meta_donnee(filename):
 ##    print(filepath)
 ##    print(format_Donnee)
 ##    print(user)
-##    print(capteur)
 ##    print(annotations)
 ##    print(donnees)
-##    print(others)
-    struct_metadonnee = [name, format_donnee, user, capteur, others]
-    print(struct_metadonnee)
+    struct_metadonnee = [name, format_donnee, others]
     return struct_metadonnee
 
 def get_donnee(filename):
@@ -220,7 +212,7 @@ def route_get_meta_donne():
     recherche_fichier_inkml()
     for fichier in LISTE_FICHIER_INKML:
         meta_donnees.append(get_meta_donnee(fichier))
-    return json.dumps(meta_donnees)
+    return json.dumps(meta_donnees[0])
 
 #cette route permet de recuperer la sÃ©quence du fichier namefichier
 @APP.route('/models/getDonnee/<namefichier>')
@@ -231,7 +223,8 @@ def route_get_sequence(namefichier):
 
 
 if __name__ == "__main__":
-    #recherche_fichier_inkml()
+    recherche_fichier_inkml()
+    get_meta_donnee("sequence1.inkml")
     #ouverture_fichier_inkml(2)
     download_hyperparameters()
     start_api_wandb()

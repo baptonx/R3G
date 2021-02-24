@@ -22,7 +22,6 @@ export class Sequence {
   }
 
   ajouterMetaDonnees(): void {
-
   }
 
   equals(seq: Sequence): boolean{
