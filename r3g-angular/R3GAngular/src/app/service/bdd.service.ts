@@ -55,6 +55,7 @@ export class BddService {
         console.log(returnedData[key])
         this.sequences.push(new Sequence(key,"",returnedData[key]) );
       }
+      console.log("returnData : "+ returnedData);
       this.notifyTableauService();
     });
 
