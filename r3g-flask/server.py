@@ -11,7 +11,6 @@ from werkzeug.utils import secure_filename
 
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
-from Class.MetaDonnees import MetaDonnees
 
 APP = Flask(__name__)
 API = wandb.Api()
@@ -212,7 +211,7 @@ def route_get_meta_donne():
     recherche_fichier_inkml()
     for fichier in LISTE_FICHIER_INKML:
         meta_donnees.append(get_meta_donnee(fichier))
-    return json.dumps(meta_donnees[0])
+    return json.dumps(meta_donnees)
 
 #cette route permet de recuperer la sÃ©quence du fichier namefichier
 @APP.route('/models/getDonnee/<namefichier>')
