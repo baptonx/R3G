@@ -60,7 +60,7 @@ def recherche_fichier_inkml():
     for path, _, files in walk("./BDD"):
         for filename in files:
             if p_1.match(filename):
-                LISTE_FICHIER_INKML[filename] = path+'\\'+filename
+                LISTE_FICHIER_INKML[filename] = path+'/'+filename
     print(LISTE_FICHIER_INKML)
 
 def get_meta_donnee(filename):
