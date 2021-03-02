@@ -35,6 +35,7 @@ export class BddService {
   }
 
   notifyTableauService(): void{
+    console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
   }
 
@@ -44,10 +45,12 @@ export class BddService {
       .subscribe((returnedData: any) => {
       this.sequences = [];
       for (let key in returnedData) {
-        console.log(returnedData[key])
-        this.sequences.push(new Sequence(key,"",returnedData[key]) );
+        let id = (' '+returnedData[key][0]).slice(1);
+        console.log(returnedData[key][0]);
+        console.log(returnedData[key][1]);
+        console.log(returnedData[key][2]);
+        this.sequences.push(new Sequence(id,"",returnedData[key]) );
       }
-      console.log("returnData : "+ returnedData);
       this.notifyTableauService();
     });
 

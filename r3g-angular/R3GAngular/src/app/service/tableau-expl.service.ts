@@ -5,7 +5,7 @@ import {Observable, Subject} from "rxjs";
 
 export interface sequencesTab {
   id: string;
-  [key: string]: any
+  [key: string]: any;
 }
 export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
@@ -16,6 +16,14 @@ export class sequenceTabImpl implements sequencesTab{
       this[k] = value;
     }
   }
+  push(k: string, v: any): void{
+    this[k] = v;
+  }
+  concat(seq: sequencesTab){
+    for(let [k,v] of Object.entries(seq)){
+      this[k] = v;
+    }
+  }
 }
 
 @Injectable({
@@ -23,9 +31,25 @@ export class sequenceTabImpl implements sequencesTab{
 })
 export class TableauExplService {
   sequences: Array<sequencesTab>;
+  dataExpl : Array<object>;
   private subject = new Subject<any>();
   constructor() {
     this.sequences = new Array<sequencesTab>();
+    this.dataExpl = new Array<object>();
+  }
+
+
+  ajouterMetadonnee(fileName: string, prefix:string, metadonnee: object): sequencesTab{
+    let sequenceData = new sequenceTabImpl(fileName,{});
+    for(let [key, value] of Object.entries(metadonnee)){
+      if(typeof value === "object"){
+        sequenceData.concat(this.ajouterMetadonnee('', prefix+'.'+key,value));
+      }
+      else{
+        sequenceData.push(key, value);
+      }
+    }
+    return sequenceData;
   }
 
   updateAll(tabSequences: Array<Sequence>): void {
@@ -35,10 +59,11 @@ export class TableauExplService {
       // let k = Object.keys(tabSequences[i].metaDonnees)[0];
       // dataCourante = {id: tabSequences[i].id, position:  2};
       // console.log(dataCourante);
-      this.sequences.push(new sequenceTabImpl(tabSequences[i].id,tabSequences[i].metaDonnees));
+      dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
+      console.log(dataCourante);
+      this.sequences.push(dataCourante);
     }
     if(this.sequences.length > 0){
-      console.log("must update here");
       this.updateTabComponent();
     }
   }
