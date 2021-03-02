@@ -39,17 +39,9 @@ export class BddService {
   }
 
   setMetaData(): void{
-
-    class MetaDonnees{
-      meta_donnees: MetaDonnee[] | undefined;
-    }
-    class MetaDonnee {
-      name: string | undefined;
-      formatdonnee: object | undefined;
-      meta_Donnee: object | undefined;
-    }
-
-    this.http.get<Array<string>>('/models/getMetaDonnee' , {}).subscribe((returnedData: any) => {
+    this.http
+      .get<Array<string>>('/models/getMetaDonnee' , {})
+      .subscribe((returnedData: any) => {
       this.sequences = [];
       for (let key in returnedData) {
         console.log(returnedData[key])
@@ -58,6 +50,17 @@ export class BddService {
       console.log("returnData : "+ returnedData);
       this.notifyTableauService();
     });
+
+  }
+
+  getDonnee(listSequenceName: Array<string>){
+    for (let sequenceName in listSequenceName){
+      this.http
+        .get<Array<string>>('/models/getDonnee/${sequenceName}' , {})
+        .subscribe((returnedData: any) => {
+          ret
+      }
+    }
 
   }
 }

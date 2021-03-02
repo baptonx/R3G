@@ -17,7 +17,7 @@ export class Sequence {
     this.isTest = false;
   }
 
-  chargerSequence(): void {
+  setSequenceDonnee(): void {
     //Get serveur local pour recuperer les traces ...
   }
 
