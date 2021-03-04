@@ -15,7 +15,10 @@ export class ChoixColonneComponent implements OnInit {
       {name: 'Primary', completed: false, children: [
           {name: 'child1', completed: false, children: [
               {name: 'child11', completed: false},
-              {name: 'child12', completed: false},
+              {name: 'child12', completed: false, children: [
+                  {name: 'child121', completed: false},
+                  {name: 'child122', completed: false}
+                ]},
             ]},
           {name: 'child2', completed: false}
         ]},
@@ -23,10 +26,10 @@ export class ChoixColonneComponent implements OnInit {
       {name: 'Warn', completed: false}
     ]
   }
-  allComplete: boolean = false;
 
   ngOnInit(): void {
   }
+
 
 
 

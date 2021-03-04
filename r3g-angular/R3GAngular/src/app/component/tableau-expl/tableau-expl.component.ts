@@ -61,7 +61,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   choisirColonne() {
     const dialogRef = this.dialog.open(ChoixColonneComponent, {
-      width: '250px',
       data: {}
     });
 

@@ -17,6 +17,7 @@ export class NodeColonneComponent implements OnInit {
   @Input() public node!: NodeCol;
   @Output() childTrue: EventEmitter<string> = new EventEmitter<string>()
   @Output() childFalse: EventEmitter<string> = new EventEmitter<string>()
+  public show: boolean = false;
   constructor() { }
 
   ngOnInit(): void {

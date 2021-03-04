@@ -2,3 +2,11 @@ ul {
   list-style-type: none;
   margin-top: 4px;
 }
+button{
+  background-color: rgba(0,0,0,0);
+  border: none;
+  color:white;
+}
+mat-icon{
+  font-size: 15px;
+}
