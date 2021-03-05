@@ -61,8 +61,8 @@ export class BddService {
       this.http
         .get<Array<string>>('/models/getDonnee/${sequenceName}' , {})
         .subscribe((returnedData: any) => {
-          ret
-      }
+          //ret
+      });
     }
 
   }

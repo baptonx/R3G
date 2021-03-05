@@ -3,6 +3,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {sequencesTab, TableauExplService} from "../../service/tableau-expl.service";
 import {VisualisationExploService} from "../../service/visualisation-explo.service";
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ChoixColonneComponent} from "../choix-colonne/choix-colonne.component";
 
 
 
@@ -22,7 +24,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   //subscription: Subscription;
 
 
-  constructor(public explService: TableauExplService, public visuService: VisualisationExploService) {
+  constructor(public explService: TableauExplService, public visuService: VisualisationExploService, public dialog: MatDialog) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
     //this.subscription = this.explService.onMessage().subscribe(() => {
       this.updateAll();
@@ -55,5 +57,16 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   tournerBouton() {
+  }
+
+  choisirColonne() {
+    const dialogRef = this.dialog.open(ChoixColonneComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.animal = result;
+    });
   }
 }

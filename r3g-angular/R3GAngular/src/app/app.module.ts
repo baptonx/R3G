@@ -36,6 +36,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SequencesChargeesComponent } from './component/sequences-chargees/sequences-chargees.component';
 import { VisualitationExploComponent } from './component/visualitation-explo/visualitation-explo.component';
 import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
+import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
+import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -58,6 +60,8 @@ const appRoutes: Routes = [
     SequencesChargeesComponent,
     VisualitationExploComponent,
     ProtocoleSeqComponent,
+    ChoixColonneComponent,
+    NodeColonneComponent,
   ],
   imports: [
     BrowserModule,
