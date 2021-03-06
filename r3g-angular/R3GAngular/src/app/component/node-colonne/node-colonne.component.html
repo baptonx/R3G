@@ -1,4 +1,4 @@
-<button *ngIf="node.children != null" (click)="this.show = !this.show" [style.transform]="this.show?'rotate(90deg)':'rotate(0)'">
+<button (click)="this.show = !this.show" [style.transform]="this.show?'rotate(90deg)':'rotate(0)'" [style.visibility]="node.children == null?'hidden':'visible'">
   <mat-icon>play_arrow</mat-icon>
 </button>
 <mat-checkbox

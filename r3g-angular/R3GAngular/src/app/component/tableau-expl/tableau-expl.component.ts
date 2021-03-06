@@ -34,7 +34,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
 
   updateAll(): void{
-    console.log(this.explService.sequences);
+    //console.log(this.explService.sequences);
     this.displayedColumns = Object.keys(this.explService.sequences[0]);
     this.allColumns = Object.assign([],this.displayedColumns);
     this.allColumns.push("addColumn");

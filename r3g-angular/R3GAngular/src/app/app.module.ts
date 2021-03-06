@@ -38,6 +38,7 @@ import { VisualitationExploComponent } from './component/visualitation-explo/vis
 import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
 import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -63,35 +64,36 @@ const appRoutes: Routes = [
     ChoixColonneComponent,
     NodeColonneComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSidenavModule,
-    MatStepperModule,
-    MatRadioModule,
-    MatCheckboxModule,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSidenavModule,
+        MatStepperModule,
+        MatRadioModule,
+        MatCheckboxModule,
 
 
-    RouterModule.forRoot(appRoutes),
-    MatListModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatTabsModule,
-    HttpClientModule,
+        RouterModule.forRoot(appRoutes),
+        MatListModule,
+        MatMenuModule,
+        MatToolbarModule,
+        MatTabsModule,
+        HttpClientModule,
+        MatTooltipModule,
 
-  ],
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

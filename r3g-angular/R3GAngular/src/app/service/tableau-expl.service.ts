@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Sequence} from "../class/commun/sequence";
-import {BddService} from "./bdd.service";
-import {Observable, Subject} from "rxjs";
 
 export interface sequencesTab {
   id: string;
@@ -30,23 +28,22 @@ export class sequenceTabImpl implements sequencesTab{
   providedIn: 'root'
 })
 export class TableauExplService {
+  //sequences a afficher (format lineaire)
   sequences: Array<sequencesTab>;
-  dataExpl : Array<object>;
-  private subject = new Subject<any>();
   constructor() {
     this.sequences = new Array<sequencesTab>();
-    this.dataExpl = new Array<object>();
   }
 
 
   ajouterMetadonnee(fileName: string, prefix:string, metadonnee: object): sequencesTab{
+    prefix = prefix === ''?'':prefix+'.';
     let sequenceData = new sequenceTabImpl(fileName,{});
     for(let [key, value] of Object.entries(metadonnee)){
-      if(typeof value === "object"){
-        sequenceData.concat(this.ajouterMetadonnee('', prefix+'.'+key,value));
+      if(typeof value === "object" && value != null){
+        sequenceData.concat(this.ajouterMetadonnee(fileName, prefix+key,value));
       }
       else{
-        sequenceData.push(key, value);
+        sequenceData.push(prefix+key, value);
       }
     }
     return sequenceData;
@@ -56,23 +53,12 @@ export class TableauExplService {
     this.sequences = new Array<sequencesTab>();
     let dataCourante: sequencesTab;
     for(let i=0; i<tabSequences.length; i++){
-      // let k = Object.keys(tabSequences[i].metaDonnees)[0];
-      // dataCourante = {id: tabSequences[i].id, position:  2};
-      // console.log(dataCourante);
       dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
-      console.log(dataCourante);
-      this.sequences.push(dataCourante);
+      if(dataCourante != null) {
+        this.sequences.push(dataCourante);
+      }
     }
-    if(this.sequences.length > 0){
-      this.updateTabComponent();
-    }
+    console.log(this.sequences);
   }
 
-  updateTabComponent() {
-    this.subject.next();
-  }
-
-  onMessage(): Observable<any>{
-    return this.subject.asObservable();
-  }
 }

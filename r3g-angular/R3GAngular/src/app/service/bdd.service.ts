@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import {Sequence} from "../class/commun/sequence";
 import {TableauExplService} from "./tableau-expl.service";
 import {HttpClient} from '@angular/common/http';
+import {FormatDonnees} from "../class/exploration/format-donnees";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BddService {
   sequences: Sequence[];
+  formatSequence: FormatDonnees = new FormatDonnees();
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
     this.sequences = [
       new Sequence("1","",{position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'}), // Faire une classe séquence
@@ -35,7 +37,7 @@ export class BddService {
   }
 
   notifyTableauService(): void{
-    console.log(this.sequences);
+    //console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
   }
 
@@ -44,13 +46,12 @@ export class BddService {
       .get<Array<string>>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
       this.sequences = [];
+      console.log(returnedData);
       for (let key in returnedData) {
-        let id = (' '+returnedData[key][0]).slice(1);
-        console.log(returnedData[key][0]);
-        console.log(returnedData[key][1]);
-        console.log(returnedData[key][2]);
+        let id = returnedData[key]["id"];
         this.sequences.push(new Sequence(id,"",returnedData[key]) );
       }
+      this.updateFormat(this.formatSequence);
       this.notifyTableauService();
     });
 
@@ -65,5 +66,24 @@ export class BddService {
       });
     }
 
+  }
+
+  private updateFormat(formatSequence: FormatDonnees) {
+    this.formatSequence = new FormatDonnees();
+    this.ajouterFormat(this.sequences[0].metaDonnees, []);
+    console.log(this.formatSequence);
+  }
+
+  private ajouterFormat(metaDonnees: object, path: string[]) {
+    for(const [key, value] of Object.entries(metaDonnees)) {
+      path.push(key);
+      if(typeof value === "object" && !Array.isArray(value)) {
+        this.ajouterFormat(value,path);
+      }
+      else{
+        this.formatSequence.add(path.slice());
+      }
+      path.pop();
+    }
   }
 }
