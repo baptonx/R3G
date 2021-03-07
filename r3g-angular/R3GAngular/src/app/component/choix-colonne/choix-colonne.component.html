@@ -1,4 +1,6 @@
-<div class="dataContainer">
-<app-node-colonne [node]="node"></app-node-colonne>
+<div class="container-choix-colonne">
+  <div class="dataContainer">
+    <app-node-colonne [node]="node"></app-node-colonne>
+  </div>
+  <button mat-button class="button-submit" (click)="sendColonnesChoisies()">Afficher les colonnes sélectionnées</button>
 </div>
-<button mat-button class="button-submit">Afficher les colonnes sélectionnées</button>

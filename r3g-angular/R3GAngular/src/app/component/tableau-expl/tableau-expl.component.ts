@@ -5,6 +5,8 @@ import {sequencesTab, TableauExplService} from "../../service/tableau-expl.servi
 import {VisualisationExploService} from "../../service/visualisation-explo.service";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ChoixColonneComponent} from "../choix-colonne/choix-colonne.component";
+import {BddService} from "../../service/bdd.service";
+import {sequence} from "@angular/animations";
 
 
 
@@ -24,10 +26,12 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   //subscription: Subscription;
 
 
-  constructor(public explService: TableauExplService, public visuService: VisualisationExploService, public dialog: MatDialog) {
+  constructor(public explService: TableauExplService,
+              public bddService: BddService,
+              public visuService: VisualisationExploService,
+              public dialog: MatDialog) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
     //this.subscription = this.explService.onMessage().subscribe(() => {
-      this.updateAll();
     //});
 
   }
@@ -35,7 +39,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   updateAll(): void{
     //console.log(this.explService.sequences);
-    this.displayedColumns = Object.keys(this.explService.sequences[0]);
+    //this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
     this.allColumns = Object.assign([],this.displayedColumns);
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
@@ -44,6 +48,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+    this.bddService.observableSequences.subscribe((sequence) => {
+      if (sequence.length > 0) this.choisirColonne();
+    });
   }
 
   ngAfterViewInit() {
@@ -59,14 +66,14 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   tournerBouton() {
   }
 
-  choisirColonne() {
+  public choisirColonne() {
     const dialogRef = this.dialog.open(ChoixColonneComponent, {
-      data: {}
+      data: {colonnes: []}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      //this.animal = result;
+      this.displayedColumns = result.colonnes;
+      this.updateAll();
     });
   }
 }

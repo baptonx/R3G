@@ -30,6 +30,22 @@ export class FormatDonnees {
     }
   }
 
+  concat(fd: FormatDonnees): void {
+    if(this.feuille()) {
+      this.children.push(fd);
+      return;
+    }
+    for(let child of this.children) {
+      let fdIndex = fd.children.findIndex((elem) => elem.value === child.value);
+      if(fdIndex >= 0) {
+        child.concat(fd.children[fdIndex]);
+      }
+      else {
+        this.children.push(fd);
+      }
+    }
+  }
+
   feuille(): boolean {
     return this.children.length === 0;
   }

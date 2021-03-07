@@ -21,6 +21,9 @@
       <mat-icon id="icone_bouton_sequences_selectionnees">arrow_back_ios</mat-icon>
     </button>
   </div>
+  <div class="boutons-aligne">
+    <button (click)="choisirColonne()" mat-button><mat-icon>subject</mat-icon> Colonnes</button>
+  </div>
 
 
 <div class="tab-container">
@@ -37,7 +40,7 @@
       </ng-container>
 
     <ng-container matColumnDef="addColumn">
-      <th class="w-50" mat-header-cell *matHeaderCellDef mat-sort-header><button (click)="choisirColonne()" mat-icon-button><mat-icon>add_circle_outline</mat-icon></button></th>
+      <th class="w-50" mat-header-cell *matHeaderCellDef mat-sort-header><button mat-icon-button><mat-icon>add_circle_outline</mat-icon></button></th>
       <td mat-cell *matCellDef="let element"></td>
     </ng-container>
 

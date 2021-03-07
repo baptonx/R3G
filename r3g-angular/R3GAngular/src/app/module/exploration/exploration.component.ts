@@ -16,7 +16,6 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   listing = document.getElementById('listing');
 
   constructor(public bdd: BddService, public visuService: VisualisationExploService) {
-    this.bdd.setMetaData();
   }
 
   ngOnInit(): void {
