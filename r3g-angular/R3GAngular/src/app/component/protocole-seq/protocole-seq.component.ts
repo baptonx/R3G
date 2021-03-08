@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sequence } from 'src/app/class/commun/sequence';
+import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
   styleUrls: ['./protocole-seq.component.css']
 })
 export class ProtocoleSeqComponent implements OnInit {
-  selectionListe = new Array<boolean>(this.serviceSeq.sequences.length);
+  selectionListe = new Array<boolean>(this.bdd.sequences.length);
   displayedColumns: string[] = ["Nom","Date","SéquencesTrain","SéquencesTest"];
   dataSource;
   nameFilter = new FormControl('');
@@ -23,8 +24,8 @@ export class ProtocoleSeqComponent implements OnInit {
     pet: ''
   };
 
-  constructor(public serviceSeq:SequencesChargeesService){
-    this.dataSource = new MatTableDataSource<Sequence>(this.serviceSeq.sequences);
+  constructor(public bdd:BddService){
+    this.dataSource = new MatTableDataSource<Sequence>(this.bdd.sequences);
   }
   ngOnInit(): void {
     this.nameFilter.valueChanges
@@ -45,11 +46,11 @@ export class ProtocoleSeqComponent implements OnInit {
   }
 
   changeSeq(i:number):void{
-    this.serviceSeq.sequences[i].isTrain=!this.serviceSeq.sequences[i].isTrain;
+    this.bdd.sequences[i].isTrain=!this.bdd.sequences[i].isTrain;
   }
 
   update(s:string):void{
-    this.serviceSeq.sequences.forEach(elt=>{
+    this.bdd.sequences.forEach(elt=>{
       if(elt.id===s){
           elt.isTest=!elt.isTest;
           elt.isTrain=!elt.isTrain;

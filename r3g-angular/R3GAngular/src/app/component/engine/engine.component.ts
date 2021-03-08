@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EngineService} from "./engine.service";
+import {MatSlider} from '@angular/material/slider';
 
 @Component({
   selector: 'app-engine',
@@ -10,6 +11,8 @@ import {EngineService} from "./engine.service";
 export class EngineComponent implements OnInit {
 
   // https://discoverthreejs.com/book/first-steps/animation-system/
+  // https://www.programmersought.com/article/14865706774/
+  // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
   // Chaque cube a son animation qui est joué
   // Quand on fait pause ou reset, on boucle sur tous les cubes.
   // Problème que l'on peut rencontrer : les cubes vont-ils être synchronisé ? Et niveau performance ?
@@ -34,12 +37,11 @@ export class EngineComponent implements OnInit {
 
   public listElementHTML: Array<ElementRef<HTMLCanvasElement>> = [];
 
-  constructor(private engServ: EngineService) {
+  constructor(public engServ: EngineService) {
   }
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
-
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML);
     this.engServ.animate();
   }
