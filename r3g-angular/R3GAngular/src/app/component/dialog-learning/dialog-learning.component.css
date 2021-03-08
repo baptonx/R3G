@@ -8,6 +8,9 @@
 .dialog{
     text-align: center;
     padding: 20px;
+    overflow-x: scroll;
+    display:inline-block;
+
 
 }
 .steper{

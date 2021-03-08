@@ -5,6 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
+import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 
 
@@ -26,7 +27,7 @@ export class DialogLearningComponent implements OnInit {
   isCrossVal:boolean;
   isProtocole:boolean
 
-  constructor(private _formBuilder: FormBuilder, public http:HttpClient,public serviceSeq:SequencesChargeesService,public dialog:MatDialog) {
+  constructor(private _formBuilder: FormBuilder, public http:HttpClient,public bdd:BddService,public dialog:MatDialog) {
     this.fileCSVName="Hyperparamètres";
     this.isManual=false;
     this.isCrossVal=false;
@@ -83,7 +84,7 @@ export class DialogLearningComponent implements OnInit {
     +("Sequence1\n");
     let train=['Train\n']
     let test=['\n','Test\n']
-    this.serviceSeq.sequences.forEach(seq=>{
+    this.bdd.sequences.forEach(seq=>{
       if(seq.isTrain){
         train.push(seq.id)
         train.push(';')

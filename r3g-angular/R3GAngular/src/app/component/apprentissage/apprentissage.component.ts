@@ -29,6 +29,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
 
   openLearning():void{
     const DialogRef = this.dialog.open(DialogLearningComponent,{
+      autoFocus: false,
       data:{}
     })
   }
