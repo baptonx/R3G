@@ -48,7 +48,6 @@ export class BddService {
           //ret
       });
     }
-
   }
 
   private updateFormat(formatSequence: FormatDonnees) {
@@ -56,6 +55,7 @@ export class BddService {
     for(let i=0 ; i<this.sequences.length ; i++) {
       this.ajouterFormat(this.sequences[i].metaDonnees, []);
     }
+    console.log(this.formatSequence);
   }
 
   private ajouterFormat(metaDonnees: object, path: string[]) {
