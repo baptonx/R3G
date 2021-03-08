@@ -39,6 +39,7 @@ import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.c
 import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { TimelineComponent } from './component/timeline/timeline.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -63,6 +64,7 @@ const appRoutes: Routes = [
     ProtocoleSeqComponent,
     ChoixColonneComponent,
     NodeColonneComponent,
+    TimelineComponent,
   ],
     imports: [
         BrowserModule,
