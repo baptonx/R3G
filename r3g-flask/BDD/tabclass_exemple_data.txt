@@ -1,0 +1,3 @@
+0;coup de poing droit
+1;coup de poing gauche
+2;coup de pied droit

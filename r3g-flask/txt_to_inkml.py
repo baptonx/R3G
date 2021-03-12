@@ -64,9 +64,10 @@ def read_class(pathclass):
     fileclass = open(pathclass, 'r')
     dictclass = {}
     for line in fileclass:
-        tabtemp = line[:-1].split(';')
+        line = line.replace('\n', '')
+        tabtemp = line.split(';')
         dictclass[tabtemp[0]] = tabtemp[1]
-        return dictclass
+    return dictclass
 
 if __name__ == "__main__":
     LABELSPATH = sys.argv[1]
