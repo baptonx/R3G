@@ -6,6 +6,7 @@ export class Sequence {
   traceVoxel: Array<Array<number>>;
   isTrain: boolean;
   isTest: boolean;
+  displayedMetadata: Map<String,String>
 
   constructor(id: string, pathVideoRGB: string = '', metadonnee: object = {}){
     this.id = id;
@@ -15,6 +16,7 @@ export class Sequence {
     this.traceVoxel = new Array<Array<number>>();
     this.isTrain = true;
     this.isTest = false;
+    this.displayedMetadata = new Map<String,String>()
   }
 
   setSequenceDonnee(): void {

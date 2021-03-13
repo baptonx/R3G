@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Sequence } from 'src/app/class/commun/sequence';
 import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
+import { TableauExplService } from 'src/app/service/tableau-expl.service';
 
 @Component({
   selector: 'app-protocole-seq',
@@ -13,8 +14,11 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
 })
 export class ProtocoleSeqComponent implements OnInit {
   selectionListe = new Array<boolean>(this.bdd.sequences.length);
-  displayedColumns: string[] = ["Nom","Date","SéquencesTrain","SéquencesTest"];
+  displayedColumns: string[] = ["Métadonnée","Opérateur","Valeur"];
   dataSource;
+  metadata:Array<String> = []
+  operateur:Array<String> = ['=','/=/','<','>']
+  valeur:Array<String> = []
   nameFilter = new FormControl('');
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   filterValues = {
@@ -24,8 +28,16 @@ export class ProtocoleSeqComponent implements OnInit {
     pet: ''
   };
 
-  constructor(public bdd:BddService){
-    this.dataSource = new MatTableDataSource<Sequence>(this.bdd.sequences);
+  constructor(public bdd:BddService,public tab:TableauExplService){
+      for (const [key, value] of Object.entries(this.tab.ajouterMetadonnee(this.bdd.sequences[0].id,'',this.bdd.sequences[0].metaDonnees))) {
+        if(key.includes("metadonnees")){
+          this.metadata.push(key.split('.')[2])
+          this.valeur.push('')
+      
+        }
+      
+    }
+    this.dataSource = new MatTableDataSource<String>(this.metadata);
   }
   ngOnInit(): void {
     this.nameFilter.valueChanges
@@ -38,7 +50,8 @@ export class ProtocoleSeqComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator= this.paginator;
+    this.dataSource.paginator= this.paginator
+   
   }
 
   selection(i: number): void{

@@ -6,6 +6,7 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
 import { BddService } from 'src/app/service/bdd.service';
 import { FormatDonnees } from 'src/app/class/exploration/format-donnees';
 import { TableauExplService } from 'src/app/service/tableau-expl.service';
+import { element } from 'protractor';
 
 
 
@@ -16,9 +17,8 @@ import { TableauExplService } from 'src/app/service/tableau-expl.service';
 })
 export class TrainSeqComponent implements AfterViewInit {
   selectionListe = new Array<boolean>(this.bdd.sequences.length);
-  displayedColumns: string[] = ["Nom","Date","SéquencesTrain","SéquencesTest"];
+  displayedColumns: string[] = ["Nom","SéquencesTrain","SéquencesTest"];
   displayedColumns2: string[] = [];
-  displayedMetadata: Array<Map<String,String>> = [];
   dataSource;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -33,20 +33,20 @@ export class TrainSeqComponent implements AfterViewInit {
         this.displayedColumns2.push(" "+key.split('.')[2]+" ")
         this.displayedColumns.push(" "+key.split('.')[2]+" ")
       }
+
     }
     console.log(this.displayedColumns2)
 
     this.bdd.sequences.forEach(elt=>{
-      this.displayedMetadata.push(new Map<String,String>())
       for (const [key, value] of Object.entries(this.tab.ajouterMetadonnee(elt.id,'',elt.metaDonnees))) {
         if(key.includes("metadonnees")){
-          this.displayedMetadata[this.bdd.sequences.indexOf(elt)].set(key.split(".")[2],value)
+          elt.displayedMetadata.set(" "+key.split('.')[2]+" ",value)
+      
       
         }
       }
     })
    
-    console.log(this.displayedMetadata)
   }
 
   selection(i: number): void{

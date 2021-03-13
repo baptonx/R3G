@@ -94,7 +94,7 @@ export class DialogLearningComponent implements OnInit {
         test.push(';')
       }
     })
-    let file = new File(train.concat(test), 'hello_world.txt', {type: 'text/plain'});
+    let file = new File(train.concat(test), 'sequences.txt', {type: 'text/plain'});
     return file
   }
   

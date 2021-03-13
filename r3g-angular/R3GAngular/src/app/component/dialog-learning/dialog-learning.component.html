@@ -5,9 +5,15 @@
       <mat-horizontal-stepper [linear]="isLinear" #stepper >
         <mat-step [stepControl]="firstFormGroup">
           <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Sélection des Hyperparamètres</ng-template> 
+            <ng-template matStepLabel>Sélection des Hyperparamètres et l'IA</ng-template> 
     <button class='btn' type="button" mat-raised-button (click)="fileInput.click()">{{this.fileCSVName}}</button>
     <input hidden (change)='openFile($event)' #fileInput type="file" id="file">
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-label>Chemin absolu du fichier IA</mat-label>
+        <input matInput placeholder="D:\Utilisateur\model.py"> 
+      </mat-form-field>
+    </div>
             <div>
               <button mat-button matStepperNext>Next</button>
             </div>
