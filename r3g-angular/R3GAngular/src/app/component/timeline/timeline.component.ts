@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {TimelineService} from './timeline.service';
 
 @Component({
   selector: 'app-timeline',
@@ -9,22 +10,12 @@ export class TimelineComponent implements OnInit {
 
   @ViewChild('canvas', { static: true })
   public canvas!: ElementRef<HTMLCanvasElement>;
-  private ctx!: CanvasRenderingContext2D | null;
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.draw(0, 0);
+  constructor(public timelineServ: TimelineService) {
   }
 
-  draw(x: number, y: number): void {
-    if (this.ctx !== null) {
-      const canvas = this.ctx.canvas;
-      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillRect(x, y, 100, 100);
-    }
+  ngOnInit(): void {
+    this.timelineServ.initialize(this.canvas.nativeElement.getContext('2d'));
   }
 
 }

@@ -4,6 +4,8 @@ import {AnimationAction, AnimationClip, AnimationMixer, Clock, NumberKeyframeTra
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import {MatSlider} from '@angular/material/slider';
+import {TimelineService} from '../timeline/timeline.service';
+import {AnnotationService} from '../../module/annotation/annotation.service';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -22,17 +24,12 @@ export class EngineService implements OnDestroy {
   private canvas!: HTMLCanvasElement;
   private renderer!: THREE.WebGLRenderer;
   public sceneElements: Array<MaSceneElement> = [];
-  public action!: AnimationAction;
   public clip!: AnimationClip;
-  public tempsTotal!: number;
-  public pauseAction: boolean;
   private frameId!: number;
-  public value: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
 
-    constructor(private ngZone: NgZone) {
-    this.pauseAction = false;
-    this.value = 0;
+    constructor(private ngZone: NgZone, private annotationServ: AnnotationService) {
+      this.annotationServ.pauseAction = false;
   }
 
   public ngOnDestroy(): void {
@@ -67,15 +64,15 @@ export class EngineService implements OnDestroy {
           [0, 4, 6],
           [2, 1, 0, 2, 2, 0, 2, 1, 0],
         );
-        this.tempsTotal = 6;
+        this.annotationServ.tempsTotal = 6;
         this.clip = new AnimationClip('move', -1, [
           positionArticulation1,
           positionArticulation2
         ]);
         const mixer = new AnimationMixer(this.squelette.root);
-        this.action = mixer.clipAction(this.clip);
-        this.action.loop = THREE.LoopOnce;
-        this.action.clampWhenFinished = true;
+        this.annotationServ.action = mixer.clipAction(this.clip);
+        this.annotationServ.action.loop = THREE.LoopOnce;
+        this.annotationServ.action.clampWhenFinished = true;
         // this.action.time = 4;
         // this.clip.duration = this.action.time;
         // action.play();
@@ -83,9 +80,9 @@ export class EngineService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
+          this.annotationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
-          this.value = this.action.time;
           camera.aspect = rect.width / rect.height;
           camera.updateProjectionMatrix();
           controls.handleResize();
@@ -164,7 +161,7 @@ export class EngineService implements OnDestroy {
     scene.add(ambientLight);
 
     const light = new THREE.PointLight(0xffffff, 1, 30);
-    light.position.set(0,5,3);
+    light.position.set(0, 5, 3);
     light.castShadow = true;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 25;
@@ -246,25 +243,26 @@ export class EngineService implements OnDestroy {
   }
 
   public play(): void {
-    console.log('test');
-    const t = this.action.time;
-    this.action.stop();
-    this.action.time = t;
-    this.clip.duration = this.tempsTotal;
-    this.action.play();
+    this.annotationServ.pauseAction = false;
+    const t = this.annotationServ.action.time;
+    this.annotationServ.action.stop();
+    this.annotationServ.action.time = t;
+    this.clip.duration = this.annotationServ.tempsTotal;
+    this.annotationServ.action.play();
   }
 
   public stop(): void {
-    console.log('test');
-    this.action.stop();
-    this.action.time = 0;
-    this.clip.duration = 0;
-    this.action.play();
+      console.log('test');
+      this.annotationServ.action.stop();
+      this.annotationServ.action.time = 0;
+      this.clip.duration = 0;
+      this.annotationServ.action.play();
   }
 
   public pause(): void {
-    this.clip.duration = this.action.time;
-    this.action.play();
+      this.annotationServ.pauseAction = true;
+      this.clip.duration = this.annotationServ.action.time;
+      this.annotationServ.action.play();
   }
 
 }
