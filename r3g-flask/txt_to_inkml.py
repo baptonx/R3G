@@ -64,7 +64,7 @@ def read_class(pathclass):
     fileclass = open(pathclass, 'r')
     dictclass = {}
     for line in fileclass:
-        line = line.replace('\n', '')
+        line = line.replace('\n','')
         tabtemp = line.split(';')
         dictclass[tabtemp[0]] = tabtemp[1]
     return dictclass

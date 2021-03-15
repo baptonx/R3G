@@ -46,6 +46,16 @@
 }
 .list{
   margin-top: 20px;
- 
+
+
+}
+  .cell{
+    text-align: center;
+    padding:10px;
+    border: 1px solid white;
+}
+.list{
+  margin-top: 20px;
+
 
 }

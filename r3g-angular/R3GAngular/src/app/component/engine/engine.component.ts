@@ -10,6 +10,18 @@ import {MatSlider} from '@angular/material/slider';
 })
 export class EngineComponent implements OnInit {
 
+  // Améliorer la timeline : deplacer curseur que quand on est dessus avec curseur souris qui change
+  // Afficher temps (en minute/seconde et en frame) directement dans canvas (+ facile pour actualisation)
+  // Mettre un editText qui permet de se mettre exactement ou l'on veut sur la timeline (en seconde et en frame)
+  // Afficher sur la timeline une barre temporelle en haut
+  // Mettre les boutons play/pause/stop au bon endroits
+  // Mettre les autres panels etc ... pour la structure
+  // Jouer la vrai animation squelette
+  // Commencer à créer des annotations ?
+
+
+
+
   // https://discoverthreejs.com/book/first-steps/animation-system/
   // https://www.programmersought.com/article/14865706774/
   // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
