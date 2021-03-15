@@ -1,16 +1,17 @@
 .tab-container{
-    display:inline-block;
-    position: relative;
+    display:block;
+    position: absolute;
     left:15%;
-    width: 70%;
-    min-width:700px;
+    min-width:1000px;
     box-shadow: 1px 1px 2px 1px rgba(255,255,255,0.4);
     padding: 10px;
     background-color: #444444;
     color: white;
+    overflow-x: auto;
   }
   table{
     width:100%;
+    overflow-x: auto;
   }
   .align-right{
     display: inline-block;
@@ -35,4 +36,7 @@
   .mat-form-field {
     font-size: 14px;
     width: 100%;
+  }
+  .dataTab {
+    padding-right: 10px;
   }

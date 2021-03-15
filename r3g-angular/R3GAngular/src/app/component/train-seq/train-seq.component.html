@@ -11,24 +11,26 @@
       <td mat-cell *matCellDef="let sequence"> {{sequence.id}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-        <td mat-cell *matCellDef="let sequence"> {{sequence.pathVideoRGB}} </td>
-      </ng-container>
+
 
     <ng-container matColumnDef="SéquencesTrain">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> SéquencesTrain </th>
-        <td mat-cell *matCellDef="let sequence">
+        <th mat-header-cell class='dataTab' *matHeaderCellDef mat-sort-header> isTrain </th>
+        <td mat-cell class='dataTab' *matCellDef="let sequence">
                 <mat-radio-button name={{sequence.id}}  checked={{sequence.isTrain}}  (change)="update(sequence.id)"> </mat-radio-button>
         </td>
       </ng-container>
 
 
       <ng-container matColumnDef="SéquencesTest">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> SéquencesTest </th>
-        <td mat-cell *matCellDef="let sequence">
+        <th mat-header-cell class='dataTab' *matHeaderCellDef mat-sort-header> isTest </th>
+        <td mat-cell class='dataTab' *matCellDef="let sequence">
                 <mat-radio-button name={{sequence.id}}  checked={{sequence.isTest}} (change)="update(sequence.id)"> </mat-radio-button>
         </td>
+      </ng-container>
+
+      <ng-container *ngFor="let colName of displayedColumns2" matColumnDef="{{colName}}">
+        <th  mat-header-cell class='dataTab' *matHeaderCellDef mat-sort-header matTooltip="{{colName}}"> {{colName}} </th>
+        <td mat-cell class='dataTab' *matCellDef="let sequence"> {{sequence.displayedMetadata.get(colName)}} </td>
       </ng-container>
   
 

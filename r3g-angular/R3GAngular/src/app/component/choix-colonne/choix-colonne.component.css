@@ -6,6 +6,7 @@
 .dataContainer {
   height: 60vh;
   overflow: auto;
+  min-width: 30vw;
 }
 app-node-colonne {
 }

@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ink xmlns="http://www.w3.org/2003/InkML">
   <traceFormat>
-    <channel name="X" type="decimal" />
-    <channel name="Y" type="decimal" />
-    <channel name="Z" type="decimal" />
-    <channel name="timestamp" type="integer"/>
+    <channel name="X" type="Decimal"/>
+    <channel name="Y" type="Decimal"/>
+    <channel name="Z" type="Decimal"/>
+    <channel name="Timestamp" type="Decimal"/>
   </traceFormat>
- <annotationXML type="Capteur">
-  <annotation type="model_capteur">Kinect</annotation>
-  <annotation type="Version">2.0</annotation>
+ <annotationXML type="capteur">
+  <annotation type="modelCapteur">Kinect</annotation>
+  <annotation type="version">2.0</annotation>
  </annotationXML>
-  <annotationXML type="User">
+  <annotationXML type="user">
     <annotation type="school">Insa</annotation>
     <annotation type="age">20</annotation>
     <annotation type="gender">Female</annotation>
-    <annotation type="user_id">564afd6e-d1e4-45c5-9d63-52d922957be8</annotation>
+    <annotation type="userId">564afd6e-d1e4-45c5-9d63-52d922957be8</annotation>
   </annotationXML>
  <annotationXML type="actions">
     <annotation type="type">coup de poing droit</annotation>
-    <annotation type="Debut">10</annotation>
-    <annotation type="Fin">30</annotation>
-    <annotation type="Point d'action">15</annotation>
+    <annotation type="debut">10</annotation>
+    <annotation type="fin">30</annotation>
+    <annotation type="pointAction">15</annotation>
   </annotationXML>
   <annotationXML type="actions">
     <annotation type="type">coup de poing gauche</annotation>
-    <annotation type="Debut">35</annotation>
-    <annotation type="Fin">45</annotation>
-    <annotation type="Point d'action">40</annotation>
+    <annotation type="debut">35</annotation>
+    <annotation type="fin">45</annotation>
+    <annotation type="pointAction">40</annotation>
   </annotationXML>
   <annotationXML type="actions">
     <annotation type="type">coup de poing droit</annotation>
-    <annotation type="Debut">50</annotation>
-    <annotation type="Fin">60</annotation>
-    <annotation type="Point d'action">55</annotation>
+    <annotation type="debut">50</annotation>
+    <annotation type="fin">60</annotation>
+    <annotation type="pointAction">55</annotation>
   </annotationXML>
   <annotationXML type="actions">
     <annotation type="type">coup de poing gauche</annotation>
-    <annotation type="Debut">70</annotation>
-    <annotation type="Fin">80</annotation>
-    <annotation type="Point d'action">75</annotation>
+    <annotation type="debut">70</annotation>
+    <annotation type="fin">80</annotation>
+    <annotation type="pointAction">75</annotation>
   </annotationXML>
   <annotationXML type="actions">
     <annotation type="type">coup de pied droit</annotation>
-    <annotation type="Debut">90</annotation>
-    <annotation type="Fin">100</annotation>
-    <annotation type="Point d'action">95</annotation>
+    <annotation type="debut">90</annotation>
+    <annotation type="fin">100</annotation>
+    <annotation type="pointAction">95</annotation>
   </annotationXML>
   <traceGroup ><!-- sequence segmenté en un ou plus fragment -->
     <!-- id de l'articulation -->
-    <trace >0 10 50 25, 0 20 40 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
-    <trace >0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 40 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
+    <trace>0 10 50 25, 0 20 50 50, 0 30 50 75</trace>
   </traceGroup>
 </ink>

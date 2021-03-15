@@ -109,7 +109,8 @@ def get_meta_donnee(filename):
                         dict_final.append(tab_2)
                     donnees[nb_articulations] = dict_final
                     nb_articulations += 1
-    struct_metadonnee = {"id": name, "format": format_donnee, "annotation": annotations, "metadonnees": others}
+    struct_metadonnee = {"id": name, "format": format_donnee,
+                         "annotation": annotations, "metadonnees": others}
     print(struct_metadonnee)
     return struct_metadonnee
 

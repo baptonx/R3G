@@ -20,13 +20,14 @@ export class FormatDonnees {
     }
     else {
       let fParent: FormatDonnees = this;
-      let fCourant: FormatDonnees;
-      do {
-        fCourant = new FormatDonnees(courant);
-        fParent.children.push(fCourant);
+      let fCourant: FormatDonnees = new FormatDonnees(courant);
+      fParent.children.push(fCourant);
+      while(index.length > 0) {
         fParent = fCourant;
         courant = index.shift();
-      }while(index.length > 0)
+        fCourant = new FormatDonnees(courant);
+        fParent.children.push(fCourant);
+      }
     }
   }
 

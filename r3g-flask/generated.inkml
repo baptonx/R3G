@@ -7,102 +7,102 @@
 		<channel name="timestamp" type="decimal"/>
 	</traceFormat>
 	<annotationXML type="action">
-		<annotation type="type">2</annotation>
+		<annotation type="type">vieniqui</annotation>
 		<annotation type="Debut">1</annotation>
 		<annotation type="Fin">79</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">14</annotation>
+		<annotation type="type">prendere</annotation>
 		<annotation type="Debut">80</annotation>
 		<annotation type="Fin">159</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">20</annotation>
+		<annotation type="type">sonostufo</annotation>
 		<annotation type="Debut">160</annotation>
 		<annotation type="Fin">219</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">6</annotation>
+		<annotation type="type">chevuoi</annotation>
 		<annotation type="Debut">220</annotation>
 		<annotation type="Fin">279</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">7</annotation>
+		<annotation type="type">daccordo</annotation>
 		<annotation type="Debut">280</annotation>
 		<annotation type="Fin">319</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">3</annotation>
+		<annotation type="type">perfetto</annotation>
 		<annotation type="Debut">320</annotation>
 		<annotation type="Fin">399</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">1</annotation>
+		<annotation type="type">vattene</annotation>
 		<annotation type="Debut">400</annotation>
 		<annotation type="Fin">439</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">13</annotation>
+		<annotation type="type">basta</annotation>
 		<annotation type="Debut">440</annotation>
 		<annotation type="Fin">479</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">18</annotation>
+		<annotation type="type">buonissimo</annotation>
 		<annotation type="Debut">480</annotation>
 		<annotation type="Fin">519</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">5</annotation>
+		<annotation type="type">cheduepalle</annotation>
 		<annotation type="Debut">520</annotation>
 		<annotation type="Fin">579</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">12</annotation>
+		<annotation type="type">cosatifarei</annotation>
 		<annotation type="Debut">580</annotation>
 		<annotation type="Fin">659</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">16</annotation>
+		<annotation type="type">fame</annotation>
 		<annotation type="Debut">660</annotation>
 		<annotation type="Fin">719</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">15</annotation>
+		<annotation type="type">noncenepiu</annotation>
 		<annotation type="Debut">720</annotation>
 		<annotation type="Fin">799</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">4</annotation>
+		<annotation type="type">furbo</annotation>
 		<annotation type="Debut">800</annotation>
 		<annotation type="Fin">879</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">9</annotation>
+		<annotation type="type">combinato</annotation>
 		<annotation type="Debut">880</annotation>
 		<annotation type="Fin">959</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">10</annotation>
+		<annotation type="type">freganiente</annotation>
 		<annotation type="Debut">960</annotation>
 		<annotation type="Fin">1039</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">8</annotation>
+		<annotation type="type">seipazzo</annotation>
 		<annotation type="Debut">1040</annotation>
 		<annotation type="Fin">1099</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">17</annotation>
+		<annotation type="type">tantotempo</annotation>
 		<annotation type="Debut">1100</annotation>
 		<annotation type="Fin">1159</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">19</annotation>
+		<annotation type="type">messidaccordo</annotation>
 		<annotation type="Debut">1160</annotation>
 		<annotation type="Fin">1199</annotation>
 	</annotationXML>
 	<annotationXML type="action">
-		<annotation type="type">11</annotation>
+		<annotation type="type">ok</annotation>
 		<annotation type="Debut">1200</annotation>
 		<annotation type="Fin">1254</annotation>
 	</annotationXML>
