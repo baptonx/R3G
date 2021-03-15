@@ -1,2 +1,0 @@
-1GT
-modeVox=24;modeLabel=0;batchSize=3;doGlu=t;dropoutVal=0.6;doBatchNormalisation=1;sideBySide=1;doMultiStream=1;denseSize=5;denseDropout=0.4;nbFeatureMap=2;dilatationsRates=[1,2,4,8,16];treshCudi=1.0;toleranceTresholdMoveCuDi=0.1;doNormKMA=t;lossWeigthWindow=0.01;lossWeigthClass=1;evalPredict=t;useWo0=1;trainWithGTReg=t;weigthBGclass=0.01;weigthBGreg=0.01;nb_epoch=1;valid_part=0.2;doReorientationFor2Sk=1;maxPoolSpatial=t
