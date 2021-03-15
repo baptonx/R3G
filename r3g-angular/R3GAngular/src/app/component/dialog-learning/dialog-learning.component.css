@@ -1,0 +1,41 @@
+.btn{
+    text-align: center;
+    background-color: #303030;
+    border: 1px solid white;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.dialog{
+    text-align: center;
+    padding: 20px;
+    display:inline-block;
+
+
+}
+.steper{
+  width: 65%;
+}
+.tab-container{
+    margin-top: 50px;
+    min-height:80vh;
+    margin-right: 15%;
+  }
+
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+
+  .container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    align-content: space-between;
+  }
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+  }

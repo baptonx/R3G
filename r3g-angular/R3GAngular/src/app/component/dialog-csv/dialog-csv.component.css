@@ -30,6 +30,6 @@ h2{
  ::ng-deep.mat-select-arrow{
      color: white;
  }
- .mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
     color: white;
 }

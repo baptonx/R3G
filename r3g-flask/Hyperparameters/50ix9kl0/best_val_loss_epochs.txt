@@ -1,0 +1,5 @@
+_ModeVoxel1feat50_Dense50
+dilatRates:ListWrapper([1, 2, 4, 8, 16, 32, 64, 1, 2, 4, 8, 16, 32, 64])
+bestValidLoss:0.81497073
+nbEpoch:217
+Res on test : [1.6715609654784203, 112.86982, 0.5428627, 0.75883603, 0.6457556]

@@ -5,7 +5,9 @@ import {MatDialog} from '@angular/material/dialog';
 import { Hyperparameter } from 'src/app/class/evaluation/hyperparameter';
 import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
 import { HyperparameterNumber } from 'src/app/class/evaluation/hyperparameter-number';
+import { Model } from 'src/app/class/evaluation/model';
 import {DialogCSVComponent} from '../dialog-csv/dialog-csv.component';
+import { DialogLearningComponent } from '../dialog-learning/dialog-learning.component';
 
 
 @Component({
@@ -18,9 +20,19 @@ import {DialogCSVComponent} from '../dialog-csv/dialog-csv.component';
 export class ApprentissageComponent implements OnInit, AfterViewInit {
   modeles = new FormControl();
 
-  modelesList: string[] = ['Modèle 1', 'Modèle 2', 'Modèle 3'];
+  modelesList: Array<Model>=[];
   constructor(public dialog: MatDialog, public http: HttpClient) { }
 
+
+  // Séparation des hyperparametres en 2 catégories, ceux qui prennent des valeurs numériques et ceux qui prennent des boolean
+  // orderVal pour ordonner les hyperparametres dans le csv, et qu'il match avec le format de william
+
+  openLearning():void{
+    const DialogRef = this.dialog.open(DialogLearningComponent,{
+      autoFocus: false,
+      data:{}
+    })
+  }
   openDialog(): void{
     const dialogRef = this.dialog.open(DialogCSVComponent, {
       data: {
@@ -44,6 +56,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      console.log(this.modelesList)
     });
   }
 
@@ -51,7 +64,8 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void{
-    this.http.get<Array<string>>('/models/getModelsNames' , {}).subscribe((returnedData: any) => this.modelesList = returnedData);
+    this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+
   }
 
 }

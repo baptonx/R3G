@@ -28,7 +28,18 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {EngineComponent} from './component/engine/engine.component';
 import { HttpClientModule } from '@angular/common/http';
-
+import { DialogLearningComponent } from './component/dialog-learning/dialog-learning.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import { TrainSeqComponent } from './component/train-seq/train-seq.component';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { SequencesChargeesComponent } from './component/sequences-chargees/sequences-chargees.component';
+import { VisualitationExploComponent } from './component/visualitation-explo/visualitation-explo.component';
+import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
+import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
+import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { TimelineComponent } from './component/timeline/timeline.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -45,34 +56,46 @@ const appRoutes: Routes = [
     DialogCSVComponent,
     TableauExplComponent,
     NavigationModulesComponent,
-    EngineComponent
+    EngineComponent,
+    DialogLearningComponent,
+    TrainSeqComponent,
+    SequencesChargeesComponent,
+    VisualitationExploComponent,
+    ProtocoleSeqComponent,
+    ChoixColonneComponent,
+    NodeColonneComponent,
+    TimelineComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSidenavModule,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSidenavModule,
+        MatStepperModule,
+        MatRadioModule,
+        MatCheckboxModule,
 
 
-    RouterModule.forRoot(appRoutes),
-    MatListModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatTabsModule,
-    HttpClientModule,
+        RouterModule.forRoot(appRoutes),
+        MatListModule,
+        MatMenuModule,
+        MatToolbarModule,
+        MatTabsModule,
+        HttpClientModule,
+        MatTooltipModule,
 
-  ],
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -2,16 +2,17 @@
   display:inline-block;
   position: relative;
   left:15%;
-  width: 70%;
-  min-width:700px;
+  min-width:70%;
   box-shadow: 1px 1px 2px 1px rgba(255,255,255,0.4);
   padding: 10px;
   background-color: #444444;
   color: white;
+  margin-top: 50px;
 }
 table{
-  width:100%;
+  min-width:100%;
 }
+
 .align-right{
   display: inline-block;
   position: absolute;
@@ -28,4 +29,29 @@ table{
  }
 .tab-line{
   height:50px;
+}
+
+notRotatedButton{
+  transform: rotate(0deg);
+  transition: 100ms;
+}
+.rotatedButton{
+  transform: rotate(180deg);
+  transition: 100ms;
+}
+.bouton-sidenav{
+  position:absolute;
+  right:0;
+  width:auto;
+  height:5%;
+}
+.w-50{
+  width: 50px;
+  padding-top: 10px;
+}
+.dataTab {
+  padding-right: 10px;
+}
+.boutons-aligne {
+  margin: 10px;
 }

@@ -2,16 +2,17 @@
 <mat-form-field appearance="fill">
   <mat-label>Choisir un modèle</mat-label>
   <mat-select>
-    <mat-option *ngFor="let m of modelesList" [value]="m">
-      {{m}}
+    <mat-option *ngFor="let m of modelesList" [value]="m.name">
+      {{m.name}}
     </mat-option>
   </mat-select>
 
 </mat-form-field>
-<mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle'>add_circle</mat-icon>
+<mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle' (click)="openLearning()">add_circle</mat-icon>
 
 <div class="container flex">
   <div><button mat-flat-button class='btn'>Lancer l'évaluation</button></div>
   <div><button mat-flat-button class='btn' (click)="openDialog()">Générer les hyperparamètres</button></div>
 </div>
 
+</div>

@@ -1,0 +1,14 @@
+<button (click)="this.show = !this.show" [style.transform]="this.show?'rotate(90deg)':'rotate(0)'" [style.visibility]="node.children == null?'hidden':'visible'">
+  <mat-icon>play_arrow</mat-icon>
+</button>
+<mat-checkbox
+              [checked]="this.node.completed"
+              [indeterminate]="someComplete()"
+              (change)="setAll($event.checked)">
+   {{node.name}}
+</mat-checkbox>
+<span *ngIf="node.children != null">
+  <ul *ngFor="let childNode of node.children">
+    <li><app-node-colonne [node]="childNode" (childFalse)="onChildFalse($event)" (childTrue)="onChildTrue($event)" [style.display]="this.show?'inline-block':'none'"></app-node-colonne></li>
+  </ul>
+</span>

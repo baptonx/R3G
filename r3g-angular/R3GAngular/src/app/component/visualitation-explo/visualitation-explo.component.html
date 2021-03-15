@@ -1,0 +1,9 @@
+<div #headPanel class="head-panel" (mousedown)="mousedown($event)">
+  <button class="button-header" mat-icon-button (click)="this.serviceVisu.hide()"><mat-icon class="icon-header">clear</mat-icon></button>
+</div>
+<div class="body-panel" [style.height]="height+'px'">
+  <div class="affichage">Vidéo</div>
+  <div class="affichage">Squelette normalisé</div>
+  <div class="affichage">Squelette voxélisé</div>
+  <div class="affichage">Squelette sans transformation</div>
+</div>

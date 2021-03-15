@@ -1,0 +1,16 @@
+.button-submit{
+  display: table-cell;
+  vertical-align: middle;
+  width:100%;
+}
+.dataContainer {
+  height: 60vh;
+  overflow: auto;
+  min-width: 30vw;
+}
+app-node-colonne {
+}
+.container-choix-colonne {
+  display: table-cell;
+  vertical-align: bottom;
+}
