@@ -17,6 +17,8 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
 export class DialogLearningComponent implements OnInit {
   @ViewChild('modelName') 
   modelName:ElementRef<MatInput> | undefined
+  @ViewChild('pathIA')
+  pathIA:ElementRef<MatInput> | undefined
   hyperpameters:any;
   fileCSVName:string;
   isLinear = false;
@@ -46,13 +48,14 @@ export class DialogLearningComponent implements OnInit {
   ngAfterViewInit():void{
 
 
-    this.startLearning();
+    this.startLearning()
 
 
   }
 
+
   
-  startLearning(){
+  startLearning():void{
     if(this.file!=undefined){
     const formData: FormData = new FormData();
     formData.append('file', this.file, this.file.name);
@@ -65,7 +68,24 @@ export class DialogLearningComponent implements OnInit {
           sequences.append('file', fileSeq, fileSeq.name);
           this.http.post('/models/uploadFile/'+name,sequences).subscribe(
             (response: any) => {
-                console.log(response)
+                
+      var ia = this.chooseIA()
+      const ia_file: FormData = new FormData();
+      ia_file.append('file',ia,ia.name)
+      this.http.post('/models/uploadFile/'+name,ia_file).subscribe(
+        (response: any) => {
+              
+      this.http.get('/models/startLearning/'+name,{}).subscribe(
+        (response: any) => {
+            console.log(response)
+        },
+        (error: any) => {
+            console.log(error)
+        });
+        },
+        (error: any) => {
+            console.log(error)
+        });
             },
             (error: any) => {
                 console.log(error)
@@ -74,7 +94,6 @@ export class DialogLearningComponent implements OnInit {
       (error: any) => {
           console.log(error)
       });
-
    
     }
   }
@@ -94,8 +113,17 @@ export class DialogLearningComponent implements OnInit {
         test.push(';')
       }
     })
+    test.pop()
+    train.pop()
     let file = new File(train.concat(test), 'sequences.txt', {type: 'text/plain'});
     return file
+  }
+
+
+  chooseIA(): File {
+    var ia = []
+    ia.push(this.pathIA?.nativeElement.value!)
+    return new File(ia,'ia.txt', {type: 'text/plain'});
   }
   
 

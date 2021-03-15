@@ -5,13 +5,17 @@
     width: 70%;
     min-width:700px;
     box-shadow: 1px 1px 2px 1px rgba(255,255,255,0.4);
-    padding: 10px;
     background-color: #444444;
     color: white;
+    text-align: center;
   }
   table{
     width:100%;
   }
+  mat-header-cell {
+    display:flex;
+    justify-content:flex-end;
+   }
   .align-right{
     display: inline-block;
     position: absolute;
@@ -27,10 +31,13 @@
      background-color: #555555;
    }
   .tab-line{
-    height:50px;
+    height:30px;
   }
   .mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;
+  }
+  .mat-header-row, .mat-row {
+    height: 30px;
   }
   .mat-form-field {
     font-size: 14px;
@@ -39,23 +46,20 @@
   .filter {
     display: block;
   }
+.list{
+  width: 100px;
+  height: 40px;
+  margin-bottom: 2px;
+
+
+}
   .cell{
     text-align: center;
     padding:10px;
-    border: 1px solid white;
+    height: 40px;
+    width: 100px;
 }
-.list{
-  margin-top: 20px;
 
-
-}
-  .cell{
-    text-align: center;
-    padding:10px;
-    border: 1px solid white;
-}
-.list{
-  margin-top: 20px;
-
-
+.align{
+  text-align: center;
 }
