@@ -1,0 +1,4 @@
+Train
+sequence1 - Copie (2).inkml;sequence1 - Copie (3).inkml;
+Test
+sequence1 - Copie.inkml;sequence1.inkml;

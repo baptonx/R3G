@@ -2,6 +2,8 @@
 
 import os
 import json
+import subprocess
+import sys
 from os import walk
 import re
 import xml.etree.ElementTree as ET
@@ -197,6 +199,30 @@ def upload_file(name):
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
 
+@APP.route('/models/startLearning/<name>')
+def start_learning(name):
+    """Permet de lancer l'apprentissage d'un model en runnant un script shell"""
+    path = ""
+    sequences = ""
+    csv = ""
+    if os.path.exists('./Upload/' + name):
+        for file in os.listdir("./Upload/" + name):
+            if file == 'sequences.txt':
+                sequences = "./Upload/" + name + '/' + file
+            if file == 'ia.txt':
+                with open("./Upload/" + name + '/' + file) as file_content:
+                    path = file_content.readlines()[0]
+                    print(path)
+            if file not in ('sequences.txt', 'ia.txt'):
+                csv = "./Upload/" + name + '/' + file
+        if os.path.isfile(path):
+            subprocess.call([sys.executable, path, sequences, csv])
+        else:
+            return json.dumps({'success': False}), 500, {'ContentType': 'application/json'}
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+
+
 @APP.route('/models/getMetaDonnee')
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
@@ -221,4 +247,5 @@ if __name__ == "__main__":
     download_hyperparameters()
     start_api_wandb()
     download_weights("ra6r8k85")
+    start_learning('mo6')
     APP.run(host='0.0.0.0')
