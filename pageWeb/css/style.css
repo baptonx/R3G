@@ -2328,8 +2328,21 @@ blockquote {
         height: 432px !important;
     }
 
+
+}
+    /*--------------------Ajout--------------------*/
+.div-logo{
+    max-width: 1245px;
+    margin: 0 auto;
+    padding: 0px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-
-
+.row-logo{
+    max-width: 1245px;
+    margin: 0 auto;
+    padding: 0px 0;
+}
 
