@@ -1,4 +1,15 @@
 <div class="container-choix-colonne">
+  <mat-form-field id="chercherDonnee" appearance="fill">
+    <mat-label >Rechercher un type de donnée</mat-label>
+    <input #searchInput (keyup)="afficherDonneees($event)" matInput>
+  </mat-form-field>
+  <div class="donneesTab">
+    <ng-container *ngFor="let line of donneesTabulees; let index = index">
+      <div [style.display]="afficheDonnee[index]?'block':'none'">
+        <mat-checkbox class="example-margin">{{line.join('.')}}</mat-checkbox>
+      </div>
+    </ng-container>
+  </div>
   <div class="dataContainer">
     <app-node-colonne [node]="node"></app-node-colonne>
   </div>

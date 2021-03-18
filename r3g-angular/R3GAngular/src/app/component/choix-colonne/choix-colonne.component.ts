@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild} from '@angular/core';
 import {NodeCol} from "../node-colonne/node-colonne.component";
 import {BddService} from "../../service/bdd.service";
 import {FormatDonnees} from "../../class/exploration/format-donnees";
@@ -14,6 +14,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class ChoixColonneComponent implements OnInit {
   node: NodeCol = {name: "undefined", completed: false};
+  donneesTabulees: Array<Array<string>> = new Array<Array<string>>();
+  afficheDonnee: Array<boolean> = new Array<boolean>();
+  @ViewChild('searchInput') searchInput!: ElementRef;
 
   constructor(public bdd: BddService,
               public dialogRef: MatDialogRef<ChoixColonneComponent>,
@@ -22,6 +25,11 @@ export class ChoixColonneComponent implements OnInit {
   ngOnInit(): void {
     this.node = {name: 'root', completed: false, children: []};
     this.updateNodeFromBDD(this.bdd.formatSequence, this.node);
+    this.donneesTabulees = this.nodeToTab(this.node,[]);
+    this.afficheDonnee = new Array<boolean>(this.donneesTabulees.length);
+    for(let i=0 ; i<this.donneesTabulees.length; i++) {
+      this.afficheDonnee[i] = false;
+    }
   }
 
 
@@ -57,5 +65,46 @@ export class ChoixColonneComponent implements OnInit {
 
   sendColonnesChoisies(): void {
     this.dialogRef.close({colonnes: this.selectionnes(this.node, '')})
+  }
+
+  nodeToTab(currentNode: NodeCol, initialPath: Array<string>) : Array<Array<string>> {
+    let tab = new Array<Array<string>>();
+    if(currentNode.children == null) {
+      let tab2 = initialPath.slice();
+      tab2.push(currentNode.name);
+      tab.push(tab2);
+      return tab;
+    }
+    for(let child of currentNode.children) {
+      initialPath.push(currentNode.name);
+      for(let item of this.nodeToTab(child,initialPath)) {
+        tab.push(item);
+      }
+      initialPath.pop();
+    }
+    return tab;
+  }
+
+  afficherDonneees(event: any) {
+
+    let word = this.searchInput.nativeElement.value;
+    console.log(word);
+    if(word !== undefined) {
+      if(word === "") {
+        for(let i=0 ; i<this.donneesTabulees.length; i++) {
+          this.afficheDonnee[i] = false;
+        }
+      }
+      else {
+        for(let i=0; i<this.donneesTabulees.length; i++) {
+          console.log(word)
+          this.afficheDonnee[i] = this.donneesTabulees[i].join(".").includes(word)?true:false;
+          console.log(this.donneesTabulees[i].join(".") + " and "+word+"          "+this.afficheDonnee[i])
+        }
+      }
+    }
+    else {
+      console.log("undefined");
+    }
   }
 }

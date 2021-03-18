@@ -19,9 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a636729-fc3b-44a5-a578-4ea03cb984dc" name="Default Changelist" comment="présentation des modules">
+    <list default="true" id="9a636729-fc3b-44a5-a578-4ea03cb984dc" name="Default Changelist" comment="taille logo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/banner-images/banner-image-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-angular/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +57,8 @@
       <option name="presentableId" value="Default" />
       <updated>1615819944548</updated>
       <workItem from="1615819945779" duration="11762000" />
-      <workItem from="1616002657569" duration="277000" />
+      <workItem from="1616002657569" duration="298000" />
+      <workItem from="1616062776136" duration="4696000" />
     </task>
     <task id="LOCAL-00001" summary="test anglais francais">
       <created>1615820397815</created>
@@ -76,7 +81,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615846847706</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="taille logo">
+      <created>1616002941684</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1616002941684</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,17 +110,22 @@
     <MESSAGE value="test anglais francais" />
     <MESSAGE value="contexte page web" />
     <MESSAGE value="présentation des modules" />
-    <option name="LAST_COMMIT_MESSAGE" value="présentation des modules" />
+    <MESSAGE value="taille logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="taille logo" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="729" y="302" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1616076502923">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="729" y="302" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1616076502923" />
     <state x="252" y="117" width="1478" height="879" key="MergeDialog" timestamp="1615820368754">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="252" y="117" width="1478" height="879" key="MergeDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1615820368754" />
-    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1615846859176">
+    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1616002949956">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1615846859176" />
+    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616002949956" />
     <state x="767" y="468" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616002700727">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
