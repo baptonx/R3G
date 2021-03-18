@@ -13,8 +13,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./choix-colonne.component.css']
 })
 export class ChoixColonneComponent implements OnInit {
-  node: NodeCol = {name: "undefined", completed: false};
-  donneesTabulees: Array<Array<string>> = new Array<Array<string>>();
+  node: NodeCol = {name: "undefined", path:"", completed: false};
+  donneesTabulees: Array<NodeCol> = new Array<NodeCol>();
   afficheDonnee: Array<boolean> = new Array<boolean>();
   @ViewChild('searchInput') searchInput!: ElementRef;
 
@@ -23,9 +23,9 @@ export class ChoixColonneComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: { colonnes: string[] }) {}
 
   ngOnInit(): void {
-    this.node = {name: 'root', completed: false, children: []};
-    this.updateNodeFromBDD(this.bdd.formatSequence, this.node);
-    this.donneesTabulees = this.nodeToTab(this.node,[]);
+    this.node = {name: 'root', path:"", completed: false, children: []};
+    this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
+    this.donneesTabulees = this.nodeToTab(this.node);
     this.afficheDonnee = new Array<boolean>(this.donneesTabulees.length);
     for(let i=0 ; i<this.donneesTabulees.length; i++) {
       this.afficheDonnee[i] = false;
@@ -33,15 +33,15 @@ export class ChoixColonneComponent implements OnInit {
   }
 
 
-  private updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol) {
+  private updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol, path: string) {
     for(let child of formatSequence.children) {
       if(!child.feuille()){
-        let childNode: NodeCol = {name: child.value, completed: false, children: []};
+        let childNode: NodeCol = {name: child.value, path:path+"."+formatSequence.value, completed: false, children: []};
         if(node.children != null) node.children.push(childNode);
-        this.updateNodeFromBDD(child, childNode);
+        this.updateNodeFromBDD(child, childNode, path + "." + node.name);
       }
       else {
-        if(node.children != null) node.children.push({name: child.value, completed: false});
+        if(node.children != null) node.children.push({name: child.value,path:path+"."+formatSequence.value, completed: false});
       }
     }
   }
@@ -67,20 +67,15 @@ export class ChoixColonneComponent implements OnInit {
     this.dialogRef.close({colonnes: this.selectionnes(this.node, '')})
   }
 
-  nodeToTab(currentNode: NodeCol, initialPath: Array<string>) : Array<Array<string>> {
-    let tab = new Array<Array<string>>();
+  nodeToTab(currentNode: NodeCol) : Array<NodeCol> {
+    let tab = new Array<NodeCol>();
     if(currentNode.children == null) {
-      let tab2 = initialPath.slice();
-      tab2.push(currentNode.name);
-      tab.push(tab2);
-      return tab;
+      return [currentNode];
     }
     for(let child of currentNode.children) {
-      initialPath.push(currentNode.name);
-      for(let item of this.nodeToTab(child,initialPath)) {
+      for(let item of this.nodeToTab(child)) {
         tab.push(item);
       }
-      initialPath.pop();
     }
     return tab;
   }
@@ -98,13 +93,31 @@ export class ChoixColonneComponent implements OnInit {
       else {
         for(let i=0; i<this.donneesTabulees.length; i++) {
           console.log(word)
-          this.afficheDonnee[i] = this.donneesTabulees[i].join(".").includes(word)?true:false;
-          console.log(this.donneesTabulees[i].join(".") + " and "+word+"          "+this.afficheDonnee[i])
+          this.afficheDonnee[i] = (this.donneesTabulees[i].path + '.'+this.donneesTabulees[i].name).includes(word)?true:false;
+          console.log(this.donneesTabulees[i].path + " and "+word+"          "+this.afficheDonnee[i])
         }
       }
     }
     else {
       console.log("undefined");
     }
+  }
+
+  selectLine(line: Array<string>) {
+    let node: NodeCol = this.node;
+    let node2: NodeCol = node;
+    for(let i=1 ; i<line.length ; i++) {
+      if(node.children != null) {
+        for (let child of node.children) {
+          if(child.name === line[i]) {
+
+          }
+        }
+      }
+    }
+  }
+
+  setNode(line: NodeCol) {
+    line.completed = !line.completed;
   }
 }

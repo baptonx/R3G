@@ -6,7 +6,7 @@
   <div class="donneesTab">
     <ng-container *ngFor="let line of donneesTabulees; let index = index">
       <div [style.display]="afficheDonnee[index]?'block':'none'">
-        <mat-checkbox class="example-margin">{{line.join('.')}}</mat-checkbox>
+        <mat-checkbox class="example-margin" [checked]="line.completed" (change)="setNode(line)">{{line.path + '.' + line.name}}</mat-checkbox>
       </div>
     </ng-container>
   </div>

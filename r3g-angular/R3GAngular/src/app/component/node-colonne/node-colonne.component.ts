@@ -3,6 +3,7 @@ import {NgModel} from "@angular/forms";
 
 export interface NodeCol{
   name: string;
+  path: string;
   completed: boolean;
   children?: NodeCol[];
 }
