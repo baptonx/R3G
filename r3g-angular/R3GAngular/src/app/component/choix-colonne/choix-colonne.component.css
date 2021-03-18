@@ -14,3 +14,13 @@ app-node-colonne {
   display: table-cell;
   vertical-align: bottom;
 }
+
+#chercherDonnee {
+  width: 100%;
+}
+
+.donneesTab {
+  max-height: 500px;
+  overflow: auto;
+  margin-bottom: 20px;
+}
