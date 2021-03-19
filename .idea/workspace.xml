@@ -19,9 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Structure générale">
+    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Commit Paul module annotation, exploration, avatar">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pageWeb/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pageWeb/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pageWeb/js/jquery.scrollUp.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/pageWeb/js/jquery.scrollUp.min.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +57,8 @@
       <updated>1615820082352</updated>
       <workItem from="1615820083396" duration="3172000" />
       <workItem from="1615882963974" duration="146000" />
-      <workItem from="1616085855025" duration="4974000" />
+      <workItem from="1616085855025" duration="5201000" />
+      <workItem from="1616143007170" duration="692000" />
     </task>
     <task id="LOCAL-00001" summary="base annotation">
       <created>1615820270297</created>
@@ -80,7 +81,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615821611144</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Commit Paul module annotation, exploration, avatar">
+      <created>1616092305238</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1616092305238</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,20 +110,21 @@
     <MESSAGE value="base annotation" />
     <MESSAGE value="5 modules" />
     <MESSAGE value="Structure générale" />
-    <option name="LAST_COMMIT_MESSAGE" value="Structure générale" />
+    <MESSAGE value="Commit Paul module annotation, exploration, avatar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit Paul module annotation, exploration, avatar" />
   </component>
   <component name="WindowStateProjectService">
     <state x="6" y="30" width="1415" height="784" key="MergeDialog" timestamp="1616086029373">
       <screen x="0" y="23" width="1440" height="808" />
     </state>
     <state x="6" y="30" width="1415" height="784" key="MergeDialog/0.23.1440.808@0.23.1440.808" timestamp="1616086029373" />
-    <state x="320" y="167" key="Vcs.Push.Dialog.v2" timestamp="1615821615878">
+    <state x="320" y="167" key="Vcs.Push.Dialog.v2" timestamp="1616092310128">
       <screen x="0" y="23" width="1440" height="808" />
     </state>
-    <state x="320" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.808@0.23.1440.808" timestamp="1615821615878" />
-    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616090851565">
+    <state x="320" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.808@0.23.1440.808" timestamp="1616092310128" />
+    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616143548662">
       <screen x="0" y="23" width="1440" height="808" />
     </state>
-    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.808@0.23.1440.808" timestamp="1616090851565" />
+    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.808@0.23.1440.808" timestamp="1616143548662" />
   </component>
 </project>
