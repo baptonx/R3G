@@ -1,4 +1,8 @@
-function ShowEn(){
+$('document').ready(function() {
+    ShowFr();
+});
+
+    function ShowEn(){
     $("en").show();
     $("fr").hide();
 }
