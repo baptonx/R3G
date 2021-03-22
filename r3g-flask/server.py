@@ -59,7 +59,7 @@ def download_weights(name):
 def recherche_fichier_inkml():
     """On renvoie les fichiers de BDD."""
     p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
-    for path, _, files in walk("./BDD"):
+    for path, _, files in walk("./BDD_chalearn_inkml"):
         for filename in files:
             if p_1.match(filename):
                 LISTE_FICHIER_INKML[filename] = path+'/'+filename
@@ -240,7 +240,7 @@ def route_get_sequence(namefichier):
 
 if __name__ == "__main__":
     recherche_fichier_inkml()
-    get_meta_donnee("sequence1.inkml")
+    #get_meta_donnee("sequence1.inkml")
     #ouverture_fichier_inkml(2)
     download_hyperparameters()
     start_api_wandb()
