@@ -19,32 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_40_[Default_Changelist]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/company-images/insa.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/company-images/intuidoc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/company-images/irisa.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_03_2021_15_50_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_03_2021_15_50__Default_Changelist_.xml" beforeDir="false" />
+    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="partie gaspard">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/company-images/company-logo9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/gallery-images/gallery-image-6.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,8 +65,16 @@
       <option name="presentableId" value="Default" />
       <updated>1616143135617</updated>
       <workItem from="1616143136777" duration="2277000" />
-      <workItem from="1616434639299" duration="5852000" />
+      <workItem from="1616434639299" duration="6227000" />
     </task>
+    <task id="LOCAL-00001" summary="partie gaspard">
+      <created>1616440548521</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616440548521</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -107,15 +92,20 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="partie gaspard" />
+    <option name="LAST_COMMIT_MESSAGE" value="partie gaspard" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="-1368" y="253" key="Vcs.Push.Dialog.v2" timestamp="1616145486898">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1616440562224">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="-1368" y="253" key="Vcs.Push.Dialog.v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1616145486898" />
-    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616146811627">
+    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616440562224" />
+    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616440552362">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1616145415114" />
-    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616146811627" />
+    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616440552362" />
   </component>
 </project>
