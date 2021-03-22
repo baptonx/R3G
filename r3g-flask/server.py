@@ -81,9 +81,6 @@ def get_meta_donnee(filename):
     nb_articulations = 0
     nb_others = 0
     for child in root:
-##         print(child.tag, child.attrib)
-##         for children in child:
-##             print(children.tag, children.attrib, children.text)
         if child.tag == "{http://www.w3.org/2003/InkML}traceFormat":
             for children in child:
                 format_donnee[children.attrib['name']] = children.attrib['type']
@@ -95,7 +92,7 @@ def get_meta_donnee(filename):
                     action[children.attrib['type']] = children.text
                 annotations[nb_annotation] = action
             else:
-##rÃ©cupere les annotations non implÃ©menter(autres que capteur, user, action)
+                ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
                 other = {}
                 nb_others += 1
                 for children in child:
@@ -113,7 +110,6 @@ def get_meta_donnee(filename):
                     nb_articulations += 1
     struct_metadonnee = {"id": name, "format": format_donnee,
                          "annotation": annotations, "metadonnees": others}
-    print(struct_metadonnee)
     return struct_metadonnee
 
 def get_donnee(filename):
@@ -232,11 +228,13 @@ def route_get_meta_donne():
         meta_donnees.append(get_meta_donnee(fichier))
     return json.dumps(meta_donnees)
 
-#cette route permet de recuperer la sÃ©quence du fichier namefichier
+#cette route permet de recuperer la sequence du fichier namefichier
 @APP.route('/models/getDonnee/<namefichier>')
 def route_get_sequence(namefichier):
     """Permet de télécharger donnée a partir du nom de fichier """
-    recherche_fichier_inkml()
+    
+    if (LISTE_FICHIER_INKML.key(namefichier) != None):
+        recherche_fichier_inkml()
     return json.dumps(get_donnee(namefichier))
 
 
