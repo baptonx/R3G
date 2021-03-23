@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="partie gaspard">
+    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="Voir plus">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
@@ -65,7 +65,8 @@
       <option name="presentableId" value="Default" />
       <updated>1616143135617</updated>
       <workItem from="1616143136777" duration="2277000" />
-      <workItem from="1616434639299" duration="6227000" />
+      <workItem from="1616434639299" duration="6350000" />
+      <workItem from="1616501923423" duration="541000" />
     </task>
     <task id="LOCAL-00001" summary="partie gaspard">
       <created>1616440548521</created>
@@ -74,7 +75,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616440548521</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Voir plus">
+      <created>1616440932233</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1616440932233</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -94,18 +102,19 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="partie gaspard" />
-    <option name="LAST_COMMIT_MESSAGE" value="partie gaspard" />
+    <MESSAGE value="Voir plus" />
+    <option name="LAST_COMMIT_MESSAGE" value="Voir plus" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1616440562224">
+    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1616440947127">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="-1368" y="253" key="Vcs.Push.Dialog.v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1616145486898" />
-    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616440562224" />
-    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616440552362">
+    <state x="603" y="283" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616440947127" />
+    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616502187231">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="-1143" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1616145415114" />
-    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616440552362" />
+    <state x="820" y="466" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616502187231" />
   </component>
 </project>
