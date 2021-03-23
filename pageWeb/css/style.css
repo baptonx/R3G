@@ -2353,3 +2353,13 @@ blockquote {
     margin: 0 auto;
     padding: 0px 0;
 }
+
+.img-heading {
+    width: 200px;
+}
+.moveLeft {
+    position: relative;
+    right: 20px;
+    color: #333333;
+    font-size: 20px;
+}

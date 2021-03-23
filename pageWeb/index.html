@@ -73,22 +73,17 @@
 
                         <!--Social Icons in Header-->
                         <ul class="social-icons">
-                            <li>
-                                <a target="_blank" title="Facebook" href="https://www.facebook.com/username">
-                                    <i class="fa fa-facebook fa-1x"></i><span>Facebook</span>
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                INSA-->
+<!--                                </a>-->
+<!--                            </li>-->
 
-                            <li>
-                                <a target="_blank" title="Twitter" href="http://www.twitter.com/username">
-                                    <i class="fa fa-twitter fa-1x"></i><span>Twitter</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" title="Instagram" href="http://www.instagram.com/username">
-                                    <i class="fa fa-instagram fa-1x"></i><span>Instagram</span>
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                IRISA-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                IntuiDoc-->
+<!--                            </li>-->
                             <li>
                                 <en>
                                     <a id="fr" href="" style="color: black; font-size: 20px" onclick="ShowFr()"> fr </a>
@@ -108,12 +103,9 @@
                             <li>
                                 <a href="#banner">Accueil</a>
                             </li>
-                            <li>
-                                <a href="#about">Présentation</a>
-                            </li>
-                            <li>
-                                <a href="#gallery"><fr>Gallerie</fr><en>Gallery</en></a>
-                            </li>
+<!--                            <li>-->
+<!--                                <a href="#about">Présentation</a>-->
+<!--                            </li>-->
                             <li>
                                 <a href="#r3g-acquisition">Analyse temps réels</a>
                             </li>
@@ -123,6 +115,19 @@
                             <li>
                                 <a href="#testimonials">L'équipe</a>
                             </li>
+                            <li style="width: 50px">
+
+                            </li>
+                            <li>
+                                <a href="https://www.insa-rennes.fr/">INSA Rennes</a>
+                            </li>
+                            <li>
+                                <a href="http://www.irisa.fr">IRISA</a>
+                            </li>
+                            <li>
+                                <a href="https://www-intuidoc.irisa.fr/">IntuiDoc</a>
+                            </li>
+
                         </ul>
                     </nav>
                     <!--End of Main Navigation-->
@@ -140,10 +145,12 @@
             <div class="col-38">
 
                 <div class="section-heading">
-                    <h1>Recognition of 3D Gesture</h1>
+                    <h1>R3G - <br> Recognition of 3D Gesture</h1>
                     <h2><en>Software Suite for recognition of 3D gesture</en>
                         <fr>Suite logicielle pour la reconnaissance de gestes 3D</fr>
                     </h2>
+                    <img class="img-heading" src="images/company-images/insa.png" alt="logo INSA"/>
+                    <img class="img-heading" src="images/company-images/intuidoc.png" alt="logo IntuiDoc"/>
                 </div>
 
 
@@ -156,49 +163,47 @@
     <main id="content">
 
         <div id="contexte">
-            <div class="row clearfix">
+            <div class="row clearfix" style="padding-bottom: 0">
                 <h2 class="text-center">
                     <en>SOFTWARE SUITE FOR CREATING A 3D GESTURE RECOGNITION SYSTEM WITH A KINECT AND A LEAPMOTION</en>
                     <fr>SUITE LOGICIELLE POUR LA MISE AU POINT D’UN SYSTÈME DE RECONNAISSANCE DE GESTES 3D KINECT ET LEAPMOTION</fr>
                 </h2>
                 <p class="text-justify">
-                    <fr>Notre projet de quatrième année, nommé R3G, consiste en la <strong>conception d’une suite logicielle</strong> pour assister
-                        les recherches sur la reconnaissance de gestes 2D et 3D. Nous travaillons en collaboration avec le laboratoire
-                        de recherche de l'IRISA pour épauler William Mocaër dans sa thèse.
+                    <fr>Notre projet, nommé R3G, s'inscrit dans le cadre de notre quatrième année d'étude au département informatique de l'INSA Rennes.
+                        Il consiste en la <strong>conception d’une suite logicielle</strong> pour assister les recherches sur la reconnaissance de
+                        gestes 2D et 3D. Nous travaillons en collaboration avec l'équipe IntuiDoc du laboratoire de recherche de l'IRISA pour épauler le doctorant
+                        William Mocaër dans sa thèse.
                         <br>
                         <br>
-                        Sa thèse porte sur la  <strong>reconnaissance  précoce</strong>  des  gestes  dans  un  flot  <strong>non  segmenté</strong> :  l'objectif  est
-                        d'identifier  ces  gestes  avant  qu'ils  ne  soient  terminés. Prenons l’exemple d’un sport comme la boxe. Les différentes
-                        classes de gestes peuvent être par exemple coup de pied, coup de poing, parer, etc. Un tel système permettrait notamment
-                        de corriger les défauts de trajectoire et d’exécution d’un geste chez un sportif, lui permettant de réaliser des gestes
-                        plus précis et plus rigoureux pour obtenir de meilleures performances. La détection anticipée des gestes apporte la
-                        possibilité, par exemple en boxe, de créer un adversaire virtuel avec lequel s’entraîner.
+                        La thèse de M. Mocaër porte sur la  <strong>reconnaissance  précoce</strong>  des  gestes  dans  un  flot  <strong>non  segmenté</strong> :  l'objectif  est
+                        d'identifier  ces  gestes  avant  qu'ils  ne  soient  terminés. Prenons l’exemple d’un sport comme la boxe. La détection anticipée des gestes apporte la
+                        possibilité de créer un adversaire virtuel avec lequel s’entraîner, dans l'objectif d'améliorer ses performances. Les différentes classes de gestes peuvent
+                        être par exemple coup de pied, coup de poing, parer, etc. Un tel système permet notamment de corriger les défauts de trajectoire et d’exécution d’un geste chez
+                        un sportif. Il réalisera alors des gestes plus précis et plus rigoureux afin d'obtenir de meilleures performances.
                     <br>
                     <br>
-                        Notre suite logicielle est composée à la fois d'un outil de capture et d'analyse des gestes en <strong>interaction avec l'utilisateur</strong>,
-                        développé à l'aide du moteur Unity, et d'un outil d'<strong>analyse a posteriori</strong>  des séquences de gestes 3D conçu avec le framework angular</fr>
+                        </fr>
                 </p>
             </div>
-        </div>
-
-        <!--Introduction-->
-        <section id="about" class="introduction scrollto">
-
             <div class="row clearfix" style="padding-top: 0">
 
-                <p class="col-1"><fr>Notre outil de capture et d'analyse en interaction avec l'utilisateur est composé d'un module d'<strong>acquisition</strong> des gestes et d'un
-                    <strong>démonstrateur</strong> tandis que notre outil d'analyse a posteriori des données sera composé d'un <strong>explorateur</strong>, d'un <strong>évaluateur</strong>
-                    et d'un module d'<strong>annotation.</strong></fr></p>
+                <p >
+                    <fr>La suite logicielle R3G est composée à la fois d'un outil de capture et d'analyse des gestes en <strong>interaction avec l'utilisateur</strong>,
+                        développé à l'aide du moteur Unity, et d'un outil d'<strong>analyse a posteriori</strong>  des séquences de gestes 3D conçu avec le framework angular.
+                        <br>
+                        Elle est composée de cinq modules distinct :
+                    </fr>
+                </p>
                 <div class="col-2 icon-block icon-top wow fadeInUp" data-wow-delay="0.1s">
                     <div class="icon">
                         <i class="fa fa-camera fa-2x"></i>
                     </div>
                     <!--Icon Block Description-->
                     <div class="icon-block-description">
-                        <h4><fr>Acquisition</fr></h4>
+                        <h4><fr>Module d'acquisition</fr></h4>
                         <p><fr>Offre  un  environnement de capture de gestes et séquences de gestes adaptable à différentes typologies
                             de capteurs. Il a pour objectif de pouvoir construire des bases de données pour
-                            les moteurs de reconnaissance à concevoir.</fr></p>
+                            les moteurs de reconnaissance à concevoir. <a href="#r3g-acquisition">Voir plus</a> </fr></p>
                     </div>
                 </div>
                 <div class="col-2  icon-block icon-top wow fadeInUp" data-wow-delay="0.1s">
@@ -207,8 +212,8 @@
                     </div>
                     <!--Icon Block Description-->
                     <div class="icon-block-description">
-                        <h4><fr>Démonstration</fr></h4>
-                        <p><fr>Permet d'éprouver en temps réel les performances des différents moteurs de reconnaissance.</fr></p>
+                        <h4><fr>Module de démonstration</fr></h4>
+                        <p><fr>Permet d'éprouver en temps réel les performances des différents moteurs de reconnaissance. <a href="#r3g-demonstration">Voir plus</a></fr></p>
                     </div>
                 </div>
                 <div class="col-1"></div>
@@ -218,8 +223,8 @@
                     </div>
                     <!--Icon Block Description-->
                     <div class="icon-block-description">
-                        <h4><fr>Exploration</fr></h4>
-                        <p><fr>Permet de visualiser les informations sous forme tabulaire, graphique ou d'animation</fr></p>
+                        <h4><fr>Module d'exploration</fr></h4>
+                        <p><fr>Permet de visualiser les informations sous forme tabulaire, graphique ou d'animation <a href="#r3g-exploration">Voir plus</a></fr></p>
                     </div>
                 </div>
                 <div class="col-3  icon-block icon-top wow fadeInUp" data-wow-delay="0.1s">
@@ -228,9 +233,9 @@
                     </div>
                     <!--Icon Block Description-->
                     <div class="icon-block-description">
-                        <h4><fr>Annotation</fr></h4>
+                        <h4><fr>Module d'annotation</fr></h4>
                         <p><fr>Permet d'annoter et de segmenter les séquences de gestes de façon manuelle ou semi-automatisée
-                            à l'aide des moteurs de reconnaissance existants.</fr></p>
+                            à l'aide des moteurs de reconnaissance existants. <a href="#r3g-annotation">Voir plus</a></fr></p>
                     </div>
                 </div>
                 <div class="col-3 icon-block icon-top wow fadeInUp" data-wow-delay="0.1s">
@@ -239,11 +244,17 @@
                     </div>
                     <!--Icon Block Description-->
                     <div class="icon-block-description">
-                        <h4><fr>Evaluation</fr></h4>
-                        <p><fr>Permet d'éprouver en différé les capacités d'analyse et de reconnaissance de l'IA.</fr></p>
+                        <h4><fr>Module d'évaluation</fr></h4>
+                        <p><fr>Permet d'éprouver en différé les capacités d'analyse et de reconnaissance de l'IA. <a href="#r3g-evaluation">Voir plus</a></fr></p>
                     </div>
                 </div>
             </div>
+
+        </div>
+
+        <!--Introduction-->
+        <section id="about" class="introduction scrollto">
+
 
 
         </section>
