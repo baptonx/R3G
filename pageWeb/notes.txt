@@ -1,32 +1,32 @@
-- ajouter les logos de l'insa et de l'irisa
-- ajouter le mot projet dans le titre, expliciter l'acronyme
-- dans la phrase sous le titre, préciser projet etudiant pour le developpement d'une ia de reconnaissance de gestes 3D
+X- ajouter les logos de l'insa et de l'irisa X
+X- ajouter le mot projet dans le titre, expliciter l'acronyme X
+X- dans la phrase sous le titre, préciser projet etudiant pour le developpement d'une ia de reconnaissance de gestes 3D X
 - images à mettre à jour
-- modifier la phrase d'intro : projet de 4eme année au depart info, spécifier le sujet, mettre un lien pour la page web d'intuidoc dans le texte.
-- "Sa thèse" mauvaise formulation -> importance de bien formuler le texte -> il faut considérer que notre audience sera variée
-- passer la phrase sur la détection anticipé en 1er puis expliquer le comment, "augmenter les perfs du sportif avec un partenaire virtuel"
+X- modifier la phrase d'intro : projet de 4eme année au depart info, spécifier le sujet, mettre un lien pour la page web d'intuidoc dans le texte. X
+X- "Sa thèse" mauvaise formulation -> importance de bien formuler le texte -> il faut considérer que notre audience sera variéeX
+X- passer la phrase sur la détection anticipé en 1er puis expliquer le comment, "augmenter les perfs du sportif avec un partenaire virtuel"X
 - attention au répétitions, la page doit être impeccable et bien nous vendre auprès d'un recruteur -> la forme compte bcp
 - le présent !! et des phrases courtes 
-- pas de "ça", de "notre logiciel" il faut expliciter
-- fusionner les 2 paragraphes au niveau du blanc, expliquer notre travail en fonction des besoins et qu'on va décrire les 5 modules ensuite
-- les modules doivent rappeler leur légende en haut (pictogramme) ex: mettre un "en savoir plus" qui relie à la partie
-- pas de titre pour les parties temps réel/analyse de données mais ça doit ressortir dans le texte ou alors il faut le faire bien et expliquer pourquoi il y a la coupure
-- informations sur les liens qui ne marchent pas encore (vidéo en attente)
+X- pas de "ça", de "notre logiciel" il faut expliciterX
+X- fusionner les 2 paragraphes au niveau du blanc, expliquer notre travail en fonction des besoins et qu'on va décrire les 5 modules ensuiteX
+X- les modules doivent rappeler leur légende en haut (pictogramme) ex: mettre un "en savoir plus" qui relie à la partieX
+X- pas de titre pour les parties temps réel/analyse de données mais ça doit ressortir dans le texte ou alors il faut le faire bien et expliquer pourquoi il y a la coupureX
+X- informations sur les liens qui ne marchent pas encore (vidéo en attente)X
 - chaque présentation de module doit être auto-suffisante et expliquer le module à elle seule
 - enregistrement -> mieux vaut dire captation
 - attention à ne pas faire croire qu'on a développé un moteur, module sert à évaluer, tester et montrer les capacité d'un moteur existant -> reformuler le titre, éprouver en temps réel un moteur de reconnaissance de gestes
-le demo permet d'effectuer des gestes devant un capteur et voir en temps réel les résultats de l'ia utilisé
+- le demo permet d'effectuer des gestes devant un capteur et voir en temps réel les résultats de l'ia utilisé
 - La phrase sur les erreurs est trop précise -> le demo ne corrige rien 
 - il faut décrire le modèle de gestes qui s'avancent et en général décrire les principes plus que le détail
-- "a toute vitesse" -> à revoir
+X- "a toute vitesse" -> à revoirX
 - changer les images -> montrer plus de données et les animations de gestes (avec un gif ou une séquence)
 - on doit avoir toutes les images, qui pourront être mises à jour éventuellement
 - homogène dans les titres ( Un partout ou verbe partout)
 - annotation interactive (facilité d'utilisation, ergonomie)
 - sur la dernière partie d'annotation : on peut faire une préannotation par l'ia (pas de correction de l'ia), plus ajouter une phrase sur l'ergonomie
 - une seule image explicite plutôt que deux, on peut en mettre deux si elles apportent qqchose en plus
-- attention aux images illisibles, les rendre cliquables
+X- attention aux images illisibles, les rendre cliquablesX
 - mettre une image de WandB, décider si le module nécessite WandB ou si c'est une extension cool mais pas plus
-- paragraphe sur l'ia a dégager
-- ajouter les encadrants dans l'équipe + mettre un sous-titre (étudiant 4info)
-- logo insa irisa intui-doc en haut à gauche
+X- paragraphe sur l'ia a dégagerX
+X- ajouter les encadrants dans l'équipe + mettre un sous-titre (étudiant 4info)X
+X- logo insa irisa intui-doc en haut à gaucheX
