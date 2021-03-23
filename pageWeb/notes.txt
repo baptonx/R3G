@@ -13,15 +13,15 @@ X- les modules doivent rappeler leur légende en haut (pictogramme) ex: mettre u
 X- pas de titre pour les parties temps réel/analyse de données mais ça doit ressortir dans le texte ou alors il faut le faire bien et expliquer pourquoi il y a la coupureX
 X- informations sur les liens qui ne marchent pas encore (vidéo en attente)X
 - chaque présentation de module doit être auto-suffisante et expliquer le module à elle seule
-- enregistrement -> mieux vaut dire captation
-- attention à ne pas faire croire qu'on a développé un moteur, module sert à évaluer, tester et montrer les capacité d'un moteur existant -> reformuler le titre, éprouver en temps réel un moteur de reconnaissance de gestes
-- le demo permet d'effectuer des gestes devant un capteur et voir en temps réel les résultats de l'ia utilisé
-- La phrase sur les erreurs est trop précise -> le demo ne corrige rien 
-- il faut décrire le modèle de gestes qui s'avancent et en général décrire les principes plus que le détail
+X enregistrement -> mieux vaut dire captationX
+X- attention à ne pas faire croire qu'on a développé un moteur, module sert à évaluer, tester et montrer les capacité d'un moteur existant -> reformuler le titre, éprouver en temps réel un moteur de reconnaissance de gestesX
+X- le demo permet d'effectuer des gestes devant un capteur et voir en temps réel les résultats de l'ia utiliséX
+X- La phrase sur les erreurs est trop précise -> le demo ne corrige rien X
+X- il faut décrire le modèle de gestes qui s'avancent et en général décrire les principes plus que le détailX
 X- "a toute vitesse" -> à revoirX
 - changer les images -> montrer plus de données et les animations de gestes (avec un gif ou une séquence)
 - on doit avoir toutes les images, qui pourront être mises à jour éventuellement
-- homogène dans les titres ( Un partout ou verbe partout)
+X- homogène dans les titres ( Un partout ou verbe partout)X
 - annotation interactive (facilité d'utilisation, ergonomie)
 - sur la dernière partie d'annotation : on peut faire une préannotation par l'ia (pas de correction de l'ia), plus ajouter une phrase sur l'ergonomie
 - une seule image explicite plutôt que deux, on peut en mettre deux si elles apportent qqchose en plus
