@@ -298,8 +298,11 @@
                         <p class="section-subtitle"><fr>La suite logicielle R3G fournit un outil permettant la capture de gestes 3D.</fr></p>
                     </div>
                     <p class="text-justify"><fr>L'application d'acquisition permet de faciliter la <strong>captation de gestes 3D</strong>. En effet, elle offre la possibilité d'utiliser différents capteurs comme la KinectV1, la KinectV2 et le LeapMotion pour enregistrer des séquences de gestes.
-                        Elle est également <strong>générique</strong> et donc facilement <strong>adaptable</strong> à l'arrivée de nouvelles technologies. Le logiciel possède un système de gestion des utilisateurs et diverses modes d'enregistrements. Le <strong>traitement des données</strong> enregistrées est également
+                        Elle est également <strong>générique</strong> et donc facilement <strong>adaptable</strong> à l'arrivée de nouvelles technologies. Le logiciel possède un système de gestion des utilisateurs et divers modes d'enregistrement.
+                        Les données enregistrées par le module sont enregistrées selon la <strong>norme InkML</strong> pour inclure les informations liées à l'utilisateur, à l'expérience ou au gestes effectués. Cela facilite aussi la compatibilité entre les différents jeu de données.
+                        <!-- Le <strong>traitement des données</strong> enregistrées est également
                         l'un des objectifs de ce module. Les données sont alors stockées dans une base de données et mises au bon format pour permettre leur traitement.
+                    -->
                          </fr>
                     </p>
                     <!-- Just replace the Video ID "UYJ5IjBRlW8" with the ID of your video on YouTube (Found within the URL) -->
@@ -328,12 +331,11 @@
                         <h2 class="section-title"><fr>Un démonstrateur en temps réel des capacités d'un moteur de reconnaissance</fr></h2>
                         <p class="section-subtitle"><fr>La suite logicielle R3G met en évidence les résultats d'une IA grâce au module de démonstration.</fr></p>
                     </div>
-                    <p class="text-justify"><fr>Le module de démonstration <strong>dialogue en temps réel</strong> avec une intelligence artificielle permettant la <strong>prédiction du type de geste réalisé</strong>.
-                        Cette application démontre les capacité d'un moteur existant. En effet, elle affiche les résultats en temps réel et les gestes reconnus au plus
-                    tôt. Cela se caractérise par l'agrandissement de l'imagette du geste correspondante.
+                    <p class="text-justify"><fr>
+                        L'application de démonstration offre la possibilité de tester un moteur de reconnaissance. C'est un moyen <strong>interactif</strong> pour évaluer le moteur dans un cas concret d'utilisation. Les mouvements de l'utilisateur sont anlaysés <strong>en direct</strong>. L'utilisateur voit fluctuer les prévisions de l'IA à l'écran jusqu'à la détection complète du geste. Il peut ainsi se rendre compte si le moteur de reconnaissance prédit les gestes avant qu'il ait fini son mouvement, c'est le principe de la <strong> détection précoce</strong>.
                     </fr>
                     </p>
-                    <p class="text-justify"><fr>Le module de démonstration permet aussi le visionnage de la séance. Il affiche un <strong>récapitulatif de la séance</strong> ainsi que les gestes au ralentis.</fr>
+                    <p class="text-justify"><fr>Le module de démonstration permet aussi le visionnage de la séance. Il affiche un <strong>récapitulatif </strong> des gestes effectués pendant la séance et permet de voir des ralentis.</fr>
                     </p>
                     <!-- Just replace the Video ID "UYJ5IjBRlW8" with the ID of your video on YouTube (Found within the URL) -->
 <!--                    <a href="#" data-videoid="UYJ5IjBRlW8" data-videosite="youtube" class="button video link-lightbox">-->
@@ -374,8 +376,7 @@
                         <h2 class="section-title">Un explorateur efficient adapté aux séquences de gestes</h2>
                         <p class="section-subtitle">La suite logicielle R3G permet d'explorer la base de donnée, de filtrer les séquences, de sélectionner un groupe de séquences, de les visualiser et de les envoyer vers les autres modules.</p>
                     </div>
-                    <p class="text-justify">L'explorateur permet d'explorer les bases de données de gestes 3D. Il charge en mémoire les données de la base pour les <strong>afficher</strong> et les <strong>filtrer</strong>.
-                        Il facilite la <strong>sélection des séquences</strong> et les transmet vers les modules d'annotation et d'évaluation.
+                    <p class="text-justify">L'explorateur permet d'explorer les bases de données de gestes 3D. Il charge en mémoire les gestes de la base pour les <strong>afficher</strong> et les <strong>filtrer</strong>, par exemple selon le capteur utilisé. Il facilite la <strong>sélection des séquences de gestes</strong> et les transmet vers les modules d'annotation et d'évaluation.
                         </p>
                     <p class="text-justify">
                     Il permet également de visualiser <strong>l'animation</strong> des gestes 3D dans différents mode et <strong>d'analyser les performances</strong> d'une IA.
@@ -703,9 +704,9 @@
     <footer id="landing-footer" class="clearfix">
         <div class="row clearfix">
 
-            <p id="copyright" class="col-2">Fais avec amour par l'équipe R3G</p>
+           <!-- <p id="copyright" class="col-2">Fais avec amour par l'équipe R3G</p>
 
-            <!--Social Icons in Footer
+            Social Icons in Footer
             <ul class="col-2 social-icons">
                 <li>
                     <a target="_blank" title="Facebook" href="https://www.facebook.com/username">
