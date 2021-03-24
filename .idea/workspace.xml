@@ -19,12 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Commit Paul images evaluation">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_03_2021_16_07_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_03_2021_16_07__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_03_2021_09_22_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_03_2021_09_22__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Commit Paul annotation">
       <change beforePath="$PROJECT_DIR$/pageWeb/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pageWeb/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +60,7 @@
       <workItem from="1616143007170" duration="3950000" />
       <workItem from="1616425785274" duration="865000" />
       <workItem from="1616532627834" duration="1396000" />
-      <workItem from="1616591147123" duration="375000" />
+      <workItem from="1616591147123" duration="943000" />
     </task>
     <task id="LOCAL-00001" summary="base annotation">
       <created>1615820270297</created>
@@ -158,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616146723636</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Commit Paul annotation">
+      <created>1616591616121</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1616591616121</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,7 +191,8 @@
     <MESSAGE value="Commit Paul reseaux sociaux" />
     <MESSAGE value="Commit Paul gallerie" />
     <MESSAGE value="Commit Paul images evaluation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit Paul images evaluation" />
+    <MESSAGE value="Commit Paul annotation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit Paul annotation" />
   </component>
   <component name="WindowStateProjectService">
     <state x="176" y="23" width="1240" height="608" key="DiffContextDialog" timestamp="1616144272412">
@@ -200,15 +203,15 @@
       <screen x="0" y="23" width="1440" height="808" />
     </state>
     <state x="6" y="30" width="1415" height="784" key="MergeDialog/0.23.1440.808@0.23.1440.808" timestamp="1616086029373" />
-    <state x="320" y="168" key="Vcs.Push.Dialog.v2" timestamp="1616146726913">
-      <screen x="0" y="23" width="1440" height="811" />
-    </state>
-    <state x="320" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.808@0.23.1440.808" timestamp="1616145906493" />
-    <state x="320" y="168" key="Vcs.Push.Dialog.v2/0.23.1440.811@0.23.1440.811" timestamp="1616146726913" />
-    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616532630086">
+    <state x="320" y="167" key="Vcs.Push.Dialog.v2" timestamp="1616591539503">
       <screen x="0" y="23" width="1440" height="808" />
     </state>
-    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.808@0.23.1440.808" timestamp="1616532630086" />
+    <state x="320" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.808@0.23.1440.808" timestamp="1616591539503" />
+    <state x="320" y="168" key="Vcs.Push.Dialog.v2/0.23.1440.811@0.23.1440.811" timestamp="1616146726913" />
+    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616591566567">
+      <screen x="0" y="23" width="1440" height="808" />
+    </state>
+    <state x="518" y="348" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.808@0.23.1440.808" timestamp="1616591566567" />
     <state x="518" y="349" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.811@0.23.1440.811" timestamp="1616146673371" />
   </component>
 </project>
