@@ -63,3 +63,10 @@
 .align{
   text-align: center;
 }
+.btn{
+  text-align: center;
+  background-color: #303030;
+  border: 1px solid white;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

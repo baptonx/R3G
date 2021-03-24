@@ -113,8 +113,12 @@ export class DialogLearningComponent implements OnInit {
         test.push(';')
       }
     })
+    if(test.length>1){
     test.pop()
+    }
+    if(train.length>1){
     train.pop()
+    }
     let file = new File(train.concat(test), 'sequences.txt', {type: 'text/plain'});
     return file
   }
