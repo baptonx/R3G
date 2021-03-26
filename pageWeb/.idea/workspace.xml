@@ -19,16 +19,29 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="">
+    <list default="true" id="8b48c96f-557c-4740-9470-adceba9d3410" name="Default Changelist" comment="marge col-3">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2021_17_40_[Default_Changelist]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/comingSoon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_18_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_25_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_39_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_40_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_41_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_03_2021_10_41__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/namari-color.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/namari-color.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -42,6 +55,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -58,8 +72,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1616749763929</updated>
-      <workItem from="1616749766124" duration="1937000" />
+      <workItem from="1616749766124" duration="2955000" />
+      <workItem from="1616776853018" duration="2002000" />
     </task>
+    <task id="LOCAL-00001" summary="marge col-3">
+      <created>1616751717479</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616751717479</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -77,10 +100,22 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="marge col-3" />
+    <option name="LAST_COMMIT_MESSAGE" value="marge col-3" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="767" y="468" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616749771118">
+    <state width="498" height="446" key="SwitcherDM" timestamp="1616778435373">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state x="767" y="468" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616749771118" />
+    <state width="498" height="446" key="SwitcherDM/72.27.1848.1053@72.27.1848.1053" timestamp="1616778435373" />
+    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1616751727244">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="591" y="289" width="800" height="535" key="Vcs.Push.Dialog.v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616751727244" />
+    <state x="767" y="468" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616776856020">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="767" y="468" width="458" height="177" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/72.27.1848.1053@72.27.1848.1053" timestamp="1616776856020" />
   </component>
 </project>
