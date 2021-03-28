@@ -14,6 +14,8 @@ from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 
+from datetime import datetime
+
 APP = Flask(__name__)
 API = wandb.Api()
 RUNS = API.runs("recoprecoce-intui")
@@ -223,9 +225,11 @@ def start_learning(name):
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
     meta_donnees = []
+    print(str(datetime.now()))
     recherche_fichier_inkml()
     for fichier in LISTE_FICHIER_INKML:
         meta_donnees.append(get_meta_donnee(fichier))
+    print(str(datetime.now()))
     return json.dumps(meta_donnees)
 
 #cette route permet de recuperer la sequence du fichier namefichier
