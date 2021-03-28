@@ -100,16 +100,6 @@ def get_meta_donnee(filename):
                     other[children.attrib['type']] = children.text
                 others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
-            for children in child:
-                if children.tag == "{http://www.w3.org/2003/InkML}trace":
-                    dict_final = []
-                    dict_1 = children.text.split(", ")
-                    for point in dict_1:
-                        tab_2 = point.split(" ")
-                        dict_final.append(tab_2)
-                    donnees[nb_articulations] = dict_final
-                    nb_articulations += 1
-        elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             break
     struct_metadonnee = {"id": name, "format": format_donnee,
                          "annotation": annotations, "metadonnees": others}
