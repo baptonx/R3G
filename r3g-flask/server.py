@@ -65,7 +65,6 @@ def recherche_fichier_inkml():
         for filename in files:
             if p_1.match(filename):
                 LISTE_FICHIER_INKML[filename] = path+'/'+filename
-    print(LISTE_FICHIER_INKML)
 
 def get_meta_donnee(filename):
     # pylint: disable-msg=too-many-locals
@@ -110,6 +109,8 @@ def get_meta_donnee(filename):
                         dict_final.append(tab_2)
                     donnees[nb_articulations] = dict_final
                     nb_articulations += 1
+        elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+            break
     struct_metadonnee = {"id": name, "format": format_donnee,
                          "annotation": annotations, "metadonnees": others}
     return struct_metadonnee
@@ -210,7 +211,6 @@ def start_learning(name):
             if file == 'ia.txt':
                 with open("./Upload/" + name + '/' + file) as file_content:
                     path = file_content.readlines()[0]
-                    print(path)
             if file not in ('sequences.txt', 'ia.txt'):
                 csv = "./Upload/" + name + '/' + file
         if os.path.isfile(path):
