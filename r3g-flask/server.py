@@ -14,6 +14,8 @@ from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 
+from datetime import datetime
+
 APP = Flask(__name__)
 API = wandb.Api()
 RUNS = API.runs("recoprecoce-intui")
@@ -63,7 +65,6 @@ def recherche_fichier_inkml():
         for filename in files:
             if p_1.match(filename):
                 LISTE_FICHIER_INKML[filename] = path+'/'+filename
-    print(LISTE_FICHIER_INKML)
 
 def get_meta_donnee(filename):
     # pylint: disable-msg=too-many-locals
@@ -99,15 +100,7 @@ def get_meta_donnee(filename):
                     other[children.attrib['type']] = children.text
                 others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
-            for children in child:
-                if children.tag == "{http://www.w3.org/2003/InkML}trace":
-                    dict_final = []
-                    dict_1 = children.text.split(", ")
-                    for point in dict_1:
-                        tab_2 = point.split(" ")
-                        dict_final.append(tab_2)
-                    donnees[nb_articulations] = dict_final
-                    nb_articulations += 1
+            break
     struct_metadonnee = {"id": name, "format": format_donnee,
                          "annotation": annotations, "metadonnees": others}
     return struct_metadonnee
@@ -208,7 +201,6 @@ def start_learning(name):
             if file == 'ia.txt':
                 with open("./Upload/" + name + '/' + file) as file_content:
                     path = file_content.readlines()[0]
-                    print(path)
             if file not in ('sequences.txt', 'ia.txt'):
                 csv = "./Upload/" + name + '/' + file
         if os.path.isfile(path):
@@ -223,9 +215,11 @@ def start_learning(name):
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
     meta_donnees = []
+    print(str(datetime.now()))
     recherche_fichier_inkml()
     for fichier in LISTE_FICHIER_INKML:
         meta_donnees.append(get_meta_donnee(fichier))
+    print(str(datetime.now()))
     return json.dumps(meta_donnees)
 
 #cette route permet de recuperer la sequence du fichier namefichier
