@@ -15,6 +15,7 @@ export class EngineComponent implements OnInit {
   // Mettre un editText qui permet de se mettre exactement ou l'on veut sur la timeline (en seconde et en frame)
   // Afficher sur la timeline une barre temporelle en haut
   // Mettre les boutons play/pause/stop au bon endroits
+  // Bouton reset la caméra !
   // Mettre les autres panels etc ... pour la structure
   // Jouer la vrai animation squelette
   // Commencer à créer des annotations ?
@@ -56,6 +57,10 @@ export class EngineComponent implements OnInit {
     this.listElementHTML.push(this.box);
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML);
     this.engServ.animate();
+  }
+
+  updateActionTime(event: any): void {
+    this.engServ.updateActionTime(event);
   }
 
 }

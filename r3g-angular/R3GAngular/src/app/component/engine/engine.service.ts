@@ -27,9 +27,10 @@ export class EngineService implements OnDestroy {
   public clip!: AnimationClip;
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
+  public controls!: TrackballControls;
 
     constructor(private ngZone: NgZone, private annotationServ: AnnotationService) {
-      this.annotationServ.pauseAction = false;
+      this.annotationServ.pauseAction = true;
   }
 
   public ngOnDestroy(): void {
@@ -76,7 +77,7 @@ export class EngineService implements OnDestroy {
         // this.action.time = 4;
         // this.clip.duration = this.action.time;
         // action.play();
-        this.stop();
+        this.stopToStart();
 
         const clock = new Clock();
         return (rect: DOMRect) => {
@@ -154,6 +155,7 @@ export class EngineService implements OnDestroy {
     const controls = new TrackballControls(camera, elem);
     controls.noPan = true;
     controls.rotateSpeed = 0.5;
+    this.controls = controls;
 
 
     // light
@@ -243,26 +245,71 @@ export class EngineService implements OnDestroy {
   }
 
   public play(): void {
+      if (this.annotationServ.pauseAction === true) {
+        this.playForward();
+      }
+      else {
+        this.annotationServ.action.timeScale = 1;
+        this.annotationServ.pauseAction = true;
+        this.clip.duration = this.annotationServ.action.time;
+        this.annotationServ.action.play();
+      }
+  }
+
+  public playForward(): void {
     this.annotationServ.pauseAction = false;
     const t = this.annotationServ.action.time;
     this.annotationServ.action.stop();
     this.annotationServ.action.time = t;
     this.clip.duration = this.annotationServ.tempsTotal;
+    this.annotationServ.action.timeScale = 1;
     this.annotationServ.action.play();
   }
 
-  public stop(): void {
-      console.log('test');
+  public playBackward(): void {
+    this.annotationServ.pauseAction = false;
+    const t = this.annotationServ.action.time;
+    this.annotationServ.action.stop();
+    this.annotationServ.action.time = t;
+    this.clip.duration = this.annotationServ.tempsTotal;
+    // this.annotationServ.action.setLoop(THREE.LoopOnce);
+    this.annotationServ.action.timeScale = -1;
+    this.annotationServ.action.play();
+  }
+
+  public stopToStart(): void {
+      this.annotationServ.action.timeScale = 1;
       this.annotationServ.action.stop();
       this.annotationServ.action.time = 0;
       this.clip.duration = 0;
       this.annotationServ.action.play();
+      this.annotationServ.pauseAction = true;
+  }
+
+  public stopToEnd(): void {
+    this.annotationServ.action.timeScale = 1;
+    this.annotationServ.action.stop();
+    this.annotationServ.action.time = this.annotationServ.tempsTotal;
+    this.clip.duration = this.annotationServ.tempsTotal;
+    this.annotationServ.action.play();
+    this.annotationServ.pauseAction = true;
   }
 
   public pause(): void {
       this.annotationServ.pauseAction = true;
       this.clip.duration = this.annotationServ.action.time;
       this.annotationServ.action.play();
+  }
+
+  updateActionTime(event: any): void {
+      const timeEditText = Number(event.target.value);
+      if (timeEditText >= 0 && timeEditText <= this.annotationServ.tempsTotal) {
+        this.annotationServ.action.time = timeEditText;
+      }
+  }
+
+  public resetCamera(): void {
+    this.controls.reset();
   }
 
 }

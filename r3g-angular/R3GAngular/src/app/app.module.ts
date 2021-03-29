@@ -38,7 +38,7 @@ import { VisualitationExploComponent } from './component/visualitation-explo/vis
 import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
 import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
-import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
