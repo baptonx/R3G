@@ -19,7 +19,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService) {
   }
 
-  addPathBDD(path: string): void{
+  addPathBDD(): void{
     this.bdd.addpath();
     console.log("addPath");
   }
