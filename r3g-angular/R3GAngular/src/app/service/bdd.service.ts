@@ -10,6 +10,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class BddService {
   sequences: Sequence[];
+  bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Sequence[]>;
   formatSequence: FormatDonnees = new FormatDonnees();
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
@@ -52,7 +53,6 @@ export class BddService {
         console.log(returnedData);
         for (const dbb of Object.values((returnedData))) {
           if (Array.isArray(dbb)) {
-            console.log("this.array");
             for(let key in dbb) {
               let id = dbb[key]['id'];
               this.sequences.push(new Sequence(id, '', dbb[key]));
@@ -63,7 +63,33 @@ export class BddService {
         this.notifyTableauService();
         this.observableSequences.next(this.sequences);
       });
-
+  }
+  getlistdb(): void{
+    this.http
+      .get<Array<string>>('/models/getListBDD' , {})
+      .subscribe((returnedData: any) => {
+        this.bddnames = returnedData;
+        console.log(returnedData);
+      });
+  }
+  reloaddb(): void{
+    this.http
+      .get<object>('/models/reload/${dbname}' , {})
+      .subscribe((returnedData: any) => {
+        this.sequences = [];
+        console.log(returnedData);
+        for (const dbb of Object.values((returnedData))) {
+          if (Array.isArray(dbb)) {
+            for(let key in dbb) {
+              let id = dbb[key]['id'];
+              this.sequences.push(new Sequence(id, '', dbb[key]));
+            }
+          }
+        }
+        this.updateFormat(this.formatSequence);
+        this.notifyTableauService();
+        this.observableSequences.next(this.sequences);
+      });
   }
   getDonnee(listSequenceName: Array<string>){
     for (let sequenceName in listSequenceName){

@@ -186,40 +186,21 @@ def save_config():
     with open(fcfg, 'w') as file:
         cfg.write(file)
 
-def recherche_fichier_inkml():
-    """On renvoie les fichiers de BDD."""
-    # pylint: disable-msg=global-statement
-    global METADONNEE
-    METADONNEE = {}
-    p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
-    for namebdd, pathbdd in LISTE_PATH_BDD.items():
-        metadonnes = []
-        liste_fichier_in = {}
-        for path, _, files in walk(pathbdd):
-            for filename in files:
-                if p_1.match(filename):
-                    liste_fichier_in[filename] = path+'/'+filename
-                    metadonnes.append(get_meta_donnee(filename, namebdd))
-        if len(liste_fichier_in) != 0:
-            LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
-        METADONNEE[namebdd] = metadonnes
-
-def ajout_fichiers_inkml_in(pathbdd):
+def ajout_fichiers_inkml_in(pathbdd, namebdd):
     """On ajoute les fichiers de présent à ce path BDD."""
     # pylint: disable-msg=global-statement
     p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
-    p_2 = re.compile(r'[^/]*$')
-    namebdd = p_2.search(pathbdd)
     liste_fichier_in = {}
     global METADONNEE
     for path, _, files in walk(pathbdd):
-        metadonnes = []
         for filename in files:
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
-                metadonnes.append(get_meta_donnee(filename, namebdd))
-        if len(liste_fichier_in) != 0:
-            LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
+    if len(liste_fichier_in) != 0:
+        LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
+        metadonnes = []
+        for file in liste_fichier_in:
+            metadonnes.append(get_meta_donnee(filename, namebdd))
         METADONNEE[namebdd] = metadonnes
 
 def suppresion_fichiers_inkml(bdd):
@@ -229,6 +210,10 @@ def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
     """Contenu du fichier inkml."""
+    
+    print(bdd)
+    print(filename)
+    print(LISTE_FICHIER_INKML.keys())
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
@@ -299,12 +284,13 @@ def route_get_list_bdd():
 def route_get_sequence(namefichier, bdd):
     """Permet de télécharger donnée a partir du nom de fichier """
     if namefichier in LISTE_FICHIER_INKML[bdd]:
-        recherche_fichier_inkml()
-    return json.dumps(get_donnee(namefichier, bdd))
+        return json.dumps(get_donnee(namefichier, bdd))
+    else return
 
 @APP.route('/models/addBDD')
 def route_add_bdd():
     """add new path ddb"""
+    global LISTE_PATH_BDD
     root = tkinter.Tk()
     root.withdraw()
     path = tkinter.filedialog.askdirectory()
@@ -314,42 +300,55 @@ def route_add_bdd():
     namebdd = p_2.search(path)
     print(namebdd)
     if namebdd is not None:
-        print(namebdd)
+        namebdd = namebdd.group(0)
         if namebdd not in LISTE_PATH_BDD:
             LISTE_PATH_BDD[namebdd] = path
-            ajout_fichiers_inkml_in(path)
+            print(LISTE_PATH_BDD)
+            print("namebdd : " +namebdd)
+            print("path : " + path)
+            ajout_fichiers_inkml_in(path, namebdd)
     save_config()
     return json.dumps(METADONNEE)
 
 @APP.route('/models/closeBDD/<nameBDD>')
 def route_close_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
+    global LISTE_PATH_BDD
     p_2 = re.compile(r'[^/]*$')
     namebdd = p_2.search(name)
     if namebdd is not None:
+        namebdd = namebdd.group(0)
         if namebdd in LISTE_PATH_BDD:
             del LISTE_PATH_BDD[namebdd]
             suppresion_fichiers_inkml(namebdd)
     save_config()
 
-@APP.route('/models/reload/<nameBDD>')
+@APP.route('/models/reload/<name>')
 def route_reload_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
+    global LISTE_FICHIER_INKML
+    global METADONNEE
     p_2 = re.compile(r'[^/]*$')
     namebdd = p_2.search(name)
     if namebdd is not None:
+        namebdd = namebdd.group(0)
         if namebdd in LISTE_PATH_BDD:
-            #path = LISTE_PATH_BDD[namebdd]
-            recherche_fichier_inkml()
+            del LISTE_FICHIER_INKML[namebdd]
+            del METADONNEE[namebdd]
+            ajout_fichiers_inkml_in(LISTE_PATH_BDD[namebdd], namebdd)
     save_config()
+    return METADONNEE
+    
 
 if __name__ == "__main__":
-
     get_last_config()
     download_hyperparameters()
     start_api_wandb()
     download_weights("ra6r8k85")
     start_learning('mo6')
     APP.run(host='0.0.0.0')
-    LISTE_PATH_BDD["BDD_chalearn_inkml"] = "./BDD_chalearn_inkml"
     save_config()
+    
+#    F = open("donneeSample.txt", "w")
+#    F.write(str(get_donnee("Sample00001_data.inkml", "BDD_chalearn_inkml")))
+#    F.close()

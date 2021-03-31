@@ -20,7 +20,15 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
   addPathBDD(): void{
     this.bdd.addpath();
-    console.log("new path");
+    console.log("addPath");
+  }
+  reloadDB(namedb): void{
+    this.bdd.reloaddb(namedb);
+    console.log("reload" + namedb);
+  }
+  closeDB(namedb): void{
+    this.bdd.closedb(namedb);
+    console.log("closed" + namedb);
   }
   ngOnInit(): void {
   }
@@ -42,6 +50,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.bdd.setMetaData();
+    this.bdd.getlistdb();
   }
 
 }

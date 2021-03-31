@@ -1,7 +1,24 @@
 
 <div style="height: 100%">
 <mat-toolbar>
-  <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawerExplo.toggle()">
+  <button mat-icon-button aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menuExplo"><!--(click)="drawerExplo.toggle()"-->
+    <mat-menu #menuExplo="matMenu">
+      <button mat-menu-item>Créer une colonne</button>
+      <button mat-menu-item>Sauvegarder la BDD</button>
+      <button mat-menu-item>Importer une BDD</button>
+      <button mat-menu-item [matMenuTriggerFor]="listbddreload">Recharger une BDD</button>
+      <button mat-menu-item [matMenuTriggerFor]="listclosebdd">fermer une BDD</button>
+      <button mat-menu-item>Charger une IA</button>
+      <button mat-menu-item>Exporter les séquences sélectionnées</button>
+    </mat-menu>
+    <mat-menu #listbddreload="matMenu">
+      <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="reloadDB(bddname)">{{bddname}}</button>
+    </mat-menu>
+    <mat-menu #listclosebdd="matMenu">
+      <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="closeDB(bddname)">{{bddname}}</button>
+    </mat-menu>
+
+
     <mat-icon>menu</mat-icon>
   </button>
   <span>Exploration</span>
@@ -26,7 +43,8 @@
 </mat-toolbar>
 
 <mat-drawer-container autosize>
-  <mat-drawer #drawerExplo mode="side">
+
+    <!--
     <mat-list>
       <button class="bouton-menu" mat-button>
         <mat-list-item>Créer une colonne</mat-list-item>
@@ -40,6 +58,14 @@
         <mat-list-item>Importer une BDD</mat-list-item>
       </button>
       <mat-divider></mat-divider>
+      <button class="bouton-menu" [matMenuTriggerFor]="menu" (click)="reloadDB()" mat-button>
+        <mat-list-item>recharger une BDD
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>Item 1</button>
+            <button mat-menu-item>Item 2</button>
+          </mat-menu>
+        </mat-list-item>
+      </button>
       <button class="bouton-menu" mat-button>
         <mat-list-item>Charger une IA</mat-list-item>
       </button>
@@ -48,8 +74,7 @@
         <mat-list-item>Exporter les séquences sélectionnées</mat-list-item>
       </button>
       <mat-divider></mat-divider>
-    </mat-list>
-  </mat-drawer>
+    </mat-list>-->
 
   <mat-tab-group animationDuration="0ms" dynamicHeight>
     <mat-tab class="ongletBDD" label="Base de données">
