@@ -33,6 +33,7 @@ export class TableauExplService {
   //sequences a afficher (format lineaire)
   sequences: Array<sequencesTab>;
   observableSequences: BehaviorSubject<sequencesTab[]>;
+  displayedColumns: string[] = new Array<string>();
   constructor() {
     this.sequences = new Array<sequencesTab>();
     this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);

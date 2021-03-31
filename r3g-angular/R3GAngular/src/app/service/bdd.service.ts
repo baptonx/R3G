@@ -73,7 +73,7 @@ export class BddService {
   }
   closedb(dbname: string): void{
     this.http
-      .get<object>(`/models/clodeBDD/${dbname}` , {})
+      .get<object>(`/models/closeBDD/${dbname}` , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
         console.log(returnedData);

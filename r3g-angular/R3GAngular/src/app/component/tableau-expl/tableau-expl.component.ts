@@ -19,7 +19,6 @@ import {sequence} from "@angular/animations";
 export class TableauExplComponent implements AfterViewInit, OnInit {
 
   selectionListe: Array<boolean> = new Array<boolean>();
-  displayedColumns: string[] = new Array<string>();
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -31,7 +30,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
               public visuService: VisualisationExploService,
               public dialog: MatDialog) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
-    this.explService.observableSequences.subscribe((sequence) => this.updateAll())
+    this.explService.observableSequences.subscribe((sequence) => {
+      if (this.explService.displayedColumns.length > 0) this.updateAll();
+    });
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
 
@@ -41,7 +42,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   updateAll(): void{
     //console.log(this.explService.sequences);
     //this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
-    this.allColumns = Object.assign([],this.displayedColumns);
+    this.allColumns = Object.assign([],this.explService.displayedColumns);
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
@@ -75,7 +76,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.displayedColumns = result.colonnes;
+      this.explService.displayedColumns = result.colonnes;
       this.updateAll();
     });
   }

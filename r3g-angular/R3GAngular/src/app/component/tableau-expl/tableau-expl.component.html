@@ -34,7 +34,7 @@
   <table mat-table matSort [dataSource]="dataSource">
 
     <!--Position Column-->
-      <ng-container *ngFor="let colName of displayedColumns" matColumnDef="{{colName}}">
+      <ng-container *ngFor="let colName of this.explService.displayedColumns" matColumnDef="{{colName}}">
         <th class="dataTab" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{colName}}"> {{colName.split('.')[colName.split('.').length-1]}} </th>
         <td class="dataTab" mat-cell *matCellDef="let element"> {{element[colName]}} </td>
       </ng-container>
