@@ -19,12 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="add router">
-      <change afterPath="$PROJECT_DIR$/../r3g-flask/donneeSample.txt" afterDir="false" />
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="start route menu">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/choix-colonnes.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/choix-colonnes.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
     </list>
@@ -75,7 +77,7 @@
       <workItem from="1610530549054" duration="2958000" />
       <workItem from="1610960966668" duration="784000" />
       <workItem from="1614162352338" duration="1092000" />
-      <workItem from="1617125640380" duration="12107000" />
+      <workItem from="1617125640380" duration="19768000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -91,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610533517742</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="start route menu">
+      <created>1617204229403</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1617204229403</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -113,7 +122,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="add style" />
     <MESSAGE value="add router" />
-    <option name="LAST_COMMIT_MESSAGE" value="add router" />
+    <MESSAGE value="start route menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="start route menu" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-1641" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1617125655034">
@@ -151,11 +161,11 @@
     </state>
     <state x="442" y="200" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610533523245" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610379305650" />
-    <state x="622" y="344" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610961608859">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1617204240461">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="622" y="344" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1610961608859" />
-    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610379342810" />
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617204240461" />
     <state x="623" y="225" key="search.everywhere.popup" timestamp="1610379051543">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

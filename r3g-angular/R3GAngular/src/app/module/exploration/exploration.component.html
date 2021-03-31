@@ -5,7 +5,7 @@
     <mat-menu #menuExplo="matMenu">
       <button mat-menu-item>Créer une colonne</button>
       <button mat-menu-item>Sauvegarder la BDD</button>
-      <button mat-menu-item>Importer une BDD</button>
+      <button mat-menu-item (click)="addPathBDD()">Importer une BDD</button>
       <button mat-menu-item [matMenuTriggerFor]="listbddreload">Recharger une BDD</button>
       <button mat-menu-item [matMenuTriggerFor]="listclosebdd">fermer une BDD</button>
       <button mat-menu-item>Charger une IA</button>

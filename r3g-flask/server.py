@@ -197,14 +197,20 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
     if len(liste_fichier_in) != 0:
+        print(liste_fichier_in)
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
-            metadonnes.append(get_meta_donnee(filename, namebdd))
+            metadonnes.append(get_meta_donnee(file, namebdd))
         METADONNEE[namebdd] = metadonnes
 
 def suppresion_fichiers_inkml(bdd):
     """ferme une bdd """
+    global METADONNEE
+    global LISTE_FICHIER_INKML
+    del METADONNEE[bdd]
+    del LISTE_FICHIER_INKML[bdd]
+    
     print(bdd)
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
@@ -285,7 +291,8 @@ def route_get_sequence(namefichier, bdd):
     """Permet de télécharger donnée a partir du nom de fichier """
     if namefichier in LISTE_FICHIER_INKML[bdd]:
         return json.dumps(get_donnee(namefichier, bdd))
-    else return
+    else:
+        return None
 
 @APP.route('/models/addBDD')
 def route_add_bdd():
@@ -322,30 +329,29 @@ def route_close_bdd(name):
             del LISTE_PATH_BDD[namebdd]
             suppresion_fichiers_inkml(namebdd)
     save_config()
+    return METADONNEE
 
 @APP.route('/models/reload/<name>')
 def route_reload_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
     global LISTE_FICHIER_INKML
     global METADONNEE
-    p_2 = re.compile(r'[^/]*$')
-    namebdd = p_2.search(name)
-    if namebdd is not None:
-        namebdd = namebdd.group(0)
-        if namebdd in LISTE_PATH_BDD:
-            del LISTE_FICHIER_INKML[namebdd]
-            del METADONNEE[namebdd]
-            ajout_fichiers_inkml_in(LISTE_PATH_BDD[namebdd], namebdd)
+    print(name)
+    if name in LISTE_PATH_BDD:
+        del LISTE_FICHIER_INKML[name]
+        del METADONNEE[name]
+        ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
     save_config()
+    print(METADONNEE)
     return METADONNEE
     
 
 if __name__ == "__main__":
     get_last_config()
     download_hyperparameters()
-    start_api_wandb()
-    download_weights("ra6r8k85")
-    start_learning('mo6')
+    #start_api_wandb()
+    #download_weights("ra6r8k85")
+    #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()
     

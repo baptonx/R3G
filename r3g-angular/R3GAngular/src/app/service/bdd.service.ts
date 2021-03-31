@@ -29,7 +29,6 @@ export class BddService {
       .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
       this.sequences = [];
-      console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
       for (const dbb of Object.values((returnedData))) {
         if (Array.isArray(dbb)) {
           console.log("this.array");
@@ -39,7 +38,7 @@ export class BddService {
           }
         }
       }
-        this.updateFormat(this.formatSequence);
+      this.updateFormat(this.formatSequence);
       this.notifyTableauService();
       this.observableSequences.next(this.sequences);
     });
@@ -47,7 +46,7 @@ export class BddService {
   }
   addpath(): void{
     this.http
-      .get<object>('/models/addBDD' , {})
+      .get<object>('/models/addBDD/' , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
         console.log(returnedData);
@@ -66,15 +65,34 @@ export class BddService {
   }
   getlistdb(): void{
     this.http
-      .get<Array<string>>('/models/getListBDD' , {})
+      .get<Array<string>>(`/models/getListBDD` , {})
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
         console.log(returnedData);
       });
   }
-  reloaddb(): void{
+  closedb(dbname: string): void{
     this.http
-      .get<object>('/models/reload/${dbname}' , {})
+      .get<object>(`/models/clodeBDD/${dbname}` , {})
+      .subscribe((returnedData: any) => {
+        this.sequences = [];
+        console.log(returnedData);
+        for (const dbb of Object.values((returnedData))) {
+          if (Array.isArray(dbb)) {
+            for(let key in dbb) {
+              let id = dbb[key]['id'];
+              this.sequences.push(new Sequence(id, '', dbb[key]));
+            }
+          }
+        }
+        this.updateFormat(this.formatSequence);
+        this.notifyTableauService();
+        this.observableSequences.next(this.sequences);
+      });
+  }
+  reloaddb(dbname: string): void{
+    this.http
+      .get<object>(`/models/reload/${dbname}` , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
         console.log(returnedData);
@@ -94,7 +112,7 @@ export class BddService {
   getDonnee(listSequenceName: Array<string>){
     for (let sequenceName in listSequenceName){
       this.http
-        .get<Array<string>>('/models/getDonnee/${sequenceName}' , {})
+        .get<Array<string>>(`/models/getDonnee/${sequenceName}` , {})
         .subscribe((returnedData: any) => {
           //ret
       });

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Sequence} from "../class/commun/sequence";
+import {BehaviorSubject} from 'rxjs';
 
 export interface sequencesTab {
   id: string;
@@ -8,6 +9,7 @@ export interface sequencesTab {
 export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
   id: string;
+
   constructor(ident: string, metadonnees: object) {
     this.id = ident;
     for (const [k, value] of Object.entries(metadonnees)){
@@ -30,8 +32,10 @@ export class sequenceTabImpl implements sequencesTab{
 export class TableauExplService {
   //sequences a afficher (format lineaire)
   sequences: Array<sequencesTab>;
+  observableSequences: BehaviorSubject<sequencesTab[]>;
   constructor() {
     this.sequences = new Array<sequencesTab>();
+    this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
   }
 
 
@@ -58,6 +62,7 @@ export class TableauExplService {
         this.sequences.push(dataCourante);
       }
     }
+    this.observableSequences.next(this.sequences);
   }
 
 }

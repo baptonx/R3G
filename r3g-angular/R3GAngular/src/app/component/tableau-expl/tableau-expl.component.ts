@@ -31,6 +31,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
               public visuService: VisualisationExploService,
               public dialog: MatDialog) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
+    this.explService.observableSequences.subscribe((sequence) => this.updateAll())
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
 
