@@ -5,6 +5,7 @@ import {FormatDonnees} from "../../class/exploration/format-donnees";
 import {element} from "protractor";
 import {TableauExplService} from "../../service/tableau-expl.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {ChoixColonnesService} from "../../service/choix-colonnes.service";
 
 
 @Component({
@@ -13,19 +14,19 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./choix-colonne.component.css']
 })
 export class ChoixColonneComponent implements OnInit {
-  node: NodeCol = {name: "undefined", path:"", completed: false};
+
   donneesTabulees: Array<NodeCol> = new Array<NodeCol>();
   afficheDonnee: Array<boolean> = new Array<boolean>();
   @ViewChild('searchInput') searchInput!: ElementRef;
 
   constructor(public bdd: BddService,
               public dialogRef: MatDialogRef<ChoixColonneComponent>,
+              public choixColService: ChoixColonnesService,
               @Inject(MAT_DIALOG_DATA) public data: { colonnes: string[] }) {}
 
   ngOnInit(): void {
-    this.node = {name: 'root', path:"", completed: false, children: []};
-    this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
-    this.donneesTabulees = this.nodeToTab(this.node);
+
+    this.donneesTabulees = this.nodeToTab(this.choixColService.node);
     this.afficheDonnee = new Array<boolean>(this.donneesTabulees.length);
     for(let i=0 ; i<this.donneesTabulees.length; i++) {
       this.afficheDonnee[i] = false;
@@ -33,18 +34,7 @@ export class ChoixColonneComponent implements OnInit {
   }
 
 
-  private updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol, path: string) {
-    for(let child of formatSequence.children) {
-      if(!child.feuille()){
-        let childNode: NodeCol = {name: child.value, path:path+"."+formatSequence.value, completed: false, children: []};
-        if(node.children != null) node.children.push(childNode);
-        this.updateNodeFromBDD(child, childNode, path + "." + node.name);
-      }
-      else {
-        if(node.children != null) node.children.push({name: child.value,path:path+"."+formatSequence.value, completed: false});
-      }
-    }
-  }
+
 
   selectionnes(node: NodeCol, path: string): string[] {
     if((node.children == null || node.children.length === 0) && !node.completed) {
@@ -64,7 +54,7 @@ export class ChoixColonneComponent implements OnInit {
   }
 
   sendColonnesChoisies(): void {
-    this.dialogRef.close({colonnes: this.selectionnes(this.node, '')})
+    this.dialogRef.close({colonnes: this.selectionnes(this.choixColService.node, '')})
   }
 
   nodeToTab(currentNode: NodeCol) : Array<NodeCol> {
@@ -104,7 +94,7 @@ export class ChoixColonneComponent implements OnInit {
   }
 
   selectLine(line: Array<string>) {
-    let node: NodeCol = this.node;
+    let node: NodeCol = this.choixColService.node;
     let node2: NodeCol = node;
     for(let i=1 ; i<line.length ; i++) {
       if(node.children != null) {
