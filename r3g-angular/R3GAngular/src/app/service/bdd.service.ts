@@ -28,7 +28,7 @@ export class BddService {
       .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
       this.sequences = [];
-      console.log(returnedData);
+      console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
       for (const dbb of Object.values((returnedData))) {
         if (Array.isArray(dbb)) {
           console.log("this.array");

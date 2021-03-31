@@ -48,9 +48,11 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.bddService.observableSequences.subscribe((sequence) => {
-      if (sequence.length > 0) this.choisirColonne();
-    });
+    // this.bddService.observableSequences.subscribe((sequence) => {
+    //   if (sequence.length > 0) {
+    //     this.choisirColonne();
+    //   }
+    // });
   }
 
   ngAfterViewInit() {
