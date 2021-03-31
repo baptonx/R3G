@@ -4,6 +4,9 @@ import os
 import json
 import subprocess
 import sys
+import configparser
+import ast
+import tkinter.filedialog
 from os import walk
 import re
 import xml.etree.ElementTree as ET
@@ -14,14 +17,16 @@ from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 
-from datetime import datetime
+
+
 
 APP = Flask(__name__)
 API = wandb.Api()
 RUNS = API.runs("recoprecoce-intui")
 MODEL_LIST = []
+LISTE_PATH_BDD = {} #= {"BDD": "./BDD", "BDD_chalearn_inkml" : "./BDD_chalearn_inkml"}
 LISTE_FICHIER_INKML = {}
-
+METADONNEE = {}
 UPLOAD_FOLDER = './Upload'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 APP.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -57,74 +62,6 @@ def download_weights(name):
                     if files.name == "weights/regression.index":
                         files.download("Weigths/"+run.id, replace=True)
 
-
-def recherche_fichier_inkml():
-    """On renvoie les fichiers de BDD."""
-    p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
-    for path, _, files in walk("./BDD_chalearn_inkml"):
-        for filename in files:
-            if p_1.match(filename):
-                LISTE_FICHIER_INKML[filename] = path+'/'+filename
-
-def get_meta_donnee(filename):
-    # pylint: disable-msg=too-many-locals
-    # pylint: disable-msg=too-many-branches
-    """Contenu du fichier inkml."""
-    filepath = LISTE_FICHIER_INKML[filename]
-    name = filename
-    format_donnee = {}
-    annotations = {}
-    donnees = {}
-    others = {}
-    tree = ET.parse(filepath)
-    root = tree.getroot()
-    nb_annotation = 0
-    nb_articulations = 0
-    nb_others = 0
-    for child in root:
-        if child.tag == "{http://www.w3.org/2003/InkML}traceFormat":
-            for children in child:
-                format_donnee[children.attrib['name']] = children.attrib['type']
-        elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-            if child.attrib == {'type': 'actions'}:
-                action = {}
-                nb_annotation += 1
-                for children in child:
-                    action[children.attrib['type']] = children.text
-                annotations[nb_annotation] = action
-            else:
-                ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
-                other = {}
-                nb_others += 1
-                for children in child:
-                    other[children.attrib['type']] = children.text
-                others[child.attrib['type']] = other
-        elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
-            break
-    struct_metadonnee = {"id": name, "format": format_donnee,
-                         "annotation": annotations, "metadonnees": others}
-    return struct_metadonnee
-
-def get_donnee(filename):
-    """Contenu du fichier inkml."""
-    filepath = LISTE_FICHIER_INKML[filename]
-    donnees = {}
-    tree = ET.parse(filepath)
-    root = tree.getroot()
-    nb_articulations = 0
-    for child in root:
-        if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
-            for children in child:
-                if children.tag == "{http://www.w3.org/2003/InkML}trace":
-                    dict_final = []
-                    dict_1 = children.text.split(", ")
-                    for point in dict_1:
-                        tab_2 = point.split(" ")
-                        dict_final.append(tab_2)
-                    donnees[nb_articulations] = dict_final
-                    nb_articulations += 1
-
-    return donnees
 
 
 def start_api_wandb():
@@ -211,33 +148,208 @@ def start_learning(name):
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
+
+#############Exploration methode##############
+
+def get_last_config():
+    """lire les dernière variables enregistrer pour recharger
+    la même configuration si un fichier Config_Server existe"""
+     # lecture du fichier
+    # pylint: disable-msg=global-statement
+    global LISTE_PATH_BDD
+    global LISTE_FICHIER_INKML
+    global METADONNEE
+
+    fcfg = 'config.ini'
+    cfg = configparser.ConfigParser()
+
+    if len(cfg.read(fcfg)) == 1:
+
+        # lecture des valeurs
+        LISTE_PATH_BDD = ast.literal_eval(cfg['server']['LISTE_PATH_BDD'])
+        LISTE_FICHIER_INKML = ast.literal_eval(cfg['server']['LISTE_FICHIER_INKML'])
+        METADONNEE = ast.literal_eval(cfg['server']['METADONNEE'])
+    else:
+        print("no config file")
+
+def save_config():
+    """sauvegarde des dernieres valeurs lues"""
+    fcfg = 'config.ini'
+    cfg = configparser.ConfigParser()
+    # modification des valeurs
+    cfg['server'] = {'LISTE_PATH_BDD': str(LISTE_PATH_BDD),
+                     'LISTE_FICHIER_INKML': str(LISTE_FICHIER_INKML),
+                     'METADONNEE': str(METADONNEE)}
+    #cfg['server']['LISTE_FICHIER_INKML'] = str(LISTE_FICHIER_INKML)
+    #cfg['server']['METADONNEE'] = str(METADONNEE)
+    # écriture du fichier modifié
+    with open(fcfg, 'w') as file:
+        cfg.write(file)
+
+def recherche_fichier_inkml():
+    """On renvoie les fichiers de BDD."""
+    # pylint: disable-msg=global-statement
+    global METADONNEE
+    METADONNEE = {}
+    p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
+    for namebdd, pathbdd in LISTE_PATH_BDD.items():
+        metadonnes = []
+        liste_fichier_in = {}
+        for path, _, files in walk(pathbdd):
+            for filename in files:
+                if p_1.match(filename):
+                    liste_fichier_in[filename] = path+'/'+filename
+                    metadonnes.append(get_meta_donnee(filename, namebdd))
+        if len(liste_fichier_in) != 0:
+            LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
+        METADONNEE[namebdd] = metadonnes
+
+def ajout_fichiers_inkml_in(pathbdd):
+    """On ajoute les fichiers de présent à ce path BDD."""
+    # pylint: disable-msg=global-statement
+    p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
+    p_2 = re.compile(r'[^/]*$')
+    namebdd = p_2.search(pathbdd)
+    liste_fichier_in = {}
+    global METADONNEE
+    for path, _, files in walk(pathbdd):
+        metadonnes = []
+        for filename in files:
+            if p_1.match(filename):
+                liste_fichier_in[filename] = path+'/'+filename
+                metadonnes.append(get_meta_donnee(filename, namebdd))
+        if len(liste_fichier_in) != 0:
+            LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
+        METADONNEE[namebdd] = metadonnes
+
+def suppresion_fichiers_inkml(bdd):
+    """ferme une bdd """
+    print(bdd)
+def get_meta_donnee(filename, bdd):
+    # pylint: disable-msg=too-many-locals
+    # pylint: disable-msg=too-many-branches
+    """Contenu du fichier inkml."""
+    filepath = LISTE_FICHIER_INKML[bdd][filename]
+    name = filename
+    format_donnee = {}
+    annotations = {}
+    others = {}
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+    nb_annotation = 0
+    nb_others = 0
+    for child in root:
+        if child.tag == "{http://www.w3.org/2003/InkML}traceFormat":
+            for children in child:
+                format_donnee[children.attrib['name']] = children.attrib['type']
+        elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+            if child.attrib == {'type': 'actions'}:
+                action = {}
+                nb_annotation += 1
+                for children in child:
+                    action[children.attrib['type']] = children.text
+                annotations[nb_annotation] = action
+            else:
+                ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
+                other = {}
+                nb_others += 1
+                for children in child:
+                    other[children.attrib['type']] = children.text
+                others[child.attrib['type']] = other
+        elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+            break
+    metadonnee = {"id": name, "BDD": bdd, "format": format_donnee,
+                  "annotation": annotations, "metadonnees": others}
+    return metadonnee
+
+def get_donnee(filename, bdd):
+    """Contenu du fichier inkml."""
+    filepath = LISTE_FICHIER_INKML[bdd][filename]
+    donnees = {}
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+    nb_articulations = 0
+    for child in root:
+        if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+            for children in child:
+                if children.tag == "{http://www.w3.org/2003/InkML}trace":
+                    dict_final = []
+                    dict_1 = children.text.split(", ")
+                    for point in dict_1:
+                        tab_2 = point.split(" ")
+                        dict_final.append(tab_2)
+                    donnees[nb_articulations] = dict_final
+                    nb_articulations += 1
+    return donnees
+
+#############Exploration route :##############
+
 @APP.route('/models/getMetaDonnee')
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
-    meta_donnees = []
-    print(str(datetime.now()))
-    recherche_fichier_inkml()
-    for fichier in LISTE_FICHIER_INKML:
-        meta_donnees.append(get_meta_donnee(fichier))
-    print(str(datetime.now()))
-    return json.dumps(meta_donnees)
+    return json.dumps(METADONNEE)
+
+@APP.route('/models/getListBDD')
+def route_get_list_bdd():
+    """Permet de télécharger la liste des BDD"""
+    return json.dumps(list(LISTE_PATH_BDD.keys()))
 
 #cette route permet de recuperer la sequence du fichier namefichier
 @APP.route('/models/getDonnee/<namefichier>')
-def route_get_sequence(namefichier):
+def route_get_sequence(namefichier, bdd):
     """Permet de télécharger donnée a partir du nom de fichier """
-    
-    if (LISTE_FICHIER_INKML.key(namefichier) != None):
+    if namefichier in LISTE_FICHIER_INKML[bdd]:
         recherche_fichier_inkml()
-    return json.dumps(get_donnee(namefichier))
+    return json.dumps(get_donnee(namefichier, bdd))
 
+@APP.route('/models/addBDD')
+def route_add_bdd():
+    """add new path ddb"""
+    root = tkinter.Tk()
+    root.withdraw()
+    path = tkinter.filedialog.askdirectory()
+    print(path)
+    #Permet de télécharger donnée a partir du nom de fichier
+    p_2 = re.compile(r'[^/]*$')
+    namebdd = p_2.search(path)
+    print(namebdd)
+    if namebdd is not None:
+        print(namebdd)
+        if namebdd not in LISTE_PATH_BDD:
+            LISTE_PATH_BDD[namebdd] = path
+            ajout_fichiers_inkml_in(path)
+    save_config()
+    return json.dumps(METADONNEE)
+
+@APP.route('/models/closeBDD/<nameBDD>')
+def route_close_bdd(name):
+    """Permet de télécharger donnée a partir du nom de fichier """
+    p_2 = re.compile(r'[^/]*$')
+    namebdd = p_2.search(name)
+    if namebdd is not None:
+        if namebdd in LISTE_PATH_BDD:
+            del LISTE_PATH_BDD[namebdd]
+            suppresion_fichiers_inkml(namebdd)
+    save_config()
+
+@APP.route('/models/reload/<nameBDD>')
+def route_reload_bdd(name):
+    """Permet de télécharger donnée a partir du nom de fichier """
+    p_2 = re.compile(r'[^/]*$')
+    namebdd = p_2.search(name)
+    if namebdd is not None:
+        if namebdd in LISTE_PATH_BDD:
+            #path = LISTE_PATH_BDD[namebdd]
+            recherche_fichier_inkml()
+    save_config()
 
 if __name__ == "__main__":
-    recherche_fichier_inkml()
-    #get_meta_donnee("sequence1.inkml")
-    #ouverture_fichier_inkml(2)
+
+    get_last_config()
     download_hyperparameters()
     start_api_wandb()
     download_weights("ra6r8k85")
     start_learning('mo6')
     APP.run(host='0.0.0.0')
+    LISTE_PATH_BDD["BDD_chalearn_inkml"] = "./BDD_chalearn_inkml"
+    save_config()

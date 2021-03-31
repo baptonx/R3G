@@ -18,6 +18,10 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   constructor(public bdd: BddService, public visuService: VisualisationExploService) {
   }
 
+  addPathBDD(): void{
+    this.bdd.addpath();
+    console.log("new path");
+  }
   ngOnInit(): void {
   }
   /*

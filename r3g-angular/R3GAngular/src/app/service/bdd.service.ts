@@ -25,21 +25,46 @@ export class BddService {
 
   setMetaData(): void{
     this.http
-      .get<Array<string>>('/models/getMetaDonnee' , {})
+      .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
       this.sequences = [];
       console.log(returnedData);
-      for (let key in returnedData) {
-        let id = returnedData[key]["id"];
-        this.sequences.push(new Sequence(id,"",returnedData[key]) );
+      for (const dbb of Object.values((returnedData))) {
+        if (Array.isArray(dbb)) {
+          console.log("this.array");
+          for(let key in dbb) {
+            let id = dbb[key]['id'];
+            this.sequences.push(new Sequence(id, '', dbb[key]));
+          }
+        }
       }
-      this.updateFormat(this.formatSequence);
+        this.updateFormat(this.formatSequence);
       this.notifyTableauService();
       this.observableSequences.next(this.sequences);
     });
 
   }
+  addpath(): void{
+    this.http
+      .get<object>('/models/addBDD' , {})
+      .subscribe((returnedData: any) => {
+        this.sequences = [];
+        console.log(returnedData);
+        for (const dbb of Object.values((returnedData))) {
+          if (Array.isArray(dbb)) {
+            console.log("this.array");
+            for(let key in dbb) {
+              let id = dbb[key]['id'];
+              this.sequences.push(new Sequence(id, '', dbb[key]));
+            }
+          }
+        }
+        this.updateFormat(this.formatSequence);
+        this.notifyTableauService();
+        this.observableSequences.next(this.sequences);
+      });
 
+  }
   getDonnee(listSequenceName: Array<string>){
     for (let sequenceName in listSequenceName){
       this.http
