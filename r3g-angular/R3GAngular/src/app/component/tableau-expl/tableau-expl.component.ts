@@ -47,6 +47,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
     this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
