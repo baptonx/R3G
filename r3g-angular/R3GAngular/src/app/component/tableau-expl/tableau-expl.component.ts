@@ -6,6 +6,7 @@ import {VisualisationExploService} from "../../service/visualisation-explo.servi
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ChoixColonneComponent} from "../choix-colonne/choix-colonne.component";
 import {BddService} from "../../service/bdd.service";
+import {MatSort} from '@angular/material/sort';
 import {sequence} from "@angular/animations";
 
 
@@ -22,6 +23,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   //subscription: Subscription;
 
 
@@ -47,6 +49,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
     this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
@@ -60,6 +63,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   selection(i: number): void{
