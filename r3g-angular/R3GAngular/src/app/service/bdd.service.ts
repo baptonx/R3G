@@ -13,6 +13,8 @@ export class BddService {
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Sequence[]>;
   formatSequence: FormatDonnees = new FormatDonnees();
+
+  waitanswer: boolean = false;
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
     this.sequences = [];
     this.notifyTableauService();
@@ -23,43 +25,31 @@ export class BddService {
     //console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
   }
-
+  answerWait(): void{
+    this.waitanswer = true;
+    console.log(true);
+  }
+  answerHere(): void{
+    this.waitanswer = false;
+    console.log(false);
+  }
   setMetaData(): void{
+    this.answerWait();
     this.http
       .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
-      this.sequences = [];
-      for (const dbb of Object.values((returnedData))) {
-        if (Array.isArray(dbb)) {
-          console.log("this.array");
-          for(let key in dbb) {
-            let id = dbb[key]['id'];
-            this.sequences.push(new Sequence(id, '', dbb[key]));
-          }
-        }
-      }
-      this.updateFormat(this.formatSequence);
-      this.notifyTableauService();
-      this.observableSequences.next(this.sequences);
+      this.miseajourdb(returnedData);
+      this.answerHere();
     });
 
   }
   addpath(): void{
+    this.answerWait();
     this.http
-      .get<object>('/models/addBDD/' , {})
+      .get<object>('/models/addBDD' , {})
       .subscribe((returnedData: any) => {
-        this.sequences = [];
-        for (const dbb of Object.values((returnedData))) {
-          if (Array.isArray(dbb)) {
-            for(let key in dbb) {
-              let id = dbb[key]['id'];
-              this.sequences.push(new Sequence(id, '', dbb[key]));
-            }
-          }
-        }
-        this.updateFormat(this.formatSequence);
-        this.notifyTableauService();
-        this.observableSequences.next(this.sequences);
+        this.miseajourdb(returnedData);
+        this.answerHere();
       });
   }
   getlistdb(): void{
@@ -71,43 +61,41 @@ export class BddService {
       });
   }
   closedb(dbname: string): void{
+    this.answerWait();
     this.http
       .get<object>(`/models/closeBDD/${dbname}` , {})
       .subscribe((returnedData: any) => {
-        this.sequences = [];
-        delete this.bddnames[this.bddnames.indexOf(dbname)];
+        this.getlistdb();
         console.log(returnedData);
-        for (const dbb of Object.values((returnedData))) {
-          if (Array.isArray(dbb)) {
-            for(let key in dbb) {
-              let id = dbb[key]['id'];
-              this.sequences.push(new Sequence(id, '', dbb[key]));
-            }
-          }
-        }
-
-        this.updateFormat(this.formatSequence);
-        this.notifyTableauService();
-        this.observableSequences.next(this.sequences);
+        this.miseajourdb(returnedData);
+        this.answerHere();
       });
   }
+
+  miseajourdb(returnedData: object): void{
+    this.sequences = [];
+    for (const dbb of Object.values((returnedData))) {
+      if (Array.isArray(dbb)) {
+        for(let key in dbb) {
+          let id = dbb[key]['id'];
+          this.sequences.push(new Sequence(id, '', dbb[key]));
+        }
+      }
+    }
+    this.getlistdb();
+    this.updateFormat();
+    this.notifyTableauService();
+    this.observableSequences.next(this.sequences);
+  }
   reloaddb(dbname: string): void{
+    this.answerWait();
     this.http
       .get<object>(`/models/reload/${dbname}` , {})
       .subscribe((returnedData: any) => {
-        this.sequences = [];
-        for (const dbb of Object.values((returnedData))) {
-          if (Array.isArray(dbb)) {
-            for(let key in dbb) {
-              let id = dbb[key]['id'];
-              this.sequences.push(new Sequence(id, '', dbb[key]));
-            }
-          }
-        }
-        this.updateFormat(this.formatSequence);
-        this.notifyTableauService();
-        this.observableSequences.next(this.sequences);
+        this.miseajourdb(returnedData);
+        this.answerHere();
       });
+
   }
   getDonnee(listSequenceName: Array<string>){
     for (let sequenceName in listSequenceName){
@@ -119,7 +107,7 @@ export class BddService {
     }
   }
 
-  private updateFormat(formatSequence: FormatDonnees) {
+  private updateFormat() {
     this.formatSequence = new FormatDonnees();
     for(let i=0 ; i<this.sequences.length ; i++) {
       this.ajouterFormat(this.sequences[i].metaDonnees, []);

@@ -82,6 +82,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.explService.displayedColumns = result.colonnes;
+      localStorage.setItem('displayedColumns', JSON.stringify(result.colonnes));
       this.updateAll();
     });
   }

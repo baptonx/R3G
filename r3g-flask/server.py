@@ -7,6 +7,10 @@ import sys
 import configparser
 import ast
 import tkinter.filedialog
+import sys
+import time
+sys.coinit_flags = 2  # COINIT_APARTMENTTHREADED
+
 from os import walk
 import re
 import xml.etree.ElementTree as ET
@@ -298,24 +302,37 @@ def route_get_sequence(namefichier, bdd):
 def route_add_bdd():
     """add new path ddb"""
     global LISTE_PATH_BDD
+    
     root = tkinter.Tk()
     root.withdraw()
-    path = tkinter.filedialog.askdirectory()
-    print(path)
-    #Permet de télécharger donnée a partir du nom de fichier
-    p_2 = re.compile(r'[^/]*$')
-    namebdd = p_2.search(path)
-    print(namebdd)
-    if namebdd is not None:
-        namebdd = namebdd.group(0)
-        if namebdd not in LISTE_PATH_BDD:
-            LISTE_PATH_BDD[namebdd] = path
-            print(LISTE_PATH_BDD)
-            print("namebdd : " +namebdd)
-            print("path : " + path)
-            ajout_fichiers_inkml_in(path, namebdd)
-    save_config()
-    return json.dumps(METADONNEE)
+    top = tkinter.Toplevel(root)
+    top.withdraw()
+    root.update()
+    top.update()
+    try:
+        path = tkinter.filedialog.askdirectory(mustexist=True)
+        print(path)
+        #Permet de télécharger donnée a partir du nom de fichier
+        if path != "":
+            p_2 = re.compile(r'[^/]*$')
+            namebdd = p_2.search(path)
+            print(namebdd)
+            if namebdd is not None:
+                namebdd = namebdd.group(0)
+                if namebdd not in LISTE_PATH_BDD:
+                    LISTE_PATH_BDD[namebdd] = path
+                    print(LISTE_PATH_BDD)
+                    print("namebdd : " +namebdd)
+                    print("path : " + path)
+                    ajout_fichiers_inkml_in(path, namebdd)
+            save_config()
+        root.destroy()
+        return json.dumps(METADONNEE)
+    except RuntimeError:
+        print("tkinter bug")
+        root.destroy()
+        return json.dumps(METADONNEE)
+    
 
 @APP.route('/models/closeBDD/<name>')
 def route_close_bdd(name):

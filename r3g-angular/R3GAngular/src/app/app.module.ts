@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AnnotationComponent } from './module/annotation/annotation.component';
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
         MatRadioModule,
         MatCheckboxModule,
         MatSortModule,
+        MatProgressBarModule,
 
 
         RouterModule.forRoot(appRoutes),

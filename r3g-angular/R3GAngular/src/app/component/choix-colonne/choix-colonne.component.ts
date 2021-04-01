@@ -27,10 +27,11 @@ export class ChoixColonneComponent implements OnInit {
   ngOnInit(): void {
 
     this.donneesTabulees = this.nodeToTab(this.choixColService.node);
-    this.afficheDonnee = new Array<boolean>(this.donneesTabulees.length);
-    for(let i=0 ; i<this.donneesTabulees.length; i++) {
-      this.afficheDonnee[i] = false;
-    }
+
+   // this.afficheDonnee = new Array<boolean>(this.donneesTabulees.length);
+    //for(let i=0 ; i<this.donneesTabulees.length; i++) {
+      //this.afficheDonnee[i] = false;
+    //}
   }
 
 

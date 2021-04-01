@@ -19,10 +19,16 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="fixed">
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="closed bdd test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/choix-colonne/choix-colonne.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/node-colonne/node-colonne.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/node-colonne/node-colonne.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
     </list>
@@ -30,6 +36,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -60,6 +73,11 @@
     <property name="ts.external.directory.path" value="C:\Users\lassa\Documents\Insa\4A 2S\projet\r3g\r3g-angular\R3GAngular\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lassa\Documents\Insa\4A 2S\projet\r3g\r3g-angular\R3GAngular\src\app\component" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -73,7 +91,9 @@
       <workItem from="1610530549054" duration="2958000" />
       <workItem from="1610960966668" duration="784000" />
       <workItem from="1614162352338" duration="1092000" />
-      <workItem from="1617125640380" duration="22571000" />
+      <workItem from="1617125640380" duration="25397000" />
+      <workItem from="1617275947440" duration="338000" />
+      <workItem from="1617276381523" duration="10043000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -110,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617212556250</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="closed bdd test">
+      <created>1617266627298</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1617266627298</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,52 +162,7 @@
     <MESSAGE value="start route menu" />
     <MESSAGE value="continue menu" />
     <MESSAGE value="fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="-1641" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1617125655034">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1610530632457" />
-    <state x="-1641" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1617125655034" />
-    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1614163452045">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610961765486" />
-    <state x="686" y="211" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1614163452045" />
-    <state width="1515" height="213" key="GridCell.Tab.0.bottom" timestamp="1610530538079">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1515" height="213" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610530538079" />
-    <state width="1515" height="213" key="GridCell.Tab.0.center" timestamp="1610530538079">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1515" height="213" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1610530538079" />
-    <state width="1515" height="213" key="GridCell.Tab.0.left" timestamp="1610530538079">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1515" height="213" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1610530538079" />
-    <state width="1515" height="213" key="GridCell.Tab.0.right" timestamp="1610530538079">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1515" height="213" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1610530538079" />
-    <state x="-1459" y="165" key="SettingsEditor" timestamp="1617189918270">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1459" y="165" key="SettingsEditor/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1617189918270" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1617212559918">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="442" y="200" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610533523245" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617212559918" />
-    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1617204240461">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="622" y="344" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1610961608859" />
-    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617204240461" />
-    <state x="623" y="225" key="search.everywhere.popup" timestamp="1610379051543">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" key="search.everywhere.popup/1920.0.1536.832/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610379051543" />
+    <MESSAGE value="closed bdd test" />
+    <option name="LAST_COMMIT_MESSAGE" value="closed bdd test" />
   </component>
 </project>

@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatInput} from '@angular/material/input';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {BddService} from '../../service/bdd.service';
 import {VisualisationExploService} from '../../service/visualisation-explo.service';
 import {ChoixColonnesService} from '../../service/choix-colonnes.service';
@@ -13,6 +14,7 @@ import {ChoixColonnesService} from '../../service/choix-colonnes.service';
 
 export class ExplorationComponent implements OnInit, AfterViewInit {
   @ViewChild('inputFiltre') inputFiltre!: MatInput;
+  //@viewChild()
   picker = document.getElementById('picker');
   listing = document.getElementById('listing');
 

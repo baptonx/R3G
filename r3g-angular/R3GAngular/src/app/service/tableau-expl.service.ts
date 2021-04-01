@@ -37,6 +37,10 @@ export class TableauExplService {
   constructor() {
     this.sequences = new Array<sequencesTab>();
     this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
+    let str = localStorage.getItem("displayedColumns");
+    if(str != null){
+        this.displayedColumns = JSON.parse(str);
+    }
   }
 
 

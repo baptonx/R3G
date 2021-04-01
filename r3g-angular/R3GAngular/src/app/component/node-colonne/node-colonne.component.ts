@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {NgModel} from "@angular/forms";
 
 export interface NodeCol{
@@ -19,10 +19,13 @@ export class NodeColonneComponent implements OnInit {
   @Output() childTrue: EventEmitter<string> = new EventEmitter<string>()
   @Output() childFalse: EventEmitter<string> = new EventEmitter<string>()
   public show: boolean = false;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
+
 
   someComplete(): boolean {
     if (this.node.children == null) {
@@ -65,7 +68,6 @@ export class NodeColonneComponent implements OnInit {
         this.setAll(false);
       }
     }
-    console.log(this.node);
   }
 
   onChildTrue(name: string) {
@@ -79,6 +81,5 @@ export class NodeColonneComponent implements OnInit {
         this.setAll(true);
       }
     }
-    console.log(this.node);
   }
 }
