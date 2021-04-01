@@ -40,6 +40,8 @@ import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.c
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
+import { MatSortModule } from "@angular/material/sort";
+
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
   { path: 'evaluation', component: EvaluationComponent },
@@ -85,6 +87,7 @@ const appRoutes: Routes = [
         MatStepperModule,
         MatRadioModule,
         MatCheckboxModule,
+        MatSortModule,
 
 
         RouterModule.forRoot(appRoutes),

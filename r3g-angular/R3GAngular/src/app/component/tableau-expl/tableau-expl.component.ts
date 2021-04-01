@@ -6,6 +6,7 @@ import {VisualisationExploService} from "../../service/visualisation-explo.servi
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ChoixColonneComponent} from "../choix-colonne/choix-colonne.component";
 import {BddService} from "../../service/bdd.service";
+import {MatSort} from '@angular/material/sort';
 import {sequence} from "@angular/animations";
 
 
@@ -19,10 +20,10 @@ import {sequence} from "@angular/animations";
 export class TableauExplComponent implements AfterViewInit, OnInit {
 
   selectionListe: Array<boolean> = new Array<boolean>();
-  displayedColumns: string[] = new Array<string>();
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   //subscription: Subscription;
 
 
@@ -31,7 +32,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
               public visuService: VisualisationExploService,
               public dialog: MatDialog) {
     this.selectionListe = new Array<boolean>(this.explService.sequences.length);
-    this.explService.observableSequences.subscribe((sequence) => this.updateAll())
+    this.explService.observableSequences.subscribe((sequence) => {
+      if (this.explService.displayedColumns.length > 0) this.updateAll();
+    });
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
 
@@ -41,11 +44,13 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   updateAll(): void{
     //console.log(this.explService.sequences);
     //this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
-    this.allColumns = Object.assign([],this.displayedColumns);
+    this.allColumns = Object.assign([],this.explService.displayedColumns);
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
     this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
@@ -58,6 +63,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   selection(i: number): void{
@@ -75,7 +81,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.displayedColumns = result.colonnes;
+      this.explService.displayedColumns = result.colonnes;
       this.updateAll();
     });
   }
