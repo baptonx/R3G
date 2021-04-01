@@ -36,26 +36,9 @@ export class ChoixColonneComponent implements OnInit {
 
 
 
-
-  selectionnes(node: NodeCol, path: string): string[] {
-    if((node.children == null || node.children.length === 0) && !node.completed) {
-      return [];
-    }
-    let tab: string[] = [];
-    let newTab: string[];
-    if(node.children != null) {
-      for(let child of node.children) {
-        newTab = this.selectionnes(child,path === ''?child.name:path + "." + child.name);
-        newTab.forEach((element) => tab.push(element));
-        tab.concat(newTab);
-      }
-      return tab;
-    }
-    return [path];
-  }
-
   sendColonnesChoisies(): void {
-    this.dialogRef.close({colonnes: this.selectionnes(this.choixColService.node, '')})
+    this.dialogRef.close({colonnes: this.choixColService.selectionnes(this.choixColService.node, '')})
+    localStorage.setItem('displayedColumns', JSON.stringify(this.choixColService.node));
   }
 
   nodeToTab(currentNode: NodeCol) : Array<NodeCol> {

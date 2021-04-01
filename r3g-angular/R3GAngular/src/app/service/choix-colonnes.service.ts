@@ -2,14 +2,23 @@ import { Injectable } from '@angular/core';
 import {NodeCol} from "../component/node-colonne/node-colonne.component";
 import {FormatDonnees} from "../class/exploration/format-donnees";
 import {BddService} from "./bdd.service";
+import {TableauExplService} from "./tableau-expl.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChoixColonnesService {
   public node: NodeCol = {name: "root", path:"", completed: false, children: []};
-  constructor(public bdd: BddService,) {
-    this.bdd.observableSequences.subscribe((sequence) => this.updateNodeFromBDD(this.bdd.formatSequence, this.node, ""))
+  constructor(public bdd: BddService,public tablExpl: TableauExplService) {
+    let str = localStorage.getItem("displayedColumns");
+    if(str != null){
+      this.node = JSON.parse(str);
+      this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
+      this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
+    }
+    this.bdd.observableSequences.subscribe((sequence) => {
+      this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
+    })
   }
 
   public updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol, path: string) {
@@ -39,5 +48,23 @@ export class ChoixColonnesService {
         }
       }
     }
+  }
+
+
+  selectionnes(node: NodeCol, path: string): string[] {
+    if((node.children == null || node.children.length === 0) && !node.completed) {
+      return [];
+    }
+    let tab: string[] = [];
+    let newTab: string[];
+    if(node.children != null) {
+      for(let child of node.children) {
+        newTab = this.selectionnes(child,path === ''?child.name:path + "." + child.name);
+        newTab.forEach((element) => tab.push(element));
+        tab.concat(newTab);
+      }
+      return tab;
+    }
+    return [path];
   }
 }

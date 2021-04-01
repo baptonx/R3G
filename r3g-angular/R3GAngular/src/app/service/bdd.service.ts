@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Sequence} from "../class/commun/sequence";
-import {TableauExplService} from "./tableau-expl.service";
+import {sequencesTab, TableauExplService} from "./tableau-expl.service";
 import {HttpClient} from '@angular/common/http';
 import {FormatDonnees} from "../class/exploration/format-donnees";
 import {BehaviorSubject} from "rxjs";
@@ -126,5 +126,24 @@ export class BddService {
       }
       path.pop();
     }
+  }
+  chercherSequenceTableau(seqTabTab: sequencesTab[]): Sequence[] {
+    let sequencesReturn: Sequence[] = [];
+    let seqTab;
+    let cpt;
+    for(let seq of this.sequences) {
+      cpt = 0;
+      while(cpt < seqTabTab.length) {
+        seqTab = seqTabTab[cpt];
+        if(seq.id === seqTab.id) {
+          sequencesReturn.push(seq)
+          seqTab.selected = false;
+          seqTabTab.splice(cpt,1);
+        }
+        else cpt++
+      }
+      if(seqTabTab.length === 0) break
+    }
+    return sequencesReturn;
   }
 }

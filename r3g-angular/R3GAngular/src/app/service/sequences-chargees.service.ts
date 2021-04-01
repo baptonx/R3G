@@ -5,15 +5,14 @@ import {Sequence} from "../class/commun/sequence";
   providedIn: 'root'
 })
 export class SequencesChargeesService {
-  sequences: Array<Sequence>;
+  sequences: Set<Sequence>;
   constructor() {
-    this.sequences = new Array<Sequence>();
-    for(let i=1 ; i<20 ; i++){
-      this.sequences.push(new Sequence("Sequence"+i));
-    }
+    this.sequences = new Set<Sequence>();
   }
 
-  deleteSeq(i: number): void{
-        this.sequences.splice(i,1);
+  addToList(sequences: Sequence[]): void {
+    for(let seq of sequences) {
+      this.sequences.add(seq);
+    }
   }
 }

@@ -2,14 +2,14 @@
 <mat-label>Filtrer</mat-label>
 <input #inputFiltre matInput placeholder="Ex. Sequence 1">
 </mat-form-field>
-<div id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences.length+'px'">
+<div id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences.size+'px'">
   <mat-list>
     <ng-container *ngFor="let sequence of this.seqChargeesService.sequences, let i = index">
       <mat-list-item style="display:flex; justify-content: right;">
 
           <span style="padding-right: 20px">{{sequence.id}}</span>
         <span><button mat-icon-button><mat-icon>play_circle_outline</mat-icon></button></span>
-          <span><button mat-icon-button (click)="seqChargeesService.deleteSeq(i)" ><mat-icon>delete_outline</mat-icon></button> </span>
+          <span><button mat-icon-button (click)="seqChargeesService.sequences.delete(sequence)" ><mat-icon>delete_outline</mat-icon></button> </span>
 
       </mat-list-item>
       <mat-divider></mat-divider>

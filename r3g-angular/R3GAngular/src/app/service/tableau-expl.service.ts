@@ -4,10 +4,12 @@ import {BehaviorSubject} from 'rxjs';
 
 export interface sequencesTab {
   id: string;
+  selected: boolean;
   [key: string]: any;
 }
 export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
+  selected: boolean = false;
   id: string;
 
   constructor(ident: string, metadonnees: object) {
@@ -34,13 +36,11 @@ export class TableauExplService {
   sequences: Array<sequencesTab>;
   observableSequences: BehaviorSubject<sequencesTab[]>;
   displayedColumns: string[] = new Array<string>();
+  observableColumns: BehaviorSubject<string[]>;
   constructor() {
     this.sequences = new Array<sequencesTab>();
     this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
-    let str = localStorage.getItem("displayedColumns");
-    if(str != null){
-        this.displayedColumns = JSON.parse(str);
-    }
+    this.observableColumns = new BehaviorSubject<string[]>(this.displayedColumns);
   }
 
 
@@ -69,5 +69,4 @@ export class TableauExplService {
     }
     this.observableSequences.next(this.sequences);
   }
-
 }

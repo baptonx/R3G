@@ -23,6 +23,7 @@
   </div>
   <div class="boutons-aligne">
     <button (click)="choisirColonne()" mat-button><mat-icon>subject</mat-icon> Colonnes</button>
+    <button (click)="ajouterSequencesSelectionnees()" mat-button>Importer les séquences sélectionnées</button>
   </div>
 
 
@@ -40,18 +41,23 @@
       </ng-container>
 
     <ng-container matColumnDef="addColumn">
-      <th class="w-50" mat-header-cell *matHeaderCellDef mat-sort-header><button mat-icon-button><mat-icon>add_circle_outline</mat-icon></button></th>
+      <th class="w-50" mat-header-cell *matHeaderCellDef><button mat-icon-button><mat-icon>add_circle_outline</mat-icon></button></th>
       <td mat-cell *matCellDef="let element"></td>
     </ng-container>
 
     <ng-container matColumnDef="visualisation">
-      <th class="w-50" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <th class="w-50" mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element"><button mat-icon-button (click)="this.visuService.show()"><mat-icon>play_circle_outline</mat-icon></button></td>
     </ng-container>
 
     <ng-container matColumnDef="download">
-      <th class="w-50" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <th class="w-50" mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element"><button mat-icon-button><mat-icon> vertical_align_bottom</mat-icon></button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkbox">
+      <th class="w-50" mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element"><mat-checkbox class="tab-selected" [(ngModel)]="element.selected" (change)="setSelectedSequence(element)"></mat-checkbox></td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="allColumns"></tr>

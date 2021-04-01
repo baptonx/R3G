@@ -1,13 +1,14 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {sequencesTab, TableauExplService} from "../../service/tableau-expl.service";
+import {sequencesTab, sequenceTabImpl, TableauExplService} from "../../service/tableau-expl.service";
 import {VisualisationExploService} from "../../service/visualisation-explo.service";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ChoixColonneComponent} from "../choix-colonne/choix-colonne.component";
 import {BddService} from "../../service/bdd.service";
 import {MatSort} from '@angular/material/sort';
 import {sequence} from "@angular/animations";
+import {SequencesChargeesService} from "../../service/sequences-chargees.service";
 
 
 
@@ -19,7 +20,7 @@ import {sequence} from "@angular/animations";
 })
 export class TableauExplComponent implements AfterViewInit, OnInit {
 
-  selectionListe: Array<boolean> = new Array<boolean>();
+  selectionListe: Array<sequencesTab> = new Array<sequencesTab>();
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -30,11 +31,12 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   constructor(public explService: TableauExplService,
               public bddService: BddService,
               public visuService: VisualisationExploService,
-              public dialog: MatDialog) {
-    this.selectionListe = new Array<boolean>(this.explService.sequences.length);
+              public dialog: MatDialog,
+              public sequenceChargees: SequencesChargeesService) {
     this.explService.observableSequences.subscribe((sequence) => {
       if (this.explService.displayedColumns.length > 0) this.updateAll();
     });
+    this.explService.observableColumns.subscribe((colonnes) => this.updateAll());
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
 
@@ -48,6 +50,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
+    this.allColumns.push("checkbox");
     this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -66,12 +69,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  selection(i: number): void{
-    this.selectionListe[i] = !this.selectionListe[i];
-    console.log(this.selectionListe);
-    console.log(i);
-  }
-
   tournerBouton() {
   }
 
@@ -82,8 +79,26 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.explService.displayedColumns = result.colonnes;
-      localStorage.setItem('displayedColumns', JSON.stringify(result.colonnes));
       this.updateAll();
     });
+  }
+
+  setSelectedSequence(element: any) {
+    if(element instanceof sequenceTabImpl) {
+      if(element.selected) {
+        this.selectionListe.push(element);
+      }
+      else {
+        let i=0;
+        while(i < this.selectionListe.length) {
+          if(this.selectionListe[i] == element) this.selectionListe.splice(i,1);
+          i++;
+        }
+      }
+    }
+  }
+
+  ajouterSequencesSelectionnees() {
+    this.sequenceChargees.addToList(this.bddService.chercherSequenceTableau(this.selectionListe));
   }
 }
