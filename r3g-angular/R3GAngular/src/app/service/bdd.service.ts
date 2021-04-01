@@ -49,7 +49,6 @@ export class BddService {
       .get<object>('/models/addBDD/' , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
-        console.log(returnedData);
         for (const dbb of Object.values((returnedData))) {
           if (Array.isArray(dbb)) {
             for(let key in dbb) {
@@ -73,9 +72,10 @@ export class BddService {
   }
   closedb(dbname: string): void{
     this.http
-      .get<object>(`/models/clodeBDD/${dbname}` , {})
+      .get<object>(`/models/closeBDD/${dbname}` , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
+        delete this.bddnames[this.bddnames.indexOf(dbname)];
         console.log(returnedData);
         for (const dbb of Object.values((returnedData))) {
           if (Array.isArray(dbb)) {
@@ -85,6 +85,7 @@ export class BddService {
             }
           }
         }
+
         this.updateFormat(this.formatSequence);
         this.notifyTableauService();
         this.observableSequences.next(this.sequences);
@@ -95,7 +96,6 @@ export class BddService {
       .get<object>(`/models/reload/${dbname}` , {})
       .subscribe((returnedData: any) => {
         this.sequences = [];
-        console.log(returnedData);
         for (const dbb of Object.values((returnedData))) {
           if (Array.isArray(dbb)) {
             for(let key in dbb) {

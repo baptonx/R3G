@@ -317,7 +317,7 @@ def route_add_bdd():
     save_config()
     return json.dumps(METADONNEE)
 
-@APP.route('/models/closeBDD/<nameBDD>')
+@APP.route('/models/closeBDD/<name>')
 def route_close_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
     global LISTE_PATH_BDD
