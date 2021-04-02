@@ -254,7 +254,6 @@ def get_donnee(filename, bdd):
     donnees = []
     tree = ET.parse(filepath)
     root = tree.getroot()
-    nb_articulations = 0
     for child in root:
         if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             for children in child:
@@ -288,6 +287,7 @@ def route_get_sequence(bdd, namefichier):
         if namefichier in LISTE_FICHIER_INKML[bdd]:
             return json.dumps(get_donnee(namefichier, bdd))
     return None
+
 
 @APP.route('/models/addBDD')
 def route_add_bdd():

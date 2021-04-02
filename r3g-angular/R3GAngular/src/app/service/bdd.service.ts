@@ -4,6 +4,8 @@ import {sequencesTab, TableauExplService} from "./tableau-expl.service";
 import {HttpClient} from '@angular/common/http';
 import {FormatDonnees} from "../class/exploration/format-donnees";
 import {BehaviorSubject} from "rxjs";
+import set = Reflect.set;
+import {element} from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -99,22 +101,23 @@ export class BddService {
       });
 
   }
-  getDonnee(listSequenceName: Array<string>){
+  getDonnee(listSequence: Array<Sequence>){
     this.answerWait();
-    for(let sequenceName in listSequenceName){
-      let sequence = this.sequences.find(element => element.id == sequenceName);
-      if (sequence != undefined){
-        this.http
-          .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
-          .subscribe((returnedData: any) => {
-            if (sequence != undefined){
-              console.log(returnedData);
-              sequence.traceNormal = (returnedData);
-            }
+    let counter = listSequence.length;
+    for(let sequence of listSequence){
+      this.http
+        .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
+        .subscribe((returnedData: any) => {
+          if (sequence != undefined){
+            sequence.traceNormal = (returnedData);
+          }
+          counter--;
+          if(counter == 0){
             this.answerHere();
-          });
-      }
+          }
+        });
     }
+
   }
 
   private updateFormat() {

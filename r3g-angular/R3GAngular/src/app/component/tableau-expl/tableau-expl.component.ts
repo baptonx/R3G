@@ -99,6 +99,8 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ajouterSequencesSelectionnees() {
-    this.sequenceChargees.addToList(this.bddService.chercherSequenceTableau(this.selectionListe));
+    let seqSelectionee = this.bddService.chercherSequenceTableau(this.selectionListe);
+    this.bddService.getDonnee(seqSelectionee);
+    this.sequenceChargees.addToList(seqSelectionee);
   }
 }
