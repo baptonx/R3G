@@ -67,6 +67,7 @@ export class TableauExplService {
         this.sequences.push(dataCourante);
       }
     }
+    console.log(this.sequences);
     this.observableSequences.next(this.sequences);
   }
 }

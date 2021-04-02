@@ -7,9 +7,6 @@ import sys
 import configparser
 import ast
 import tkinter.filedialog
-import sys
-import time
-sys.coinit_flags = 2  # COINIT_APARTMENTTHREADED
 
 from os import walk
 import re
@@ -159,7 +156,6 @@ def get_last_config():
     """lire les dernière variables enregistrer pour recharger
     la même configuration si un fichier Config_Server existe"""
      # lecture du fichier
-    # pylint: disable-msg=global-statement
     global LISTE_PATH_BDD
     global LISTE_FICHIER_INKML
     global METADONNEE
@@ -201,7 +197,6 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
     if len(liste_fichier_in) != 0:
-        print(liste_fichier_in)
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -215,15 +210,11 @@ def suppresion_fichiers_inkml(bdd):
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
     
-    print(bdd)
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
     """Contenu du fichier inkml."""
     
-    print(bdd)
-    print(filename)
-    print(LISTE_FICHIER_INKML.keys())
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
@@ -260,7 +251,7 @@ def get_meta_donnee(filename, bdd):
 def get_donnee(filename, bdd):
     """Contenu du fichier inkml."""
     filepath = LISTE_FICHIER_INKML[bdd][filename]
-    donnees = {}
+    donnees = []
     tree = ET.parse(filepath)
     root = tree.getroot()
     nb_articulations = 0
@@ -273,8 +264,7 @@ def get_donnee(filename, bdd):
                     for point in dict_1:
                         tab_2 = point.split(" ")
                         dict_final.append(tab_2)
-                    donnees[nb_articulations] = dict_final
-                    nb_articulations += 1
+                    donnees.append(dict_final)
     return donnees
 
 #############Exploration route :##############
@@ -282,6 +272,7 @@ def get_donnee(filename, bdd):
 @APP.route('/models/getMetaDonnee')
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
+
     return json.dumps(METADONNEE)
 
 @APP.route('/models/getListBDD')
@@ -290,13 +281,13 @@ def route_get_list_bdd():
     return json.dumps(list(LISTE_PATH_BDD.keys()))
 
 #cette route permet de recuperer la sequence du fichier namefichier
-@APP.route('/models/getDonnee/<namefichier>')
-def route_get_sequence(namefichier, bdd):
+@APP.route('/models/getDonnee/<bdd>/<namefichier>')
+def route_get_sequence(bdd, namefichier):
     """Permet de télécharger donnée a partir du nom de fichier """
-    if namefichier in LISTE_FICHIER_INKML[bdd]:
-        return json.dumps(get_donnee(namefichier, bdd))
-    else:
-        return None
+    if bdd in LISTE_PATH_BDD:
+        if namefichier in LISTE_FICHIER_INKML[bdd]:
+            return json.dumps(get_donnee(namefichier, bdd))
+    return None
 
 @APP.route('/models/addBDD')
 def route_add_bdd():
@@ -311,19 +302,14 @@ def route_add_bdd():
     top.update()
     try:
         path = tkinter.filedialog.askdirectory(mustexist=True)
-        print(path)
         #Permet de télécharger donnée a partir du nom de fichier
         if path != "":
             p_2 = re.compile(r'[^/]*$')
             namebdd = p_2.search(path)
-            print(namebdd)
             if namebdd is not None:
                 namebdd = namebdd.group(0)
                 if namebdd not in LISTE_PATH_BDD:
                     LISTE_PATH_BDD[namebdd] = path
-                    print(LISTE_PATH_BDD)
-                    print("namebdd : " +namebdd)
-                    print("path : " + path)
                     ajout_fichiers_inkml_in(path, namebdd)
             save_config()
         root.destroy()
@@ -353,15 +339,14 @@ def route_reload_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
     global LISTE_FICHIER_INKML
     global METADONNEE
-    print(name)
     if name in LISTE_PATH_BDD:
         del LISTE_FICHIER_INKML[name]
         del METADONNEE[name]
         ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
     save_config()
-    print(METADONNEE)
     return METADONNEE
-    
+
+#############Traduire Fichier INKML -> TXT route :##############
 
 if __name__ == "__main__":
     get_last_config()

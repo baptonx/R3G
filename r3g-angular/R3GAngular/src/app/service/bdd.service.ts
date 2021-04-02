@@ -78,10 +78,12 @@ export class BddService {
       if (Array.isArray(dbb)) {
         for(let key in dbb) {
           let id = dbb[key]['id'];
-          this.sequences.push(new Sequence(id, '', dbb[key]));
+          let bdd = dbb[key]['BDD'];
+          this.sequences.push(new Sequence(id, bdd, '', dbb[key]));
         }
       }
     }
+    console.log(this.sequences);
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
@@ -98,12 +100,20 @@ export class BddService {
 
   }
   getDonnee(listSequenceName: Array<string>){
-    for (let sequenceName in listSequenceName){
-      this.http
-        .get<Array<string>>(`/models/getDonnee/${sequenceName}` , {})
-        .subscribe((returnedData: any) => {
-          //ret
-      });
+    this.answerWait();
+    for(let sequenceName in listSequenceName){
+      let sequence = this.sequences.find(element => element.id == sequenceName);
+      if (sequence != undefined){
+        this.http
+          .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
+          .subscribe((returnedData: any) => {
+            if (sequence != undefined){
+              console.log(returnedData);
+              sequence.traceNormal = (returnedData);
+            }
+            this.answerHere();
+          });
+      }
     }
   }
 
