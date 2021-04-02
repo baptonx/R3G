@@ -288,7 +288,6 @@ def route_get_sequence(bdd, namefichier):
             return json.dumps(get_donnee(namefichier, bdd))
     return None
 
-
 @APP.route('/models/addBDD')
 def route_add_bdd():
     """add new path ddb"""
