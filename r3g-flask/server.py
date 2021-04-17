@@ -23,9 +23,9 @@ from Class.Model import Model
 
 APP = Flask(__name__)
 API = wandb.Api()
-RUNS = API.runs("recoprecoce-intui")
+RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
-LISTE_PATH_BDD = {} #= {"BDD": "./BDD", "BDD_chalearn_inkml" : "./BDD_chalearn_inkml"}
+LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
 METADONNEE = {}
 UPLOAD_FOLDER = './Upload'
@@ -126,6 +126,21 @@ def upload_file(name):
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
 
+@APP.route('/models/evaluation/<sequences>/<model>')
+def evaluation(sequences,model):
+    """ on fait l'evaluation de sequences avec le model passé en param"""
+    for seq in sequences:
+        print(seq)
+    print(model)
+    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
+    "Weigths/20210331-143205/"])
+    ret = []
+    for file in os.listdir('./EvaluationSequences/'):
+        with open('./EvaluationSequences/' + file) as file_content:
+            ret.append(file_content.readlines()[1])
+    return json.dumps(ret)
+
+
 @APP.route('/models/startLearning/<name>')
 def start_learning(name):
     """Permet de lancer l'apprentissage d'un model en runnant un script shell"""
@@ -209,12 +224,12 @@ def suppresion_fichiers_inkml(bdd):
     global LISTE_FICHIER_INKML
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
-    
+
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
     """Contenu du fichier inkml."""
-    
+
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
@@ -277,6 +292,7 @@ def route_get_meta_donne():
 @APP.route('/models/getListBDD')
 def route_get_list_bdd():
     """Permet de télécharger la liste des BDD"""
+    print(list(LISTE_PATH_BDD))
     return json.dumps(list(LISTE_PATH_BDD.keys()))
 
 #cette route permet de recuperer la sequence du fichier namefichier
@@ -292,7 +308,7 @@ def route_get_sequence(bdd, namefichier):
 def route_add_bdd():
     """add new path ddb"""
     global LISTE_PATH_BDD
-    
+
     root = tkinter.Tk()
     root.withdraw()
     top = tkinter.Toplevel(root)
@@ -317,7 +333,7 @@ def route_add_bdd():
         print("tkinter bug")
         root.destroy()
         return json.dumps(METADONNEE)
-    
+
 
 @APP.route('/models/closeBDD/<name>')
 def route_close_bdd(name):
@@ -350,12 +366,12 @@ def route_reload_bdd(name):
 if __name__ == "__main__":
     get_last_config()
     download_hyperparameters()
-    #start_api_wandb()
+    start_api_wandb()
     #download_weights("ra6r8k85")
     #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()
-    
+
 #    F = open("donneeSample.txt", "w")
 #    F.write(str(get_donnee("Sample00001_data.inkml", "BDD_chalearn_inkml")))
 #    F.close()
