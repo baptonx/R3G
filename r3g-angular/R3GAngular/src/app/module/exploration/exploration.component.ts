@@ -54,6 +54,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.bdd.setMetaData();
     this.bdd.getlistdb();
+    console.log(this.bdd)
   }
 
 }

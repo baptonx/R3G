@@ -11,10 +11,10 @@ import tkinter.filedialog
 from os import walk
 import re
 import xml.etree.ElementTree as ET
+from shutil import copyfile
 from flask import Flask, request, flash, redirect
 import wandb
 from werkzeug.utils import secure_filename
-
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 
@@ -82,6 +82,14 @@ def start_api_wandb():
                 model = Model(run.id, run.name, param[run.id])
                 MODEL_LIST.append(model.__dict__)
 
+def start_wandb_v2():
+    """v2 pour l'autre depot"""
+    param = {}
+    for run in RUNS:
+        param[run.id] = []
+        model = Model(run.id, run.name, param[run.id])
+        MODEL_LIST.append(model.__dict__)
+
 
 @APP.route('/models/getModelsNames')
 def get_models_names():
@@ -126,14 +134,26 @@ def upload_file(name):
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
 
-@APP.route('/models/evaluation/<sequences>/<model>')
-def evaluation(sequences,model):
+@APP.route('/models/evaluation/<name>/<sequences>/<model>')
+def evaluation(name,sequences,model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
-    for seq in sequences:
-        print(seq)
-    print(model)
+    name='BDD_Kinect_V2'
+    model='20210331-143205/'
+    seq=sequences.split(',')
+    for fichier in os.listdir('./Sequences'):
+        if os.path.exists('./Sequences/'+fichier):
+            os.remove('./Sequences/'+fichier)
+        else:
+            print("The file does not exist")
+    for fichier in os.listdir('./EvaluationSequences'):
+        if os.path.exists('./EvaluationSequences/'+fichier):
+            os.remove('./EvaluationSequences/'+fichier)
+        else:
+            print("The file does not exist")
+    for elt in seq:
+        copyfile('./'+name+'/Data/'+elt+'.txt','./Sequences/'+elt+'.txt')
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
-    "Weigths/20210331-143205/"])
+    "Weigths/"+model])
     ret = []
     for file in os.listdir('./EvaluationSequences/'):
         with open('./EvaluationSequences/' + file) as file_content:
@@ -366,7 +386,7 @@ def route_reload_bdd(name):
 if __name__ == "__main__":
     get_last_config()
     download_hyperparameters()
-    start_api_wandb()
+    start_wandb_v2()
     #download_weights("ra6r8k85")
     #start_learning('mo6')
     APP.run(host='0.0.0.0')

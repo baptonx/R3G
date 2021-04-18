@@ -1,7 +1,7 @@
 <div class="tab-container">
 <mat-form-field appearance="fill">
   <mat-label>Choisir un modèle</mat-label>
-  <mat-select>
+  <mat-select (valueChange)="changeValue($event)">
     <mat-option *ngFor="let m of modelesList" [value]="m.name">
       {{m.name}}
     </mat-option>
@@ -11,7 +11,7 @@
 <mat-icon aria-hidden="false" aria-label="Add circle" class='add-circle' (click)="openLearning()">add_circle</mat-icon>
 
 <div class="container flex">
-  <div><button mat-flat-button class='btn'>Lancer l'évaluation</button></div>
+  <div><button mat-flat-button class='btn' (click)='openEval()'>Lancer l'évaluation</button></div>
   <div><button mat-flat-button class='btn' (click)="openDialog()">Générer les hyperparamètres</button></div>
 </div>
 
