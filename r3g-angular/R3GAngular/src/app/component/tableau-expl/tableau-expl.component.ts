@@ -26,6 +26,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   //subscription: Subscription;
+  allComplete: boolean = false;
 
 
   constructor(public explService: TableauExplService,
@@ -87,8 +88,10 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     if(element instanceof sequenceTabImpl) {
       if(element.selected) {
         this.selectionListe.push(element);
+        if(this.explService.sequences.every(s => s.selected)) this.allComplete = true;
       }
       else {
+        this.allComplete = false;
         let i=0;
         while(i < this.selectionListe.length) {
           if(this.selectionListe[i] == element) this.selectionListe.splice(i,1);
@@ -100,7 +103,30 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   ajouterSequencesSelectionnees() {
     let seqSelectionee = this.bddService.chercherSequenceTableau(this.selectionListe);
+    this.allComplete = false;
+    console.log("sequences trouvees");
     this.bddService.getDonnee(seqSelectionee);
+    console.log("getDonnees");
     this.sequenceChargees.addToList(seqSelectionee);
+    console.log("added to list");
+  }
+
+  someComplete(): boolean {
+    if(this.explService.sequences == null) {
+      return false
+    }
+    return this.explService.sequences.filter(s => s.selected).length > 0 && ! this.allComplete;
+  }
+
+  setAll(checked: boolean) {
+    this.selectionListe = [];
+    this.allComplete = checked;
+    if(this.explService.sequences == null) {
+      return;
+    }
+    this.explService.sequences.forEach(s => s.selected = checked);
+    if(checked) {
+      this.selectionListe = this.explService.sequences.concat([]);
+    }
   }
 }
