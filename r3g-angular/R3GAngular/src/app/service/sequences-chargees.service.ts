@@ -7,8 +7,10 @@ import {BddService} from './bdd.service';
 })
 export class SequencesChargeesService {
   sequences: Set<Sequence>;
+  evaluation:Array<String>;
   constructor(public bdd : BddService) {
     this.sequences = new Set<Sequence>();
+    this.evaluation = [];
   }
 
   addToList(sequences: Sequence[]): void {

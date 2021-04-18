@@ -137,7 +137,7 @@ def upload_file(name):
 @APP.route('/models/evaluation/<name>/<sequences>/<model>')
 def evaluation(name,sequences,model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
-    name='BDD_Kinect_V2'
+    name=name.replace('_inkml','')
     model='20210331-143205/'
     seq=sequences.split(',')
     for fichier in os.listdir('./Sequences'):
@@ -151,7 +151,8 @@ def evaluation(name,sequences,model):
         else:
             print("The file does not exist")
     for elt in seq:
-        copyfile('./'+name+'/Data/'+elt+'.txt','./Sequences/'+elt+'.txt')
+        copyfile('./'+name+'/Data/'+elt.replace('.inkml','')+'.txt','./Sequences/'+\
+        elt.replace('.inkml','')+'.txt')
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
     "Weigths/"+model])
     ret = []
