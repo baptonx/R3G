@@ -13,7 +13,7 @@ import { DialogCSVComponent } from '../dialog-csv/dialog-csv.component';
   styleUrls: ['./dialog-eval.component.css']
 })
 export class DialogEvalComponent implements OnInit {
-  model:Model;
+  model:String='';
   chargement:String='';
   sequences:Array<String>=[];
   constructor(public http:HttpClient,public bdd: BddService,public sequencesChargees:SequencesChargeesService,
@@ -37,6 +37,9 @@ export class DialogEvalComponent implements OnInit {
       console.log(response)
       this.chargement='Evaluation terminée'
       this.sequencesChargees.evaluation=response;
+      if (this.sequencesChargees.evaluation.length == 0) {
+          this.chargement= 'Mauvais format de squelette'
+      }
     },
     (error: any) => {
       console.log(error)

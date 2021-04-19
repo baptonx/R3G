@@ -8,6 +8,7 @@ from Tools import DataSetReader
 from Tools.Gesture.Morphology import Morphology
 from Tools.Gesture.MorphologyGetter import MorphologyGetter
 from Tools.Voxelizer.Voxelizer2sqCWM_CuDi_JointsAsVector_SkId import Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId
+from Tools.Voxelizer.VoxelizerCWM_CuDi_JointsAsVector import VoxelizerCWMSoupler_CuDi_JointsAsVector
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 
@@ -50,12 +51,20 @@ thresholdToleranceCuDi = config["thresholdToleranceCuDi"]
 thresholdToleranceDrawing = config["thresholdToleranceDrawing"]
 jointsSelected = config["jointSelection"]
 device: str = config["device"]
+nbSkeleton = config["nbSkeleton"]
 morph: Morphology = MorphologyGetter.getMorphologyFromDeviceName(device)
 
-voxelizer = Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId(dimensionsOutputImage, thresholdToleranceCuDi,
-                                                            False, thresholdCuDi,
-                                                            thresholdToleranceDrawing, morph.nbJoints,
-                                                            jointsSelected)
+if nbSkeleton == 2:
+    voxelizer = Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId(dimensionsOutputImage, thresholdToleranceCuDi,
+                                                                     False, thresholdCuDi,
+                                                                     thresholdToleranceDrawing,
+                                                                     morph.nbJoints,
+                                                                     jointsSelected)
+else:
+    voxelizer = VoxelizerCWMSoupler_CuDi_JointsAsVector(dimensionsOutputImage, thresholdToleranceCuDi,
+                                                             False, thresholdCuDi, thresholdToleranceDrawing,
+                                                             morph.nbJoints,
+                                                             jointsSelected)
 
 model = ModelEarlyOC3D_3D(nbClass=config["nbClass"], boxSize=config["boxSize"],
                           doGLU=config["doGlu"], dropoutVal=config["dropoutVal"],
@@ -73,8 +82,11 @@ listeSeq = os.listdir(pathFolder)
 nbJointPerSkeleton = morph.nbJoints
 jointsTypes = morph.jointTypes
 for seq in listeSeq:
-    postures1,postures2 = DataSetReader.readDataPostures(pathFolder+seq,2,morph,config["subSampling"])
-    voxelizations, repeat = voxelizer.voxelizeTrajectories(postures1, postures2)
+    postures1,postures2 = DataSetReader.readDataPostures(pathFolder+seq,nbSkeleton,morph,config["subSampling"])
+    if nbSkeleton == 2:
+        voxelizations, repeat = voxelizer.voxelizeTrajectories(postures1, postures2)
+    else :
+        voxelizations, repeat = voxelizer.voxelizeTrajectories(postures1)
     input = np.array([voxelizations], dtype=np.float)
     prediction = model(input, steps=1, training=False)[0][0]
     rejection = prediction[:, 0].numpy()

@@ -90,8 +90,8 @@ def readLabels(fData: str, actionsNames:List[str] , SubSampling: int = 1) -> Lis
     labels = []
     for line in fData:
         values = line.split(",")
-        if len(values) != 4:
-            print("NOT 4 values but " + str(len(values)))
+        if len(values) <3 :
+            print("NOT 3 values but " + str(len(values)))
         classId = int(values[0])
         begin = round(int(values[1]) / SubSampling)
         end = round(int(values[2]) / SubSampling)
