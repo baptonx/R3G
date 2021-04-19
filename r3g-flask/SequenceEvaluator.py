@@ -1,5 +1,4 @@
 import sys
-
 import tensorflow as tf
 import numpy as np
 import os
@@ -11,7 +10,6 @@ from Tools.Voxelizer.Voxelizer2sqCWM_CuDi_JointsAsVector_SkId import Voxelizer2s
 from Tools.Voxelizer.VoxelizerCWM_CuDi_JointsAsVector import VoxelizerCWMSoupler_CuDi_JointsAsVector
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
-
 pathFolder = sys.argv[1]
 pathFolderOut = sys.argv[2]
 pathModel = sys.argv[3]
@@ -93,7 +91,16 @@ for seq in listeSeq:
     prediction = prediction[:, 1:]
     prediction = tf.argmax(prediction,axis=1).numpy()
     rejection = " ".join(["{:.2f}".format(e) for e in rejection])
-    prediction = "    ".join([str(e) for e in prediction])
     f = open(pathFolderOut+seq,"w+")
+    listeFinaleTemporelle = []
+    for index,e in enumerate(repeat):
+        for i in range(e):
+            listeFinaleTemporelle.append(prediction[index])
+    prediction = " ".join([str(e) for e in listeFinaleTemporelle])
     f.write(str(rejection)+"\n"+str(prediction))
     f.close()
+    #repeatStr = " ".join([str(int(e)) for e in repeat])
+
+    #f = open(pathFolderOut + seq+".repeat", "w+")
+    #f.write(repeatStr)
+    #f.close()
