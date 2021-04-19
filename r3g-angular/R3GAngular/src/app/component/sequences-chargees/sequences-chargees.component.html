@@ -5,7 +5,7 @@
 <div id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences.size+'px'">
   <mat-list>
     <ng-container *ngFor="let sequence of this.seqChargeesService.sequences, let i = index">
-      <mat-list-item style="display:flex; justify-content: right;">
+      <mat-list-item style ="justify-content: right;" [style.display]="sequence.id.includes(inputFiltre.value)?'block':'none'">
 
           <span style="padding-right: 20px">{{sequence.id}}</span>
         <span><button mat-icon-button><mat-icon>play_circle_outline</mat-icon></button></span>
