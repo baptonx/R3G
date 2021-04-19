@@ -42,6 +42,7 @@ import { NodeColonneComponent } from './component/node-colonne/node-colonne.comp
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
 import { MatSortModule } from "@angular/material/sort";
+import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
     ChoixColonneComponent,
     NodeColonneComponent,
     TimelineComponent,
+    DialogEvalComponent,
   ],
     imports: [
         BrowserModule,

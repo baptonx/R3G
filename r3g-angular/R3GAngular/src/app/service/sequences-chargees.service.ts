@@ -7,8 +7,10 @@ import {BddService} from './bdd.service';
 })
 export class SequencesChargeesService {
   sequences: Set<Sequence>;
+  evaluation:Array<String>;
   constructor(public bdd : BddService) {
     this.sequences = new Set<Sequence>();
+    this.evaluation = [];
   }
 
   addToList(sequences: Sequence[]): void {
@@ -24,5 +26,9 @@ export class SequencesChargeesService {
   deleteFromList(sequence: Sequence): void {
     sequence.traceNormal = [];
     this.sequences.delete(sequence)
+  }
+
+  clear() {
+    this.sequences.clear();
   }
 }

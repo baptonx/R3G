@@ -11,10 +11,10 @@ import tkinter.filedialog
 from os import walk
 import re
 import xml.etree.ElementTree as ET
+from shutil import copyfile
 from flask import Flask, request, flash, redirect
 import wandb
 from werkzeug.utils import secure_filename
-
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 
@@ -23,9 +23,9 @@ from Class.Model import Model
 
 APP = Flask(__name__)
 API = wandb.Api()
-RUNS = API.runs("recoprecoce-intui")
+RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
-LISTE_PATH_BDD = {} #= {"BDD": "./BDD", "BDD_chalearn_inkml" : "./BDD_chalearn_inkml"}
+LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
 METADONNEE = {}
 UPLOAD_FOLDER = './Upload'
@@ -49,18 +49,20 @@ def download_hyperparameters():
 
 
 def download_weights(name):
-    """ Telechargement des poids d'un modele dont le nom est passe en parametre. 4 fichier a DL."""
+    """ Telechargement des poids d'un modele dont le nom est passe en parametre. 5 fichier a DL."""
     for run in RUNS:
         if not os.path.exists("Weigths/" + run.id):
             if run.id == name:
                 for files in run.files():
-                    if files.name == "weights/checkpoint":
+                    if files.name == "weights/Weights/checkpoint":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.data-00000-of-00002":
+                    if files.name == "weights/Weights/model.data-00000-of-00002":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.data-00001-of-00002":
+                    if files.name == "weights/Weights/model.data-00001-of-00002":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.index":
+                    if files.name == "weights/Weights/model.index":
+                        files.download("Weigths/"+run.id, replace=True)
+                    if files.name == 'weights/config.txt':
                         files.download("Weigths/"+run.id, replace=True)
 
 
@@ -82,6 +84,14 @@ def start_api_wandb():
                 model = Model(run.id, run.name, param[run.id])
                 MODEL_LIST.append(model.__dict__)
 
+def start_wandb_v2():
+    """v2 pour l'autre depot"""
+    param = {}
+    for run in RUNS:
+        param[run.id] = []
+        model = Model(run.id, run.name, param[run.id])
+        MODEL_LIST.append(model.__dict__)
+    print(MODEL_LIST)
 
 @APP.route('/models/getModelsNames')
 def get_models_names():
@@ -124,6 +134,34 @@ def upload_file(name):
             file.save(os.path.join(APP.config['UPLOAD_FOLDER'], filename))
             return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
+
+@APP.route('/models/evaluation/<name>/<sequences>/<model>')
+def evaluation(name,sequences,model):
+    """ on fait l'evaluation de sequences avec le model passé en param"""
+    download_weights(model)
+    name=name.replace('_inkml','')
+    seq=sequences.split(',')
+    for fichier in os.listdir('./Sequences'):
+        if os.path.exists('./Sequences/'+fichier):
+            os.remove('./Sequences/'+fichier)
+        else:
+            print("The file does not exist")
+    for fichier in os.listdir('./EvaluationSequences'):
+        if os.path.exists('./EvaluationSequences/'+fichier):
+            os.remove('./EvaluationSequences/'+fichier)
+        else:
+            print("The file does not exist")
+    for elt in seq:
+        copyfile('./'+name+'/Data/'+elt.replace('.inkml','')+'.txt','./Sequences/'+\
+        elt.replace('.inkml','')+'.txt')
+    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
+    "Weigths/"+model+'/weights/'])
+    ret = []
+    for file in os.listdir('./EvaluationSequences/'):
+        with open('./EvaluationSequences/' + file) as file_content:
+            ret.append(file_content.readlines()[1])
+    return json.dumps(ret)
 
 
 @APP.route('/models/startLearning/<name>')
@@ -209,12 +247,12 @@ def suppresion_fichiers_inkml(bdd):
     global LISTE_FICHIER_INKML
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
-    
+
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
     """Contenu du fichier inkml."""
-    
+
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
@@ -277,6 +315,7 @@ def route_get_meta_donne():
 @APP.route('/models/getListBDD')
 def route_get_list_bdd():
     """Permet de télécharger la liste des BDD"""
+    print(list(LISTE_PATH_BDD))
     return json.dumps(list(LISTE_PATH_BDD.keys()))
 
 #cette route permet de recuperer la sequence du fichier namefichier
@@ -292,7 +331,7 @@ def route_get_sequence(bdd, namefichier):
 def route_add_bdd():
     """add new path ddb"""
     global LISTE_PATH_BDD
-    
+
     root = tkinter.Tk()
     root.withdraw()
     top = tkinter.Toplevel(root)
@@ -317,7 +356,7 @@ def route_add_bdd():
         print("tkinter bug")
         root.destroy()
         return json.dumps(METADONNEE)
-    
+
 
 @APP.route('/models/closeBDD/<name>')
 def route_close_bdd(name):
@@ -350,12 +389,12 @@ def route_reload_bdd(name):
 if __name__ == "__main__":
     get_last_config()
     download_hyperparameters()
-    #start_api_wandb()
-    #download_weights("ra6r8k85")
+    start_wandb_v2()
+    #download_weights("je7bvwl4")
     #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()
-    
+
 #    F = open("donneeSample.txt", "w")
 #    F.write(str(get_donnee("Sample00001_data.inkml", "BDD_chalearn_inkml")))
 #    F.close()

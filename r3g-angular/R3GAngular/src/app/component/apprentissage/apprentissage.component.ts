@@ -7,6 +7,7 @@ import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool
 import { HyperparameterNumber } from 'src/app/class/evaluation/hyperparameter-number';
 import { Model } from 'src/app/class/evaluation/model';
 import {DialogCSVComponent} from '../dialog-csv/dialog-csv.component';
+import { DialogEvalComponent } from '../dialog-eval/dialog-eval.component';
 import { DialogLearningComponent } from '../dialog-learning/dialog-learning.component';
 
 
@@ -19,13 +20,33 @@ import { DialogLearningComponent } from '../dialog-learning/dialog-learning.comp
 
 export class ApprentissageComponent implements OnInit, AfterViewInit {
   modeles = new FormControl();
-
+  modelSelected:String='';
   modelesList: Array<Model>=[];
-  constructor(public dialog: MatDialog, public http: HttpClient) { }
+  constructor(public dialog: MatDialog, public http: HttpClient) { 
+
+  }
 
 
   // Séparation des hyperparametres en 2 catégories, ceux qui prennent des valeurs numériques et ceux qui prennent des boolean
   // orderVal pour ordonner les hyperparametres dans le csv, et qu'il match avec le format de william
+
+  changeValue(value:any){
+    this.modelesList.forEach(elt =>{
+        if(elt.name==value){
+          this.modelSelected=elt._id
+          console.log(elt._id)
+        }
+    }
+    )
+  }
+  openEval():void{
+    const DialogRef = this.dialog.open(DialogEvalComponent,{
+      data: {
+        model:this.modelSelected,
+        sequences:['0005-L','0005-M','0005-R']
+      }
+    })
+  }
 
   openLearning():void{
     const DialogRef = this.dialog.open(DialogLearningComponent,{
@@ -61,10 +82,12 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+    console.log(this.modelesList)
   }
 
   ngAfterViewInit(): void{
-    this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+    
 
   }
 
@@ -74,4 +97,8 @@ export interface DialogData {
   hyperparametersBool: Array<HyperparameterBool>;
   orderVal: Array<number>;
 
+}
+export interface DialogData2 {
+  model:String
+  sequences:Array<String>
 }
