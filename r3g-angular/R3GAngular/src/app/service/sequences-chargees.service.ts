@@ -27,4 +27,8 @@ export class SequencesChargeesService {
     sequence.traceNormal = [];
     this.sequences.delete(sequence)
   }
+
+  clear() {
+    this.sequences.clear();
+  }
 }
