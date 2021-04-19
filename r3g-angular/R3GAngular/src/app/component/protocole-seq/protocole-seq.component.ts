@@ -23,8 +23,8 @@ export class ProtocoleSeqComponent implements OnInit {
   valeur:Array<String> = []
   valeur_test:Array<String> = []
   nameFilter = new FormControl('');
-  train:Array<Array<String>>= []
-  test:Array<Array<String>>= []
+  train: Array<Array<String>> = []
+  test: Array<Array<String>> = []
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   filterValues = {
@@ -45,7 +45,7 @@ export class ProtocoleSeqComponent implements OnInit {
           this.operateur.push(['=','/=/','<','>'])
           this.operateur_test.push(['=','/=/','<','>'])
         }
-      
+
     }
     this.dataSource = new MatTableDataSource<String>(this.metadata);
   }
@@ -61,11 +61,11 @@ export class ProtocoleSeqComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator= this.paginator
-   
+
   }
 
   selection(i: number): void{
-    this.selectionListe[i] = !this.selectionListe[i];    
+    this.selectionListe[i] = !this.selectionListe[i];
   }
 
   changeSeq(i:number):void{
@@ -87,13 +87,13 @@ export class ProtocoleSeqComponent implements OnInit {
   }
 
   changeVal(event: any, i:number):void{
-  
+
           this.train[i][0]=this.metadata[i]
           this.train[i][2]=event.target.value
     }
 
     changeValTest(event: any, i:number):void{
-  
+
       this.test[i][0]=this.metadata[i]
       this.test[i][2]=event.target.value
 }
@@ -111,15 +111,15 @@ export class ProtocoleSeqComponent implements OnInit {
       seq.isTrain=true
       for(var i = 0;i<this.train.length; i++){
       for (const [key, value] of Object.entries(this.tab.ajouterMetadonnee(seq.id,'',seq.metaDonnees))) {
-    
-      
+
+
           switch(this.train[i][1]){
 
             case "=":
               if(this.train[i][0]==String(key.split('.')[2]) && this.train[i][2]!=String(value)){
                 seq.isTrain=false
                 console.log('here')
-               
+
               }
               break;
             case "/=/":
