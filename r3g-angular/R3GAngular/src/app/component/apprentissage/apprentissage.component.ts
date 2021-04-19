@@ -20,7 +20,7 @@ import { DialogLearningComponent } from '../dialog-learning/dialog-learning.comp
 
 export class ApprentissageComponent implements OnInit, AfterViewInit {
   modeles = new FormControl();
-  modelSelected:Model | undefined;
+  modelSelected:String='';
   modelesList: Array<Model>=[];
   constructor(public dialog: MatDialog, public http: HttpClient) { 
 
@@ -31,8 +31,13 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
   // orderVal pour ordonner les hyperparametres dans le csv, et qu'il match avec le format de william
 
   changeValue(value:any){
-    this.modelSelected=value;
-    console.log(this.modelSelected)
+    this.modelesList.forEach(elt =>{
+        if(elt.name==value){
+          this.modelSelected=elt._id
+          console.log(elt._id)
+        }
+    }
+    )
   }
   openEval():void{
     const DialogRef = this.dialog.open(DialogEvalComponent,{
@@ -77,11 +82,12 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+    console.log(this.modelesList)
   }
 
   ngAfterViewInit(): void{
-    this.http.get<Array<Model>>('/models/getModelsNames' , {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
-    console.log(this.modelesList)
+    
 
   }
 
@@ -93,6 +99,6 @@ export interface DialogData {
 
 }
 export interface DialogData2 {
-  model:Model
+  model:String
   sequences:Array<String>
 }

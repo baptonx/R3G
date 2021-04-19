@@ -29,7 +29,7 @@ class VoxelizerHandler(ABC):
         self.sizeBox = sizeBoxInit
 
     @abstractmethod
-    def voxelizeTrajectories(self, data: List[Posture], labels: List[Label]) -> Tuple[List[np.array],List[Label]]:
+    def voxelizeTrajectories(self, data: List[Posture]) -> Tuple[List[np.array],List[Label]]:
         """
         :param labels:
         :param data:

@@ -49,18 +49,20 @@ def download_hyperparameters():
 
 
 def download_weights(name):
-    """ Telechargement des poids d'un modele dont le nom est passe en parametre. 4 fichier a DL."""
+    """ Telechargement des poids d'un modele dont le nom est passe en parametre. 5 fichier a DL."""
     for run in RUNS:
         if not os.path.exists("Weigths/" + run.id):
             if run.id == name:
                 for files in run.files():
-                    if files.name == "weights/checkpoint":
+                    if files.name == "weights/Weights/checkpoint":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.data-00000-of-00002":
+                    if files.name == "weights/Weights/model.data-00000-of-00002":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.data-00001-of-00002":
+                    if files.name == "weights/Weights/model.data-00001-of-00002":
                         files.download("Weigths/"+run.id, replace=True)
-                    if files.name == "weights/regression.index":
+                    if files.name == "weights/Weights/model.index":
+                        files.download("Weigths/"+run.id, replace=True)
+                    if files.name == 'weights/config.txt':
                         files.download("Weigths/"+run.id, replace=True)
 
 
@@ -89,7 +91,7 @@ def start_wandb_v2():
         param[run.id] = []
         model = Model(run.id, run.name, param[run.id])
         MODEL_LIST.append(model.__dict__)
-
+    print(MODEL_LIST)
 
 @APP.route('/models/getModelsNames')
 def get_models_names():
@@ -137,8 +139,8 @@ def upload_file(name):
 @APP.route('/models/evaluation/<name>/<sequences>/<model>')
 def evaluation(name,sequences,model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
+    download_weights(model)
     name=name.replace('_inkml','')
-    model='20210331-143205/'
     seq=sequences.split(',')
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
@@ -154,7 +156,7 @@ def evaluation(name,sequences,model):
         copyfile('./'+name+'/Data/'+elt.replace('.inkml','')+'.txt','./Sequences/'+\
         elt.replace('.inkml','')+'.txt')
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
-    "Weigths/"+model])
+    "Weigths/"+model+'/weights/'])
     ret = []
     for file in os.listdir('./EvaluationSequences/'):
         with open('./EvaluationSequences/' + file) as file_content:
@@ -388,7 +390,7 @@ if __name__ == "__main__":
     get_last_config()
     download_hyperparameters()
     start_wandb_v2()
-    #download_weights("ra6r8k85")
+    #download_weights("je7bvwl4")
     #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()

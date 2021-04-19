@@ -107,7 +107,7 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
         # _ = self.masker(x)  # just to init masker
         # theMask = self.masker.compute_mask(x)  # compute where the images have been padded
         # theMask = tf.reduce_all(tf.reduce_all(theMask, axis=2), axis=2)  # [batch,seq(True/False)]
-        tf.print("x x ",tf.shape(x))
+        # tf.print("x x ",tf.shape(x))
         # print("x x ",x)
         if(self.modeChannel==ModeTestChannel.ONLY_FINGER_POS):
             x = x[:, :, :, :, 1:2] # only the secondChannel
@@ -197,7 +197,8 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
         resConcat = self.concat([resSelection,resClassifPred])
         # tf.print("after resConcat shape of x ", tf.shape(resConcat))
 
+        resConcatAux = self.concat([resSelection,resAuxiliaire])
 
         # resConcatWithoutPad = tf.boolean_mask(resConcat, theMask)  # [batch*nbSequence -masked ,nbclasse]
         # resAuxiliaireWithoutPad = tf.boolean_mask(resAuxiliaire, theMask)  # [batch*nbSequence -masked ,nbclasse]
-        return resConcat, resAuxiliaire
+        return resConcat, resConcatAux
