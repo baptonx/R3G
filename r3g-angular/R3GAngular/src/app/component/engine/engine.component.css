@@ -71,3 +71,9 @@ p {
   width: 50px;
 }
 
+.buttonsModeAnnotation {
+  position: absolute;
+  left: 5%;
+  top: 36em;
+}
+

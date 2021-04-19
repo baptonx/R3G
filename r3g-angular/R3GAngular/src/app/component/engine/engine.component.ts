@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EngineService} from "./engine.service";
 import {MatSlider} from '@angular/material/slider';
+import {MatButtonToggle, MatButtonToggleAppearance} from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-engine',
@@ -10,15 +11,15 @@ import {MatSlider} from '@angular/material/slider';
 })
 export class EngineComponent implements OnInit {
 
-  // Améliorer la timeline : deplacer curseur que quand on est dessus avec curseur souris qui change
-  // Afficher temps (en minute/seconde et en frame) directement dans canvas (+ facile pour actualisation)
-  // Mettre un editText qui permet de se mettre exactement ou l'on veut sur la timeline (en seconde et en frame)
-  // Afficher sur la timeline une barre temporelle en haut
-  // Mettre les boutons play/pause/stop au bon endroits
-  // Bouton reset la caméra !
+  // --> Jouer la vrai animation squelette
   // Mettre les autres panels etc ... pour la structure
-  // Jouer la vrai animation squelette
-  // Commencer à créer des annotations ?
+  // Paramétrer les annotations
+  // Enregistrer annotations dans BDD (bouton sauvegarde)
+  // Changer de séquence dans toutes les séquences chargées
+  // Pouvoir se positionner à tel frame
+  // Mettre l'ia
+  // Attention quand on quitte et qu'on revient sur le mode ! mettre en place une sauvegarde de session ?
+  // Afficher l'évaluation ? (Mode évaluation ? Pas possible de changer annotation, que visualiser ...)
 
 
 
@@ -48,6 +49,12 @@ export class EngineComponent implements OnInit {
   @ViewChild('box', {static: true})
   public box!: ElementRef<HTMLCanvasElement>;
 
+  @ViewChild('buttonModeViewing', { static: true })
+  public buttonModeViewing!: MatButtonToggle;
+
+  @ViewChild('buttonModeAnnotation', { static: true })
+  public buttonModeAnnotation!: MatButtonToggle;
+
   public listElementHTML: Array<ElementRef<HTMLCanvasElement>> = [];
 
   constructor(public engServ: EngineService) {
@@ -56,6 +63,9 @@ export class EngineComponent implements OnInit {
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML);
+    this.buttonModeViewing.checked = true;
+    this.engServ.annotationServ.buttonModeViewing = this.buttonModeViewing;
+    this.engServ.annotationServ.buttonModeAnnotation = this.buttonModeAnnotation;
     this.engServ.animate();
   }
 

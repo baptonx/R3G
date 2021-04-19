@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -394,6 +395,7 @@ if __name__ == "__main__":
     #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()
+
 
 #    F = open("donneeSample.txt", "w")
 #    F.write(str(get_donnee("Sample00001_data.inkml", "BDD_chalearn_inkml")))

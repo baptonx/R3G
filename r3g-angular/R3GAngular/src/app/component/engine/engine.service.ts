@@ -6,6 +6,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import {MatSlider} from '@angular/material/slider';
 import {TimelineService} from '../timeline/timeline.service';
 import {AnnotationService} from '../../module/annotation/annotation.service';
+import {MatButtonToggle} from '@angular/material/button-toggle';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -29,7 +30,7 @@ export class EngineService implements OnDestroy {
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
 
-    constructor(private ngZone: NgZone, private annotationServ: AnnotationService) {
+    constructor(private ngZone: NgZone, public annotationServ: AnnotationService) {
       this.annotationServ.pauseAction = true;
   }
 

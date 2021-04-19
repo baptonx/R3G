@@ -10,6 +10,7 @@ import { EvaluationComponent } from './module/evaluation/evaluation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { ApprentissageComponent } from './component/apprentissage/apprentissage.component';
@@ -90,6 +91,7 @@ const appRoutes: Routes = [
         MatStepperModule,
         MatRadioModule,
         MatCheckboxModule,
+        MatButtonToggleModule,
         MatSortModule,
         MatProgressBarModule,
 
