@@ -9,6 +9,7 @@ import {BddService} from "../../service/bdd.service";
 import {MatSort} from '@angular/material/sort';
 import {sequence} from "@angular/animations";
 import {SequencesChargeesService} from "../../service/sequences-chargees.service";
+import {FilterComponent} from "../filter/filter.component";
 
 
 
@@ -128,5 +129,16 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     if(checked) {
       this.selectionListe = this.explService.sequences.concat([]);
     }
+  }
+
+  openDialogFilter(): void {
+    const dialogRef = this.dialog.open(FilterComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //his.animal = result;
+    });
   }
 }
