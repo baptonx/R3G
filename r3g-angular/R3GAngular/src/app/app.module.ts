@@ -48,6 +48,7 @@ import { PopUpComponent } from './component/pop-up/pop-up.component';
 import { EditeurComponent } from './component/editeur/editeur.component';
 import { FilterComponent } from './component/filter/filter.component';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
+import { SequencesAnnotationComponent } from './component/sequences-annotation/sequences-annotation.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -78,6 +79,7 @@ const appRoutes: Routes = [
     EditeurComponent,
     FilterComponent,
     PopUpComponent,
+    SequencesAnnotationComponent,
   ],
     imports: [
         BrowserModule,

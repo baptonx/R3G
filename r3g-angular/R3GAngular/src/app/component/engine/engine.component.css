@@ -13,7 +13,9 @@
  *****************************************************/
 .edit {
   margin-left: 1%;
-
+}
+.edit2{
+  margin-right: 5%;
 }
 html, body, app-root, app-game {
   width   : 100%;
