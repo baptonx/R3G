@@ -143,6 +143,11 @@ export class BddService {
     this.formatSequence = new FormatDonnees();
     for(let i=0 ; i<this.sequences.length ; i++) {
       this.ajouterFormat(this.sequences[i].metaDonnees, []);
+      for(const [key, value] of Object.entries(this.sequences[i].metaDonnees.annotation)) {
+        if(typeof value === 'object' && value != null) {
+          this.ajouterFormat(value, ['annotation']);
+        }
+      }
     }
     console.log(this.formatSequence);
   }
@@ -150,7 +155,7 @@ export class BddService {
   private ajouterFormat(metaDonnees: object, path: string[]) {
     for(const [key, value] of Object.entries(metaDonnees)) {
       path.push(key);
-      if(typeof value === "object" && !Array.isArray(value) && value != null) {
+      if(typeof value === "object" && !Array.isArray(value) && value != null && key !== 'annotation') {
         this.ajouterFormat(value,path);
       }
       else{

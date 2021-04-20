@@ -70,8 +70,8 @@ export class TableauExplService {
     console.log(tabSequences);
     for(let i=0; i<tabSequences.length; i++){
       dataCourante = new sequenceTabImpl(tabSequences[i].id,{});
-      if('annotation' in tabSequences[i].metaDonnees) {
-        if(typeof tabSequences[i].metaDonnees.annotation === 'object') {
+      if(typeof tabSequences[i].metaDonnees === 'object' && 'annotation' in tabSequences[i].metaDonnees) {
+        if(typeof tabSequences[i].metaDonnees['annotation'] === 'object') {
           if(Object.keys(tabSequences[i].metaDonnees.annotation).length === 0) {
             dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
             if(dataCourante != null) {
@@ -102,6 +102,7 @@ export class TableauExplService {
       }
     }
     console.log(this.sequences);
+    console.log(this.sequences[0]);
     console.log(this.allAttributes);
     this.observableSequences.next(this.sequences);
   }
