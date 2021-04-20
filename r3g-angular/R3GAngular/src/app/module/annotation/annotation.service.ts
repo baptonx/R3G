@@ -114,7 +114,7 @@ export class AnnotationService {
       // ======================================================
       // ActionTime
       this.ctx.font = '20px Arial';
-      this.ctx.fillText(this.action.time.toFixed(2).toString(), canvas.width - 80, 30);
+      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 80, 30);
     }
   }
 

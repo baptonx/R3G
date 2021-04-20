@@ -30,7 +30,7 @@
 <div class="tab-container">
   <div>
     <span>Filtres : </span>
-    <div class="align-right"><button mat-raised-button id="ajouter-un-filtre">Ajouter un filtre</button></div>
+    <div class="align-right"><button mat-raised-button id="ajouter-un-filtre" (click)="openDialogFilter()">Ajouter un filtre</button></div>
   </div>
   <table mat-table [dataSource]="dataSource" matSort>
 

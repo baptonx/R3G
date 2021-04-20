@@ -7,7 +7,7 @@ import {BddService} from './bdd.service';
 })
 export class SequencesChargeesService {
   sequences: Set<Sequence>;
-  evaluation:Array<String>;
+  evaluation:Array<string>;
   constructor(public bdd : BddService) {
     this.sequences = new Set<Sequence>();
     this.evaluation = [];

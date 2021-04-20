@@ -7,6 +7,9 @@ import {MatSlider} from '@angular/material/slider';
 import {TimelineService} from '../timeline/timeline.service';
 import {AnnotationService} from '../../module/annotation/annotation.service';
 import {MatButtonToggle} from '@angular/material/button-toggle';
+import {BddService} from '../../service/bdd.service';
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
+import {Sequence} from '../../class/commun/sequence';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -29,8 +32,10 @@ export class EngineService implements OnDestroy {
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
+  public sequenceCurrent!: Sequence;
+  public facteurGrossissement = 1.5;
 
-    constructor(private ngZone: NgZone, public annotationServ: AnnotationService) {
+  constructor(private ngZone: NgZone, public annotationServ: AnnotationService, public sequencesChargeesService: SequencesChargeesService) {
       this.annotationServ.pauseAction = true;
   }
 
@@ -49,28 +54,80 @@ export class EngineService implements OnDestroy {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+    this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
+    console.log(this.sequenceCurrent);
+
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
+        if (this.sequenceCurrent !== undefined) {
+          const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
+
+          const tabPosX: Array<number> = [];
+          const tabPosY: Array<number> = [];
+          const tabPosZ: Array<number> = [];
+          let averageX: number;
+          let averageY: number;
+          let averageZ: number;
+
+          for (const frame of this.sequenceCurrent.traceNormal[0]) {
+            tabPosX.push(frame[0]);
+            tabPosY.push(frame[1]);
+            tabPosZ.push(frame[2]);
+          }
+
+          averageX = this.calculateAverage(tabPosX);
+          averageY = this.calculateAverage(tabPosY);
+          averageZ = this.calculateAverage(tabPosZ);
+
+
+          for (let i = 0; i < this.sequenceCurrent.traceNormal.length; i++) {
+            const tabPosXYZ: Array<number> = [];
+            const tabTime: Array<number> = [];
+            this.squelette.addArticulation();
+
+            for (const frame of this.sequenceCurrent.traceNormal[i]) {
+              tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
+              tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
+              tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
+              tabTime.push(frame[3]);
+            }
+            const positionArticulation = new VectorKeyframeTrack(
+              '.children[' + i + '].position',
+              tabTime,
+              tabPosXYZ,
+            );
+            tabPositionArticulation.push(positionArticulation);
+            this.annotationServ.tempsTotal = tabTime[tabTime.length - 1];
+          }
+
+          console.log('temps total : ' + this.annotationServ.tempsTotal);
+          this.clip = new AnimationClip('move', -1, tabPositionArticulation);
+
+          /*
+          // ANIMATION
+          const positionArticulation1 = new VectorKeyframeTrack(
+            '.children[0].position',
+            [0, 4, 6],
+            [-2, 1, 0, -2, 2, 0, -2, 1, 0],
+          );
+          const positionArticulation2 = new VectorKeyframeTrack(
+            '.children[1].position',
+            [0, 4, 6],
+            [2, 1, 0, 2, 2, 0, 2, 1, 0],
+          );
+          this.annotationServ.tempsTotal = 6;
+          this.clip = new AnimationClip('move', -1, [
+            positionArticulation1,
+            positionArticulation2
+          ]);
+           */
+        }
+        else {
+          this.clip = new AnimationClip('move', -1, []);
+        }
 
         scene.add(this.squelette.root);
-
-        // ANIMATION
-        const positionArticulation1 = new VectorKeyframeTrack(
-          '.children[0].position',
-          [0, 4, 6],
-          [-2, 1, 0, -2, 2, 0, -2, 1, 0],
-        );
-        const positionArticulation2 = new VectorKeyframeTrack(
-          '.children[1].position',
-          [0, 4, 6],
-          [2, 1, 0, 2, 2, 0, 2, 1, 0],
-        );
-        this.annotationServ.tempsTotal = 6;
-        this.clip = new AnimationClip('move', -1, [
-          positionArticulation1,
-          positionArticulation2
-        ]);
         const mixer = new AnimationMixer(this.squelette.root);
         this.annotationServ.action = mixer.clipAction(this.clip);
         this.annotationServ.action.loop = THREE.LoopOnce;
@@ -148,8 +205,8 @@ export class EngineService implements OnDestroy {
     const near = 1;
     const far = 100;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set( 0, 6, 15 );
-    camera.lookAt( 0, 6, 0 );
+    camera.position.set( 0, 1, -8 );
+    camera.lookAt( 0, 0, 0 );
 
     scene.add(camera);
 
@@ -164,7 +221,7 @@ export class EngineService implements OnDestroy {
     scene.add(ambientLight);
 
     const light = new THREE.PointLight(0xffffff, 1, 30);
-    light.position.set(0, 5, 3);
+    light.position.set(2, 5, -2);
     light.castShadow = true;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 25;
@@ -173,6 +230,7 @@ export class EngineService implements OnDestroy {
     // ground
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0x999999 } ) );
     mesh.rotation.x = - Math.PI / 2;
+    mesh.position.y = -1.5;
     mesh.receiveShadow = true;
     scene.add( mesh );
 
@@ -311,6 +369,14 @@ export class EngineService implements OnDestroy {
 
   public resetCamera(): void {
     this.controls.reset();
+  }
+
+  public calculateAverage(tab: Array<number>): number {
+    let average = 0;
+    for (const n of tab) {
+      average = average + Number(n);
+    }
+    return average / tab.length;
   }
 
 }

@@ -1,0 +1,39 @@
+<form class="operand-form">
+  <mat-form-field class="mat-form-field-operand">
+    <mat-label>Operande</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           [formControl]="operande"
+           [matAutocomplete]="autoOperande">
+    <mat-autocomplete #autoOperande="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsOperande | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="operator-form">
+    <mat-label>Operateur</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           [formControl]="operateur"
+           [matAutocomplete]="autoOperator">
+    <mat-autocomplete #autoOperator>
+      <mat-option *ngFor="let option of filteredOptionsOperateur | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Result</mat-label>
+    <input type="text"
+           aria-label="Number"
+           matInput>
+  </mat-form-field>
+</form>
+<button class="button-submit" mat-button>Ajouter le filtre</button>

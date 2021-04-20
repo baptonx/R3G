@@ -45,6 +45,8 @@ import { TimelineComponent } from './component/timeline/timeline.component';
 import { MatSortModule } from "@angular/material/sort";
 import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
 import { EditeurComponent } from './component/editeur/editeur.component';
+import { FilterComponent } from './component/filter/filter.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -73,6 +75,8 @@ const appRoutes: Routes = [
     TimelineComponent,
     DialogEvalComponent,
     EditeurComponent,
+    FilterComponent,
+
   ],
     imports: [
         BrowserModule,
@@ -96,6 +100,7 @@ const appRoutes: Routes = [
         MatButtonToggleModule,
         MatSortModule,
         MatProgressBarModule,
+        MatAutocompleteModule,
 
 
         RouterModule.forRoot(appRoutes),
