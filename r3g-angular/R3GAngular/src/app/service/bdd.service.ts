@@ -15,8 +15,9 @@ export class BddService {
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Sequence[]>;
   formatSequence: FormatDonnees = new FormatDonnees();
+  waitanswer: boolean = true;
+  classesGestes:Array<String>=[];
 
-  waitanswer: boolean = false;
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
     this.sequences = [];
     this.notifyTableauService();
@@ -24,8 +25,11 @@ export class BddService {
   }
 
   notifyTableauService(): void{
-    //console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
+  }
+
+  getClasses():void{
+
   }
   answerWait(): void{
     this.waitanswer = true;
@@ -54,12 +58,27 @@ export class BddService {
         this.answerHere();
       });
   }
+  addbddwithpath(path: string): void{
+    this.answerWait();
+    console.log(path);
+    let str = [];
+    for(let i = 0; i< path.length; i++){
+      str.push(path.charCodeAt(i));
+    }
+    this.http
+      .get<object>(`/models/addBDDwithpath/${str}` , {})
+      .subscribe((returnedData: any) => {
+        this.miseajourdb(returnedData);
+        this.answerHere();
+      });
+  }
   getlistdb(): void{
     this.http
       .get<Array<string>>(`/models/getListBDD` , {})
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
         console.log(returnedData);
+        this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
   }
   closedb(dbname: string): void{

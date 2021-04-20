@@ -1,13 +1,24 @@
 .mat-stepper-vertical {
     margin-top: 8px;
+    position: absolute;
   }
-  
+  .table{
+      position: absolute;
+      width: 22%;
+  }
   .mat-form-field {
     margin-top: 16px;
   }
   mat-step-header .mat-step-label {
     overflow: visible;
 }
+.mat-row {
+    height: auto;
+  }
+  
+  .mat-cell {
+    padding: 8px 8px 8px 0;
+  }
 
 .example-additional-selection {
     opacity: 0.75;

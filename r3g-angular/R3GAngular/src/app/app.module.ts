@@ -44,9 +44,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
 import { MatSortModule } from "@angular/material/sort";
 import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
+import { PopUpComponent } from './component/pop-up/pop-up.component';
 import { EditeurComponent } from './component/editeur/editeur.component';
 import { FilterComponent } from './component/filter/filter.component';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -76,7 +77,7 @@ const appRoutes: Routes = [
     DialogEvalComponent,
     EditeurComponent,
     FilterComponent,
-
+    PopUpComponent,
   ],
     imports: [
         BrowserModule,
@@ -101,8 +102,6 @@ const appRoutes: Routes = [
         MatSortModule,
         MatProgressBarModule,
         MatAutocompleteModule,
-
-
         RouterModule.forRoot(appRoutes),
         MatListModule,
         MatMenuModule,

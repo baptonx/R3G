@@ -1,9 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatInput} from '@angular/material/input';
-import {MatProgressBar} from '@angular/material/progress-bar';
 import {BddService} from '../../service/bdd.service';
 import {VisualisationExploService} from '../../service/visualisation-explo.service';
 import {ChoixColonnesService} from '../../service/choix-colonnes.service';
+import {PopUpComponent} from '../../component/pop-up/pop-up.component';
+import {MatDialog} from '@angular/material/dialog';
+
+
+export interface DialogData {
+  name: string;
+}
 
 @Component({
   selector: 'app-exploration',
@@ -11,14 +17,15 @@ import {ChoixColonnesService} from '../../service/choix-colonnes.service';
   styleUrls: ['./exploration.component.css']
 })
 
-
 export class ExplorationComponent implements OnInit, AfterViewInit {
   @ViewChild('inputFiltre') inputFiltre!: MatInput;
   //@viewChild()
   picker = document.getElementById('picker');
   listing = document.getElementById('listing');
+  private pathbdd: string;
 
-  constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService) {
+  constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
+    this.pathbdd = "";
   }
 
   addPathBDD(): void{
@@ -32,6 +39,21 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   closeDB(namedb: string): void{
     this.bdd.closedb(namedb);
     console.log("closed" + namedb);
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PopUpComponent, {
+      width: '250px',
+      data: {name: this.pathbdd}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.pathbdd = result;
+      if(this.pathbdd !== "")
+      {
+        this.bdd.addbddwithpath(this.pathbdd);
+      }
+    });
   }
   ngOnInit(): void {
   }

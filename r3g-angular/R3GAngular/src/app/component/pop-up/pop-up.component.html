@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Importer une base de donnée depuis un path absolu</h1>
+<div mat-dialog-content>
+  <p>Quelle est le path absolu de la base de donnée ?</p>
+  <mat-form-field>
+    <mat-label>Path : </mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ajouter</button>
+</div>
