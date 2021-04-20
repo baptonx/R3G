@@ -51,6 +51,7 @@ export class ChoixColonnesService {
   }
 
 
+  //convertit l'abre de metadonnees en liste de string
   selectionnes(node: NodeCol, path: string): string[] {
     if((node.children == null || node.children.length === 0) && !node.completed) {
       return [];

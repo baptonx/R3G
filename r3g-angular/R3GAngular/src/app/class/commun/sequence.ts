@@ -1,7 +1,7 @@
 export class Sequence {
   id: string;
   bdd: string;
-  metaDonnees: object;
+  metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
   traceVoxel: Array<Array<number>>;

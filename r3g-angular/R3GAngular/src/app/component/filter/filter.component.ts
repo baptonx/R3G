@@ -27,7 +27,7 @@ export class FilterComponent implements OnInit {
   constructor(public tableauExpl: TableauExplService,
               public dialogRef: MatDialogRef<FilterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: { filter: Function }) {
-    this.optionsOperande = this.tableauExpl.displayedColumns;
+    this.optionsOperande = this.tableauExpl.allAttributes;
   }
 
   ngOnInit(): void {

@@ -421,6 +421,7 @@ def route_reload_bdd(name):
         del METADONNEE[name]
         ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
     save_config()
+    print(METADONNEE)
     return METADONNEE
 
 #############Traduire Fichier INKML -> TXT route :##############

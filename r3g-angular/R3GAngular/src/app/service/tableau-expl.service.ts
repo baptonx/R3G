@@ -37,6 +37,7 @@ export class TableauExplService {
   observableSequences: BehaviorSubject<sequencesTab[]>;
   displayedColumns: string[] = new Array<string>();
   observableColumns: BehaviorSubject<string[]>;
+  allAttributes: string[] = [];
 
   //Filtres
   filtres: Array<Function> = [];
@@ -52,10 +53,11 @@ export class TableauExplService {
     prefix = prefix === ''?'':prefix+'.';
     let sequenceData = new sequenceTabImpl(fileName,{});
     for(let [key, value] of Object.entries(metadonnee)){
-      if(typeof value === "object" && value != null){
+      if(typeof value === "object" && value != null && key !== 'annotation'){
         sequenceData.concat(this.ajouterMetadonnee(fileName, prefix+key,value));
       }
       else{
+        this.addAttribute(prefix+key);
         sequenceData.push(prefix+key, value);
       }
     }
@@ -65,13 +67,53 @@ export class TableauExplService {
   updateAll(tabSequences: Array<Sequence>): void {
     this.sequences = new Array<sequencesTab>();
     let dataCourante: sequencesTab;
+    console.log(tabSequences);
     for(let i=0; i<tabSequences.length; i++){
-      dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
-      if(dataCourante != null) {
-        this.sequences.push(dataCourante);
+      dataCourante = new sequenceTabImpl(tabSequences[i].id,{});
+      if('annotation' in tabSequences[i].metaDonnees) {
+        if(typeof tabSequences[i].metaDonnees.annotation === 'object') {
+          if(Object.keys(tabSequences[i].metaDonnees.annotation).length === 0) {
+            dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
+            if(dataCourante != null) {
+              this.sequences.push(dataCourante);
+            }
+          }
+          for(let [key, value] of Object.entries(tabSequences[i].metaDonnees.annotation)) {
+             if(typeof value === 'object' && value != null) {
+               dataCourante.push(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
+             }
+             dataCourante.push(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
+             if(dataCourante != null) {
+               this.sequences.push(dataCourante);
+             }
+          }
+        }
+        else {
+          dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
+          if(dataCourante != null) {
+            this.sequences.push(dataCourante);
+          }
+        }
+      } else {
+        dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
+        if(dataCourante != null) {
+          this.sequences.push(dataCourante);
+        }
       }
     }
+    console.log(this.sequences);
+    console.log(this.allAttributes);
     this.observableSequences.next(this.sequences);
   }
 
+  private addAttribute(prefix: string): void {
+    let idx = this.allAttributes.findIndex((value) => prefix === value);
+    if(idx < 0) {
+      idx = this.allAttributes.findIndex((value) => prefix.includes(value));
+      if(idx >= 0) {
+        this.allAttributes.splice(idx,1);
+      }
+      this.allAttributes.push(prefix);
+    }
+  }
 }
