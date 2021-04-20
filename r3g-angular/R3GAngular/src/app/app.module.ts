@@ -5,7 +5,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AnnotationComponent } from './module/annotation/annotation.component';
-import { ExplorationComponent} from './module/exploration/exploration.component';
+import { ExplorationComponent } from './module/exploration/exploration.component';
 import { EvaluationComponent } from './module/evaluation/evaluation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
@@ -45,6 +45,9 @@ import { TimelineComponent } from './component/timeline/timeline.component';
 import { MatSortModule } from "@angular/material/sort";
 import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
 import { PopUpComponent } from './component/pop-up/pop-up.component';
+import { EditeurComponent } from './component/editeur/editeur.component';
+import { FilterComponent } from './component/filter/filter.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -72,6 +75,8 @@ const appRoutes: Routes = [
     NodeColonneComponent,
     TimelineComponent,
     DialogEvalComponent,
+    EditeurComponent,
+    FilterComponent,
     PopUpComponent,
   ],
     imports: [
@@ -96,6 +101,9 @@ const appRoutes: Routes = [
         MatButtonToggleModule,
         MatSortModule,
         MatProgressBarModule,
+        MatAutocompleteModule,
+
+
         RouterModule.forRoot(appRoutes),
         MatListModule,
         MatMenuModule,

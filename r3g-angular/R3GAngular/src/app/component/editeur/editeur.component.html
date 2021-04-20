@@ -1,0 +1,44 @@
+<mat-vertical-stepper [linear]="isLinear" #stepper>
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Editeur</ng-template>
+        <mat-form-field appearance="fill">
+            <mat-label>Classe du geste</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let geste of classeGeste" [value]="geste">
+              {{geste}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+            <mat-form-field>
+              <mat-label>Début</mat-label>
+              <input matInput  #debut autocomplete="off"> 
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Fin</mat-label>
+              <input matInput  #fin autocomplete="off"> 
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Point d'action</mat-label>
+              <input matInput  #action autocomplete="off"> 
+            </mat-form-field>
+          </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Classe de gestes</ng-template>
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                 required>
+        </mat-form-field>
+      </form>
+    </mat-step>
+
+  </mat-vertical-stepper>

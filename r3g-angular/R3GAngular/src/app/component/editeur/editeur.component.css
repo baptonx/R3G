@@ -1,0 +1,71 @@
+.mat-stepper-vertical {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+  mat-step-header .mat-step-label {
+    overflow: visible;
+}
+
+.example-additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+  }
+  .tab-container{
+    display:inline-block;
+    position: relative;
+    margin-top: 20px;
+    left:15%;
+    width: 40%;
+    padding: 20px;
+    min-width:100px;
+    background-color: #444444;
+    color: white;
+  }
+  .mat-app-background {
+    background-color: #303030;
+    color: #fff;
+    position: relative;
+}
+.add-circle{
+  margin-left: 10px;
+  cursor: pointer;
+}
+.btn{
+  background-color: #303030;
+  border: 1px solid white;
+}
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: white !important;
+ }
+
+ ::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: white !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+ /*change color of underline when focused*/
+ background-color: white !important;;
+}
+.container {
+  margin-top: 20px;
+  justify-content: space-between;
+  align-content: space-between;
+}
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
+  color: white;
+}
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow  {
+  color: white;
+}
+input, select, textarea{
+    color: #fff;
+}

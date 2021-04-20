@@ -156,13 +156,13 @@ export class BddService {
       while(cpt < seqTabTab.length) {
         seqTab = seqTabTab[cpt];
         if(seq.id === seqTab.id) {
-          sequencesReturn.push(seq)
+          sequencesReturn.push(seq);
           seqTab.selected = false;
           seqTabTab.splice(cpt,1);
         }
-        else cpt++
+        else cpt++;
       }
-      if(seqTabTab.length === 0) break
+      if(seqTabTab.length === 0) break;
     }
     return sequencesReturn;
   }
