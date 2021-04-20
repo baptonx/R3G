@@ -21,9 +21,10 @@ def add_labels(inkmltree, labels, dictclass):
     """on ajoute les annotations a l'arbre passe en param"""
     root = inkmltree.getroot()
     filelabels = open(labels, 'r')
+    unit = SubElement(root, 'unit')
     for line in filelabels:
         label = line[:-1].split(',')
-        annotation_xml = SubElement(root, 'annotationXML')
+        annotation_xml = SubElement(unit, 'annotationXML')
         annotation_xml.set('type', 'actions')
         annotation = SubElement(annotation_xml, 'annotation')
         annotation.set('type', 'type')
@@ -105,12 +106,9 @@ def recherche_fichier_label(path_dossier_label):
                 liste_fichier_label[filename] = path+'/'+filename
     
     return(liste_fichier_label)
-    print("label : ")
-    print(liste_fichier_label)
 
 def generate_database(liste_data, liste_label, tableau_classe,inkml_path_dossier, fps):
     for file_data in liste_data:
-        print(inkml_path_dossier + "/" + file_data[:-3] + "inkml")
         generatefile_inkml(liste_data[file_data], liste_label[file_data], tableau_classe,
                            inkml_path_dossier + "/" + file_data[:-3] + "inkml", fps)
         

@@ -15,14 +15,17 @@ def write_label(tree, flabel, fclass):
         tabtemp = line.split(';')
         dictclass[tabtemp[1]] = tabtemp[0]
     for child in root:
-        if child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-            if child.attrib == {'type': 'actions'}:
-                action = {}
-                nb_annotation += 1
-                for children in child:
-                    action[children.attrib['type']] = children.text
-                annotations[nb_annotation] = action
+        if child.tag == "{http://www.w3.org/2003/InkML}unit":
+            if child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+                if child.attrib == {'type': 'actions'}:
+                    action = {}
+                    nb_annotation += 1
+                    for children in child:
+                        action[children.attrib['type']] = children.text
+                    annotations[nb_annotation] = action
     print("dict : " + str(dictclass))
+    if(len(annotations)):
+        FLABEL = open(FILENAME + "_label.txt", "w")
     for id_elem in annotations:
         line = ""
         line += dictclass[annotations[id_elem]["type"]]
@@ -65,11 +68,9 @@ if __name__ == "__main__":
     TABCLASSPATH = sys.argv[2]
     FILENAME = os.path.splitext(os.path.basename(INKMLFILEPATH))[0]
     FDATA = open(FILENAME + "_data.txt", "w")
-    FLABEL = open(FILENAME + "_label.txt", "w")
-
     TREE = ET.parse(INKMLFILEPATH)
     TABCLASSFILE = open(TABCLASSPATH, "r")
-    write_label(TREE, FLABEL, TABCLASSFILE)
+    write_label(TREE, FILENAME + "_label.txt", TABCLASSFILE)
     write_data(TREE, FDATA)
     FDATA.close()
     FLABEL.close()

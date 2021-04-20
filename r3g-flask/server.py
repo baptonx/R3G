@@ -267,20 +267,21 @@ def get_meta_donnee(filename, bdd):
         if child.tag == "{http://www.w3.org/2003/InkML}traceFormat":
             for children in child:
                 format_donnee[children.attrib['name']] = children.attrib['type']
-        elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-            if child.attrib == {'type': 'actions'}:
-                action = {}
-                nb_annotation += 1
-                for children in child:
-                    action[children.attrib['type']] = children.text
-                annotations[nb_annotation] = action
-            else:
-                ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
-                other = {}
-                nb_others += 1
-                for children in child:
-                    other[children.attrib['type']] = children.text
-                others[child.attrib['type']] = other
+        elif child.tag == "{http://www.w3.org/2003/InkML}unit":
+            if child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+                if child.attrib == {'type': 'actions'}:
+                    action = {}
+                    nb_annotation += 1
+                    for children in child:
+                        action[children.attrib['type']] = children.text
+                    annotations[nb_annotation] = action
+                else:
+                    ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
+                    other = {}
+                    nb_others += 1
+                    for children in child:
+                        other[children.attrib['type']] = children.text
+                    others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             break
     metadonnee = {"id": name, "BDD": bdd, "format": format_donnee,
@@ -350,13 +351,30 @@ def route_add_bdd():
                 if namebdd not in LISTE_PATH_BDD:
                     LISTE_PATH_BDD[namebdd] = path
                     ajout_fichiers_inkml_in(path, namebdd)
-            save_config()
+                    save_config()
         root.destroy()
         return json.dumps(METADONNEE)
     except RuntimeError:
         print("tkinter bug")
         root.destroy()
         return json.dumps(METADONNEE)
+
+@APP.route('/models/addBDDwithpath/<path>')
+def route_add_bdd_path():
+    """add new path ddb"""
+    global LISTE_PATH_BDD
+    if path != "":
+        print(path)
+        p_2 = re.compile(r'[^/]*$')
+        namebdd = p_2.search(path)
+        if namebdd is not None:
+            namebdd = namebdd.group(0)
+            if namebdd not in LISTE_PATH_BDD:
+                LISTE_PATH_BDD[namebdd] = path
+                ajout_fichiers_inkml_in(path, namebdd)
+                save_config()
+    return json.dumps(METADONNEE)
+   
 
 
 @APP.route('/models/closeBDD/<name>')
