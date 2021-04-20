@@ -286,20 +286,21 @@ def get_meta_donnee(filename, bdd):
             for children in child:
                 format_donnee[children.attrib['name']] = children.attrib['type']
         elif child.tag == "{http://www.w3.org/2003/InkML}unit":
-            if child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-                if child.attrib == {'type': 'actions'}:
-                    action = {}
-                    nb_annotation += 1
-                    for children in child:
-                        action[children.attrib['type']] = children.text
-                    annotations[nb_annotation] = action
-                else:
-                    ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
-                    other = {}
-                    nb_others += 1
-                    for children in child:
-                        other[children.attrib['type']] = children.text
-                    others[child.attrib['type']] = other
+            for children2 in child:
+                if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+                    if children2.attrib == {'type': 'actions'}:
+                        action = {}
+                        nb_annotation += 1
+                        for children in children2:
+                            action[children.attrib['type']] = children.text
+                        annotations[nb_annotation] = action
+                    else:
+                        ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
+                        other = {}
+                        nb_others += 1
+                        for children in child:
+                            other[children.attrib['type']] = children.text
+                        others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             break
     metadonnee = {"id": name, "BDD": bdd, "format": format_donnee,
