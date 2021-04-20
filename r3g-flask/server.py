@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -98,6 +98,19 @@ def start_wandb_v2():
 def get_models_names():
     """Cette route permet de recuperer la liste des modeles disponible sur Wandb."""
     return json.dumps(MODEL_LIST)
+
+@APP.route('/models/getClasses/<bdd>')
+def get_classes(bdd):
+    """exemple : obtenir les classes de la BDD charlearn"""
+    bdd=bdd.replace('_inkml','')
+    ret=[]
+    if os.path.exists('./'+bdd+'/tabclass.txt'):
+        with open('./'+bdd+'/tabclass.txt') as file_content:
+            for line in file_content:
+                ret.append(line.split(';')[1].replace('\n',''))
+    else:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+    return json.dumps(ret)
 
 
 

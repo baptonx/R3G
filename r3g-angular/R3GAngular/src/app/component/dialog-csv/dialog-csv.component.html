@@ -5,7 +5,7 @@
 <ng-container *ngFor="let eltName of this.data.hyperparametersNumber">
     <mat-form-field class="mat-form">
       <p>{{eltName.name}}</p>
-    <input matInput [(ngModel)]="this.data.hyperparametersNumber[this.data.hyperparametersNumber.indexOf(eltName)].value">
+    <input autocomplete="off" matInput [(ngModel)]="this.data.hyperparametersNumber[this.data.hyperparametersNumber.indexOf(eltName)].value">
   </mat-form-field>
   </ng-container>
 
@@ -25,12 +25,12 @@
   </ng-container>
   <mat-form-field class="mat-form" >
     <p>subFolderFit</p>
-  <input matInput #subFolder>
+  <input matInput #subFolder autocomplete="off">
 </mat-form-field>
 
 <mat-form-field class="mat-form" >
   <p>pathWeight</p>
-<input matInput #pathWeight>
+<input matInput #pathWeight autocomplete="off">
 </mat-form-field>
 
 
