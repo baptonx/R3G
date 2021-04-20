@@ -16,7 +16,7 @@
     <annotation type="gender">Female</annotation>
     <annotation type="userId">564afd6e-d1e4-45c5-9d63-52d922957be8</annotation>
   </annotationXML>
-  <unit type="annotation">
+  <unit>
     <annotationXML type="actions">
       <annotation type="type">coup de poing droit</annotation>
       <annotation type="debut">10</annotation>
