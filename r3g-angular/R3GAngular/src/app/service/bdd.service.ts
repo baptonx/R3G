@@ -15,6 +15,7 @@ export class BddService {
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Sequence[]>;
   formatSequence: FormatDonnees = new FormatDonnees();
+  classesGestes:Array<String>=[];
 
   waitanswer: boolean = false;
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
@@ -26,6 +27,10 @@ export class BddService {
   notifyTableauService(): void{
     //console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
+  }
+
+  getClasses():void{
+    
   }
   answerWait(): void{
     this.waitanswer = true;
@@ -60,6 +65,7 @@ export class BddService {
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
         console.log(returnedData);
+        this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
   }
   closedb(dbname: string): void{
