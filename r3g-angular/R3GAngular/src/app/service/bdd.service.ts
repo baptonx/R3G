@@ -54,8 +54,13 @@ export class BddService {
   }
   addbddwithpath(path: string): void{
     this.answerWait();
+    console.log(path);
+    let str = [];
+    for(let i = 0; i< path.length; i++){
+      str.push(path.charCodeAt(i));
+    }
     this.http
-      .get<object>(`/models/addBDDwithpath/${path}` , {})
+      .get<object>(`/models/addBDDwithpath/${str}` , {})
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();

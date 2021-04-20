@@ -8,6 +8,7 @@ import sys
 import configparser
 import ast
 import tkinter.filedialog
+import unicodedata
 
 from os import walk
 import re
@@ -18,6 +19,7 @@ import wandb
 from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
+
 
 
 
@@ -254,6 +256,9 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
         for file in liste_fichier_in:
             metadonnes.append(get_meta_donnee(file, namebdd))
         METADONNEE[namebdd] = metadonnes
+        return True
+    else:
+        return False
 
 def suppresion_fichiers_inkml(bdd):
     """ferme une bdd """
@@ -362,9 +367,9 @@ def route_add_bdd():
             if namebdd is not None:
                 namebdd = namebdd.group(0)
                 if namebdd not in LISTE_PATH_BDD:
-                    LISTE_PATH_BDD[namebdd] = path
-                    ajout_fichiers_inkml_in(path, namebdd)
-                    save_config()
+                    if ajout_fichiers_inkml_in(path, namebdd):
+                        LISTE_PATH_BDD[namebdd] = path
+                        save_config()
         root.destroy()
         return json.dumps(METADONNEE)
     except RuntimeError:
@@ -373,19 +378,21 @@ def route_add_bdd():
         return json.dumps(METADONNEE)
 
 @APP.route('/models/addBDDwithpath/<path>')
-def route_add_bdd_path():
+def route_add_bdd_path(path):
     """add new path ddb"""
     global LISTE_PATH_BDD
-    if path != "":
-        print(path)
+    strpath = ""
+    for char in path.split(','):
+        strpath += chr(int(char))
+    if strpath != "":
         p_2 = re.compile(r'[^/]*$')
-        namebdd = p_2.search(path)
+        namebdd = p_2.search(strpath)
         if namebdd is not None:
             namebdd = namebdd.group(0)
             if namebdd not in LISTE_PATH_BDD:
-                LISTE_PATH_BDD[namebdd] = path
-                ajout_fichiers_inkml_in(path, namebdd)
-                save_config()
+                if ajout_fichiers_inkml_in(path, namebdd):
+                        LISTE_PATH_BDD[namebdd] = path
+                        save_config()
     return json.dumps(METADONNEE)
    
 
