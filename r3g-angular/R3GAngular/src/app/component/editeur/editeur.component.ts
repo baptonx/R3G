@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { BddService } from 'src/app/service/bdd.service';
 
 @Component({
@@ -11,14 +13,21 @@ import { BddService } from 'src/app/service/bdd.service';
 export class EditeurComponent implements OnInit {
   isLinear = false;
   classeGeste:Array<String>=[];
+  dataSource!: MatTableDataSource<String>;
+  displayedColumns=['Geste','Couleur']
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(public http:HttpClient,public bdd:BddService) {}
-
-  ngOnInit() {
-    this.http.get<Array<String>>('/models/getClasses/'+this.bdd.bddnames,{}).subscribe((returnedData: Array<String>) => this.classeGeste = returnedData);
+  constructor(public http:HttpClient,public bdd:BddService) {
+    this.classeGeste=this.bdd.classesGestes;
+    this.dataSource = new MatTableDataSource<String>(this.classeGeste);
+    console.log(this.dataSource)
   }
 
-  ngAfterInit(){
-    
+  ngOnInit() {
+   
+  }
+
+  ngAfterViewInit(){
+    this.dataSource.paginator = this.paginator;
   }
 }

@@ -1,4 +1,4 @@
-<mat-vertical-stepper [linear]="isLinear" #stepper>
+<div class='table'><mat-vertical-stepper [linear]="isLinear" #stepper position='absolute'>
     <mat-step>
       <form>
         <ng-template matStepLabel>Editeur</ng-template>
@@ -19,7 +19,7 @@
           <div>
             <mat-form-field>
               <mat-label>Fin</mat-label>
-              <input matInput  #fin autocomplete="off"> 
+              <input matInput  autocomplete="off" #fin> 
             </mat-form-field>
           </div>
           <div>
@@ -31,14 +31,29 @@
       </form>
     </mat-step>
     <mat-step>
-      <form>
         <ng-template matStepLabel>Classe de gestes</ng-template>
-        <mat-form-field>
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                 required>
-        </mat-form-field>
-      </form>
+        <table mat-table matSort [dataSource]="dataSource">
+  
+            <!-- Position Column -->
+            <ng-container matColumnDef="Geste">
+                <th mat-header-cell *matHeaderCellDef> Geste </th>
+                <td mat-cell *matCellDef="let geste"> {{geste}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Couleur">
+                <th mat-header-cell  class='align' *matHeaderCellDef> Couleur </th>
+                <td mat-cell *matCellDef="let geste"> 
+                  <input matInput class='cell'> </td>
+              </ng-container>
+        
+        
+        
+          
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[3,5]"></mat-paginator>
+      
     </mat-step>
 
-  </mat-vertical-stepper>
+  </mat-vertical-stepper></div>
