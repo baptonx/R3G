@@ -1,15 +1,12 @@
-import * as THREE from 'three';
 import {ElementRef, Injectable, NgZone, OnDestroy} from '@angular/core';
-import {AnimationAction, AnimationClip, AnimationMixer, Clock, NumberKeyframeTrack, VectorKeyframeTrack} from 'three';
+import * as THREE from 'three';
+import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
+import {AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
-import {MatSlider} from '@angular/material/slider';
-import {TimelineService} from '../timeline/timeline.service';
-import {AnnotationService} from '../../module/annotation/annotation.service';
-import {MatButtonToggle} from '@angular/material/button-toggle';
-import {BddService} from '../../service/bdd.service';
-import {SequencesChargeesService} from '../../service/sequences-chargees.service';
 import {Sequence} from '../../class/commun/sequence';
+import {AnnotationService} from '../../module/annotation/annotation.service';
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
+import {ExplorationService} from '../../module/exploration/exploration.service';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -23,8 +20,12 @@ interface MaSceneElement {
 }
 
 
-@Injectable()
-export class EngineService implements OnDestroy {
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EngineExplorationService implements OnDestroy {
+  private listElementHtmlRefresh: Array<ElementRef<HTMLCanvasElement>> = [];
   private canvas!: HTMLCanvasElement;
   private renderer!: THREE.WebGLRenderer;
   public sceneElements: Array<MaSceneElement> = [];
@@ -36,8 +37,8 @@ export class EngineService implements OnDestroy {
   public tabTimeCurrent!: Array<number>;
   public facteurGrossissement = 1.5;
 
-  constructor(private ngZone: NgZone, public annotationServ: AnnotationService, public sequencesChargeesService: SequencesChargeesService) {
-      this.annotationServ.pauseAction = true;
+  constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public sequencesChargeesService: SequencesChargeesService) {
+    this.explorationServ.pauseAction = true;
   }
 
   public ngOnDestroy(): void {
@@ -46,11 +47,13 @@ export class EngineService implements OnDestroy {
     }
   }
 
-  public initialize(canvas: ElementRef<HTMLCanvasElement>, listElementHtml: Array<ElementRef<HTMLCanvasElement>>): void {
+  public initialize(canvas: ElementRef<HTMLCanvasElement>|undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>>|undefined, refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
-    this.canvas = canvas.nativeElement;
+    if (refresh === false && canvas !== undefined) {
+      this.canvas = canvas.nativeElement;
+    }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -104,10 +107,10 @@ export class EngineService implements OnDestroy {
               tabPosXYZ,
             );
             tabPositionArticulation.push(positionArticulation);
-            this.annotationServ.tempsTotal = tabTime[tabTime.length - 1];
+            this.explorationServ.tempsTotal = tabTime[tabTime.length - 1];
           }
 
-          console.log('temps total : ' + this.annotationServ.tempsTotal);
+          console.log('temps total : ' + this.explorationServ.tempsTotal);
           this.clip = new AnimationClip('move', -1, tabPositionArticulation);
 
           /*
@@ -135,9 +138,9 @@ export class EngineService implements OnDestroy {
 
         scene.add(this.squelette.root);
         const mixer = new AnimationMixer(this.squelette.root);
-        this.annotationServ.action = mixer.clipAction(this.clip);
-        this.annotationServ.action.loop = THREE.LoopOnce;
-        this.annotationServ.action.clampWhenFinished = true;
+        this.explorationServ.action = mixer.clipAction(this.clip);
+        this.explorationServ.action.loop = THREE.LoopOnce;
+        this.explorationServ.action.clampWhenFinished = true;
         // this.action.time = 4;
         // this.clip.duration = this.action.time;
         // action.play();
@@ -145,7 +148,7 @@ export class EngineService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.annotationServ.draw();
+          this.explorationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;
@@ -176,22 +179,49 @@ export class EngineService implements OnDestroy {
       },*/
     };
 
-    for (const element of listElementHtml) {
-      const sceneName = element.nativeElement.dataset.diagram;
-      // let key: 'box'|'pyramid' = 'box';
-      let key: 'box' = 'box';
-      if (sceneName === 'box') {
-        key = 'box';
+    if (refresh === false && listElementHtml !== undefined) {
+      for (const element of listElementHtml) {
+        this.listElementHtmlRefresh.push(element);
+        console.log(this.listElementHtmlRefresh);
+        const sceneName = element.nativeElement.dataset.diagram;
+        // let key: 'box'|'pyramid' = 'box';
+        let key: 'box' = 'box';
+        if (sceneName === 'box') {
+          key = 'box';
+        }
+        /*
+        else if (sceneName === 'pyramid') {
+          key = 'pyramid';
+        }
+         */
+        const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
+        const sceneRenderFunction = sceneInitFunction(element.nativeElement);
+        this.addScene(element, sceneRenderFunction);
       }
-      /*
-      else if (sceneName === 'pyramid') {
-        key = 'pyramid';
-      }
-       */
-      const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
-      const sceneRenderFunction = sceneInitFunction(element.nativeElement);
-      this.addScene(element, sceneRenderFunction);
     }
+    else {
+      console.log(this.listElementHtmlRefresh);
+      for (const element of this.listElementHtmlRefresh) {
+        const sceneName = element.nativeElement.dataset.diagram;
+        // let key: 'box'|'pyramid' = 'box';
+        let key: 'box' = 'box';
+        if (sceneName === 'box') {
+          key = 'box';
+        }
+        /*
+        else if (sceneName === 'pyramid') {
+          key = 'pyramid';
+        }
+         */
+        const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
+        const sceneRenderFunction = sceneInitFunction(element.nativeElement);
+        this.addScene(element, sceneRenderFunction);
+      }
+    }
+  }
+
+  public refreshInitialize(): void {
+    this.initialize(undefined, undefined, true);
   }
 
   public addScene(elem: ElementRef<HTMLCanvasElement>, fn: (rect: DOMRect) => void): void {
@@ -310,74 +340,74 @@ export class EngineService implements OnDestroy {
   }
 
   public play(): void {
-      if (this.annotationServ.pauseAction === true) {
-        this.playForward();
-      }
-      else {
-        this.annotationServ.action.timeScale = 1;
-        this.annotationServ.pauseAction = true;
-        this.clip.duration = this.annotationServ.action.time;
-        this.annotationServ.action.play();
-      }
+    if (this.explorationServ.pauseAction === true) {
+      this.playForward();
+    }
+    else {
+      this.explorationServ.action.timeScale = 1;
+      this.explorationServ.pauseAction = true;
+      this.clip.duration = this.explorationServ.action.time;
+      this.explorationServ.action.play();
+    }
   }
 
   public playForward(): void {
-    this.annotationServ.pauseAction = false;
-    const t = this.annotationServ.action.time;
-    this.annotationServ.action.stop();
-    this.annotationServ.action.time = t;
-    this.clip.duration = this.annotationServ.tempsTotal;
-    this.annotationServ.action.timeScale = 1;
-    this.annotationServ.action.play();
+    this.explorationServ.pauseAction = false;
+    const t = this.explorationServ.action.time;
+    this.explorationServ.action.stop();
+    this.explorationServ.action.time = t;
+    this.clip.duration = this.explorationServ.tempsTotal;
+    this.explorationServ.action.timeScale = 1;
+    this.explorationServ.action.play();
   }
 
   public playBackward(): void {
-    this.annotationServ.pauseAction = false;
-    const t = this.annotationServ.action.time;
-    this.annotationServ.action.stop();
-    this.annotationServ.action.time = t;
-    this.clip.duration = this.annotationServ.tempsTotal;
+    this.explorationServ.pauseAction = false;
+    const t = this.explorationServ.action.time;
+    this.explorationServ.action.stop();
+    this.explorationServ.action.time = t;
+    this.clip.duration = this.explorationServ.tempsTotal;
     // this.annotationServ.action.setLoop(THREE.LoopOnce);
-    this.annotationServ.action.timeScale = -1;
-    this.annotationServ.action.play();
+    this.explorationServ.action.timeScale = -1;
+    this.explorationServ.action.play();
   }
 
   public stopToStart(): void {
-      this.annotationServ.action.timeScale = 1;
-      this.annotationServ.action.stop();
-      this.annotationServ.action.time = 0;
-      this.clip.duration = 0;
-      this.annotationServ.action.play();
-      this.annotationServ.pauseAction = true;
+    this.explorationServ.action.timeScale = 1;
+    this.explorationServ.action.stop();
+    this.explorationServ.action.time = 0;
+    this.clip.duration = 0;
+    this.explorationServ.action.play();
+    this.explorationServ.pauseAction = true;
   }
 
   public stopToEnd(): void {
-    this.annotationServ.action.timeScale = 1;
-    this.annotationServ.action.stop();
-    this.annotationServ.action.time = this.annotationServ.tempsTotal;
-    this.clip.duration = this.annotationServ.tempsTotal;
-    this.annotationServ.action.play();
-    this.annotationServ.pauseAction = true;
+    this.explorationServ.action.timeScale = 1;
+    this.explorationServ.action.stop();
+    this.explorationServ.action.time = this.explorationServ.tempsTotal;
+    this.clip.duration = this.explorationServ.tempsTotal;
+    this.explorationServ.action.play();
+    this.explorationServ.pauseAction = true;
   }
 
   public pause(): void {
-      this.annotationServ.pauseAction = true;
-      this.clip.duration = this.annotationServ.action.time;
-      this.annotationServ.action.play();
+    this.explorationServ.pauseAction = true;
+    this.clip.duration = this.explorationServ.action.time;
+    this.explorationServ.action.play();
   }
 
   updateActionFrame(event: any): void {
     const frameEditText = Number(event.target.value);
     if (frameEditText >= 0 && frameEditText < this.tabTimeCurrent.length) {
-      this.annotationServ.action.time = this.convertFrameToTime(frameEditText);
+      this.explorationServ.action.time = this.convertFrameToTime(frameEditText);
     }
   }
 
   updateActionTime(event: any): void {
-      const timeEditText = Number(event.target.value);
-      if (timeEditText >= 0 && timeEditText <= this.annotationServ.tempsTotal) {
-        this.annotationServ.action.time = timeEditText;
-      }
+    const timeEditText = Number(event.target.value);
+    if (timeEditText >= 0 && timeEditText <= this.explorationServ.tempsTotal) {
+      this.explorationServ.action.time = timeEditText;
+    }
   }
 
   public resetCamera(): void {
@@ -400,7 +430,7 @@ export class EngineService implements OnDestroy {
   }
 
   public convertTimeToFrame(time: number): number {
-    if (time >= 0 && time < this.annotationServ.tempsTotal) {
+    if (time >= 0 && time < this.explorationServ.tempsTotal) {
       for (let i = 0; i < this.tabTimeCurrent.length; i++) {
         if (this.tabTimeCurrent[i] >= time) {
           return i;
@@ -409,5 +439,4 @@ export class EngineService implements OnDestroy {
     }
     return 0;
   }
-
 }

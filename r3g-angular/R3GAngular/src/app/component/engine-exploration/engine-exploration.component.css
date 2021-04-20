@@ -1,0 +1,52 @@
+#renderCanvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: -1;
+}
+
+
+.engine-wrapper {
+  position: absolute;
+  z-index: 0;
+}
+
+#renderCanvas {
+  touch-action: none;
+}
+
+#renderCanvas:focus {
+  outline: none;
+}
+
+
+*[data-diagram] {
+  display: inline-block;
+  width: 70em;
+  height: 30em;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/*
+.left {
+  float: left;
+  margin-right: .25em;
+}
+.right {
+  float: right;
+  margin-left: .25em;
+}
+
+ */
+
+.barButtonsEngine {
+  position: absolute;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 10em;
+}
+
