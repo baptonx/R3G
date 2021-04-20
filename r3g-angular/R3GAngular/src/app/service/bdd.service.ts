@@ -15,8 +15,7 @@ export class BddService {
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Sequence[]>;
   formatSequence: FormatDonnees = new FormatDonnees();
-
-  waitanswer: boolean = false;
+  waitanswer: boolean = true;
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
     this.sequences = [];
     this.notifyTableauService();
@@ -24,7 +23,6 @@ export class BddService {
   }
 
   notifyTableauService(): void{
-    //console.log(this.sequences);
     this.tableauExpl.updateAll(this.sequences);
   }
   answerWait(): void{
@@ -49,6 +47,15 @@ export class BddService {
     this.answerWait();
     this.http
       .get<object>('/models/addBDD' , {})
+      .subscribe((returnedData: any) => {
+        this.miseajourdb(returnedData);
+        this.answerHere();
+      });
+  }
+  addbddwithpath(path: string): void{
+    this.answerWait();
+    this.http
+      .get<object>(`/models/addBDDwithpath/${path}` , {})
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();

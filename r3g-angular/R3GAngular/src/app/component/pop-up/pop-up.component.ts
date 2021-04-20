@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogData} from '../../module/exploration/exploration.component';
 
 @Component({
-  selector: 'app-pop-up',
-  templateUrl: './pop-up.component.html',
-  styleUrls: ['./pop-up.component.css']
+  selector: 'pop-up',
+  templateUrl: 'pop-up.component.html',
 })
-export class PopUpComponent implements OnInit {
+export class PopUpComponent {
 
-  constructor() { }
+  constructor(
+    public dialogRef: MatDialogRef<PopUpComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
-  ngOnInit(): void {
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }
