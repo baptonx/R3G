@@ -390,8 +390,8 @@ def route_add_bdd_path(path):
         if namebdd is not None:
             namebdd = namebdd.group(0)
             if namebdd not in LISTE_PATH_BDD:
-                if ajout_fichiers_inkml_in(path, namebdd):
-                        LISTE_PATH_BDD[namebdd] = path
+                if ajout_fichiers_inkml_in(strpath, namebdd):
+                        LISTE_PATH_BDD[namebdd] = strpath
                         save_config()
     return json.dumps(METADONNEE)
    
