@@ -138,7 +138,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      //his.animal = result;
+      this.explService.filtres.push(result.filter);
+      this.explService.filteredList = this.explService.sequences;
+      this.explService.filteredList = this.explService.filteredList.filter(result.filter);
     });
   }
 }

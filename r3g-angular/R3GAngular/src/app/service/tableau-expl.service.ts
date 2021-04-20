@@ -37,6 +37,10 @@ export class TableauExplService {
   observableSequences: BehaviorSubject<sequencesTab[]>;
   displayedColumns: string[] = new Array<string>();
   observableColumns: BehaviorSubject<string[]>;
+
+  //Filtres
+  filtres: Array<Function> = [];
+  filteredList: sequencesTab[] = [];
   constructor() {
     this.sequences = new Array<sequencesTab>();
     this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
@@ -67,7 +71,7 @@ export class TableauExplService {
         this.sequences.push(dataCourante);
       }
     }
-    console.log(this.sequences);
     this.observableSequences.next(this.sequences);
   }
+
 }

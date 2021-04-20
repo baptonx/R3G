@@ -1,7 +1,7 @@
 <form class="operand-form">
   <mat-form-field class="mat-form-field-operand">
     <mat-label>Operande</mat-label>
-    <input type="text"
+    <input #operandeInput type="text"
            placeholder="Pick one"
            aria-label="Number"
            matInput
@@ -16,7 +16,7 @@
 
   <mat-form-field class="operator-form">
     <mat-label>Operateur</mat-label>
-    <input type="text"
+    <input #operateurInput type="text"
            placeholder="Pick one"
            aria-label="Number"
            matInput
@@ -31,9 +31,9 @@
 
   <mat-form-field>
     <mat-label>Result</mat-label>
-    <input type="text"
+    <input #resultInput type="text"
            aria-label="Number"
            matInput>
   </mat-form-field>
 </form>
-<button class="button-submit" mat-button>Ajouter le filtre</button>
+<button class="button-submit" (click)="close()" mat-button>Ajouter le filtre</button>
