@@ -18,16 +18,17 @@ export class ChoixColonnesService {
     }
     this.bdd.observableSequences.subscribe((sequence) => {
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
-      console.log(this.bdd.formatSequence);
     })
   }
 
+  //cree l'arboresecence de noeud (pour les choix des colonnes) a partir du format des sequences de la BDD
   public updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol, path: string) {
     let estPresent: boolean = false;
     for (let child of formatSequence.children) {
+      estPresent = false;
       if(node.children != null) {
         for(let childNode of node.children) {
-          if(childNode.name === child.value) estPresent = true;
+          if(childNode.name === child.value) estPresent = true; //Si child est deja dans les fils des noeuds
         }
       }
       if(!estPresent) {

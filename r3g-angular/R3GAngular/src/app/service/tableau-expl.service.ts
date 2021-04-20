@@ -67,10 +67,9 @@ export class TableauExplService {
   updateAll(tabSequences: Array<Sequence>): void {
     this.sequences = new Array<sequencesTab>();
     let dataCourante: sequencesTab;
-    console.log(tabSequences);
     for(let i=0; i<tabSequences.length; i++){
       dataCourante = new sequenceTabImpl(tabSequences[i].id,{});
-      if(typeof tabSequences[i].metaDonnees === 'object' && 'annotation' in tabSequences[i].metaDonnees) {
+      if('annotation' in tabSequences[i].metaDonnees) {
         if(typeof tabSequences[i].metaDonnees['annotation'] === 'object') {
           if(Object.keys(tabSequences[i].metaDonnees.annotation).length === 0) {
             dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
@@ -80,9 +79,9 @@ export class TableauExplService {
           }
           for(let [key, value] of Object.entries(tabSequences[i].metaDonnees.annotation)) {
              if(typeof value === 'object' && value != null) {
-               dataCourante.push(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
+               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
              }
-             dataCourante.push(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
+             dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
              if(dataCourante != null) {
                this.sequences.push(dataCourante);
              }
@@ -101,9 +100,6 @@ export class TableauExplService {
         }
       }
     }
-    console.log(this.sequences);
-    console.log(this.sequences[0]);
-    console.log(this.allAttributes);
     this.observableSequences.next(this.sequences);
   }
 

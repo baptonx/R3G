@@ -57,7 +57,6 @@ export class ChoixColonneComponent implements OnInit {
   afficherDonneees(event: any) {
 
     let word = this.searchInput.nativeElement.value;
-    console.log(word);
     if(word !== undefined) {
       if(word === "") {
         for(let i=0 ; i<this.donneesTabulees.length; i++) {
@@ -66,14 +65,9 @@ export class ChoixColonneComponent implements OnInit {
       }
       else {
         for(let i=0; i<this.donneesTabulees.length; i++) {
-          console.log(word)
           this.afficheDonnee[i] = (this.donneesTabulees[i].path + '.'+this.donneesTabulees[i].name).includes(word)?true:false;
-          console.log(this.donneesTabulees[i].path + " and "+word+"          "+this.afficheDonnee[i])
         }
       }
-    }
-    else {
-      console.log("undefined");
     }
   }
 

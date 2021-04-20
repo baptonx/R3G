@@ -33,11 +33,9 @@ export class BddService {
   }
   answerWait(): void{
     this.waitanswer = true;
-    console.log(true);
   }
   answerHere(): void{
     this.waitanswer = false;
-    console.log(false);
   }
   setMetaData(): void{
     this.answerWait();
@@ -60,7 +58,6 @@ export class BddService {
   }
   addbddwithpath(path: string): void{
     this.answerWait();
-    console.log(path);
     let str = [];
     for(let i = 0; i< path.length; i++){
       str.push(path.charCodeAt(i));
@@ -77,7 +74,6 @@ export class BddService {
       .get<Array<string>>(`/models/getListBDD` , {})
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
-        console.log(returnedData);
         this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
   }
@@ -87,7 +83,6 @@ export class BddService {
       .get<object>(`/models/closeBDD/${dbname}` , {})
       .subscribe((returnedData: any) => {
         this.getlistdb();
-        console.log(returnedData);
         this.miseajourdb(returnedData);
         this.answerHere();
       });
@@ -104,7 +99,6 @@ export class BddService {
         }
       }
     }
-    console.log(this.sequences);
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
@@ -149,7 +143,6 @@ export class BddService {
         }
       }
     }
-    console.log(this.formatSequence);
   }
 
   private ajouterFormat(metaDonnees: object, path: string[]) {

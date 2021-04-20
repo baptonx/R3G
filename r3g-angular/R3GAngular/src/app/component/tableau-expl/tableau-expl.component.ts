@@ -105,11 +105,8 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   ajouterSequencesSelectionnees() {
     let seqSelectionee = this.bddService.chercherSequenceTableau(this.selectionListe);
     this.allComplete = false;
-    console.log("sequences trouvees");
     this.bddService.getDonnee(seqSelectionee);
-    console.log("getDonnees");
     this.sequenceChargees.addToList(seqSelectionee);
-    console.log("added to list");
   }
 
   someComplete(): boolean {
@@ -137,7 +134,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.explService.filtres.push(result.filter);
       this.explService.filteredList = this.explService.sequences;
       this.explService.filteredList = this.explService.filteredList.filter(result.filter);
