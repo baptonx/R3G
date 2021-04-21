@@ -17,7 +17,10 @@ export class ChoixColonnesService {
       this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
     }
     this.bdd.observableSequences.subscribe((sequence) => {
+      this.node = {name: "root", path:"", completed: false, children: []};
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
+      console.log(this.bdd.formatSequence);
+      console.log(this.node);
     })
   }
 

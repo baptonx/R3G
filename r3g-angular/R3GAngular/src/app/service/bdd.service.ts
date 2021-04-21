@@ -140,8 +140,8 @@ export class BddService {
       this.ajouterFormat(this.sequences[i].metaDonnees, []);
       for(const [key, value] of Object.entries(this.sequences[i].metaDonnees.annotation)) {
         if(typeof value === 'object' && value != null) {
+          this.formatSequence.add(['annotation','idGeste']);
           this.ajouterFormat(value, ['annotation']);
-          this.ajouterFormat({'id-geste': 1},['annotation','id-geste']);
         }
       }
     }
