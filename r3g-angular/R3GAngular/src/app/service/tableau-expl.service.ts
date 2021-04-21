@@ -4,6 +4,7 @@ import {BehaviorSubject} from 'rxjs';
 
 export interface sequencesTab {
   id: string;
+  geste?:string;
   selected: boolean;
   [key: string]: any;
 }
@@ -11,8 +12,9 @@ export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
   selected: boolean = false;
   id: string;
+  geste?: string;
 
-  constructor(ident: string, metadonnees: object) {
+  constructor(ident: string, metadonnees: object, geste: string|null = null) {
     this.id = ident;
     for (const [k, value] of Object.entries(metadonnees)){
       this[k] = value;
@@ -34,6 +36,7 @@ export class sequenceTabImpl implements sequencesTab{
 export class TableauExplService {
   //sequences a afficher (format lineaire)
   sequences: Array<sequencesTab>;
+  selectionListe: Array<sequencesTab>;
   observableSequences: BehaviorSubject<sequencesTab[]>;
   displayedColumns: string[] = new Array<string>();
   observableColumns: BehaviorSubject<string[]>;
@@ -43,6 +46,7 @@ export class TableauExplService {
   filtres: Array<Function> = [];
   filteredList: sequencesTab[] = [];
   constructor() {
+    this.selectionListe = new Array<sequencesTab>();
     this.sequences = new Array<sequencesTab>();
     this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
     this.observableColumns = new BehaviorSubject<string[]>(this.displayedColumns);
@@ -73,18 +77,17 @@ export class TableauExplService {
         if(typeof tabSequences[i].metaDonnees['annotation'] === 'object') {
           if(Object.keys(tabSequences[i].metaDonnees.annotation).length === 0) {
             dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
-            if(dataCourante != null) {
-              this.sequences.push(dataCourante);
-            }
+            this.sequences.push(dataCourante);
           }
-          for(let [key, value] of Object.entries(tabSequences[i].metaDonnees.annotation)) {
+          for(let [key,value] of Object.entries(tabSequences[i].metaDonnees.annotation)) {
+            dataCourante = new sequenceTabImpl(tabSequences[i].id,{}, key);
+              dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
              if(typeof value === 'object' && value != null) {
                dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
+               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', {'id-geste': key}));
+               console.log(dataCourante);
              }
-             dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
-             if(dataCourante != null) {
-               this.sequences.push(dataCourante);
-             }
+              this.sequences.push(dataCourante);
           }
         }
         else {

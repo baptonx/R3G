@@ -4,20 +4,23 @@
   <button mat-icon-button aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menuExplo"><!--(click)="drawerExplo.toggle()"-->
     <mat-menu #menuExplo="matMenu">
       <button mat-menu-item [matMenuTriggerFor]="addPath">Importer une BDD</button>
-      <button mat-menu-item [matMenuTriggerFor]="listbddreload">Recharger une BDD</button>
-      <button mat-menu-item [matMenuTriggerFor]="listclosebdd">fermer une BDD</button>
+      <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listbddreload">Recharger une BDD</button>
+      <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listclosebdd">fermer une BDD</button>
       <button mat-menu-item>Charger une IA</button>
-      <button mat-menu-item>Exporter les séquences sélectionnées</button>
+      <button mat-menu-item *ngIf="this.bdd.tableauExpl.selectionListe.length !== 0" [matMenuTriggerFor]="listexporter">Exporter les séquences sélectionnées</button>
     </mat-menu>
     <mat-menu #addPath="matMenu">
       <button mat-menu-item (click)="openDialog()">à partir d'un path</button>
       <button mat-menu-item (click)="addPathBDD()">via le serveur</button>
     </mat-menu>
-    <mat-menu #listbddreload="matMenu">
+    <mat-menu  #listbddreload="matMenu">
       <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="reloadDB(bddname)">{{bddname}}</button>
     </mat-menu>
     <mat-menu #listclosebdd="matMenu">
       <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="closeDB(bddname)">{{bddname}}</button>
+    </mat-menu>
+    <mat-menu #listexporter="matMenu">
+      <button mat-menu-item  *ngFor="let sequenceselect of this.bdd.tableauExpl.selectionListe">{{sequenceselect.id}}</button>
     </mat-menu>
 
 
@@ -90,9 +93,10 @@
     <mat-tab label="Graphique">Graphique</mat-tab>
   </mat-tab-group>
 </mat-drawer-container>
+
+  <app-engine-exploration></app-engine-exploration>
+  <app-timeline-exploration></app-timeline-exploration>
 </div>
 
-<app-engine-exploration></app-engine-exploration>
-<app-timeline-exploration></app-timeline-exploration>
 <!--<app-visualitation-explo [style.display]="this.visuService.componentHidden?'none':'block'"></app-visualitation-explo>-->
 <app-navigation-modules></app-navigation-modules>

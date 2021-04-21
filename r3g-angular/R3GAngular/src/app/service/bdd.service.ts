@@ -102,6 +102,7 @@ export class BddService {
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
+    console.log(this.sequences);
     this.observableSequences.next(this.sequences);
   }
   reloaddb(dbname: string): void{
@@ -140,6 +141,7 @@ export class BddService {
       for(const [key, value] of Object.entries(this.sequences[i].metaDonnees.annotation)) {
         if(typeof value === 'object' && value != null) {
           this.ajouterFormat(value, ['annotation']);
+          this.ajouterFormat({'id-geste': 1},['annotation','id-geste']);
         }
       }
     }
