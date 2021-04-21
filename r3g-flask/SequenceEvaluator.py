@@ -93,9 +93,8 @@ for seq in listeSeq:
     rejection = " ".join(["{:.2f}".format(e) for e in rejection])
     f = open(pathFolderOut+seq,"w+")
     listeFinaleTemporelle = []
-    for index,e in enumerate(repeat):
-        for i in range(e):
-            listeFinaleTemporelle.append(prediction[index])
+    for index,e in enumerate(prediction):
+        listeFinaleTemporelle.append(str(e)+";"+str(repeat[index]))
     prediction = " ".join([str(e) for e in listeFinaleTemporelle])
     f.write(str(rejection)+"\n"+str(prediction))
     f.close()

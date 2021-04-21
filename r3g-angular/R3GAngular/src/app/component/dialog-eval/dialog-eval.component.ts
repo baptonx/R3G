@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Annotation } from 'src/app/class/commun/annotation/annotation';
 import { Model } from 'src/app/class/evaluation/model';
 import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
@@ -32,19 +33,17 @@ export class DialogEvalComponent implements OnInit {
   eval():void{
     if(this.model!=null){
       this.chargement='Evaluation en cours, veuillez patienter.'
-    this.http.get('/models/evaluation/'+this.bdd.bddnames+'/'+this.sequences+'/'+this.model).subscribe(
-    (response: any) => {
-      console.log(response)
-      this.chargement='Evaluation terminée'
-      this.sequencesChargees.evaluation=response;
-      if (this.sequencesChargees.evaluation.length == 0) {
-          this.chargement= 'Mauvais format de squelette'
-      }
-    },
-    (error: any) => {
-      console.log(error)
-      this.chargement='Echec de l\'évaluation'
-  });
+    this.http.get<Map<String,Array<Annotation>>>('/models/evaluation/'+this.bdd.bddnames+'/'+this.sequences+'/'+this.model).subscribe(
+      (returnedData: Map<String,Array<Annotation>>) =>{
+        this.sequencesChargees.evaluation = returnedData;
+        this.chargement='Evaluation terminée'
+        console.log(returnedData)
+
+      },
+      (error: any) => {
+        console.log(error)
+        this.chargement='Echec de l\'évaluation'
+    });
     }
 }
 }
