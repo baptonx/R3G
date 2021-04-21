@@ -1,8 +1,8 @@
 <div class="tab-container">
     <mat-form-field appearance="fill">
       <mat-label>Choisir une séquence</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let s of sequencesList" [value]="s">
+      <mat-select (valueChange)="changeValue($event)">
+        <mat-option *ngFor="let s of sequencesList" [value]="s" >
           {{s}}
         </mat-option>
       </mat-select>
