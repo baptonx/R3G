@@ -4,6 +4,7 @@ import {BehaviorSubject} from 'rxjs';
 
 export interface sequencesTab {
   id: string;
+  geste?:string;
   selected: boolean;
   [key: string]: any;
 }
@@ -11,8 +12,9 @@ export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
   selected: boolean = false;
   id: string;
+  geste?: string;
 
-  constructor(ident: string, metadonnees: object) {
+  constructor(ident: string, metadonnees: object, geste: string|null = null) {
     this.id = ident;
     for (const [k, value] of Object.entries(metadonnees)){
       this[k] = value;
@@ -77,14 +79,15 @@ export class TableauExplService {
             dataCourante = this.ajouterMetadonnee(tabSequences[i].id,'',tabSequences[i].metaDonnees);
             this.sequences.push(dataCourante);
           }
-          for(let value of Object.values(tabSequences[i].metaDonnees.annotation)) {
+          for(let [key,value] of Object.entries(tabSequences[i].metaDonnees.annotation)) {
+            dataCourante = new sequenceTabImpl(tabSequences[i].id,{}, key);
+              dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
              if(typeof value === 'object' && value != null) {
                dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
+               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', {'id-geste': key}));
+               console.log(dataCourante);
              }
-            if(dataCourante != null) {
-              dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
               this.sequences.push(dataCourante);
-            }
           }
         }
         else {

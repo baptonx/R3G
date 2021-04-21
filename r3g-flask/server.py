@@ -8,7 +8,6 @@ import sys
 import configparser
 import ast
 import tkinter.filedialog
-import unicodedata
 
 from os import walk
 import re
@@ -19,6 +18,7 @@ import wandb
 from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
+from Class.Annotation import Annotation
 
 
 
@@ -28,6 +28,7 @@ APP = Flask(__name__)
 API = wandb.Api()
 RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
+CLASSES = []
 LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
 METADONNEE = {}
@@ -110,6 +111,7 @@ def get_classes(bdd):
         with open('./'+bdd+'/tabclass.txt') as file_content:
             for line in file_content:
                 ret.append(line.split(';')[1].replace('\n',''))
+                CLASSES.append(line.split(';')[1].replace('\n',''))
     else:
         return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     return json.dumps(ret)
@@ -158,6 +160,8 @@ def evaluation(name,sequences,model):
     download_weights(model)
     name=name.replace('_inkml','')
     seq=sequences.split(',')
+    if len(CLASSES) == 0:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
             os.remove('./Sequences/'+fichier)
@@ -173,10 +177,19 @@ def evaluation(name,sequences,model):
         elt.replace('.inkml','')+'.txt')
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
     "Weigths/"+model+'/weights/'])
-    ret = []
+    ret = {}
     for file in os.listdir('./EvaluationSequences/'):
         with open('./EvaluationSequences/' + file) as file_content:
-            ret.append(file_content.readlines()[1])
+            frame = 0
+            liste_annotation = []
+            tab = file_content.readlines()[1].split(' ')
+            for elt in tab:
+                id_geste=elt.split(';')[0]
+                nb_frame=elt.split(';')[1]
+                annotation = Annotation(frame,frame+int(nb_frame),0,CLASSES[int(id_geste)])
+                frame = frame + int(nb_frame)
+                liste_annotation.append(annotation.__dict__)
+        ret[file.replace('txt','inkml')] = liste_annotation
     return json.dumps(ret)
 
 
@@ -257,8 +270,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             metadonnes.append(get_meta_donnee(file, namebdd))
         METADONNEE[namebdd] = metadonnes
         return True
-    else:
-        return False
+    return False
 
 def suppresion_fichiers_inkml(bdd):
     """ferme une bdd """
@@ -295,7 +307,7 @@ def get_meta_donnee(filename, bdd):
                             action[children.attrib['type']] = children.text
                         annotations[nb_annotation] = action
                     else:
-                        ##récupere les annotations non implÃ©menter(autres que capteur, user, action)
+                        ##récupere les annotations non implÃ©menter(autres que capteur,user,action)
                         other = {}
                         nb_others += 1
                         for children in child:
@@ -392,10 +404,9 @@ def route_add_bdd_path(path):
             namebdd = namebdd.group(0)
             if namebdd not in LISTE_PATH_BDD:
                 if ajout_fichiers_inkml_in(strpath, namebdd):
-                        LISTE_PATH_BDD[namebdd] = strpath
-                        save_config()
+                    LISTE_PATH_BDD[namebdd] = strpath
+                    save_config()
     return json.dumps(METADONNEE)
-   
 
 
 @APP.route('/models/closeBDD/<name>')
