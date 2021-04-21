@@ -28,6 +28,7 @@
 
 # ignore fichier config
 *.ini
+r3g-flask/config.ini
 
 # Gradle cache directory
 .gradle/
