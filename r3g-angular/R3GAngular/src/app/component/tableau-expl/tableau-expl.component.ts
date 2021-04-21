@@ -10,6 +10,7 @@ import {MatSort} from '@angular/material/sort';
 import {sequence} from "@angular/animations";
 import {SequencesChargeesService} from "../../service/sequences-chargees.service";
 import {FilterComponent} from "../filter/filter.component";
+import {EngineExplorationService} from '../engine-exploration/engine-exploration.service';
 
 
 
@@ -32,6 +33,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   constructor(public explService: TableauExplService,
               public bddService: BddService,
               public visuService: VisualisationExploService,
+              public engineExplorationService: EngineExplorationService,
               public dialog: MatDialog,
               public sequenceChargees: SequencesChargeesService) {
     this.explService.observableSequences.subscribe((sequence) => {
@@ -106,8 +108,12 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   ajouterSequencesSelectionnees() {
     let seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe);
     this.allComplete = false;
+    console.log("sequences trouvees");
     this.bddService.getDonnee(seqSelectionee);
+    console.log("getDonnees");
     this.sequenceChargees.addToList(seqSelectionee);
+    console.log("added to list");
+    setTimeout(() => this.engineExplorationService.refreshInitialize(), 1500);
   }
 
   someComplete(): boolean {

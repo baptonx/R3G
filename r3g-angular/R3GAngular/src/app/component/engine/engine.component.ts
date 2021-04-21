@@ -73,4 +73,8 @@ export class EngineComponent implements OnInit {
     this.engServ.updateActionTime(event);
   }
 
+  updateActionFrame(event: any): void {
+    this.engServ.updateActionFrame(event);
+  }
+
 }

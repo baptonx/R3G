@@ -47,8 +47,10 @@ import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.compone
 import { PopUpComponent } from './component/pop-up/pop-up.component';
 import { EditeurComponent } from './component/editeur/editeur.component';
 import { FilterComponent } from './component/filter/filter.component';
-import { MatAutocompleteModule} from '@angular/material/autocomplete';
-import { SequencesAnnotationComponent } from './component/sequences-annotation/sequences-annotation.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { EngineExplorationComponent } from './component/engine-exploration/engine-exploration.component';
+import { TimelineExplorationComponent } from './component/timeline-exploration/timeline-exploration.component';
+import {SequencesAnnotationComponent} from './component/sequences-annotation/sequences-annotation.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -80,6 +82,8 @@ const appRoutes: Routes = [
     FilterComponent,
     PopUpComponent,
     SequencesAnnotationComponent,
+    EngineExplorationComponent,
+    TimelineExplorationComponent,
   ],
     imports: [
         BrowserModule,
@@ -104,6 +108,8 @@ const appRoutes: Routes = [
         MatSortModule,
         MatProgressBarModule,
         MatAutocompleteModule,
+
+
         RouterModule.forRoot(appRoutes),
         MatListModule,
         MatMenuModule,

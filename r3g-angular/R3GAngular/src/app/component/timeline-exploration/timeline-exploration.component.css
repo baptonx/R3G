@@ -1,0 +1,5 @@
+canvas {
+  margin-top: 5em;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
