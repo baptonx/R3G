@@ -47,10 +47,8 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.pathbdd = result;
-      if(this.pathbdd !== "")
-      {
+      if(this.pathbdd != undefined) {
         this.bdd.addbddwithpath(this.pathbdd);
       }
     });

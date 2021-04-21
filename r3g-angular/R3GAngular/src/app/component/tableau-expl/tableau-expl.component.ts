@@ -21,7 +21,6 @@ import {FilterComponent} from "../filter/filter.component";
 })
 export class TableauExplComponent implements AfterViewInit, OnInit {
 
-  selectionListe: Array<sequencesTab> = new Array<sequencesTab>();
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -80,22 +79,24 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.explService.displayedColumns = result.colonnes;
-      this.updateAll();
+      if(result !== undefined){
+        this.explService.displayedColumns = result.colonnes;
+        this.updateAll();
+      }
     });
   }
 
   setSelectedSequence(element: any) {
     if(element instanceof sequenceTabImpl) {
       if(element.selected) {
-        this.selectionListe.push(element);
+        this.explService.selectionListe.push(element);
         if(this.explService.sequences.every(s => s.selected)) this.allComplete = true;
       }
       else {
         this.allComplete = false;
         let i=0;
-        while(i < this.selectionListe.length) {
-          if(this.selectionListe[i] == element) this.selectionListe.splice(i,1);
+        while(i < this.explService.selectionListe.length) {
+          if(this.explService.selectionListe[i] == element) this.explService.selectionListe.splice(i,1);
           i++;
         }
       }
@@ -103,7 +104,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ajouterSequencesSelectionnees() {
-    let seqSelectionee = this.bddService.chercherSequenceTableau(this.selectionListe);
+    let seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe);
     this.allComplete = false;
     this.bddService.getDonnee(seqSelectionee);
     this.sequenceChargees.addToList(seqSelectionee);
@@ -117,14 +118,14 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   setAll(checked: boolean) {
-    this.selectionListe = [];
+    this.explService.selectionListe = [];
     this.allComplete = checked;
     if(this.explService.sequences == null) {
       return;
     }
     this.explService.sequences.forEach(s => s.selected = checked);
     if(checked) {
-      this.selectionListe = this.explService.sequences.concat([]);
+      this.explService.selectionListe = this.explService.sequences.concat([]);
     }
   }
 
@@ -134,9 +135,11 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.explService.filtres.push(result.filter);
-      this.explService.filteredList = this.explService.sequences;
-      this.explService.filteredList = this.explService.filteredList.filter(result.filter);
+      if(result !== undefined) {
+        this.explService.filtres.push(result.filter);
+        this.explService.filteredList = this.explService.sequences;
+        this.explService.filteredList = this.explService.filteredList.filter(result.filter);
+      }
     });
   }
 }
