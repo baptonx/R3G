@@ -42,7 +42,7 @@
               <ng-container matColumnDef="Couleur">
                 <th mat-header-cell  class='align' *matHeaderCellDef> Couleur </th>
                 <td mat-cell *matCellDef="let geste"> 
-                  <input matInput class='cell'> </td>
+                  <input matInput class='cell'  [(ngModel)]="couleur[this.classeGeste.indexOf(geste)]" (change)="changeVal($event,this.classeGeste.indexOf(geste))"> </td>
               </ng-container>
         
         

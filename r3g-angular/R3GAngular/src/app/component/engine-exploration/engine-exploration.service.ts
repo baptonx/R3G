@@ -35,8 +35,6 @@ export class EngineExplorationService implements OnDestroy {
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
-  public sequenceCurrent!: Sequence;
-  public tabTimeCurrent!: Array<number>;
   public facteurGrossissement = 1.5;
 
   constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public bddService: BddService) {
@@ -63,14 +61,14 @@ export class EngineExplorationService implements OnDestroy {
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
     const s = this.bddService.sequenceCourante;
     if (s !== undefined) {
-      this.sequenceCurrent = s;
+      this.explorationServ.sequenceCurrent = s;
     }
-    console.log(this.sequenceCurrent);
+    console.log(this.explorationServ.sequenceCurrent);
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
-        if (this.sequenceCurrent !== undefined) {
+        if (this.explorationServ.sequenceCurrent !== undefined) {
           const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
 
           const tabPosX: Array<number> = [];
@@ -80,7 +78,7 @@ export class EngineExplorationService implements OnDestroy {
           let averageY: number;
           let averageZ: number;
 
-          for (const frame of this.sequenceCurrent.traceNormal[0]) {
+          for (const frame of this.explorationServ.sequenceCurrent.traceNormal[0]) {
             tabPosX.push(frame[0]);
             tabPosY.push(frame[1]);
             tabPosZ.push(frame[2]);
@@ -91,12 +89,13 @@ export class EngineExplorationService implements OnDestroy {
           averageZ = this.calculateAverage(tabPosZ);
 
 
-          for (let i = 0; i < this.sequenceCurrent.traceNormal.length; i++) {
+          this.squelette.initialize();
+          for (let i = 0; i < this.explorationServ.sequenceCurrent.traceNormal.length; i++) {
             const tabPosXYZ: Array<number> = [];
             const tabTime: Array<number> = [];
             this.squelette.addArticulation();
 
-            for (const frame of this.sequenceCurrent.traceNormal[i]) {
+            for (const frame of this.explorationServ.sequenceCurrent.traceNormal[i]) {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
@@ -104,7 +103,7 @@ export class EngineExplorationService implements OnDestroy {
             }
 
             if (i === 0) {
-              this.tabTimeCurrent = tabTime;
+              this.explorationServ.tabTimeCurrent = tabTime;
             }
 
             const positionArticulation = new VectorKeyframeTrack(
@@ -149,7 +148,6 @@ export class EngineExplorationService implements OnDestroy {
         this.explorationServ.action.clampWhenFinished = true;
         // this.action.time = 4;
         // this.clip.duration = this.action.time;
-        // action.play();
         this.stopToStart();
 
         const clock = new Clock();
@@ -253,8 +251,8 @@ export class EngineExplorationService implements OnDestroy {
     scene.add(camera);
 
     const controls = new TrackballControls(camera, elem);
-    controls.noPan = true;
-    controls.rotateSpeed = 0.5;
+    // controls.noPan = true;
+    controls.rotateSpeed = 2;
     this.controls = controls;
 
 
@@ -272,7 +270,7 @@ export class EngineExplorationService implements OnDestroy {
     // ground
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0x999999 } ) );
     mesh.rotation.x = - Math.PI / 2;
-    mesh.position.y = -1.5;
+    mesh.position.y = -1.7;
     mesh.receiveShadow = true;
     scene.add( mesh );
 
@@ -404,8 +402,8 @@ export class EngineExplorationService implements OnDestroy {
 
   updateActionFrame(event: any): void {
     const frameEditText = Number(event.target.value);
-    if (frameEditText >= 0 && frameEditText < this.tabTimeCurrent.length) {
-      this.explorationServ.action.time = this.convertFrameToTime(frameEditText);
+    if (frameEditText >= 0 && frameEditText < this.explorationServ.tabTimeCurrent.length) {
+      this.explorationServ.action.time = this.explorationServ.convertFrameToTime(frameEditText);
     }
   }
 
@@ -426,23 +424,5 @@ export class EngineExplorationService implements OnDestroy {
       average = average + Number(n);
     }
     return average / tab.length;
-  }
-
-  public convertFrameToTime(frame: number): number {
-    if (frame >= 0 && frame < this.tabTimeCurrent.length) {
-      return this.tabTimeCurrent[frame];
-    }
-    return 0;
-  }
-
-  public convertTimeToFrame(time: number): number {
-    if (time >= 0 && time < this.explorationServ.tempsTotal) {
-      for (let i = 0; i < this.tabTimeCurrent.length; i++) {
-        if (this.tabTimeCurrent[i] >= time) {
-          return i;
-        }
-      }
-    }
-    return 0;
   }
 }

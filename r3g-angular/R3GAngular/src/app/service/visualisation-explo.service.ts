@@ -25,7 +25,15 @@ export class VisualisationExploService {
       console.log('getDonnees');
       // this.sequenceChargees.addToList(seqSelectionee);
       // console.log("added to list");
-      setTimeout(() => this.engineExplorationService.refreshInitialize(), 1500);
+      setTimeout(() => {
+        this.engineExplorationService.refreshInitialize();
+        // console.log(element['annotation.debut']);
+        this.engineExplorationService.explorationServ.action.time = Number(Number(this.engineExplorationService.explorationServ.convertFrameToTime(Number(element['annotation.debut']))).toFixed(2));
+        console.log(this.engineExplorationService.explorationServ.action.time );
+        this.engineExplorationService.play();
+        this.engineExplorationService.pause();
+        // console.log('time : ' + this.engineExplorationService.explorationServ.action.time);
+      }, 1500);
     }
     this.componentHidden = false;
   }

@@ -34,6 +34,10 @@ export class SqueletteAnimation {
     this.root.add(articulation);
   }
 
+  public initialize(): void {
+    this.root = new Object3D();
+  }
+
 
 
 }
