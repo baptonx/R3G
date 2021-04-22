@@ -31,6 +31,7 @@ MODEL_LIST = []
 CLASSES = []
 LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
+LISTE_GESTE_BDD = {}
 METADONNEE = {}
 UPLOAD_FOLDER = './Upload'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -226,6 +227,7 @@ def get_last_config():
     global LISTE_PATH_BDD
     global LISTE_FICHIER_INKML
     global METADONNEE
+    global LISTE_GESTE_BDD
 
     fcfg = 'config.ini'
     cfg = configparser.ConfigParser()
@@ -235,6 +237,7 @@ def get_last_config():
         # lecture des valeurs
         LISTE_PATH_BDD = ast.literal_eval(cfg['server']['LISTE_PATH_BDD'])
         LISTE_FICHIER_INKML = ast.literal_eval(cfg['server']['LISTE_FICHIER_INKML'])
+        LISTE_GESTE_BDD = ast.literal_eval(cfg['server']['LISTE_GESTE_BDD'])
         METADONNEE = ast.literal_eval(cfg['server']['METADONNEE'])
     else:
         print("no config file")
@@ -246,9 +249,8 @@ def save_config():
     # modification des valeurs
     cfg['server'] = {'LISTE_PATH_BDD': str(LISTE_PATH_BDD),
                      'LISTE_FICHIER_INKML': str(LISTE_FICHIER_INKML),
+                     'LISTE_GESTE_BDD': str(LISTE_GESTE_BDD),
                      'METADONNEE': str(METADONNEE)}
-    #cfg['server']['LISTE_FICHIER_INKML'] = str(LISTE_FICHIER_INKML)
-    #cfg['server']['METADONNEE'] = str(METADONNEE)
     # écriture du fichier modifié
     with open(fcfg, 'w') as file:
         cfg.write(file)
@@ -259,11 +261,13 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
     p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
     liste_fichier_in = {}
     global METADONNEE
+    global LISTE_GESTE_BDD
     for path, _, files in walk(pathbdd):
         for filename in files:
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
     if len(liste_fichier_in) != 0:
+        LISTE_GESTE_BDD[namebdd] = [] 
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -272,19 +276,32 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
         return True
     return False
 
-def suppresion_fichiers_inkml(bdd):
+def fermer_bdd_inkml(bdd):
     """ferme une bdd """
     global METADONNEE
     global LISTE_FICHIER_INKML
+    global LISTE_GESTE_BDD
+    global LISTE_PATH_BDD
+    del LISTE_PATH_BDD[bdd]
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
+    del LISTE_GESTE_BDD[bdd]
+
+def effacer_metadonnee_bdd(bdd):
+    """ferme une bdd """
+    global METADONNEE
+    global LISTE_FICHIER_INKML
+    global LISTE_GESTE_BDD
+    del METADONNEE[bdd]
+    del LISTE_FICHIER_INKML[bdd]
+    del LISTE_GESTE_BDD[bdd]
 
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
     # pylint: disable-msg=too-many-nested-blocks
     """Contenu du fichier inkml."""
-
+    global LISTE_GESTE_BDD
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
@@ -306,6 +323,8 @@ def get_meta_donnee(filename, bdd):
                         nb_annotation += 1
                         for children in children2:
                             action[children.attrib['type']] = children.text
+                            if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
+                                LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
                     else:
                         ##récupere les annotations non implÃ©menter(autres que capteur,user,action)
@@ -352,7 +371,7 @@ def route_get_list_bdd():
     print(list(LISTE_PATH_BDD))
     return json.dumps(list(LISTE_PATH_BDD.keys()))
 
-#cette route permet de recuperer la sequence du fichier namefichier
+#cette route permet de recuperer les données normalisées du fichier namefichier
 @APP.route('/models/getDonnee/<bdd>/<namefichier>')
 def route_get_sequence(bdd, namefichier):
     """Permet de télécharger donnée a partir du nom de fichier """
@@ -365,7 +384,7 @@ def route_get_sequence(bdd, namefichier):
 def route_add_bdd():
     """add new path ddb"""
     global LISTE_PATH_BDD
-
+    global LISTE_GESTE_BDD
     root = tkinter.Tk()
     root.withdraw()
     top = tkinter.Toplevel(root)
@@ -383,6 +402,7 @@ def route_add_bdd():
                 if namebdd not in LISTE_PATH_BDD:
                     if ajout_fichiers_inkml_in(path, namebdd):
                         LISTE_PATH_BDD[namebdd] = path
+                        LISTE_GESTE_BDD[namebdd] = []
                         save_config()
         root.destroy()
         return json.dumps(METADONNEE)
@@ -395,6 +415,7 @@ def route_add_bdd():
 def route_add_bdd_path(path):
     """add new path ddb"""
     global LISTE_PATH_BDD
+    global LISTE_GESTE_BDD
     strpath = ""
     for char in path.split(','):
         strpath += chr(int(char))
@@ -406,21 +427,21 @@ def route_add_bdd_path(path):
             if namebdd not in LISTE_PATH_BDD:
                 if ajout_fichiers_inkml_in(strpath, namebdd):
                     LISTE_PATH_BDD[namebdd] = strpath
+                    LISTE_GESTE_BDD[namebdd] = []
                     save_config()
     return json.dumps(METADONNEE)
 
 
 @APP.route('/models/closeBDD/<name>')
 def route_close_bdd(name):
-    """Permet de télécharger donnée a partir du nom de fichier """
+    """Permet de fermer une base donnée"""
     global LISTE_PATH_BDD
     p_2 = re.compile(r'[^/]*$')
     namebdd = p_2.search(name)
     if namebdd is not None:
         namebdd = namebdd.group(0)
         if namebdd in LISTE_PATH_BDD:
-            del LISTE_PATH_BDD[namebdd]
-            suppresion_fichiers_inkml(namebdd)
+            fermer_bdd_inkml(namebdd)
     save_config()
     return METADONNEE
 
@@ -430,11 +451,10 @@ def route_reload_bdd(name):
     global LISTE_FICHIER_INKML
     global METADONNEE
     if name in LISTE_PATH_BDD:
-        del LISTE_FICHIER_INKML[name]
-        del METADONNEE[name]
+        effacer_metadonnee_bdd(name)
         ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
     save_config()
-    print(METADONNEE)
+    print(LISTE_GESTE_BDD)
     return METADONNEE
 
 #############Traduire Fichier INKML -> TXT route :##############

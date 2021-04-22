@@ -24,8 +24,8 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   allColumns: string[] = new Array<string>();
   dataSource: MatTableDataSource<sequencesTab> = new MatTableDataSource<sequencesTab>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
   //subscription: Subscription;
   allComplete: boolean = false;
 
@@ -37,8 +37,11 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
               public dialog: MatDialog,
               public sequenceChargees: SequencesChargeesService) {
     this.explService.observableSequences.subscribe((sequence) => {
-      if (this.explService.displayedColumns.length > 0) this.updateAll();
+      if (this.explService.displayedColumns.length > 0){
+        this.updateAll();
+      }
     });
+    console.log("tableau expl");
     this.explService.observableColumns.subscribe((colonnes) => this.updateAll());
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
@@ -47,28 +50,26 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
 
   updateAll(): void{
+
+    console.log("hello2");
     //console.log(this.explService.sequences);
     //this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
+
     this.allColumns = Object.assign([],this.explService.displayedColumns);
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
     this.allColumns.push("checkbox");
-    this.dataSource = new MatTableDataSource<sequencesTab>(this.explService.sequences);
+    this.dataSource.data = this.explService.sequences;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
-    // this.bddService.observableSequences.subscribe((sequence) => {
-    //   if (sequence.length > 0) {
-    //     this.choisirColonne();
-    //   }
-    // });
+    this.dataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 

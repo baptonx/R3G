@@ -69,6 +69,8 @@ export class TableauExplService {
   }
 
   updateAll(tabSequences: Array<Sequence>): void {
+
+    console.log("start");
     this.sequences = new Array<sequencesTab>();
     let dataCourante: sequencesTab;
     for(let i=0; i<tabSequences.length; i++){
