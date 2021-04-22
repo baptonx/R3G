@@ -3,6 +3,8 @@ import {AnimationAction} from 'three';
 import {MatButtonToggle} from '@angular/material/button-toggle';
 import {Annotation} from '../../class/commun/annotation/annotation';
 import {EventManager} from '@angular/platform-browser';
+import {Sequence} from '../../class/commun/sequence';
+import {BddService} from '../../service/bdd.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +32,13 @@ export class ExplorationService {
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
+  public sequenceCurrent!: Sequence;
+  public tabTimeCurrent!: Array<number>;
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
 
-  constructor(private eventManager: EventManager) {
+  constructor(private eventManager: EventManager, public bddService: BddService) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
     this.sizeIndicatorTime = 20;
     this.margeTimeline = 40;
@@ -61,8 +65,51 @@ export class ExplorationService {
       this.drawLine(this.margeTimeline, canvas.height / 2, canvas.width - this.margeTimeline, canvas.height / 2);
       this.ctx.strokeStyle = 'black';
 
+      const lengthAnnotation = this.sizeOfAnnotations();
+
+      /*
+      if (this.sequenceCurrent !== undefined) {
+        console.log(this.sequenceCurrent.metaDonnees.annotation);
+      }
+       */
+
+      this.ctx.font = '12px Arial';
+      for (let i = 1; i < lengthAnnotation; i++) {
+        const name = this.sequenceCurrent.metaDonnees.annotation[i.toString()].type;
+        const frame1 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].debut;
+        const frame2 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].fin;
+        const t1 = this.convertFrameToTime(Number(frame1));
+        const t2 = this.convertFrameToTime(Number(frame2));
+        if (name === 'nothing') { this.ctx.fillStyle = 'green'; }
+        else if (name === 'vattene') { this.ctx.fillStyle = 'red'; }
+        else if (name === 'vieniqui') { this.ctx.fillStyle = 'yellow';}
+        else if (name === 'perfetto') { this.ctx.fillStyle = 'brown'; }
+        else if (name === 'furbo') { this.ctx.fillStyle = 'purple'; }
+        else if (name === 'cheduepalle') { this.ctx.fillStyle = 'blue'; }
+        else if (name === 'chevuoi') { this.ctx.fillStyle = 'pink'; }
+        else if (name === 'daccordo') { this.ctx.fillStyle = 'Crimson'; }
+        else if (name === 'seipazzo') { this.ctx.fillStyle = 'HotPink'; }
+        else if (name === 'combinato') { this.ctx.fillStyle = 'Coral'; }
+        else if (name === 'freganiente') { this.ctx.fillStyle = 'Gold'; }
+        else if (name === 'ok') { this.ctx.fillStyle = 'DarkKhaki'; }
+        else if (name === 'cosatifarei') { this.ctx.fillStyle = 'Indigo'; }
+        else if (name === 'basta') { this.ctx.fillStyle = 'LightGreen'; }
+        else if (name === 'prendere') { this.ctx.fillStyle = 'MediumAquamarine'; }
+        else if (name === 'noncenepiu') { this.ctx.fillStyle = 'LightSteelBlue'; }
+        else if (name === 'fame') { this.ctx.fillStyle = 'BurlyWood'; }
+        else if (name === 'tantotempo') { this.ctx.fillStyle = 'SandyBrown'; }
+        else if (name === 'buonissimo') { this.ctx.fillStyle = 'Sienna'; }
+        else if (name === 'messidaccordo') { this.ctx.fillStyle = 'Silver'; }
+        else if (name === 'sonostufo') { this.ctx.fillStyle = 'Bisque'; }
+        else { this.ctx.fillStyle = 'black'; }
+        this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(name, this.timeToPos(t1) + 5, 13);
+      }
+
       // ======================================================
       // CURSOR
+      // console.log('time : ' + this.action.time);
       this.ctx.fillStyle = 'red';
       this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
 
@@ -74,10 +121,23 @@ export class ExplorationService {
     }
   }
 
+  public sizeOfAnnotations(): number {
+    let i = 1;
+
+    if (this.sequenceCurrent === undefined) {
+      return i;
+    }
+
+    while (this.sequenceCurrent.metaDonnees.annotation[i.toString()] !== undefined) {
+      i++;
+    }
+    return i;
+  }
+
   public onResize(): void{
     if (this.ctx !== null && this.ctx !== undefined) {
       const canvas = this.ctx.canvas;
-      canvas.width = 1120;
+      canvas.width = window.innerWidth - this.marge * 4;
       this.draw();
     }
   }
@@ -262,5 +322,29 @@ export class ExplorationService {
 
   public timeToPos(time: number): number {
     return time * this.unit + this.margeTimeline;
+  }
+
+  public convertFrameToTime(frame: number): number {
+    if (frame >= 0 && frame < this.tabTimeCurrent.length) {
+      return this.tabTimeCurrent[frame];
+    }
+    if (frame >= this.tabTimeCurrent.length) {
+      return this.tempsTotal;
+    }
+    return 0;
+  }
+
+  public convertTimeToFrame(time: number): number {
+    if (time >= 0 && time < this.tempsTotal) {
+      for (let i = 0; i < this.tabTimeCurrent.length; i++) {
+        if (this.tabTimeCurrent[i] >= time) {
+          return i;
+        }
+      }
+    }
+    if (time >= this.tabTimeCurrent[this.tabTimeCurrent.length - 1]) {
+      return this.tabTimeCurrent.length - 1;
+    }
+    return 0;
   }
 }

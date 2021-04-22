@@ -20,11 +20,11 @@ export class EditeurComponent implements OnInit {
   constructor(public http:HttpClient,public bdd:BddService) {
     this.classeGeste=this.bdd.classesGestes;
     this.dataSource = new MatTableDataSource<String>(this.classeGeste);
-    console.log(this.dataSource)
+    console.log(this.dataSource);
   }
 
   ngOnInit() {
-   
+
   }
 
   ngAfterViewInit(){
