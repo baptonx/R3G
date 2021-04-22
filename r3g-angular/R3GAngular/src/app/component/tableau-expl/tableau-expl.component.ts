@@ -136,10 +136,18 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result !== undefined) {
+        this.explService.nomFiltres.push(result.nomFiltre);
         this.explService.filtres.push(result.filter);
         this.explService.filteredList = this.explService.filteredList.filter(result.filter);
         this.updateAll();
       }
     });
+  }
+
+  remove(i: number) {
+    this.explService.filtres.splice(i,1);
+    this.explService.nomFiltres.splice(i,1);
+    this.explService.reloadFiltres();
+    this.updateAll();
   }
 }

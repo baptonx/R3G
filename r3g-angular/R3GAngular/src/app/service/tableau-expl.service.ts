@@ -49,6 +49,7 @@ export class TableauExplService {
 
   //Filtres
   filtres: Array<Function> = [];
+  nomFiltres: string[] = [];
   filteredList: sequencesTab[] = [];
   constructor() {
     this.selectionListe = new Array<sequencesTab>();
@@ -122,8 +123,8 @@ export class TableauExplService {
     }
   }
 
-  private reloadFiltres() {
-    this.filteredList = this.sequences.concat([]);
+  reloadFiltres(): void {
+    this.filteredList = this.sequences;
     for(let filtre of this.filtres) {
       this.filteredList = this.filteredList.filter(geste => filtre(geste));
     }

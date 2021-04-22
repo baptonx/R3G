@@ -8,3 +8,7 @@ mat-form-field {
 .button-submit {
   width: 100%;
 }
+.w100 {
+  width: 100%;
+  text-align: center;
+}

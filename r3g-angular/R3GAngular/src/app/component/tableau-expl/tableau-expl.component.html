@@ -29,8 +29,18 @@
 
 <div class="tab-container">
   <div>
-    <span>Filtres : </span>
     <div class="align-right"><button mat-raised-button id="ajouter-un-filtre" (click)="openDialogFilter()">Ajouter un filtre</button></div>
+    <mat-chip-list #listeFiltres aria-label="Filtres">
+      <span>Filtres : </span>
+      <mat-chip
+        *ngFor="let filtre of explService.filtres; let i=index;"
+        [removable]="true"
+        (removed)="remove(i)">
+        {{explService.nomFiltres[i]}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+
   </div>
   <table mat-table [dataSource]="dataSource" matSort>
 

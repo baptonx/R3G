@@ -11,6 +11,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./filter.component.css']
 })
 export class FilterComponent implements OnInit {
+  @ViewChild('nomFiltreInput') nomFiltreInput!: ElementRef;
   //operande
   operande = new FormControl();
   optionsOperande: string[] = [];
@@ -26,7 +27,7 @@ export class FilterComponent implements OnInit {
 
   constructor(public tableauExpl: TableauExplService,
               public dialogRef: MatDialogRef<FilterComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { filter: Function }) {
+              @Inject(MAT_DIALOG_DATA) public data: { filter: Function, nomFiltre: string }) {
     this.optionsOperande = this.tableauExpl.allAttributes;
   }
 
@@ -67,6 +68,6 @@ export class FilterComponent implements OnInit {
     let operateurValue = this.operateurInput.nativeElement.value;
     let resultValue = this.resultInput.nativeElement.value;
     let predicate: Function = this.createFilter(operandeValue,operateurValue,resultValue);
-    this.dialogRef.close({filter: predicate});
+    this.dialogRef.close({filter: predicate, nomFiltre: this.nomFiltreInput.nativeElement.value});
   }
 }

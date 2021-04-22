@@ -51,6 +51,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { EngineExplorationComponent } from './component/engine-exploration/engine-exploration.component';
 import { TimelineExplorationComponent } from './component/timeline-exploration/timeline-exploration.component';
 import {SequencesAnnotationComponent} from './component/sequences-annotation/sequences-annotation.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -108,6 +109,7 @@ const appRoutes: Routes = [
         MatSortModule,
         MatProgressBarModule,
         MatAutocompleteModule,
+        MatChipsModule,
 
 
         RouterModule.forRoot(appRoutes),
