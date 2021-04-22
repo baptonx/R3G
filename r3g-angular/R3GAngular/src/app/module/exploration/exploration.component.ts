@@ -26,7 +26,6 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
     this.pathbdd = "";
 
-    console.log("start3");
   }
 
   addPathBDDINKML(): void{
@@ -64,11 +63,9 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }
   reloadDB(namedb: string): void{
     this.bdd.reloaddb(namedb);
-    console.log("reload" + namedb);
   }
   closeDB(namedb: string): void{
     this.bdd.closedb(namedb);
-    console.log("closed" + namedb);
   }
   exporterSeq(): void{
     if(this.bdd.tableauExpl.selectionListe.length == 0){
@@ -78,9 +75,10 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
     }
   }
   ngOnInit(): void {
-    console.log("start2");
-    this.bdd.setMetaData();
-    this.bdd.getlistdb();
+    if(this.bdd.sequences.length === 0) {
+      this.bdd.setMetaData();
+      this.bdd.getlistdb();
+    }
   }
   /*
   importBase(): void{
@@ -99,9 +97,6 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }*/
 
   ngAfterViewInit(): void {
-
-
-    //console.log(this.bdd)
   }
 
 }

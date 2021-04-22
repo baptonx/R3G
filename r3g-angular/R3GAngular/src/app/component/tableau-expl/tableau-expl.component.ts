@@ -37,11 +37,10 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
               public dialog: MatDialog,
               public sequenceChargees: SequencesChargeesService) {
     this.explService.observableSequences.subscribe((sequence) => {
-      if (this.explService.displayedColumns.length > 0){
+      if (this.explService.displayedColumns.length > 0) {
         this.updateAll();
-      }
+      };
     });
-    console.log("tableau expl");
     this.explService.observableColumns.subscribe((colonnes) => this.updateAll());
     //this.subscription = this.explService.onMessage().subscribe(() => {
     //});
@@ -50,17 +49,13 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
 
   updateAll(): void{
-
-    console.log("hello2");
-    //console.log(this.explService.sequences);
     //this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
-
     this.allColumns = Object.assign([],this.explService.displayedColumns);
     this.allColumns.push("addColumn");
     this.allColumns.push("visualisation");
     this.allColumns.push("download");
     this.allColumns.push("checkbox");
-    this.dataSource.data = this.explService.sequences;
+    this.dataSource.data = this.explService.filteredList;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -70,6 +65,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -93,13 +89,13 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     if(element instanceof sequenceTabImpl) {
       if(element.selected) {
         this.explService.selectionListe.push(element);
-        if(this.explService.sequences.every(s => s.selected)) this.allComplete = true;
+        if(this.explService.filteredList.every(s => s.selected)) this.allComplete = true;
       }
       else {
         this.allComplete = false;
         let i=0;
         while(i < this.explService.selectionListe.length) {
-          if(this.explService.selectionListe[i] == element) this.explService.selectionListe.splice(i,1);
+          if(this.explService.selectionListe[i].equals(element)) this.explService.selectionListe.splice(i,1);
           i++;
         }
       }
@@ -109,30 +105,27 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   ajouterSequencesSelectionnees() {
     let seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe);
     this.allComplete = false;
-    console.log("sequences trouvees");
     this.bddService.getDonnee(seqSelectionee);
-    console.log("getDonnees");
     this.sequenceChargees.addToList(seqSelectionee);
-    console.log("added to list");
     setTimeout(() => this.engineExplorationService.refreshInitialize(), 1500);
   }
 
   someComplete(): boolean {
-    if(this.explService.sequences == null) {
+    if(this.explService.filteredList == null) {
       return false
     }
-    return this.explService.sequences.filter(s => s.selected).length > 0 && ! this.allComplete;
+    return this.explService.filteredList.filter(s => s.selected).length > 0 && ! this.allComplete;
   }
 
   setAll(checked: boolean) {
     this.explService.selectionListe = [];
     this.allComplete = checked;
-    if(this.explService.sequences == null) {
+    if(this.explService.filteredList == null) {
       return;
     }
-    this.explService.sequences.forEach(s => s.selected = checked);
+    this.explService.filteredList.forEach(s => s.selected = checked);
     if(checked) {
-      this.explService.selectionListe = this.explService.sequences.concat([]);
+      this.explService.selectionListe = this.explService.filteredList.concat([]);
     }
   }
 
@@ -144,8 +137,8 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result !== undefined) {
         this.explService.filtres.push(result.filter);
-        this.explService.filteredList = this.explService.sequences;
         this.explService.filteredList = this.explService.filteredList.filter(result.filter);
+        this.updateAll();
       }
     });
   }

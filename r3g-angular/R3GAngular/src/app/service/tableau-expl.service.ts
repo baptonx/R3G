@@ -7,6 +7,7 @@ export interface sequencesTab {
   geste?:string;
   selected: boolean;
   [key: string]: any;
+  equals(seq: sequencesTab): boolean;
 }
 export class sequenceTabImpl implements sequencesTab{
   [key: string]: any;
@@ -20,6 +21,10 @@ export class sequenceTabImpl implements sequencesTab{
       this[k] = value;
     }
   }
+  equals(seq: sequencesTab): boolean {
+    return this.id === seq.id && this.geste === seq.geste;
+  }
+
   push(k: string, v: any): void{
     this[k] = v;
   }
@@ -48,7 +53,7 @@ export class TableauExplService {
   constructor() {
     this.selectionListe = new Array<sequencesTab>();
     this.sequences = new Array<sequencesTab>();
-    this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.sequences);
+    this.observableSequences = new BehaviorSubject<sequencesTab[]>(this.filteredList);
     this.observableColumns = new BehaviorSubject<string[]>(this.displayedColumns);
   }
 
@@ -69,8 +74,6 @@ export class TableauExplService {
   }
 
   updateAll(tabSequences: Array<Sequence>): void {
-
-    console.log("start");
     this.sequences = new Array<sequencesTab>();
     let dataCourante: sequencesTab;
     for(let i=0; i<tabSequences.length; i++){
@@ -87,7 +90,6 @@ export class TableauExplService {
              if(typeof value === 'object' && value != null) {
                dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', {'idGeste': key}));
                dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
-               //console.log(dataCourante);
              }
               this.sequences.push(dataCourante);
           }
@@ -105,8 +107,8 @@ export class TableauExplService {
         }
       }
     }
-    this.observableSequences.next(this.sequences);
-    console.log(this.sequences[1]);
+    this.reloadFiltres();
+    this.observableSequences.next(this.filteredList);
   }
 
   private addAttribute(prefix: string): void {
@@ -117,6 +119,13 @@ export class TableauExplService {
         this.allAttributes.splice(idx,1);
       }
       this.allAttributes.push(prefix);
+    }
+  }
+
+  private reloadFiltres() {
+    this.filteredList = this.sequences.concat([]);
+    for(let filtre of this.filtres) {
+      this.filteredList = this.filteredList.filter(geste => filtre(geste));
     }
   }
 }

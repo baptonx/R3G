@@ -19,8 +19,6 @@ export class ChoixColonnesService {
     this.bdd.observableSequences.subscribe((sequence) => {
       this.node = {name: "root", path:"", completed: false, children: []};
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, "");
-      console.log(this.bdd.formatSequence);
-      console.log(this.node);
     })
   }
 

@@ -20,7 +20,6 @@ export class BddService {
   public sequenceCourante: Sequence|undefined;
 
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
-    console.log("constutction");
     this.sequences = [];
     this.notifyTableauService();
     this.observableSequences = new BehaviorSubject<Sequence[]>(this.sequences);
@@ -44,9 +43,7 @@ export class BddService {
     this.http
       .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
-        console.log("answer here");
         this.miseajourdb(returnedData);
-        console.log("traiter");
       this.answerHere();
     });
 
@@ -115,7 +112,6 @@ export class BddService {
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
-    console.log(this.sequences);
     this.observableSequences.next(this.sequences);
   }
   reloaddb(dbname: string): void{
