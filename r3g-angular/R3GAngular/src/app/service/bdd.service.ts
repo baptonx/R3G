@@ -38,7 +38,7 @@ export class BddService {
   answerHere(): void{
     this.waitanswer = false;
   }
-  setMetaData(): void{
+ setMetaData(): void{
     this.answerWait();
     this.http
       .get<object>('/models/getMetaDonnee' , {})
@@ -47,7 +47,7 @@ export class BddService {
       this.answerHere();
     });
 
-  }
+  } 
   addpath(): void{
     this.answerWait();
     this.http
@@ -77,7 +77,7 @@ export class BddService {
         this.bddnames = returnedData;
         this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
-  }
+  } 
   closedb(dbname: string): void{
     this.answerWait();
     this.http

@@ -282,6 +282,7 @@ def suppresion_fichiers_inkml(bdd):
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
+    # pylint: disable-msg=too-many-nested-blocks
     """Contenu du fichier inkml."""
 
     filepath = LISTE_FICHIER_INKML[bdd][filename]
