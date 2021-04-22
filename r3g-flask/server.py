@@ -106,16 +106,7 @@ def get_models_names():
 @APP.route('/models/getClasses/<bdd>')
 def get_classes(bdd):
     """exemple : obtenir les classes de la BDD charlearn"""
-    bdd=bdd.replace('_inkml','')
-    ret=[]
-    if os.path.exists('./'+bdd+'/tabclass.txt'):
-        with open('./'+bdd+'/tabclass.txt') as file_content:
-            for line in file_content:
-                ret.append(line.split(';')[1].replace('\n',''))
-                CLASSES.append(line.split(';')[1].replace('\n',''))
-    else:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-    return json.dumps(ret)
+    return json.dumps(LISTE_GESTE_BDD[bdd])
 
 
 
@@ -267,7 +258,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
     if len(liste_fichier_in) != 0:
-        LISTE_GESTE_BDD[namebdd] = [] 
+        LISTE_GESTE_BDD[namebdd] = []
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -323,7 +314,8 @@ def get_meta_donnee(filename, bdd):
                         nb_annotation += 1
                         for children in children2:
                             action[children.attrib['type']] = children.text
-                            if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
+                            if(children.attrib['type'] == "type" and children.text not \
+                            in LISTE_GESTE_BDD[bdd]):
                                 LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
                     else:
