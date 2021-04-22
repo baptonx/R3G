@@ -13,18 +13,30 @@ import { BddService } from 'src/app/service/bdd.service';
 export class EditeurComponent implements OnInit {
   isLinear = false;
   classeGeste:Array<String>=[];
+  couleur:Array<String>=[];
   dataSource!: MatTableDataSource<String>;
   displayedColumns=['Geste','Couleur']
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public http:HttpClient,public bdd:BddService) {
     this.classeGeste=this.bdd.classesGestes;
+    this.classeGeste.forEach(elt=>{
+      this.couleur.push('blue')
+    })
     this.dataSource = new MatTableDataSource<String>(this.classeGeste);
-    console.log(this.dataSource)
+    console.log(this.dataSource);
+  }
+
+  changeVal(event: any, i:number):void{
+    this.couleur[i]=event.target.value
+}
+
+  saveColor():void{
+    console.log(this.couleur)
   }
 
   ngOnInit() {
-   
+
   }
 
   ngAfterViewInit(){

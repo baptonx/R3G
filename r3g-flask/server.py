@@ -267,7 +267,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             if p_1.match(filename):
                 liste_fichier_in[filename] = path+'/'+filename
     if len(liste_fichier_in) != 0:
-        LISTE_GESTE_BDD[namebdd] = [] 
+        LISTE_GESTE_BDD[namebdd] = []
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -299,6 +299,7 @@ def effacer_metadonnee_bdd(bdd):
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
+    # pylint: disable-msg=too-many-nested-blocks
     """Contenu du fichier inkml."""
     global LISTE_GESTE_BDD
     filepath = LISTE_FICHIER_INKML[bdd][filename]
@@ -322,7 +323,8 @@ def get_meta_donnee(filename, bdd):
                         nb_annotation += 1
                         for children in children2:
                             action[children.attrib['type']] = children.text
-                            if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
+                            if(children.attrib['type'] == "type" and children.text not\
+                             in LISTE_GESTE_BDD[bdd]):
                                 LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
                     else:
