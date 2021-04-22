@@ -83,9 +83,9 @@ export class TableauExplService {
             dataCourante = new sequenceTabImpl(tabSequences[i].id,{}, key);
               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, '',tabSequences[i].metaDonnees));
              if(typeof value === 'object' && value != null) {
+               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', {'idGeste': key}));
                dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', value));
-               dataCourante.concat(this.ajouterMetadonnee(tabSequences[i].id, 'annotation', {'id-geste': key}));
-               console.log(dataCourante);
+               //console.log(dataCourante);
              }
               this.sequences.push(dataCourante);
           }
@@ -104,6 +104,7 @@ export class TableauExplService {
       }
     }
     this.observableSequences.next(this.sequences);
+    console.log(this.sequences[1]);
   }
 
   private addAttribute(prefix: string): void {

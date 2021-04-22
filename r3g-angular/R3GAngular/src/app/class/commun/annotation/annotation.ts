@@ -3,8 +3,8 @@ export class Annotation {
   public t2!: number;
   public f1!: number;
   public f2!: number;
-  public pointAction!: number;
-  public classeGeste!: Array<string>;
+  public point_action!: number;
+  public classe_geste!: string;
 
 
   public verifyT1BeforeT2(): void {
