@@ -8,7 +8,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./navigation-modules.component.css']
 })
 export class NavigationModulesComponent implements OnInit {
-  static mod: number = 1;
+  static mod: number = 2;
   constructor(private router: Router) {
     let modc = this.router.getCurrentNavigation()?.extractedUrl.toString().split('/')[1];
     switch (modc) {
@@ -24,6 +24,7 @@ export class NavigationModulesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("charger");
   }
   toAnnotation(): void{
     NavigationModulesComponent.mod = 1;

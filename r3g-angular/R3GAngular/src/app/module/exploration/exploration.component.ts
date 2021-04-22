@@ -6,7 +6,6 @@ import {ChoixColonnesService} from '../../service/choix-colonnes.service';
 import {PopUpComponent} from '../../component/pop-up/pop-up.component';
 import {MatDialog} from '@angular/material/dialog';
 
-
 export interface DialogData {
   name: string;
 }
@@ -26,21 +25,15 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
   constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
     this.pathbdd = "";
+
+    console.log("start3");
   }
 
-  addPathBDD(): void{
+  addPathBDDINKML(): void{
     this.bdd.addpath();
-    console.log("addPath");
   }
-  reloadDB(namedb: string): void{
-    this.bdd.reloaddb(namedb);
-    console.log("reload" + namedb);
-  }
-  closeDB(namedb: string): void{
-    this.bdd.closedb(namedb);
-    console.log("closed" + namedb);
-  }
-  openDialog(): void {
+
+  openDialogINKML(): void {
     const dialogRef = this.dialog.open(PopUpComponent, {
       width: '250px',
       data: {name: this.pathbdd}
@@ -53,7 +46,41 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  addPathBDDTXT(): void{
+    this.bdd.addpathtxt();
+  }
+  openDialogTXT(): void {
+    const dialogRef = this.dialog.open(PopUpComponent, {
+      width: '250px',
+      data: {name: this.pathbdd}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.pathbdd = result;
+      if(this.pathbdd != undefined) {
+        this.bdd.addbddwithpath(this.pathbdd);
+      }
+    });
+  }
+  reloadDB(namedb: string): void{
+    this.bdd.reloaddb(namedb);
+    console.log("reload" + namedb);
+  }
+  closeDB(namedb: string): void{
+    this.bdd.closedb(namedb);
+    console.log("closed" + namedb);
+  }
+  exporterSeq(): void{
+    if(this.bdd.tableauExpl.selectionListe.length == 0){
+      window.alert("Aucune séquence sélectionnée");
+    }else{
+
+    }
+  }
   ngOnInit(): void {
+    console.log("start2");
+    this.bdd.setMetaData();
+    this.bdd.getlistdb();
   }
   /*
   importBase(): void{
@@ -72,9 +99,9 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }*/
 
   ngAfterViewInit(): void {
-    this.bdd.setMetaData();
-    this.bdd.getlistdb();
-    console.log(this.bdd)
+
+
+    //console.log(this.bdd)
   }
 
 }
