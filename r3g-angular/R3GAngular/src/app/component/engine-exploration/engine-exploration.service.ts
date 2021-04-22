@@ -7,6 +7,8 @@ import {Sequence} from '../../class/commun/sequence';
 import {AnnotationService} from '../../module/annotation/annotation.service';
 import {SequencesChargeesService} from '../../service/sequences-chargees.service';
 import {ExplorationService} from '../../module/exploration/exploration.service';
+import {VisualisationExploService} from '../../service/visualisation-explo.service';
+import {BddService} from '../../service/bdd.service';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -37,7 +39,7 @@ export class EngineExplorationService implements OnDestroy {
   public tabTimeCurrent!: Array<number>;
   public facteurGrossissement = 1.5;
 
-  constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public sequencesChargeesService: SequencesChargeesService) {
+  constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public bddService: BddService) {
     this.explorationServ.pauseAction = true;
   }
 
@@ -58,7 +60,11 @@ export class EngineExplorationService implements OnDestroy {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
+    // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
+    const s = this.bddService.sequenceCourante;
+    if (s !== undefined) {
+      this.sequenceCurrent = s;
+    }
     console.log(this.sequenceCurrent);
 
     const sceneInitFunctionsByName = {

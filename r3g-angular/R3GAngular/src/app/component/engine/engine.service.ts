@@ -217,7 +217,7 @@ export class EngineService implements OnDestroy {
     scene.add(camera);
 
     const controls = new TrackballControls(camera, elem);
-    controls.noPan = true;
+    // controls.noPan = true;
     controls.rotateSpeed = 0.5;
     this.controls = controls;
 

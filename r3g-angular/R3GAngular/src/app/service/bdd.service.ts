@@ -17,6 +17,7 @@ export class BddService {
   formatSequence: FormatDonnees = new FormatDonnees();
   waitanswer: boolean = true;
   classesGestes:Array<String>=[];
+  public sequenceCourante: Sequence|undefined;
 
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
     this.sequences = [];
@@ -177,5 +178,14 @@ export class BddService {
       if(seqTabTab.length === 0) break;
     }
     return sequencesReturn;
+  }
+
+  chercherSequence(sequenceLigneTableau: sequencesTab): Sequence|undefined {
+    for (const seq of this.sequences) {
+      if (seq.id === sequenceLigneTableau.id) {
+        return seq;
+      }
+    }
+    return undefined;
   }
 }

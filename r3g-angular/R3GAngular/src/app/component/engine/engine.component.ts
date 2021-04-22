@@ -11,9 +11,9 @@ import {MatButtonToggle, MatButtonToggleAppearance} from '@angular/material/butt
 })
 export class EngineComponent implements OnInit {
 
-  // --> Jouer la vrai animation squelette
+  // Jouer la vrai animation squelette
   // Mettre les autres panels etc ... pour la structure
-  // Paramétrer les annotations
+  // --> Paramétrer les annotations
   // Enregistrer annotations dans BDD (bouton sauvegarde)
   // Changer de séquence dans toutes les séquences chargées
   // Pouvoir se positionner à tel frame
