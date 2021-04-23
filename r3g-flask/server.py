@@ -19,6 +19,7 @@ from werkzeug.utils import secure_filename
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 from Class.Annotation import Annotation
+from Class.Eval import Eval
 
 
 
@@ -178,7 +179,7 @@ def evaluation(name,sequences,model):
         elt.replace('.inkml','')+'.txt')
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
     "Weigths/"+model+'/weights/'])
-    ret = {}
+    ret = []
     for file in os.listdir('./EvaluationSequences/'):
         with open('./EvaluationSequences/' + file) as file_content:
             frame = 0
@@ -190,7 +191,7 @@ def evaluation(name,sequences,model):
                 annotation = Annotation(frame,frame+int(nb_frame),0,CLASSES[int(id_geste)])
                 frame = frame + int(nb_frame)
                 liste_annotation.append(annotation.__dict__)
-        ret[file.replace('txt','inkml')] = liste_annotation
+        ret.append(Eval(file.replace('txt','inkml'),liste_annotation).__dict__)
     return json.dumps(ret)
 
 

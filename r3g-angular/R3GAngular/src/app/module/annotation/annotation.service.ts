@@ -7,6 +7,8 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
 import * as THREE from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {Annotation} from '../../class/commun/annotation/annotation';
+import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
+import { BddService } from 'src/app/service/bdd.service';
 
 
 @Injectable({
@@ -35,10 +37,11 @@ export class AnnotationService {
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
 
+
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
 
-  constructor(private eventManager: EventManager) {
+  constructor(private eventManager: EventManager, public sequencesChargees:SequencesChargeesService, public bdd:BddService) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
     this.sizeIndicatorTime = 20;
     this.margeTimeline = 20;
@@ -95,6 +98,12 @@ export class AnnotationService {
       // RectAnnotationIA
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+      for (let i = 0; i < this.sequencesChargees.evaluation_selected.length; i++) {
+        const f1 = this.sequencesChargees.evaluation_selected[i].f1
+        const f2 = this.sequencesChargees.evaluation_selected[i].f2
+      }
+      
+
 
       // ======================================================
       // CURSOR
