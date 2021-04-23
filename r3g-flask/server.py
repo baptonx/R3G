@@ -344,7 +344,7 @@ def get_donnee(filename, bdd):
     """Contenu du fichier inkml."""
     filepath = LISTE_FICHIER_INKML[bdd][filename]
     donnees = []
-    tree = ET.parse(filepath)
+    tree = ET.parse(LISTE_PATH_BDD[bdd]+ '/' + filepath)
     root = tree.getroot()
     for child in root:
         if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
