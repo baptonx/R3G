@@ -80,28 +80,13 @@ export class ExplorationService {
         const frame2 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].fin;
         const t1 = this.convertFrameToTime(Number(frame1));
         const t2 = this.convertFrameToTime(Number(frame2));
-        if (name === 'nothing') { this.ctx.fillStyle = 'green'; }
-        else if (name === 'vattene') { this.ctx.fillStyle = 'red'; }
-        else if (name === 'vieniqui') { this.ctx.fillStyle = 'yellow';}
-        else if (name === 'perfetto') { this.ctx.fillStyle = 'brown'; }
-        else if (name === 'furbo') { this.ctx.fillStyle = 'purple'; }
-        else if (name === 'cheduepalle') { this.ctx.fillStyle = 'blue'; }
-        else if (name === 'chevuoi') { this.ctx.fillStyle = 'pink'; }
-        else if (name === 'daccordo') { this.ctx.fillStyle = 'Crimson'; }
-        else if (name === 'seipazzo') { this.ctx.fillStyle = 'HotPink'; }
-        else if (name === 'combinato') { this.ctx.fillStyle = 'Coral'; }
-        else if (name === 'freganiente') { this.ctx.fillStyle = 'Gold'; }
-        else if (name === 'ok') { this.ctx.fillStyle = 'DarkKhaki'; }
-        else if (name === 'cosatifarei') { this.ctx.fillStyle = 'Indigo'; }
-        else if (name === 'basta') { this.ctx.fillStyle = 'LightGreen'; }
-        else if (name === 'prendere') { this.ctx.fillStyle = 'MediumAquamarine'; }
-        else if (name === 'noncenepiu') { this.ctx.fillStyle = 'LightSteelBlue'; }
-        else if (name === 'fame') { this.ctx.fillStyle = 'BurlyWood'; }
-        else if (name === 'tantotempo') { this.ctx.fillStyle = 'SandyBrown'; }
-        else if (name === 'buonissimo') { this.ctx.fillStyle = 'Sienna'; }
-        else if (name === 'messidaccordo') { this.ctx.fillStyle = 'Silver'; }
-        else if (name === 'sonostufo') { this.ctx.fillStyle = 'Bisque'; }
-        else { this.ctx.fillStyle = 'black'; }
+        const color = localStorage.getItem(name);
+        if(color != null){
+          this.ctx.fillStyle = color;
+        }
+        else { 
+          this.ctx.fillStyle = 'black';
+         }
         this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
         this.ctx.fillStyle = 'black';
         this.ctx.fillText(name, this.timeToPos(t1) + 5, 13);
