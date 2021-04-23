@@ -28,7 +28,7 @@
     "ngx-golden-layout": "0.0.17",
     "rxjs": "^6.6.7",
     "sweetalert": "^2.1.2",
-    "three": "^0.124.0",
+    "three": "^0.127.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.10.2"
   },
@@ -39,6 +39,7 @@
     "@types/jasmine": "^3.6.9",
     "@types/jquery": "^3.5.5",
     "@types/node": "^12.20.10",
+    "@types/three": "^0.127.1",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",

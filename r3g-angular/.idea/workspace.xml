@@ -19,9 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="nothing special">
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/annotation/annotation.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/annotation/annotation.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" afterDir="false" />
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="retour vers exploration rapide">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/sequence.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/sequence.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +99,7 @@
       <workItem from="1618918926297" duration="16774000" />
       <workItem from="1618986091630" duration="1703000" />
       <workItem from="1619073672022" duration="14832000" />
+      <workItem from="1619184783737" duration="16000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -200,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618986737703</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="retour vers exploration rapide">
+      <created>1619095344009</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1619095344009</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -231,6 +244,7 @@
     <MESSAGE value="ajout téléchargement de sequence" />
     <MESSAGE value="ajout téléchargement de sequence bis" />
     <MESSAGE value="nothing special" />
-    <option name="LAST_COMMIT_MESSAGE" value="nothing special" />
+    <MESSAGE value="retour vers exploration rapide" />
+    <option name="LAST_COMMIT_MESSAGE" value="retour vers exploration rapide" />
   </component>
 </project>

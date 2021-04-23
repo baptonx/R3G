@@ -260,14 +260,15 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
     # pylint: disable-msg=global-statement
     p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
     liste_fichier_in = {}
+    longeur_path = len(pathbdd)
     global METADONNEE
     global LISTE_GESTE_BDD
     for path, _, files in walk(pathbdd):
         for filename in files:
             if p_1.match(filename):
-                liste_fichier_in[filename] = path+'/'+filename
+                liste_fichier_in[filename] = path[longeur_path:]+'/'+filename
     if len(liste_fichier_in) != 0:
-        LISTE_GESTE_BDD[namebdd] = []
+        LISTE_GESTE_BDD[namebdd] = [] 
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -299,10 +300,9 @@ def effacer_metadonnee_bdd(bdd):
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
-    # pylint: disable-msg=too-many-nested-blocks
     """Contenu du fichier inkml."""
     global LISTE_GESTE_BDD
-    filepath = LISTE_FICHIER_INKML[bdd][filename]
+    filepath = LISTE_PATH_BDD[bdd] + LISTE_FICHIER_INKML[bdd][filename]
     name = filename
     format_donnee = {}
     annotations = {}
@@ -323,8 +323,7 @@ def get_meta_donnee(filename, bdd):
                         nb_annotation += 1
                         for children in children2:
                             action[children.attrib['type']] = children.text
-                            if(children.attrib['type'] == "type" and children.text not\
-                             in LISTE_GESTE_BDD[bdd]):
+                            if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
                                 LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
                     else:
@@ -358,13 +357,16 @@ def get_donnee(filename, bdd):
                     donnees.append(dict_final)
     return donnees
 
+def add_listgeste_metadonne():
+    """Construit la structure a envoyer au serveur contenant et les liste de geste par bdd et les Metadonnee"""
+    return [LISTE_GESTE_BDD, METADONNEE]
 #############Exploration route :##############
 
 @APP.route('/models/getMetaDonnee')
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
 
-    return json.dumps(METADONNEE)
+    return json.dumps(add_listgeste_metadonne())
 
 @APP.route('/models/getListBDD')
 def route_get_list_bdd():
@@ -401,16 +403,19 @@ def route_add_bdd():
             if namebdd is not None:
                 namebdd = namebdd.group(0)
                 if namebdd not in LISTE_PATH_BDD:
+                    LISTE_GESTE_BDD[namebdd] = []
+                    LISTE_PATH_BDD[namebdd] = path
                     if ajout_fichiers_inkml_in(path, namebdd):
-                        LISTE_PATH_BDD[namebdd] = path
-                        LISTE_GESTE_BDD[namebdd] = []
-                        save_config()
+                        save_config()  
+                    else:
+                        del LISTE_GESTE_BDD[namebdd]
+                        del LISTE_PATH_BDD[namebdd]
         root.destroy()
-        return json.dumps(METADONNEE)
+        return json.dumps(add_listgeste_metadonne())
     except RuntimeError:
         print("tkinter bug")
         root.destroy()
-        return json.dumps(METADONNEE)
+        return json.dumps(add_listgeste_metadonne())
 
 @APP.route('/models/addBDDwithpath/<path>')
 def route_add_bdd_path(path):
@@ -426,11 +431,14 @@ def route_add_bdd_path(path):
         if namebdd is not None:
             namebdd = namebdd.group(0)
             if namebdd not in LISTE_PATH_BDD:
+                LISTE_GESTE_BDD[namebdd] = []
+                LISTE_PATH_BDD[namebdd] = strpath
                 if ajout_fichiers_inkml_in(strpath, namebdd):
-                    LISTE_PATH_BDD[namebdd] = strpath
-                    LISTE_GESTE_BDD[namebdd] = []
                     save_config()
-    return json.dumps(METADONNEE)
+                else:
+                    del LISTE_GESTE_BDD[namebdd]
+                    del LISTE_PATH_BDD[namebdd]
+    return json.dumps(add_listgeste_metadonne())
 
 
 @APP.route('/models/closeBDD/<name>')
@@ -444,7 +452,7 @@ def route_close_bdd(name):
         if namebdd in LISTE_PATH_BDD:
             fermer_bdd_inkml(namebdd)
     save_config()
-    return METADONNEE
+    return json.dumps(add_listgeste_metadonne())
 
 @APP.route('/models/reload/<name>')
 def route_reload_bdd(name):
@@ -455,8 +463,7 @@ def route_reload_bdd(name):
         effacer_metadonnee_bdd(name)
         ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
     save_config()
-    print(LISTE_GESTE_BDD)
-    return METADONNEE
+    return json.dumps(add_listgeste_metadonne())
 
 #############Traduire Fichier INKML -> TXT route :##############
 

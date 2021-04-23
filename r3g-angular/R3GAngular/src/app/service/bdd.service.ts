@@ -4,8 +4,6 @@ import {sequencesTab, TableauExplService} from "./tableau-expl.service";
 import {HttpClient} from '@angular/common/http';
 import {FormatDonnees} from "../class/exploration/format-donnees";
 import {BehaviorSubject} from "rxjs";
-import set = Reflect.set;
-import {element} from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +15,7 @@ export class BddService {
   formatSequence: FormatDonnees = new FormatDonnees();
   waitanswer: boolean = true;
   classesGestes:Array<String>=[];
+  listGesteBDD: Map<String, Array<String>> = new Map<String, Array<String>>();
   public sequenceCourante: Sequence|undefined;
 
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
@@ -47,7 +46,7 @@ export class BddService {
       this.answerHere();
     });
 
-  } 
+  }
   addpath(): void{
     this.answerWait();
     this.http
@@ -86,7 +85,7 @@ export class BddService {
         this.bddnames = returnedData;
         this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
-  } 
+  }
   closedb(dbname: string): void{
     this.answerWait();
     this.http
@@ -98,9 +97,16 @@ export class BddService {
       });
   }
 
-  miseajourdb(returnedData: object): void{
+  miseajourdb(returnedData: any): void{
+    this.listGesteBDD.clear();
+    for (const [namebdd,value] of Object.entries((returnedData[0]))) {
+      if (Array.isArray(value)){
+       this.listGesteBDD.set(namebdd,value);
+      }
+    }
+    console.log(this.listGesteBDD);
     this.sequences = [];
-    for (const dbb of Object.values((returnedData))) {
+    for (const dbb of Object.values((returnedData[1]))) {
       if (Array.isArray(dbb)) {
         for(let key in dbb) {
           let id = dbb[key]['id'];
