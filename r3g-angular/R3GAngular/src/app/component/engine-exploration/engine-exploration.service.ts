@@ -186,7 +186,7 @@ export class EngineExplorationService implements OnDestroy {
     if (refresh === false && listElementHtml !== undefined) {
       for (const element of listElementHtml) {
         this.listElementHtmlRefresh.push(element);
-        console.log(this.listElementHtmlRefresh);
+        // console.log(this.listElementHtmlRefresh);
         const sceneName = element.nativeElement.dataset.diagram;
         // let key: 'box'|'pyramid' = 'box';
         let key: 'box' = 'box';
@@ -204,19 +204,12 @@ export class EngineExplorationService implements OnDestroy {
       }
     }
     else {
-      console.log(this.listElementHtmlRefresh);
       for (const element of this.listElementHtmlRefresh) {
         const sceneName = element.nativeElement.dataset.diagram;
-        // let key: 'box'|'pyramid' = 'box';
         let key: 'box' = 'box';
         if (sceneName === 'box') {
           key = 'box';
         }
-        /*
-        else if (sceneName === 'pyramid') {
-          key = 'pyramid';
-        }
-         */
         const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
         const sceneRenderFunction = sceneInitFunction(element.nativeElement);
         this.addScene(element, sceneRenderFunction);

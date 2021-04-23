@@ -25,6 +25,7 @@ interface MaSceneElement {
 
 @Injectable()
 export class EngineService implements OnDestroy {
+  private listElementHtmlRefresh: Array<ElementRef<HTMLCanvasElement>> = [];
   private canvas!: HTMLCanvasElement;
   private renderer!: THREE.WebGLRenderer;
   public sceneElements: Array<MaSceneElement> = [];
@@ -46,17 +47,24 @@ export class EngineService implements OnDestroy {
     }
   }
 
-  public initialize(canvas: ElementRef<HTMLCanvasElement>, listElementHtml: Array<ElementRef<HTMLCanvasElement>>): void {
+  public initialize(canvas: ElementRef<HTMLCanvasElement>|undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>>|undefined, refresh: boolean, newSequence: Sequence|undefined): void {
     this.sceneElements = [];
     this.frameId = 0;
 
-    this.canvas = canvas.nativeElement;
+    if (refresh === false && canvas !== undefined) {
+      this.canvas = canvas.nativeElement;
+    }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
-    console.log(this.sequenceCurrent);
+    if (newSequence !== undefined) {
+      this.sequenceCurrent = newSequence;
+    }
+    else {
+      this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
+      // console.log(this.sequenceCurrent);
+    }
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
@@ -81,7 +89,7 @@ export class EngineService implements OnDestroy {
           averageY = this.calculateAverage(tabPosY);
           averageZ = this.calculateAverage(tabPosZ);
 
-
+          this.squelette.initialize();
           for (let i = 0; i < this.sequenceCurrent.traceNormal.length; i++) {
             const tabPosXYZ: Array<number> = [];
             const tabTime: Array<number> = [];
@@ -176,22 +184,42 @@ export class EngineService implements OnDestroy {
       },*/
     };
 
-    for (const element of listElementHtml) {
-      const sceneName = element.nativeElement.dataset.diagram;
-      // let key: 'box'|'pyramid' = 'box';
-      let key: 'box' = 'box';
-      if (sceneName === 'box') {
-        key = 'box';
+
+    if (refresh === false && listElementHtml !== undefined) {
+      for (const element of listElementHtml) {
+        this.listElementHtmlRefresh.push(element);
+        const sceneName = element.nativeElement.dataset.diagram;
+        // let key: 'box'|'pyramid' = 'box';
+        let key: 'box' = 'box';
+        if (sceneName === 'box') {
+          key = 'box';
+        }
+        /*
+        else if (sceneName === 'pyramid') {
+          key = 'pyramid';
+        }
+         */
+        const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
+        const sceneRenderFunction = sceneInitFunction(element.nativeElement);
+        this.addScene(element, sceneRenderFunction);
       }
-      /*
-      else if (sceneName === 'pyramid') {
-        key = 'pyramid';
-      }
-       */
-      const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
-      const sceneRenderFunction = sceneInitFunction(element.nativeElement);
-      this.addScene(element, sceneRenderFunction);
     }
+    else {
+      for (const element of this.listElementHtmlRefresh) {
+        const sceneName = element.nativeElement.dataset.diagram;
+        let key: 'box' = 'box';
+        if (sceneName === 'box') {
+          key = 'box';
+        }
+        const sceneInitFunction: (elem: HTMLCanvasElement) => (rect: DOMRect) => void = sceneInitFunctionsByName[key];
+        const sceneRenderFunction = sceneInitFunction(element.nativeElement);
+        this.addScene(element, sceneRenderFunction);
+      }
+    }
+  }
+
+  public refreshInitialize(newSequence: Sequence|undefined): void {
+    this.initialize(undefined, undefined, true, newSequence);
   }
 
   public addScene(elem: ElementRef<HTMLCanvasElement>, fn: (rect: DOMRect) => void): void {
@@ -218,7 +246,7 @@ export class EngineService implements OnDestroy {
 
     const controls = new TrackballControls(camera, elem);
     // controls.noPan = true;
-    controls.rotateSpeed = 0.5;
+    controls.rotateSpeed = 2;
     this.controls = controls;
 
 

@@ -7,6 +7,10 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
 import * as THREE from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {Annotation} from '../../class/commun/annotation/annotation';
+import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
+import { BddService } from 'src/app/service/bdd.service';
+import { Eval } from 'src/app/class/evaluation/eval';
+import { Sequence } from 'src/app/class/commun/sequence';
 
 
 @Injectable({
@@ -27,13 +31,16 @@ export class AnnotationService {
   public mouseDownAnnotationMove!: boolean;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
-  public buttonModeViewing!: MatButtonToggle;
+  public buttonModeEditing!: MatButtonToggle;
   public buttonModeAnnotation!: MatButtonToggle;
   public annotationCurrent!: Annotation;
   public allAnnotation: Array<Annotation> = [];
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
+  public geste_couleur:Map<string,string>=new Map<string,string>();
+  public annotationIA:Array<Eval> = [];
+
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
@@ -95,6 +102,9 @@ export class AnnotationService {
       // RectAnnotationIA
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+      
+
+
 
       // ======================================================
       // CURSOR
@@ -126,11 +136,13 @@ export class AnnotationService {
     }
   }
 
+  
+
   onMouseDown(event: MouseEvent): void {
     const posX = event.offsetX;
     const posY = event.offsetY;
     this.mouseDown = true;
-    if (this.buttonModeViewing.checked === true) {
+    if (this.buttonModeEditing.checked === true) {
       const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
       if (tabIndiceAnnotation.length !== 0) {
         this.indiceAnnotationSelected = tabIndiceAnnotation[0];
@@ -179,7 +191,7 @@ export class AnnotationService {
     const posY = event.offsetY;
     const newValueTime = this.posToTime(posX);
 
-    if (this.buttonModeViewing.checked === true) {
+    if (this.buttonModeEditing.checked === true) {
       if (this.mouseDownAnnotationRightEdge) {
         const timeMouse = this.posToTime(posX);
         const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);

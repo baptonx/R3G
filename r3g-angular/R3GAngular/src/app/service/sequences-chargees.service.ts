@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Annotation } from '../class/commun/annotation/annotation';
 import {Sequence} from "../class/commun/sequence";
+import { Eval } from '../class/evaluation/eval';
 import {BddService} from './bdd.service';
 
 @Injectable({
@@ -8,10 +9,13 @@ import {BddService} from './bdd.service';
 })
 export class SequencesChargeesService {
   sequences: Set<Sequence>;
-  evaluation:Map<String,Array<Annotation>>
+  evaluation:Array<Eval>
+  evaluation_selected:Array<Annotation>
   constructor(public bdd : BddService) {
     this.sequences = new Set<Sequence>();
-    this.evaluation = new Map<String,Array<Annotation>>();
+    this.evaluation = []
+    this.evaluation_selected = [];
+  
   }
 
   addToList(sequences: Sequence[]): void {
