@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 import { EngineService } from '../engine/engine.service';
+import {BddService} from '../../service/bdd.service';
 
 @Component({
   selector: 'app-sequences-annotation',
@@ -10,25 +10,25 @@ import { EngineService } from '../engine/engine.service';
 })
 export class SequencesAnnotationComponent implements OnInit {
   sequencesList:Array<String>;
-  constructor(public serviceSequence:SequencesChargeesService, public bdd:BddService) { 
+  constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService) {
     this.sequencesList=[]
     this.serviceSequence.sequences.forEach(elt=>{
       this.sequencesList.push(elt.id)
     })
   }
 
-  changeValue(value:any){
-    this.serviceSequence.sequences.forEach(elt=>{
-      if(elt.id==value){
-          this.bdd.sequenceCourante=elt
-          this.serviceSequence.evaluation.forEach(elt=>{
-            if(elt.name === this.bdd.sequenceCourante?.id){
-                this.serviceSequence.evaluation_selected = elt.annotation
-            }
-          })
+  changeValue(value: any): void{
+    this.serviceSequence.sequences.forEach(seq => {
+      if (seq.id === value) {
+        this.engineService.refreshInitialize(seq);
+        this.bdd.sequenceCourante = seq;
+        this.serviceSequence.evaluation.forEach(ev => {
+          if (ev.name === this.bdd.sequenceCourante?.id) {
+            this.serviceSequence.evaluation_selected = ev.annotation;
+          }
+        });
       }
- 
-    })
+    });
   }
 
   ngOnInit(): void {

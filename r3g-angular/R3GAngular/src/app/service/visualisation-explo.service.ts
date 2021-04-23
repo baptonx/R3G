@@ -35,7 +35,7 @@ export class VisualisationExploService {
         // console.log('time : ' + this.engineExplorationService.explorationServ.action.time);
       }, 1500);
     }
-    this.componentHidden = false;
+    // this.componentHidden = false;
   }
   hide(): void{
     this.componentHidden = true;

@@ -11,15 +11,15 @@ import {MatButtonToggle, MatButtonToggleAppearance} from '@angular/material/butt
 })
 export class EngineComponent implements OnInit {
 
-  // Jouer la vrai animation squelette
-  // Mettre les autres panels etc ... pour la structure
-  // --> Paramétrer les annotations
-  // Enregistrer annotations dans BDD (bouton sauvegarde)
-  // Changer de séquence dans toutes les séquences chargées
-  // Pouvoir se positionner à tel frame
-  // Mettre l'ia
-  // Attention quand on quitte et qu'on revient sur le mode ! mettre en place une sauvegarde de session ?
-  // Afficher l'évaluation ? (Mode évaluation ? Pas possible de changer annotation, que visualiser ...)
+  // --> Visualiser les annotations des séquences
+  // Sélection d'une annotation
+  // Afficher les informations dans l'éditeur textuel
+  // Pouvoir modifier les annotations des séquences à la main et avec l'éditeur textuel (faire attention à l'ordre des listes !)
+  // Pouvoir créer une nouvelle annotation
+  // Pouvoir sauvegarder
+  // Mettre l'ia -> Récupérer un tableau d'annotation à afficher
+  // Bouton pour recopier liste annotation IA dans liste annotation de la séquence
+  // Evaluation pareil : liste d'annotation à afficher mais bloquer la modification (booléen mode évaluation à true et reviens à false quand on quitte le module)
 
 
 
@@ -49,8 +49,8 @@ export class EngineComponent implements OnInit {
   @ViewChild('box', {static: true})
   public box!: ElementRef<HTMLCanvasElement>;
 
-  @ViewChild('buttonModeViewing', { static: true })
-  public buttonModeViewing!: MatButtonToggle;
+  @ViewChild('buttonModeEditing', { static: true })
+  public buttonModeEditing!: MatButtonToggle;
 
   @ViewChild('buttonModeAnnotation', { static: true })
   public buttonModeAnnotation!: MatButtonToggle;
@@ -62,9 +62,9 @@ export class EngineComponent implements OnInit {
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
-    this.engServ.initialize(this.rendererCanvas, this.listElementHTML);
-    this.buttonModeViewing.checked = true;
-    this.engServ.annotationServ.buttonModeViewing = this.buttonModeViewing;
+    this.engServ.initialize(this.rendererCanvas, this.listElementHTML, false, undefined);
+    this.buttonModeEditing.checked = true;
+    this.engServ.annotationServ.buttonModeEditing = this.buttonModeEditing;
     this.engServ.annotationServ.buttonModeAnnotation = this.buttonModeAnnotation;
     this.engServ.animate();
   }

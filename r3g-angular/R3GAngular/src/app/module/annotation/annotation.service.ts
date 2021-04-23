@@ -29,7 +29,7 @@ export class AnnotationService {
   public mouseDownAnnotationMove!: boolean;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
-  public buttonModeViewing!: MatButtonToggle;
+  public buttonModeEditing!: MatButtonToggle;
   public buttonModeAnnotation!: MatButtonToggle;
   public annotationCurrent!: Annotation;
   public allAnnotation: Array<Annotation> = [];
@@ -102,7 +102,7 @@ export class AnnotationService {
         const f1 = this.sequencesChargees.evaluation_selected[i].f1
         const f2 = this.sequencesChargees.evaluation_selected[i].f2
       }
-      
+
 
 
       // ======================================================
@@ -139,7 +139,7 @@ export class AnnotationService {
     const posX = event.offsetX;
     const posY = event.offsetY;
     this.mouseDown = true;
-    if (this.buttonModeViewing.checked === true) {
+    if (this.buttonModeEditing.checked === true) {
       const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
       if (tabIndiceAnnotation.length !== 0) {
         this.indiceAnnotationSelected = tabIndiceAnnotation[0];
@@ -188,7 +188,7 @@ export class AnnotationService {
     const posY = event.offsetY;
     const newValueTime = this.posToTime(posX);
 
-    if (this.buttonModeViewing.checked === true) {
+    if (this.buttonModeEditing.checked === true) {
       if (this.mouseDownAnnotationRightEdge) {
         const timeMouse = this.posToTime(posX);
         const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
