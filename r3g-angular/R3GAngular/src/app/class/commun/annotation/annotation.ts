@@ -7,6 +7,7 @@ export class Annotation {
   public classe_geste!: string;
 
 
+
   public verifyT1BeforeT2(): void {
     if (this.t1 > this.t2) {
       const temp = this.t2;
@@ -14,4 +15,5 @@ export class Annotation {
       this.t1 = temp;
     }
   }
+
 }

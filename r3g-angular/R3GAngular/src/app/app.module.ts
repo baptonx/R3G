@@ -52,6 +52,7 @@ import { EngineExplorationComponent } from './component/engine-exploration/engin
 import { TimelineExplorationComponent } from './component/timeline-exploration/timeline-exploration.component';
 import {SequencesAnnotationComponent} from './component/sequences-annotation/sequences-annotation.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { TimelineEvaluationComponent } from './component/timeline-evaluation/timeline-evaluation.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
     SequencesAnnotationComponent,
     EngineExplorationComponent,
     TimelineExplorationComponent,
+    TimelineEvaluationComponent,
   ],
     imports: [
         BrowserModule,

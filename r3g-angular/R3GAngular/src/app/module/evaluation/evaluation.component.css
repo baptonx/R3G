@@ -25,3 +25,14 @@ app-navigation-modules{
   z-index: 1;
   bottom:0;
 }
+
+.tab-container2{
+  display:inline-block;
+  position: relative;
+  margin-top: 20px;
+  right:15%;
+  padding: 20px;
+  min-width:100px;
+  background-color: #444444;
+  color: white;
+}

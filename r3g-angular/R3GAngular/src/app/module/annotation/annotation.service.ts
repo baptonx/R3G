@@ -68,7 +68,7 @@ export class AnnotationService {
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-
+  
       // ======================================================
       // RectAnnotationVeriteTerrain
       this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
@@ -102,6 +102,8 @@ export class AnnotationService {
       // RectAnnotationIA
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+
+      
       
 
 

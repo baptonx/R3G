@@ -15,14 +15,18 @@ export class EditeurComponent implements OnInit {
   isLinear = false;
   classeGeste:Array<String>=[];
   couleur:Array<String>=[];
- 
+  bdd_selected:string="";
   geste:string="";
   dataSource!: MatTableDataSource<String>;
   displayedColumns=['Geste','Couleur']
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public http:HttpClient,public bdd:BddService, public annotation:AnnotationService) {
-    this.classeGeste=this.bdd.classesGestes;
+    this.bdd.listGesteBDD.forEach((value: String[], key: String) => {
+      value.forEach(elt=>{
+        this.classeGeste.push(elt)
+      })
+  });
     for(var i=0;i<this.classeGeste.length;i++){
     let Col=localStorage.getItem(this.classeGeste[i].toString());
     if(Col!=null){  //  it checks values here or not to the variable
@@ -37,6 +41,17 @@ export class EditeurComponent implements OnInit {
     this.dataSource = new MatTableDataSource<String>(this.classeGeste);
     console.log(this.dataSource);
     console.log(this.couleur)
+  }
+
+  changeValue(value:any){
+    this.bdd.bddnames.forEach(elt =>{
+        if(elt==value){
+          this.bdd_selected=elt
+          console.log(this.bdd_selected)
+          console.log(this.bdd.listGesteBDD)
+        }
+    }
+    )
   }
 
   changeVal(event: any, i:number):void{

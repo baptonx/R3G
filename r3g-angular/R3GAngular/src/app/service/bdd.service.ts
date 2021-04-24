@@ -83,7 +83,6 @@ export class BddService {
       .get<Array<string>>(`/models/getListBDD` , {})
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
-        this.http.get<Array<String>>('/models/getClasses/'+this.bddnames[0],{}).subscribe((returnedData: Array<String>) => this.classesGestes = returnedData);
       });
   }
   closedb(dbname: string): void{

@@ -5,7 +5,7 @@
         <mat-form-field appearance="fill">
             <mat-label>Classe du geste</mat-label>
         <mat-select>
-            <mat-option *ngFor="let geste of classeGeste" [value]="geste">
+            <mat-option *ngFor="let geste of this.classeGeste" [value]="geste">
               {{geste}}
             </mat-option>
           </mat-select>

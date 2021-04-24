@@ -104,21 +104,6 @@ def get_models_names():
     """Cette route permet de recuperer la liste des modeles disponible sur Wandb."""
     return json.dumps(MODEL_LIST)
 
-@APP.route('/models/getClasses/<bdd>')
-def get_classes(bdd):
-    """exemple : obtenir les classes de la BDD charlearn"""
-    bdd=bdd.replace('_inkml','')
-    ret=[]
-    if os.path.exists('./'+bdd+'/tabclass.txt'):
-        with open('./'+bdd+'/tabclass.txt') as file_content:
-            for line in file_content:
-                ret.append(line.split(';')[1].replace('\n',''))
-                CLASSES.append(line.split(';')[1].replace('\n',''))
-    else:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-    return json.dumps(ret)
-
-
 
 @APP.route('/models/getModel/<id>')
 def get_model(model_id):
@@ -162,6 +147,12 @@ def evaluation(name,sequences,model):
     download_weights(model)
     name=name.replace('_inkml','')
     seq=sequences.split(',')
+    if os.path.exists('./'+name+'/tabclass.txt'):
+        with open('./'+name+'/tabclass.txt') as file_content:
+            for line in file_content:
+                CLASSES.append(line.split(';')[1].replace('\n',''))
+    else:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     if len(CLASSES) == 0:
         return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     for fichier in os.listdir('./Sequences'):
@@ -182,7 +173,7 @@ def evaluation(name,sequences,model):
     ret = []
     for file in os.listdir('./EvaluationSequences/'):
         with open('./EvaluationSequences/' + file) as file_content:
-            frame = 0
+            frame = 1
             liste_annotation = []
             tab = file_content.readlines()[1].split(' ')
             for elt in tab:

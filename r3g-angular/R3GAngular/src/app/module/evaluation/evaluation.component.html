@@ -1,4 +1,16 @@
-<div class="tab-container">
-    <app-apprentissage></app-apprentissage>
+<div>
+    <app-apprentissage class="tab-container"></app-apprentissage>
+    <div class="tab-container2" style="float: right;">
+        <mat-form-field appearance="fill">
+          <mat-label>Choisir une séquence</mat-label>
+          <mat-select (valueChange)="changeValue($event)">
+            <mat-option *ngFor="let s of sequencesList" [value]="s" >
+              {{s}}
+            </mat-option>
+        </mat-select> 
+        </mat-form-field>   
+    </div>
 </div>
+
+<app-timeline-evaluation></app-timeline-evaluation>
 <app-navigation-modules></app-navigation-modules>
