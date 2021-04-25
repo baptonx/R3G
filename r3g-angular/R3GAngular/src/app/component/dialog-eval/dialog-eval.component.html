@@ -1,5 +1,5 @@
-<h3><B>Id du modèle</B> : {{model}}</h3>
-<h3><B>Séquences choisies</B> : {{sequences}}</h3>
+<h3><B>Identifiant du modèle</B> : {{model}}</h3>
+<h3><B>Séquences choisies</B> : <li *ngFor="let s of sequences">{{s}}</li></h3>
 <button mat-flat-button class='btn' (click)='eval()'>Lancer l'evaluation</button>
 <h3> </h3>
 <h3>{{chargement}}</h3>

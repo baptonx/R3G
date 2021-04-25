@@ -17,6 +17,7 @@ export class EvaluationComponent implements OnInit {
     this.serviceSequence.sequences.forEach(elt=>{
       this.sequencesList.push(elt.id)
     })
+    this.evalServ.reset();
   }
 
   ngOnInit(): void {
@@ -57,6 +58,18 @@ export class EvaluationComponent implements OnInit {
         });
       }
     });
+  }
+
+  change_timeline_1(value:any):void{
+    this.evalServ.timeline_1=value;
+    console.log(this.evalServ)
+    this.evalServ.draw();
+  }
+
+  change_timeline_2(value:any):void{
+    this.evalServ.timeline_2=value;
+    console.log(this.evalServ)
+    this.evalServ.draw();
   }
 
  

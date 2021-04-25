@@ -32,7 +32,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
 
   changeValue(value:any){
     this.modelesList.forEach(elt =>{
-        if(elt.name==value){
+        if(elt._id==value){
           this.modelSelected=elt._id
           console.log(elt._id)
         }

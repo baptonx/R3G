@@ -36,10 +36,15 @@ export class EvaluationService {
   public margeEdgeMouse = 10;
   public geste_couleur:Map<string,string>=new Map<string,string>();
   public annotationIA:Array<Eval> = [];
+  public model_eval_1:Set<string> = new Set<string>();
+  public model_eval_2:Set<string> = new Set<string>();
   public sequenceCurrent!:Sequence;
   public tabTimeCurrent!:Array<number>;
   public geste_verite_terrain:string[]=[];
   public geste_ia_1:string[]=[];
+  public geste_ia_2:string[]=[];
+  public timeline_1:string="";
+  public timeline_2:string="";
 
 
   // Timeline
@@ -59,6 +64,15 @@ export class EvaluationService {
     this.annotationCurrent = new Annotation();
     this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
+    this.model_eval_1.add("Vérité terrain")
+    this.model_eval_2.add("Vérité terrain")
+  }
+
+  reset():void{
+      this.timeline_1 = ""
+      this.timeline_2 = ""
+
+    
   }
 
   draw(): void {
@@ -68,77 +82,35 @@ export class EvaluationService {
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
       this.ctx.clearRect(0,0,canvas.width,canvas.height)
 
-
       // ======================================================
       // RectAnnotationVeriteTerrain
       this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
       this.ctx.fillRect(this.margeTimeline, 100, this.unit * this.tempsTotal, 100);
 
       // ======================================================
-      // AnnotationVeriteTerrain
-      const lengthAnnotation = this.sizeOfAnnotations();
-      console.log(this.sequenceCurrent.metaDonnees.annotation)
-      /*
-      if (this.sequenceCurrent !== undefined) {
-        console.log(this.sequenceCurrent.metaDonnees.annotation);
-      }
-       */
+      // RectAnnotationIA
+      this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+
 
       this.get_verite();
-      this.get_ia();
-      console.log(this.geste_verite_terrain)
-
-   
-  
+      this.get_annot();
       this.ctx.font = '12px Arial';
 
-      if(this.geste_ia_1.length==0 && this.geste_verite_terrain.length>0){
-      for (let i = 1; i < lengthAnnotation; i++) {
-        const name = this.sequenceCurrent.metaDonnees.annotation[i.toString()].type;
-        const frame1 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].debut;
-        const frame2 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].fin;
-   
-        const t1 = this.convertFrameToTime(Number(frame1));
-        const t2 = this.convertFrameToTime(Number(frame2));
-        const color = localStorage.getItem(name);
+      if(this.timeline_1 === 'Vérité terrain'){
+        this.draw_verite(100)
+      }
+      else{
+        this.draw_ia(100,1)
+      }
+      if(this.timeline_2 === 'Vérité terrain'){
+        this.draw_verite(230)
+      }
+      else{
+        this.draw_ia(230,2)
+        console.log(this.geste_ia_2)
+      }
     
-
-        if(this.geste_verite_terrain.length>0 && this.geste_ia_1.length==0){
-
-        if(color != null){
-          this.ctx.fillStyle = color;
-        }
-        else { 
-          this.ctx.fillStyle = 'black';
-         }
-        this.ctx.fillRect(this.timeToPos(t1), 100, this.timeToPos(t2) - this.timeToPos(t1), 100);
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText(name, this.timeToPos(t1) + 5, 100);
-        }
-      }}
-        else{
-          let geste=''
-          for(var i=0;i<this.geste_verite_terrain.length;i++){
-            const t1 = this.convertFrameToTime(Number(i));
-            const t2 = this.convertFrameToTime(Number(i+1));
-            if(this.geste_verite_terrain[i] === this.geste_ia_1[i]){
-              this.ctx.fillStyle = 'green';
-              this.ctx.fillRect(this.timeToPos(t1), 100, this.timeToPos(t2) - this.timeToPos(t1), 100);
-              this.ctx.fillStyle = 'black';
-              if (geste === this.geste_verite_terrain[i]){
-              }
-              else{
-                if(this.geste_verite_terrain[i] !== undefined){
-              this.ctx.fillText(this.geste_verite_terrain[i], this.timeToPos(t1) + 5, 100);
-                }
-              geste = this.geste_verite_terrain[i]
-              }
-            }
-          }
-
-        } 
-     
-
       // ======================================================
       // PreviewAnnotationCurrent
       if (this.mouseDown && this.buttonModeAnnotation.checked === true) {
@@ -148,28 +120,113 @@ export class EvaluationService {
         this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
       }
 
-      // ======================================================
-      // RectAnnotationIA
-      this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
-      this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
-
-      
-    
+     
     }
+
+    }
+
+public draw_ia(j:number,k:number):void{
+  if (this.ctx !== null && this.ctx !== undefined) {
+  this.get_ia(k);
+  let tmp=this.geste_ia_1
+  if(k===2){
+    tmp=this.geste_ia_2
+  }
+  let geste=''
+      
+          for(var i=0;i<this.geste_verite_terrain.length;i++){
+            const t1 = this.convertFrameToTime(Number(i));
+            const t2 = this.convertFrameToTime(Number(i+1));
+            if(this.geste_verite_terrain[i] === tmp[i]  && this.geste_verite_terrain[i] !== undefined){
+              this.ctx.fillStyle = 'green';
+              this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+              this.ctx.fillStyle = 'black';
+              if (geste === this.geste_verite_terrain[i]){
+              }
+              else{
+                if(this.geste_verite_terrain[i] !== undefined){
+              this.ctx.fillText(this.geste_verite_terrain[i], this.timeToPos(t1) + 5, j);
+                }
+              geste = this.geste_verite_terrain[i]
+              
+            }}
+          }
+}
+}
+      
+public draw_verite(j:number):void{
+  if (this.ctx !== null && this.ctx !== undefined) {
+  for (let i = 0; i < this.allAnnotation.length; i++) {
+    const name = this.allAnnotation[i].classe_geste
+    const frame1 = this.allAnnotation[i].f1
+    const frame2 = this.allAnnotation[i].f2
+
+    const t1 = this.convertFrameToTime(Number(frame1));
+    const t2 = this.convertFrameToTime(Number(frame2));
+    const color = localStorage.getItem(name);
+    if(color != null){
+      this.ctx.fillStyle = color;
+    }
+    else { 
+      this.ctx.fillStyle = 'black';
+     }
+    this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+    this.ctx.fillStyle = 'black';
+    this.ctx.fillText(name, this.timeToPos(t1) + 5, j);
+  }
+}
+}
+
+public get_annot():void{
+  this.allAnnotation = []
+  const lengthAnnotation = this.sizeOfAnnotations();
+  for (let i = 1; i < lengthAnnotation; i++) {
+    const name = this.sequenceCurrent.metaDonnees.annotation[i.toString()].type;
+    const frame1 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].debut;
+    const frame2 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].fin;
+
+    const t1 = this.convertFrameToTime(Number(frame1));
+    const t2 = this.convertFrameToTime(Number(frame2));
+    const color = localStorage.getItem(name);
+
+    let tmp=new Annotation()
+    tmp.f1 = frame1
+    tmp.f2 = frame2
+    tmp.classe_geste = name
+    tmp.t1 = t1
+    tmp.t2 = t2
+    this.allAnnotation.push(tmp)
   }
 
-  public get_ia():void{
+  }
+
+  public get_ia(i:number):void{
+    if(i===1){
     this.geste_ia_1=[]
     this.annotationIA.forEach(list=>{
-      if (list.name === this.sequenceCurrent.id){
+      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_1){
         list.annotation.forEach(an=>{
-          for(let j=an.f1;j<an.f2;j++){
+          for(let j=an.f1;j<=an.f2;j++){
             this.geste_ia_1[j]=an.classe_geste
           }
         })
       }
+    })}
+    else if (i===2){
+      this.geste_ia_2=[]
+    this.annotationIA.forEach(list=>{
+      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_2){
+        list.annotation.forEach(an=>{
+          for(let j=an.f1;j<=an.f2;j++){
+            this.geste_ia_2[j]=an.classe_geste
+          }
+        })
+      }
     })
+    }
   }
+
+
 
   public get_verite():void{
     this.geste_verite_terrain=[]
@@ -192,6 +249,7 @@ export class EvaluationService {
 
 
   public convertFrameToTime(frame: number): number {
+
     if (frame >= 0 && frame < this.tabTimeCurrent.length) {
       if(this.tabTimeCurrent[frame]==0 && frame!=0){
         return this.tempsTotal;

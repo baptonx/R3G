@@ -2,8 +2,8 @@
 <mat-form-field appearance="fill">
   <mat-label>Choisir un modèle</mat-label>
   <mat-select (valueChange)="changeValue($event)">
-    <mat-option *ngFor="let m of modelesList" [value]="m.name">
-      {{m.name}}
+    <mat-option *ngFor="let m of modelesList" [value]="m._id">
+      {{m._id}}
     </mat-option>
   </mat-select>
 
