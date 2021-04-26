@@ -129,10 +129,11 @@ export class BddService {
       });
 
   }
+
   getDonnee(listSequence: Array<Sequence>){
     this.answerWait();
     let counter = listSequence.length;
-    for(let sequence of listSequence){
+    for (let sequence of listSequence){
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {
@@ -154,7 +155,7 @@ export class BddService {
       this.ajouterFormat(this.sequences[i].metaDonnees, []);
       for(const [key, value] of Object.entries(this.sequences[i].metaDonnees.annotation)) {
         if(typeof value === 'object' && value != null) {
-          this.formatSequence.add(['annotation','idGeste']);
+          this.formatSequence.add(['annotation', 'idGeste']);
           this.ajouterFormat(value, ['annotation']);
         }
       }

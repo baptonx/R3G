@@ -20,10 +20,12 @@ export class SequencesAnnotationComponent implements OnInit {
   changeValue(value: any): void{
     this.serviceSequence.sequences.forEach(seq => {
       if (seq.id === value) {
+        console.log(seq);
         this.engineService.refreshInitialize(seq);
-        this.bdd.sequenceCourante = seq;
+        // this.bdd.sequenceCourante = seq;
         this.serviceSequence.evaluation.forEach(ev => {
-          if (ev.name === this.bdd.sequenceCourante?.id) {
+          // if (ev.name === this.bdd.sequenceCourante?.id) {
+          if (ev.name === seq.id) {
             this.serviceSequence.evaluation_selected = ev.annotation;
           }
         });

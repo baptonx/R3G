@@ -33,9 +33,9 @@ export class EngineService implements OnDestroy {
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
-  public sequenceCurrent!: Sequence;
   public tabTimeCurrent!: Array<number>;
   public facteurGrossissement = 1.5;
+  public facteurScale = 1;
 
   constructor(private ngZone: NgZone, public annotationServ: AnnotationService, public sequencesChargeesService: SequencesChargeesService) {
       this.annotationServ.pauseAction = true;
@@ -59,17 +59,16 @@ export class EngineService implements OnDestroy {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     if (newSequence !== undefined) {
-      this.sequenceCurrent = newSequence;
+      this.annotationServ.sequenceCurrent = newSequence;
     }
-    else {
-      this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
-      // console.log(this.sequenceCurrent);
+    else if (this.annotationServ.sequenceCurrent === undefined) {
+      this.annotationServ.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
     }
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
-        if (this.sequenceCurrent !== undefined) {
+        if (this.annotationServ.sequenceCurrent !== undefined) {
           const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
 
           const tabPosX: Array<number> = [];
@@ -79,7 +78,7 @@ export class EngineService implements OnDestroy {
           let averageY: number;
           let averageZ: number;
 
-          for (const frame of this.sequenceCurrent.traceNormal[0]) {
+          for (const frame of this.annotationServ.sequenceCurrent.traceNormal[0]) {
             tabPosX.push(frame[0]);
             tabPosY.push(frame[1]);
             tabPosZ.push(frame[2]);
@@ -90,16 +89,16 @@ export class EngineService implements OnDestroy {
           averageZ = this.calculateAverage(tabPosZ);
 
           this.squelette.initialize();
-          for (let i = 0; i < this.sequenceCurrent.traceNormal.length; i++) {
+          for (let i = 0; i < this.annotationServ.sequenceCurrent.traceNormal.length; i++) {
             const tabPosXYZ: Array<number> = [];
             const tabTime: Array<number> = [];
             this.squelette.addArticulation();
 
-            for (const frame of this.sequenceCurrent.traceNormal[i]) {
+            for (const frame of this.annotationServ.sequenceCurrent.traceNormal[i]) {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3]);
+              tabTime.push(frame[3] * this.facteurScale);
             }
 
             if (i === 0) {
@@ -406,6 +405,23 @@ export class EngineService implements OnDestroy {
       if (timeEditText >= 0 && timeEditText <= this.annotationServ.tempsTotal) {
         this.annotationServ.action.time = timeEditText;
       }
+  }
+
+  updateSizeCube(event: any): void {
+    const size = Number(event.target.value);
+    if (size > 0) {
+      for (const cube of this.squelette.root.children) {
+        cube.scale.set(size, size, size);
+      }
+    }
+  }
+
+  updateTimeScale(event: any): void {
+    const scale = Number(event.target.value);
+    if (scale > 0) {
+      this.facteurScale = scale;
+      this.refreshInitialize(undefined);
+    }
   }
 
   public resetCamera(): void {

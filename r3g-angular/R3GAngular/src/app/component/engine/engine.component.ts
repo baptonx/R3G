@@ -77,4 +77,12 @@ export class EngineComponent implements OnInit {
     this.engServ.updateActionFrame(event);
   }
 
+  updateSizeCube(event: any): void {
+    this.engServ.updateSizeCube(event);
+  }
+
+  updateTimeScale(event: any): void {
+    this.engServ.updateTimeScale(event);
+  }
+
 }
