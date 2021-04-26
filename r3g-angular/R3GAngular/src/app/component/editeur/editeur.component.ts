@@ -21,7 +21,7 @@ export class EditeurComponent implements OnInit {
   displayedColumns=['Geste','Couleur']
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(public http:HttpClient,public bdd:BddService, public annotation:AnnotationService) {
+  constructor(public http:HttpClient,public bdd:BddService, public annotation: AnnotationService) {
     this.bdd.listGesteBDD.forEach((value: String[], key: String) => {
       value.forEach(elt=>{
         this.classeGeste.push(elt)
@@ -36,7 +36,7 @@ export class EditeurComponent implements OnInit {
     else{
       this.couleur.push('')
     }
-  
+
     }
     this.dataSource = new MatTableDataSource<String>(this.classeGeste);
     console.log(this.dataSource);

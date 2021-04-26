@@ -87,8 +87,10 @@ export class AnnotationService {
           this.ctx.strokeStyle = 'black';
           this.ctx.lineWidth = 2;
           this.ctx.strokeRect(pos1, 100, pos2 - pos1, 100);
+          this.ctx.lineWidth = 1;
         }
       }
+
 
       // ======================================================
       // PreviewAnnotationCurrent
