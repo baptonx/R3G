@@ -8,9 +8,9 @@ export class FormatDonnees {
   }
 
   // Ajoute une nouvelle valeur a l'objet FormatDonnees courant. sa valeur est le dernier element
-  //de la liste index et le reste de la liste constitue son chemin
-  add(index: string[]) {
-    if(index.length === 0) {
+  // de la liste index et le reste de la liste constitue son chemin
+  add(index: string[]): void {
+    if (index.length === 0) {
       return;
     }
     let courant = index.shift();

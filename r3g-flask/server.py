@@ -333,13 +333,13 @@ def get_meta_donnee(filename, bdd):
                             if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
                                 LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
-                    else:
-                        ##récupere les annotations non implÃ©menter(autres que capteur,user,action)
-                        other = {}
-                        nb_others += 1
-                        for children in child:
-                            other[children.attrib['type']] = children.text
-                        others[child.attrib['type']] = other
+        elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+            ##récupere les annotations non implÃ©menter(autres que capteur,user,action)
+            other = {}
+            nb_others += 1
+            for children in child:
+                other[children.attrib['type']] = children.text
+            others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             break
     metadonnee = {"id": name, "BDD": bdd, "format": format_donnee,
@@ -366,6 +366,7 @@ def get_donnee(filename, bdd):
 
 def add_listgeste_metadonne():
     """Construit la structure a envoyer au serveur contenant et les liste de geste par bdd et les Metadonnee"""
+    print(json.dumps([LISTE_GESTE_BDD, METADONNEE]))
     return [LISTE_GESTE_BDD, METADONNEE]
 #############Exploration route :##############
 
@@ -418,6 +419,7 @@ def route_add_bdd():
                         del LISTE_GESTE_BDD[namebdd]
                         del LISTE_PATH_BDD[namebdd]
         root.destroy()
+        print(json.dumps(add_listgeste_metadonne()))
         return json.dumps(add_listgeste_metadonne())
     except RuntimeError:
         print("tkinter bug")

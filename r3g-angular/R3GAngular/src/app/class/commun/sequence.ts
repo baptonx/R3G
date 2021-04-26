@@ -1,7 +1,10 @@
+import {Annotation} from './annotation/annotation';
+
 export class Sequence {
   id: string;
   bdd: string;
-  metaDonnees:  any;
+  listAnnotation: Array<Annotation> = [];
+  metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
   traceVoxel: Array<Array<number>>;
@@ -9,9 +12,10 @@ export class Sequence {
   isTest: boolean;
   displayedMetadata: Map<string, string>;
 
-  constructor(id: string, bdd: string, pathVideoRGB: string = '', metadonnee: object = {}){
+  constructor(id: string, bdd: string, pathVideoRGB: string = '', listAnnotation: Array<Annotation>, metadonnee: object = {}){
     this.id = id;
     this.bdd = bdd;
+    this.listAnnotation = listAnnotation;
     this.pathVideoRGB = pathVideoRGB;
     this.metaDonnees = metadonnee;
     this.traceNormal = new Array<Array<Array<number>>>();

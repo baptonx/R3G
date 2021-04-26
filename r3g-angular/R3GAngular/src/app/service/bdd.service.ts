@@ -1,34 +1,55 @@
 import { Injectable } from '@angular/core';
-import {Sequence} from "../class/commun/sequence";
-import {sequencesTab, TableauExplService} from "./tableau-expl.service";
+import {Sequence} from '../class/commun/sequence';
+import {SequencesTab, TableauExplService} from './tableau-expl.service';
 import {HttpClient} from '@angular/common/http';
-import {FormatDonnees} from "../class/exploration/format-donnees";
-import {BehaviorSubject} from "rxjs";
+import {FormatDonnees} from '../class/exploration/format-donnees';
+import {BehaviorSubject} from 'rxjs';
+import {Annotation} from '../class/commun/annotation/annotation';
+
+
+
+export interface BaseDeDonne {
+  BDD: Array<SequenceInterface>;
+}
+
+export interface SequenceInterface {
+  id: string;
+  BDD: string;
+  format: Map<string, string>;
+  annotation: Array<Annotation>;
+  metadonnees: Metadonnee;
+}
+
+export interface Metadonnee {
+  [metadonnee: string]: string | Metadonnee;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class BddService {
-  sequences: Sequence[];
+  // sequences: Sequence[];
+  mapSequences: Map<string, Array<Sequence>> = new Map<string, Array<Sequence>>();
   bddnames: Array<string> = [];
-  observableSequences: BehaviorSubject<Sequence[]>;
+  observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
   formatSequence: FormatDonnees = new FormatDonnees();
-  waitanswer: boolean = true;
-  classesGestes:Array<String>=[];
-  listGesteBDD: Map<String, Array<String>> = new Map<String, Array<String>>();
+  waitanswer = true;
+  classesGestes: Array<string> = [];
+  listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
   public sequenceCourante: Sequence|undefined;
 
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
-    this.sequences = [];
+   // this.sequences = [];
     this.notifyTableauService();
-    this.observableSequences = new BehaviorSubject<Sequence[]>(this.sequences);
+    this.observableSequences = new BehaviorSubject<Map<string, Array<Sequence>>>(this.mapSequences);
   }
 
   notifyTableauService(): void{
-    this.tableauExpl.updateAll(this.sequences);
+    this.tableauExpl.updateAll(this.mapSequences);
   }
 
-  getClasses():void{
+  getClasses(): void{
 
   }
   answerWait(): void{
@@ -43,7 +64,7 @@ export class BddService {
       .get<object>('/models/getMetaDonnee' , {})
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
-      this.answerHere();
+        this.answerHere();
     });
 
   }
@@ -67,8 +88,8 @@ export class BddService {
   }
   addbddwithpath(path: string): void{
     this.answerWait();
-    let str = [];
-    for(let i = 0; i< path.length; i++){
+    const str = [];
+    for (let i = 0; i < path.length; i++){
       str.push(path.charCodeAt(i));
     }
     this.http
@@ -83,7 +104,7 @@ export class BddService {
       .get<Array<string>>(`/models/getListBDD` , {})
       .subscribe((returnedData: any) => {
         this.bddnames = returnedData;
-      });
+        });
   }
   closedb(dbname: string): void{
     this.answerWait();
@@ -98,26 +119,26 @@ export class BddService {
 
   miseajourdb(returnedData: any): void{
     this.listGesteBDD.clear();
-    for (const [namebdd,value] of Object.entries((returnedData[0]))) {
+    for (const [namebdd, value] of Object.entries((returnedData[0]))) {
       if (Array.isArray(value)){
-       this.listGesteBDD.set(namebdd,value);
+       this.listGesteBDD.set(namebdd, value);
       }
     }
-    console.log(this.listGesteBDD);
-    this.sequences = [];
-    for (const dbb of Object.values((returnedData[1]))) {
-      if (Array.isArray(dbb)) {
-        for(let key in dbb) {
-          let id = dbb[key]['id'];
-          let bdd = dbb[key]['BDD'];
-          this.sequences.push(new Sequence(id, bdd, '', dbb[key]));
-        }
+    // this.sequences = [];
+    for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
+      const listseq = dbb as BaseDeDonne;
+      const listSequence = new Array<Sequence>();
+      for (const seqInterface of listseq.BDD) { // list sequence
+        const sequence = seqInterface as SequenceInterface;
+        listSequence.push(new Sequence(sequence.id, sequence.BDD, '', sequence.annotation, sequence.metadonnees));
+
       }
+      this.mapSequences.set(key, listSequence);
     }
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
-    this.observableSequences.next(this.sequences);
+    // this.observableSequences.next(this.sequences);
   }
   reloaddb(dbname: string): void{
     this.answerWait();
@@ -129,18 +150,18 @@ export class BddService {
       });
 
   }
-  getDonnee(listSequence: Array<Sequence>){
+  getDonnee(listSequence: Array<Sequence>): void{
     this.answerWait();
     let counter = listSequence.length;
-    for(let sequence of listSequence){
+    for (const sequence of listSequence){
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {
-          if (sequence != undefined){
+          if (sequence !== undefined){
             sequence.traceNormal = (returnedData);
           }
           counter--;
-          if(counter == 0){
+          if (counter === 0){
             this.answerHere();
           }
         });
@@ -148,24 +169,26 @@ export class BddService {
 
   }
 
-  private updateFormat() {
+  private updateFormat(): void {
     this.formatSequence = new FormatDonnees();
-    for(let i=0 ; i<this.sequences.length ; i++) {
-      this.ajouterFormat(this.sequences[i].metaDonnees, []);
-      for(const [key, value] of Object.entries(this.sequences[i].metaDonnees.annotation)) {
-        if(typeof value === 'object' && value != null) {
-          this.formatSequence.add(['annotation','idGeste']);
-          this.ajouterFormat(value, ['annotation']);
+    for (const listsequence of this.mapSequences.values()) {
+      for (const sequence of listsequence) {
+        this.ajouterFormat(sequence.metaDonnees, []);
+        for (const value of Object.values(sequence.metaDonnees.annotation)) {
+          if (typeof value === 'object' && value != null) {
+            this.formatSequence.add(['annotation', 'idGeste']);
+            this.ajouterFormat(value, ['annotation']);
+          }
         }
       }
     }
   }
 
-  private ajouterFormat(metaDonnees: object, path: string[]) {
-    for(const [key, value] of Object.entries(metaDonnees)) {
+  private ajouterFormat(metaDonnees: object, path: string[]): void {
+    for (const [key, value] of Object.entries(metaDonnees)) {
       path.push(key);
-      if(typeof value === "object" && !Array.isArray(value) && value != null && key !== 'annotation') {
-        this.ajouterFormat(value,path);
+      if (typeof value === 'object' && !Array.isArray(value) && value != null && key !== 'annotation') {
+        this.ajouterFormat(value, path);
       }
       else{
         this.formatSequence.add(path.slice());
@@ -173,31 +196,37 @@ export class BddService {
       path.pop();
     }
   }
-  chercherSequenceTableau(seqTabTab: sequencesTab[]): Sequence[] {
-    let sequencesReturn: Sequence[] = [];
+  chercherSequenceTableau(seqTabTab: SequencesTab[]): Sequence[] {
+    const sequencesReturn: Sequence[] = [];
     let seqTab;
     let cpt;
-    for(let seq of this.sequences) {
-      cpt = 0;
-      while(cpt < seqTabTab.length) {
-        seqTab = seqTabTab[cpt];
-        if(seq.id === seqTab.id) {
-          sequencesReturn.push(seq);
-          seqTab.selected = false;
-          seqTabTab.splice(cpt,1);
+    for (const listseq of this.mapSequences.values()) {
+      for (const seq of listseq)
+      {
+        cpt = 0;
+        while (cpt < seqTabTab.length) {
+          seqTab = seqTabTab[cpt];
+          if (seq.id === seqTab.id) {
+            sequencesReturn.push(seq);
+            seqTab.selected = false;
+            seqTabTab.splice(cpt, 1);
+          } else {
+            cpt++;
+          }
         }
-        else cpt++;
       }
-      if(seqTabTab.length === 0) break;
+      if (seqTabTab.length === 0) { break; }
     }
     return sequencesReturn;
   }
 
-  chercherSequence(sequenceLigneTableau: sequencesTab): Sequence|undefined {
-    for (const seq of this.sequences) {
-      if (seq.id === sequenceLigneTableau.id) {
-        return seq;
-      }
+  chercherSequence(sequenceLigneTableau: SequencesTab): Sequence|undefined {
+    for (const listseq of this.mapSequences.values()) {
+        for (const seq of listseq){
+          if (seq.id === sequenceLigneTableau.id) {
+            return seq;
+          }
+        }
     }
     return undefined;
   }
