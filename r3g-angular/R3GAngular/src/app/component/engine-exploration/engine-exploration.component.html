@@ -9,4 +9,10 @@
   <button mat-raised-button (click)="engServ.play()">Play</button>
   <button mat-raised-button (click)="engServ.playForward()">></button>
   <button mat-raised-button (click)="engServ.stopToEnd()">>></button>
+  <mat-form-field class="inputActionTime">
+    <input matInput (keyup.enter)="updateSizeCube($event)">
+  </mat-form-field>
+  <mat-form-field class="inputActionTime">
+    <input matInput (keyup.enter)="updateTimeScale($event)">
+  </mat-form-field>
 </div>

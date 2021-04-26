@@ -28,4 +28,12 @@ export class EngineExplorationComponent implements OnInit {
     this.engServ.animate();
   }
 
+  updateSizeCube(event: any): void {
+    this.engServ.updateSizeCube(event);
+  }
+
+  updateTimeScale(event: any): void {
+    this.engServ.updateTimeScale(event);
+  }
+
 }

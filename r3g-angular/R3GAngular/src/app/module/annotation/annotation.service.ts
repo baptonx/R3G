@@ -38,8 +38,9 @@ export class AnnotationService {
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
-  public geste_couleur:Map<string,string>=new Map<string,string>();
-  public annotationIA:Array<Eval> = [];
+  public geste_couleur: Map<string, string> = new Map<string, string>();
+  public annotationIA: Array<Eval> = [];
+  public sequenceCurrent!: Sequence;
 
 
   // Timeline
@@ -68,7 +69,7 @@ export class AnnotationService {
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  
+
       // ======================================================
       // RectAnnotationVeriteTerrain
       this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
@@ -86,8 +87,10 @@ export class AnnotationService {
           this.ctx.strokeStyle = 'black';
           this.ctx.lineWidth = 2;
           this.ctx.strokeRect(pos1, 100, pos2 - pos1, 100);
+          this.ctx.lineWidth = 1;
         }
       }
+
 
       // ======================================================
       // PreviewAnnotationCurrent
@@ -103,10 +106,6 @@ export class AnnotationService {
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
 
-      
-      
-
-
 
       // ======================================================
       // CURSOR
@@ -116,7 +115,11 @@ export class AnnotationService {
       // ======================================================
       // IndicatorTime
       this.ctx.fillStyle = 'black';
-      for (let i = 0; i < this.tempsTotal + 1; i++) {
+      let pas = 1;
+      if (this.tempsTotal > 40) {
+        pas = 5;
+      }
+      for (let i = 0; i < this.tempsTotal + 1; i = i + pas) {
         const posIndicatorTime = i * this.unit + this.margeTimeline;
         this.drawLine(posIndicatorTime, 0, posIndicatorTime, this.sizeIndicatorTime);
         this.ctx.font = '10px Arial';
@@ -138,7 +141,7 @@ export class AnnotationService {
     }
   }
 
-  
+
 
   onMouseDown(event: MouseEvent): void {
     const posX = event.offsetX;

@@ -36,6 +36,7 @@ export class EngineExplorationService implements OnDestroy {
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
   public facteurGrossissement = 1.5;
+  public facteurScale = 1;
 
   constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public bddService: BddService) {
     this.explorationServ.pauseAction = true;
@@ -99,7 +100,7 @@ export class EngineExplorationService implements OnDestroy {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3]);
+              tabTime.push(frame[3] * this.facteurScale);
             }
 
             if (i === 0) {
@@ -404,6 +405,23 @@ export class EngineExplorationService implements OnDestroy {
     const timeEditText = Number(event.target.value);
     if (timeEditText >= 0 && timeEditText <= this.explorationServ.tempsTotal) {
       this.explorationServ.action.time = timeEditText;
+    }
+  }
+
+  updateSizeCube(event: any): void {
+    const size = Number(event.target.value);
+    if (size > 0) {
+      for (const cube of this.squelette.root.children) {
+        cube.scale.set(size, size, size);
+      }
+    }
+  }
+
+  updateTimeScale(event: any): void {
+    const scale = Number(event.target.value);
+    if (scale > 0) {
+      this.facteurScale = scale;
+      this.refreshInitialize();
     }
   }
 

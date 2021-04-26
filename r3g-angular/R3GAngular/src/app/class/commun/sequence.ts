@@ -26,7 +26,7 @@ export class Sequence {
   }
 
   setSequenceDonnee(): void {
-    //Get serveur local pour recuperer les traces ...
+    // Get serveur local pour recuperer les traces ...
   }
 
   ajouterMetaDonnees(): void {

@@ -13,7 +13,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Affichage timeline 1</mat-label>
           <mat-select (valueChange)="change_timeline_1($event)">
-            <mat-option *ngFor="let an of evalServ.model_eval_1" [value]="an" >
+            <mat-option *ngFor="let an of evalServ.modelEval1" [value]="an" >
               {{an}}
             </mat-option>
            
@@ -24,7 +24,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Affichage timeline 2</mat-label>
             <mat-select  (valueChange)="change_timeline_2($event)">
-              <mat-option *ngFor="let an of evalServ.model_eval_2" [value]="an" >
+              <mat-option *ngFor="let an of evalServ.modelEval2" [value]="an" >
                 {{an}}
               </mat-option>
           </mat-select> 
