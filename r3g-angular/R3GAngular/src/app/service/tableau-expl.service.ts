@@ -3,19 +3,23 @@ import {Sequence} from '../class/commun/sequence';
 import {BehaviorSubject} from 'rxjs';
 
 export interface SequencesTab {
+  BDD: string;
   id: string;
-  geste?: string;
+  idGeste?: string;
   selected: boolean;
   [key: string]: any;
   equals(seq: SequencesTab): boolean;
 }
 export class SequenceTabImpl implements SequencesTab{
+  BDD: string;
+  id: string;
+  idGeste?: string;
+  geste?: string;
   [key: string]: any;
   selected = false;
-  id: string;
-  geste?: string;
 
-  constructor(ident: string, metadonnees: object) {
+  constructor(ident: string, bdd: string, metadonnees: object) {
+    this.BDD = bdd;
     this.id = ident;
     for (const [k, value] of Object.entries(metadonnees)){
       this[k] = value;
@@ -59,12 +63,12 @@ export class TableauExplService {
   }
 
 
-  ajouterMetadonnee(fileName: string, prefix: string, metadonnee: object): SequencesTab{
+  ajouterMetadonnee(fileName: string, bdd: string, prefix: string, metadonnee: object): SequencesTab{
     prefix = prefix === '' ? '' : prefix + '.';
-    const sequenceData = new SequenceTabImpl(fileName, {});
+    const sequenceData = new SequenceTabImpl(fileName, bdd, {});
     for (const [key, value] of Object.entries(metadonnee)){
       if (typeof value === 'object' && value != null && key !== 'annotation'){
-        sequenceData.concat(this.ajouterMetadonnee(fileName, prefix + key, value));
+        sequenceData.concat(this.ajouterMetadonnee(fileName, bdd, prefix + key, value));
       }
       else{
         this.addAttribute(prefix + key);
@@ -77,33 +81,17 @@ export class TableauExplService {
   updateAll(mapSequences: Map<string, Array<Sequence>>): void {
     this.sequences = new Array<SequencesTab>();
     let dataCourante: SequencesTab;
-    for ( const tabSequences of mapSequences.values()) {
-      for (const sequence of tabSequences) {
-        dataCourante = new SequenceTabImpl(sequence.id, {});
-        if ('annotation' in sequence.metaDonnees) {
-          if (typeof sequence.metaDonnees.annotation === 'object') {
-            if (Object.keys(sequence.metaDonnees.annotation).length === 0) {
-              dataCourante = this.ajouterMetadonnee(sequence.id, '', sequence.metaDonnees);
-              this.sequences.push(dataCourante);
-            }
-            for (const [key, value] of Object.entries(sequence.metaDonnees.annotation)) {
-              dataCourante = new SequenceTabImpl(sequence.id, {});
-              dataCourante.concat(this.ajouterMetadonnee(sequence.id, '', sequence.metaDonnees));
-              if (typeof value === 'object' && value != null) {
-                dataCourante.concat(this.ajouterMetadonnee(sequence.id, 'annotation', {idGeste: key}));
-                dataCourante.concat(this.ajouterMetadonnee(sequence.id, 'annotation', value));
-              }
-              this.sequences.push(dataCourante);
-            }
-          } else {
-            dataCourante = this.ajouterMetadonnee(sequence.id, '', sequence.metaDonnees);
-            if (dataCourante != null) {
-              this.sequences.push(dataCourante);
-            }
-          }
+    for (const bdd of mapSequences.values()) {
+      for (const sequence of bdd) {
+        if (sequence.listAnnotation.length === 0) {
+          dataCourante = new SequenceTabImpl(sequence.id, sequence.bdd, sequence.metaDonnees);
+          this.sequences.push(dataCourante);
         } else {
-          dataCourante = this.ajouterMetadonnee(sequence.id, '', sequence.metaDonnees);
-          if (dataCourante != null) {
+          for (let geste = 0 ; geste < sequence.listAnnotation.length ; geste++) {
+            dataCourante = new SequenceTabImpl(sequence.id, sequence.bdd, {});
+            dataCourante['annotation.idGeste'] = geste;
+            dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, 'annotation', sequence.listAnnotation[geste]));
+            dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, '', sequence.metaDonnees));
             this.sequences.push(dataCourante);
           }
         }

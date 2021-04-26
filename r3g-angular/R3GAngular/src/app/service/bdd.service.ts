@@ -76,7 +76,6 @@ export class BddService {
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();
-        console.log(returnedData);
       });
   }
   addpathtxt(): void{
@@ -129,10 +128,8 @@ export class BddService {
     // this.sequences = [];
     for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
       const listseq = dbb as Array<SequenceInterface>;
-      console.log(listseq);
       const listSequence = new Array<Sequence>();
       for (const seqInterface of listseq) { // list sequence
-        console.log(seqInterface);
         const sequence = seqInterface as SequenceInterface;
         const listannot = new Array<Annotation>();
         for (const annotation of Object.values(sequence.annotation)) {
@@ -144,13 +141,12 @@ export class BddService {
         }
         listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
       }
-      console.log(listSequence);
       this.mapSequences.set(key, listSequence);
     }
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
-    // this.observableSequences.next(this.sequences);
+    this.observableSequences.next(this.mapSequences);
   }
   reloaddb(dbname: string): void{
     this.answerWait();
@@ -183,10 +179,11 @@ export class BddService {
 
   private updateFormat(): void {
     this.formatSequence = new FormatDonnees();
+    this.formatSequence.add(['BDD']);
+    this.formatSequence.add(['id']);
     for (const listsequence of this.mapSequences.values()) {
       for (const sequence of listsequence) {
         this.ajouterFormat(sequence.metaDonnees, []);
-        console.log(sequence.listAnnotation);
         for (const value of sequence.listAnnotation) {
           if (typeof value === 'object' && value != null) {
             this.formatSequence.add(['annotation', 'idGeste']);
