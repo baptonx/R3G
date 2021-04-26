@@ -17,13 +17,10 @@ export interface DialogData {
 })
 
 export class ExplorationComponent implements OnInit, AfterViewInit {
-  @ViewChild('inputFiltre') inputFiltre!: MatInput;
   //@viewChild()
-  picker = document.getElementById('picker');
-  listing = document.getElementById('listing');
   private pathbdd: string;
 
-  constructor(public bdd: BddService, public visuService: VisualisationExploService, public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
+  constructor(public bdd: BddService, public dialog: MatDialog) {
     this.pathbdd = "";
 
   }

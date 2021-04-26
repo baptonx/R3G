@@ -75,6 +75,7 @@ export class BddService {
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();
+        console.log(returnedData);
       });
   }
   addpathtxt(): void{

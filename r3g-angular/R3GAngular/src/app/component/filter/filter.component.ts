@@ -2,8 +2,8 @@ import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {sequencesTab, TableauExplService} from "../../service/tableau-expl.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {SequencesTab, TableauExplService} from '../../service/tableau-expl.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-filter',
@@ -12,22 +12,22 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class FilterComponent implements OnInit {
   @ViewChild('nomFiltreInput') nomFiltreInput!: ElementRef;
-  //operande
+  // operande
   operande = new FormControl();
   optionsOperande: string[] = [];
   filteredOptionsOperande: Observable<string[]> = new Observable<string[]>();
   @ViewChild('operandeInput') operandeInput!: ElementRef;
-  //operateur
+  // operateur
   operateur = new FormControl();
-  optionsOperateur: string[] = ['='];
+  optionsOperateur: string[] = ['=', 'contient'];
   filteredOptionsOperateur: Observable<string[]> = new Observable<string[]>();
   @ViewChild('operateurInput') operateurInput!: ElementRef;
-  //result
+  // result
   @ViewChild('resultInput') resultInput!: ElementRef;
 
   constructor(public tableauExpl: TableauExplService,
               public dialogRef: MatDialogRef<FilterComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { filter: Function, nomFiltre: string }) {
+              @Inject(MAT_DIALOG_DATA) public data: { filter: (geste: SequencesTab) => boolean, nomFiltre: string }) {
     this.optionsOperande = this.tableauExpl.allAttributes;
   }
 
@@ -50,24 +50,27 @@ export class FilterComponent implements OnInit {
     return options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
-  createFilter(operandeValue: string, operateurValue: string, resultValue: string): Function {
-    let operateurFunc = (geste: sequencesTab) => false;
-    if(operateurValue === '=') {
-      operateurFunc = (geste: sequencesTab) => geste[operandeValue] === resultValue;
+  createFilter(operandeValue: string, operateurValue: string, resultValue: string): (geste: SequencesTab) => boolean {
+    let operateurFunc = (geste: SequencesTab) => false;
+    if (operateurValue === '=') {
+      operateurFunc = (geste: SequencesTab) => geste[operandeValue] === resultValue;
     }
-    return (geste: sequencesTab) => {
-      if(geste[operandeValue] != null) {
+    else if (operateurValue === 'contient') {
+      operateurFunc = (geste: SequencesTab) => geste[operandeValue].includes(resultValue);
+    }
+    return (geste: SequencesTab) => {
+      if (geste[operandeValue] != null) {
         return operateurFunc(geste);
       }
       return false;
     };
   }
 
-  close() {
-    let operandeValue = this.operandeInput.nativeElement.value;
-    let operateurValue = this.operateurInput.nativeElement.value;
-    let resultValue = this.resultInput.nativeElement.value;
-    let predicate: Function = this.createFilter(operandeValue,operateurValue,resultValue);
+  close(): void {
+    const operandeValue = this.operandeInput.nativeElement.value;
+    const operateurValue = this.operateurInput.nativeElement.value;
+    const resultValue = this.resultInput.nativeElement.value;
+    const predicate: (geste: SequencesTab) => boolean = this.createFilter(operandeValue, operateurValue, resultValue);
     this.dialogRef.close({filter: predicate, nomFiltre: this.nomFiltreInput.nativeElement.value});
   }
 }
