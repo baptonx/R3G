@@ -15,21 +15,21 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
   styleUrls: ['./dialog-learning.component.css']
 })
 export class DialogLearningComponent implements OnInit {
-  @ViewChild('modelName') 
-  modelName:ElementRef<MatInput> | undefined
+  @ViewChild('modelName')
+  modelName: ElementRef<MatInput> | undefined;
   @ViewChild('pathIA')
-  pathIA:ElementRef<MatInput> | undefined
-  hyperpameters:any;
-  fileCSVName:string;
+  pathIA: ElementRef<MatInput> | undefined;
+  hyperpameters: any;
+  fileCSVName: string;
   isLinear = false;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
-  file:File | undefined;
-  isManual:boolean;
-  isCrossVal:boolean;
-  isProtocole:boolean
+  file: File | undefined;
+  isManual: boolean;
+  isCrossVal: boolean;
+  isProtocole: boolean;
 
-  constructor(private _formBuilder: FormBuilder, public http:HttpClient,public bdd:BddService,public dialog:MatDialog) {
+  constructor(private _formBuilder: FormBuilder, public http: HttpClient, public bdd: BddService, public dialog: MatDialog) {
     this.fileCSVName="Hyperparamètres";
     this.isManual=false;
     this.isCrossVal=false;
@@ -54,7 +54,7 @@ export class DialogLearningComponent implements OnInit {
   }
 
 
-  
+
   startLearning():void{
     if(this.file!=undefined){
     const formData: FormData = new FormData();
@@ -68,13 +68,13 @@ export class DialogLearningComponent implements OnInit {
           sequences.append('file', fileSeq, fileSeq.name);
           this.http.post('/models/uploadFile/'+name,sequences).subscribe(
             (response: any) => {
-                
+
       var ia = this.chooseIA()
       const ia_file: FormData = new FormData();
       ia_file.append('file',ia,ia.name)
       this.http.post('/models/uploadFile/'+name,ia_file).subscribe(
         (response: any) => {
-              
+
       this.http.get('/models/startLearning/'+name,{}).subscribe(
         (response: any) => {
             console.log(response)
@@ -94,12 +94,12 @@ export class DialogLearningComponent implements OnInit {
       (error: any) => {
           console.log(error)
       });
-   
+
     }
   }
 
   chooseSequence():File{
-    let csvContent = "data:text/csv;charset=utf-8," 
+    let csvContent = "data:text/csv;charset=utf-8,"
     +("Sequence1\n");
     let train=['Train\n']
     let test=['\n','Test\n']
@@ -129,7 +129,7 @@ export class DialogLearningComponent implements OnInit {
     ia.push(this.pathIA?.nativeElement.value!)
     return new File(ia,'ia.txt', {type: 'text/plain'});
   }
-  
+
 
 
   openFile(event: { target: any; }) {
@@ -141,9 +141,9 @@ export class DialogLearningComponent implements OnInit {
             // this 'text' is the content of the file
             this.hyperpameters = reader.result;
             this.file=event.target.files.item(0)
-          
+
         }
-       
+
         reader.readAsText(input.files[index]);
         this.fileCSVName=input.files[index].name;
     };

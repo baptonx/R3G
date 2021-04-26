@@ -17,12 +17,14 @@ export interface DialogData {
 })
 
 export class ExplorationComponent implements OnInit, AfterViewInit {
-  //@viewChild()
+  // @viewChild()
+  picker = document.getElementById('picker');
+  listing = document.getElementById('listing');
   private pathbdd: string;
 
-  constructor(public bdd: BddService, public dialog: MatDialog) {
-    this.pathbdd = "";
-
+  constructor(public bdd: BddService, public visuService: VisualisationExploService,
+              public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
+    this.pathbdd = '';
   }
 
   addPathBDDINKML(): void{
@@ -37,7 +39,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.pathbdd = result;
-      if(this.pathbdd != undefined) {
+      if(this.pathbdd !== undefined) {
         this.bdd.addbddwithpath(this.pathbdd);
       }
     });
@@ -53,7 +55,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.pathbdd = result;
-      if(this.pathbdd != undefined) {
+      if (this.pathbdd !== undefined) {
         this.bdd.addbddwithpath(this.pathbdd);
       }
     });
@@ -72,7 +74,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
     }
   }
   ngOnInit(): void {
-    if(this.bdd.sequences.length === 0) {
+    if (this.bdd.mapSequences.size === 0) {
       this.bdd.setMetaData();
       this.bdd.getlistdb();
     }

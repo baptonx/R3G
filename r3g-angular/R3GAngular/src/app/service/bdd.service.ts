@@ -16,9 +16,10 @@ export interface SequenceInterface {
   id: string;
   BDD: string;
   format: Map<string, string>;
-  annotation: Array<Annotation>;
+  annotation: object;
   metadonnees: Metadonnee;
 }
+
 
 export interface Metadonnee {
   [metadonnee: string]: string | Metadonnee;
@@ -127,13 +128,23 @@ export class BddService {
     }
     // this.sequences = [];
     for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
-      const listseq = dbb as BaseDeDonne;
+      const listseq = dbb as Array<SequenceInterface>;
+      console.log(listseq);
       const listSequence = new Array<Sequence>();
-      for (const seqInterface of listseq.BDD) { // list sequence
+      for (const seqInterface of listseq) { // list sequence
+        console.log(seqInterface);
         const sequence = seqInterface as SequenceInterface;
-        listSequence.push(new Sequence(sequence.id, sequence.BDD, '', sequence.annotation, sequence.metadonnees));
-
+        const listannot = new Array<Annotation>();
+        for (const annotation of Object.values(sequence.annotation)) {
+          const annot = new Annotation();
+          annot.classeGeste = annotation.type;
+          annot.t1 = parseFloat(annotation.debut);
+          annot.t2 = parseFloat(annotation.fin);
+          listannot.push(annot);
+        }
+        listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
       }
+      console.log(listSequence);
       this.mapSequences.set(key, listSequence);
     }
     this.getlistdb();
@@ -175,7 +186,8 @@ export class BddService {
     for (const listsequence of this.mapSequences.values()) {
       for (const sequence of listsequence) {
         this.ajouterFormat(sequence.metaDonnees, []);
-        for (const value of Object.values(sequence.metaDonnees.annotation)) {
+        console.log(sequence.listAnnotation);
+        for (const value of sequence.listAnnotation) {
           if (typeof value === 'object' && value != null) {
             this.formatSequence.add(['annotation', 'idGeste']);
             this.ajouterFormat(value, ['annotation']);

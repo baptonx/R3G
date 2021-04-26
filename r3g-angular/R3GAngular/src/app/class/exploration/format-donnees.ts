@@ -14,15 +14,15 @@ export class FormatDonnees {
       return;
     }
     let courant = index.shift();
-    let childIndex = this.children.findIndex((element) => element.value === courant);
-    if(childIndex >= 0) {
+    const childIndex = this.children.findIndex((element) => element.value === courant);
+    if (childIndex >= 0) {
       this.children[childIndex].add(index);
     }
     else {
       let fParent: FormatDonnees = this;
       let fCourant: FormatDonnees = new FormatDonnees(courant);
       fParent.children.push(fCourant);
-      while(index.length > 0) {
+      while (index.length > 0) {
         fParent = fCourant;
         courant = index.shift();
         fCourant = new FormatDonnees(courant);
@@ -32,13 +32,13 @@ export class FormatDonnees {
   }
 
   concat(fd: FormatDonnees): void {
-    if(this.feuille()) {
+    if (this.feuille()) {
       this.children.push(fd);
       return;
     }
-    for(let child of this.children) {
-      let fdIndex = fd.children.findIndex((elem) => elem.value === child.value);
-      if(fdIndex >= 0) {
+    for (const child of this.children) {
+      const fdIndex = fd.children.findIndex((elem) => elem.value === child.value);
+      if (fdIndex >= 0) {
         child.concat(fd.children[fdIndex]);
       }
       else {

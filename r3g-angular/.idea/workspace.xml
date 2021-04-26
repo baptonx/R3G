@@ -19,32 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="rework server">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" afterDir="false" />
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean code 'espère na pas tout casser'">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/annotation/annotation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/annotation/annotation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/sequence.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/sequence.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/exploration/format-donnees.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/exploration/format-donnees.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/tableau-expl/tableau-expl.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/dialog-learning/dialog-learning.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/dialog-learning/dialog-learning.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/tableau-expl.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/BDD-Copie/sequence1 - Copie.inkml" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/BDD-Copie/sequence1 - Copie.inkml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/18am6rejSample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/1bmoeoi3Sample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/1wkj0hbzSample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/1wkj0hbzSample00710_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/3f51ng13Sample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/3f51ng13Sample00003_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/3f51ng13Sample00004_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/i4nbetfaSample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/i4nbetfaSample00004_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/je7bvwl4Sample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/je7bvwl4Sample00004_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/movtpyblSample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/EvaluationSequences/w4cmmde1Sample00001_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/config.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +50,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1mvfXJZYlAI4n95p5cjDAVH09qf" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -123,7 +108,7 @@
       <workItem from="1618986091630" duration="1703000" />
       <workItem from="1619073672022" duration="14832000" />
       <workItem from="1619184783737" duration="1857000" />
-      <workItem from="1619428823121" duration="16238000" />
+      <workItem from="1619428823121" duration="19973000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -251,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619191006691</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="clean code 'espère na pas tout casser'">
+      <created>1619450860548</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1619450860548</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -285,7 +277,8 @@
     <MESSAGE value="retour vers exploration rapide" />
     <MESSAGE value="ajout Gesteliste" />
     <MESSAGE value="rework server" />
-    <option name="LAST_COMMIT_MESSAGE" value="rework server" />
+    <MESSAGE value="clean code 'espère na pas tout casser'" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean code 'espère na pas tout casser'" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
