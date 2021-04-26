@@ -1,4 +1,5 @@
 import sys
+
 import tensorflow as tf
 import numpy as np
 import os
@@ -8,7 +9,9 @@ from Tools.Gesture.Morphology import Morphology
 from Tools.Gesture.MorphologyGetter import MorphologyGetter
 from Tools.Voxelizer.Voxelizer2sqCWM_CuDi_JointsAsVector_SkId import Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId
 from Tools.Voxelizer.VoxelizerCWM_CuDi_JointsAsVector import VoxelizerCWMSoupler_CuDi_JointsAsVector
+#assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
 
+#configtmp = tf.config.experimental.set_memory_growth(physical_devices[0], True)
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 pathFolder = sys.argv[1]
 pathFolderOut = sys.argv[2]
@@ -76,6 +79,31 @@ model.compile(opti, loss=[lambda x, y: lossFGWithReject(x, y, config['lambdahype
                           lambda x, y: lossHAux(x, y)], metrics=[])
 model.load_weights(pathModel + "Weights" + separator + "model")
 
+
+def strategyAccept(prediction,rejection,repeat):
+    assert len(prediction)==len(rejection)
+    assert len(prediction)!=0
+    prediction[np.less(rejection,0.5)] = 0
+    listeFinalePred = np.repeat(prediction, repeat)
+    i = 1
+    currClass = listeFinalePred[0]
+    startCurrentClass = 0
+
+    bounds = []
+
+    for pred in listeFinalePred:
+        if i==len(listeFinalePred):
+            break
+
+        if pred!=currClass or i==len(listeFinalePred)-1:
+            bounds.append([startCurrentClass,i-1,currClass]) # should be i if i==len(listeSeq)-1 instead of i-1
+            currClass = pred
+            startCurrentClass = i
+        i+=1
+    return bounds
+
+
+
 listeSeq = os.listdir(pathFolder)
 nbJointPerSkeleton = morph.nbJoints
 jointsTypes = morph.jointTypes
@@ -90,16 +118,19 @@ for seq in listeSeq:
     rejection = prediction[:, 0].numpy()
     prediction = prediction[:, 1:]
     prediction = tf.argmax(prediction,axis=1).numpy()
-    rejection = " ".join(["{:.2f}".format(e) for e in rejection])
-    f = open(pathFolderOut+seq,"w+")
-    listeFinaleTemporelle = []
-    for index,e in enumerate(prediction):
-        listeFinaleTemporelle.append(str(e)+";"+str(repeat[index]))
-    prediction = " ".join([str(e) for e in listeFinaleTemporelle])
-    f.write(str(rejection)+"\n"+str(prediction))
-    f.close()
-    #repeatStr = " ".join([str(int(e)) for e in repeat])
 
-    #f = open(pathFolderOut + seq+".repeat", "w+")
-    #f.write(repeatStr)
-    #f.close()
+    listBoundsTemporelle = strategyAccept(prediction,rejection,repeat)
+
+    f = open(pathFolderOut+seq,"w+")
+    f.write("\n".join([str(int(b[2]))+","+str(int(b[0]))+","+str(int(b[1])) for b in listBoundsTemporelle]))
+    f.close()
+    # rejection = " ".join(["{:.2f}".format(e) for e in rejection])
+    # prediction = "    ".join([str(e) for e in prediction])
+    # f = open(pathFolderOut+seq,"w+")
+    # f.write(str(rejection)+"\n"+str(prediction))
+    # f.close()
+    # repeatStr = " ".join([str(int(e)) for e in repeat])
+    #
+    # f = open(pathFolderOut + seq+".repeat", "w+")
+    # f.write(repeatStr)
+    # f.close()

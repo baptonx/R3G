@@ -30,6 +30,7 @@ API = wandb.Api()
 RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
 CLASSES = []
+EVALUATION = []
 LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
 LISTE_GESTE_BDD = {}
@@ -99,6 +100,26 @@ def start_wandb_v2():
         MODEL_LIST.append(model.__dict__)
     print(MODEL_LIST)
 
+def get_class_geste(name):
+    """ on recup le contenu de tab_class.txt """
+    name=name.replace('_inkml','')
+    if os.path.exists('./'+name+'/tabclass.txt'):
+        with open('./'+name+'/tabclass.txt') as file_content:
+            for line in file_content:
+                CLASSES.append(line.split(';')[1].replace('\n',''))
+    else:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+    if len(CLASSES) == 0:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
+def delete_eval():
+    """supression des anciennes eval """
+    for fichier in os.listdir('./EvaluationSequences'):
+        if os.path.exists('./EvaluationSequences/'+fichier):
+            os.remove('./EvaluationSequences/'+fichier)
+        else:
+            print("The file does not exist")
+
 @APP.route('/models/getModelsNames')
 def get_models_names():
     """Cette route permet de recuperer la liste des modeles disponible sur Wandb."""
@@ -146,44 +167,38 @@ def evaluation(name,sequences,model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
     download_weights(model)
     name=name.replace('_inkml','')
+    get_class_geste(name)
     seq=sequences.split(',')
-    if os.path.exists('./'+name+'/tabclass.txt'):
-        with open('./'+name+'/tabclass.txt') as file_content:
-            for line in file_content:
-                CLASSES.append(line.split(';')[1].replace('\n',''))
-    else:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-    if len(CLASSES) == 0:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
+   # remise à zéro des séquences à évaluer
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
             os.remove('./Sequences/'+fichier)
         else:
             print("The file does not exist")
-    for fichier in os.listdir('./EvaluationSequences'):
-        if os.path.exists('./EvaluationSequences/'+fichier):
-            os.remove('./EvaluationSequences/'+fichier)
-        else:
-            print("The file does not exist")
+
+
+    # run SequenceEvaluator.py pour évaluer
     for elt in seq:
         copyfile('./'+name+'/Data/'+elt.replace('.inkml','')+'.txt','./Sequences/'+\
         elt.replace('.inkml','')+'.txt')
-    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/", \
-    "Weigths/"+model+'/weights/'])
-    ret = []
+    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"\
+    + model, "Weigths/"+model+'/weights/'])
+
+ 
     for file in os.listdir('./EvaluationSequences/'):
+        liste_annotation = []
         with open('./EvaluationSequences/' + file) as file_content:
-            frame = 1
-            liste_annotation = []
-            tab = file_content.readlines()[1].split(' ')
-            for elt in tab:
-                id_geste=elt.split(';')[0]
-                nb_frame=elt.split(';')[1]
-                annotation = Annotation(frame,frame+int(nb_frame),0,CLASSES[int(id_geste)])
-                frame = frame + int(nb_frame)
+            for line in file_content:
+                tab = line.split(',')
+                id_geste = int(tab[0])
+                debut = int(tab[1])
+                fin = int(tab[2])
+                annotation = Annotation(debut,fin,0,CLASSES[id_geste])
                 liste_annotation.append(annotation.__dict__)
-        ret.append(Eval(file.replace('txt','inkml'),liste_annotation).__dict__)
-    return json.dumps(ret)
+        EVALUATION.append(Eval(file.replace('txt','inkml').replace(model,''),liste_annotation, model).__dict__)
+
+    return json.dumps(EVALUATION)
 
 
 @APP.route('/models/startLearning/<name>')
@@ -461,10 +476,9 @@ def route_reload_bdd(name):
 
 if __name__ == "__main__":
     get_last_config()
+    delete_eval()
     download_hyperparameters()
     start_wandb_v2()
-    #download_weights("je7bvwl4")
-    #start_learning('mo6')
     APP.run(host='0.0.0.0')
     save_config()
 

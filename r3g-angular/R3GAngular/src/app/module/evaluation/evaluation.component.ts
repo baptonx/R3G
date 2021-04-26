@@ -42,6 +42,10 @@ export class EvaluationComponent implements OnInit {
     return tabTime[tabTime.length - 1];
   }
 
+  delete(value:any):void{
+    this.evalServ.model_eval_1.delete(value)
+  }
+
   changeValue(value: any): void{
     this.serviceSequence.sequences.forEach(seq => {
       if (seq.id === value) {

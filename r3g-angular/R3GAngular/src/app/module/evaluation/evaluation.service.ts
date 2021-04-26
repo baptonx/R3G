@@ -31,6 +31,8 @@ export class EvaluationService {
   public buttonModeAnnotation!: MatButtonToggle;
   public annotationCurrent!: Annotation;
   public allAnnotation: Array<Annotation> = [];
+  public modelAnnot_1:Array<Annotation> = [];
+  public modelAnnot_2:Array<Annotation> = [];
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
@@ -100,15 +102,22 @@ export class EvaluationService {
       if(this.timeline_1 === 'Vérité terrain'){
         this.draw_verite(100)
       }
-      else{
-        this.draw_ia(100,1)
+      else if(this.timeline_1.includes('Recouvrement')){
+        this.draw_ia_recouvrement(100,1)
+      }
+      else if(this.timeline_1.includes('Classes')){
+        this.draw_ia_classes(100,1)
+
       }
       if(this.timeline_2 === 'Vérité terrain'){
         this.draw_verite(230)
       }
-      else{
-        this.draw_ia(230,2)
-        console.log(this.geste_ia_2)
+      else if(this.timeline_2.includes('Recouvrement')){
+        this.draw_ia_recouvrement(230,2)
+      }
+      else if(this.timeline_2.includes('Classes')){
+        this.draw_ia_classes(230,2)
+
       }
     
       // ======================================================
@@ -120,12 +129,89 @@ export class EvaluationService {
         this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
       }
 
+  
+
      
     }
 
     }
 
-public draw_ia(j:number,k:number):void{
+public draw_ia_classes(j:number,k:number):void{
+  if(k===1){
+  if (this.ctx !== null && this.ctx !== undefined) {
+   this.modelAnnot_1=[]
+   this.annotationIA.forEach(list=>{
+    if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_1.replace('Classes ','')){
+      this.modelAnnot_1=list.annotation
+    }
+   })
+    let geste=''
+    for(let i=0;i<this.modelAnnot_1.length;i++){
+    const name = this.modelAnnot_1[i].classe_geste
+    const frame1 = this.modelAnnot_1[i].f1
+    const frame2 = this.modelAnnot_1[i].f2
+    const t1 = this.convertFrameToTime(Number(frame1));
+    const t2 = this.convertFrameToTime(Number(frame2));
+    const color = localStorage.getItem(name);
+    if(color != null){
+      this.ctx.fillStyle = color;
+    }
+    else { 
+      this.ctx.fillStyle = 'black';
+     }
+    this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+    this.ctx.fillStyle = 'black';
+    if (geste === name){
+    }
+    else{
+      if(name !== undefined){
+    //this.ctx.fillText(name, this.timeToPos(t1) + 5, j);
+      }
+    geste = name
+    }
+  }
+}}
+else if(k===2){
+  if (this.ctx !== null && this.ctx !== undefined) {
+    this.modelAnnot_2=[]
+    this.annotationIA.forEach(list=>{
+     if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_2.replace('Classes ','')){
+       this.modelAnnot_2=list.annotation
+     }
+    })
+     let geste=''
+     for(let i=0;i<this.modelAnnot_2.length;i++){
+     const name = this.modelAnnot_2[i].classe_geste
+     const frame1 = this.modelAnnot_2[i].f1
+     const frame2 = this.modelAnnot_2[i].f2
+     const t1 = this.convertFrameToTime(Number(frame1));
+     const t2 = this.convertFrameToTime(Number(frame2));
+     const color = localStorage.getItem(name);
+     if(color != null){
+       this.ctx.fillStyle = color;
+     }
+     else { 
+       this.ctx.fillStyle = 'black';
+      }
+     this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+     this.ctx.fillStyle = 'black';
+     if (geste === name){
+     }
+     else{
+       if(name !== undefined){
+     //this.ctx.fillText(name, this.timeToPos(t1) + 5, j);
+       }
+     geste = name
+     }
+   }
+ }
+}
+
+
+
+}
+
+public draw_ia_recouvrement(j:number,k:number):void{
   if (this.ctx !== null && this.ctx !== undefined) {
   this.get_ia(k);
   let tmp=this.geste_ia_1
@@ -133,12 +219,15 @@ public draw_ia(j:number,k:number):void{
     tmp=this.geste_ia_2
   }
   let geste=''
+  let nb_correct = 0
+  let nb_frame = this.convertTimeToFrame(Number(this.tempsTotal))
       
           for(var i=0;i<this.geste_verite_terrain.length;i++){
             const t1 = this.convertFrameToTime(Number(i));
             const t2 = this.convertFrameToTime(Number(i+1));
             if(this.geste_verite_terrain[i] === tmp[i]  && this.geste_verite_terrain[i] !== undefined){
               this.ctx.fillStyle = 'green';
+              nb_correct ++
               this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
               this.ctx.fillStyle = 'black';
               if (geste === this.geste_verite_terrain[i]){
@@ -151,6 +240,21 @@ public draw_ia(j:number,k:number):void{
               
             }}
           }
+
+          if(nb_correct>0){
+            if(k===1){
+          this.ctx.font = '14px Arial';
+          this.ctx.fillStyle = 'black';
+          let pourcentage = (nb_correct/nb_frame*100).toFixed(2)
+          this.ctx.fillText('Taux de recouvrement : '+pourcentage+'%', this.timeToPos(0), 20);
+            }
+            else if(k===2){
+              this.ctx.font = '14px Arial';
+              this.ctx.fillStyle = 'black';
+              let pourcentage = (nb_correct/nb_frame*100).toFixed(2)
+              this.ctx.fillText('Taux de recouvrement : '+pourcentage+'%', this.timeToPos(Number(this.tempsTotal))/2, 20);
+            }
+          }this.ctx.font = '12px Arial';
 }
 }
       
@@ -204,7 +308,7 @@ public get_annot():void{
     if(i===1){
     this.geste_ia_1=[]
     this.annotationIA.forEach(list=>{
-      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_1){
+      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_1.replace('Recouvrement ','')){
         list.annotation.forEach(an=>{
           for(let j=an.f1;j<=an.f2;j++){
             this.geste_ia_1[j]=an.classe_geste
@@ -215,7 +319,7 @@ public get_annot():void{
     else if (i===2){
       this.geste_ia_2=[]
     this.annotationIA.forEach(list=>{
-      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_2){
+      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline_2.replace('Recouvrement ','')){
         list.annotation.forEach(an=>{
           for(let j=an.f1;j<=an.f2;j++){
             this.geste_ia_2[j]=an.classe_geste
@@ -249,7 +353,7 @@ public get_annot():void{
 
 
   public convertFrameToTime(frame: number): number {
-
+  
     if (frame >= 0 && frame < this.tabTimeCurrent.length) {
       if(this.tabTimeCurrent[frame]==0 && frame!=0){
         return this.tempsTotal;

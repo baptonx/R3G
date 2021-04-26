@@ -42,8 +42,10 @@ export class DialogEvalComponent implements OnInit {
 
         this.annot.annotationIA = returnedData
         this.evalServ.annotationIA = returnedData
-        this.evalServ.model_eval_1.add(this.model.toString())
-        this.evalServ.model_eval_2.add(this.model.toString())
+        this.evalServ.model_eval_1.add('Recouvrement '+this.model.toString())
+        this.evalServ.model_eval_1.add('Classes '+this.model.toString())
+        this.evalServ.model_eval_2.add('Recouvrement '+this.model.toString())
+        this.evalServ.model_eval_2.add('Classes '+this.model.toString())
         this.evalServ.draw()
       },
       (error: any) => {
