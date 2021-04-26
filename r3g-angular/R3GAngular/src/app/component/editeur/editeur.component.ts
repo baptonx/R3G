@@ -13,66 +13,53 @@ import { BddService } from 'src/app/service/bdd.service';
 })
 export class EditeurComponent implements OnInit {
   isLinear = false;
-  classeGeste:Array<String>=[];
-  couleur:Array<String>=[];
-  bdd_selected:string="";
-  geste:string="";
-  dataSource!: MatTableDataSource<String>;
-  displayedColumns=['Geste','Couleur']
+  classeGeste: Array<string> = [];
+  couleur: Array<string> = [];
+  bdd_selected = '';
+  geste = '';
+  dataSource!: MatTableDataSource<string>;
+  displayedColumns = ['Geste','Couleur'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public http:HttpClient,public bdd:BddService, public annotation: AnnotationService) {
     this.bdd.listGesteBDD.forEach((value: String[], key: String) => {
-      value.forEach(elt=>{
-        this.classeGeste.push(elt)
-      })
+      value.forEach(elt => {
+        this.classeGeste.push(elt.toString());
+      });
   });
-    for(var i=0;i<this.classeGeste.length;i++){
-    let Col=localStorage.getItem(this.classeGeste[i].toString());
-    if(Col!=null){  //  it checks values here or not to the variable
-       this.couleur.push(Col)
-       this.annotation.geste_couleur.set(this.classeGeste[i].toString(),Col)
+    for (let i = 0; i < this.classeGeste.length; i++){
+    const Col = localStorage.getItem(this.classeGeste[i]);
+    if (Col !== null){  //  it checks values here or not to the variable
+       this.couleur.push(Col);
+       this.annotation.geste_couleur.set(this.classeGeste[i], Col);
     }
-    else{
-      this.couleur.push('')
+    else {
+      this.couleur.push('');
     }
-
     }
-    this.dataSource = new MatTableDataSource<String>(this.classeGeste);
-    console.log(this.dataSource);
-    console.log(this.couleur)
+    this.dataSource = new MatTableDataSource<string>(this.classeGeste);
   }
 
-  changeValue(value:any){
-    this.bdd.bddnames.forEach(elt =>{
-        if(elt==value){
-          this.bdd_selected=elt
-          console.log(this.bdd_selected)
-          console.log(this.bdd.listGesteBDD)
+  changeValue(value: any): void {
+    this.bdd.bddnames.forEach(elt => {
+        if (elt === value){
+          this.bdd_selected = elt;
         }
-    }
-    )
+    });
   }
 
-  changeVal(event: any, i:number):void{
-    this.couleur[i]=event.target.value
-    this.geste = this.classeGeste[i].toString();
-    localStorage.setItem(this.geste,event.target.value)
-    this.annotation.geste_couleur.set(this.geste,event.target.value)
-    console.log(this.annotation.geste_couleur)
+  changeVal(event: any, i: number): void {
+    this.couleur[i] = event.target.value;
+    this.geste = this.classeGeste[i];
+    localStorage.setItem(this.geste, event.target.value);
+    this.annotation.geste_couleur.set(this.geste, event.target.value);
 }
 
+ngOnInit(): void{
 
+}
 
-  saveColor():void{
-    console.log(this.couleur)
-  }
-
-  ngOnInit() {
-
-  }
-
-  ngAfterViewInit(){
+  ngAfterInit(): void{
     this.dataSource.paginator = this.paginator;
   }
 }
