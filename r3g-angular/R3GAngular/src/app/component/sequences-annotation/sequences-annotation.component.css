@@ -2,6 +2,7 @@
     opacity: 0.75;
     font-size: 0.75em;
   }
+/*
   .tab-container{
     display:inline-block;
     position: relative;
@@ -12,6 +13,14 @@
     background-color: #444444;
     color: white;
   }
+ */
+
+.tab-container{
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  width: 22%;
+}
   .mat-app-background {
     background-color: #303030;
     color: #fff;
@@ -33,7 +42,7 @@
  ::ng-deep.mat-form-field-underline {
   /*change color of underline*/
   background-color: white !important;
-} 
+}
 
 ::ng-deep.mat-form-field-ripple {
  /*change color of underline when focused*/
@@ -54,3 +63,9 @@
 ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow  {
   color: white;
 }
+
+.divBouton {
+  margin-top: 10px;
+}
+
+

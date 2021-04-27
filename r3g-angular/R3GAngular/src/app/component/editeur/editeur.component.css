@@ -15,7 +15,7 @@
 .mat-row {
     height: auto;
   }
-  
+
   .mat-cell {
     padding: 8px 8px 8px 0;
   }
@@ -56,7 +56,7 @@
  ::ng-deep.mat-form-field-underline {
   /*change color of underline*/
   background-color: white !important;
-} 
+}
 
 ::ng-deep.mat-form-field-ripple {
  /*change color of underline when focused*/
