@@ -74,10 +74,10 @@ export class ExplorationService {
        */
 
       this.ctx.font = '12px Arial';
-      for (let i = 1; i < lengthAnnotation; i++) {
-        const name = this.sequenceCurrent.metaDonnees.annotation[i.toString()].type;
-        const frame1 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].debut;
-        const frame2 = this.sequenceCurrent.metaDonnees.annotation[i.toString()].fin;
+      for (const annotation of this.sequenceCurrent.listAnnotation.values()) {
+        const name = annotation.classe_geste;
+        const frame1 = annotation.f1;
+        const frame2 = annotation.f2;
         const t1 = this.convertFrameToTime(Number(frame1));
         const t2 = this.convertFrameToTime(Number(frame2));
         const color = localStorage.getItem(name);
