@@ -9,12 +9,12 @@ import {BddService} from '../../service/bdd.service';
   styleUrls: ['./sequences-annotation.component.css']
 })
 export class SequencesAnnotationComponent implements OnInit {
-  sequencesList:Array<String>;
+  sequencesList: Array<string>;
   constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService) {
-    this.sequencesList=[]
-    this.serviceSequence.sequences.forEach(elt=>{
-      this.sequencesList.push(elt.id)
-    })
+    this.sequencesList = [];
+    this.serviceSequence.sequences.forEach(elt => {
+      this.sequencesList.push(elt.id);
+    });
   }
 
   changeValue(value: any): void{

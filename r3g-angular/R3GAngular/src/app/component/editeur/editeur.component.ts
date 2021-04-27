@@ -29,7 +29,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
       const Col = localStorage.getItem(geste);
       if (Col !== null){  //  it checks values here or not to the variable
         this.couleur.push(Col);
-        this.annotation.geste_couleur.set(geste, Col);
+        this.annotation.gesteCouleur.set(geste, Col);
       }
       else {
         this.couleur.push('');
@@ -42,7 +42,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
     this.couleur[i] = event.target.value;
     this.geste = this.classeGeste[i];
     localStorage.setItem(this.geste, event.target.value);
-    this.annotation.geste_couleur.set(this.geste, event.target.value);
+    this.annotation.gesteCouleur.set(this.geste, event.target.value);
 }
 
 ngOnInit(): void{

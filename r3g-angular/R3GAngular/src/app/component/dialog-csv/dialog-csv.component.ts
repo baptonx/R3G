@@ -70,9 +70,14 @@ export class DialogCSVComponent implements OnInit {
       }
     }
     }
-
-      const folder = this.subFolder?.nativeElement.value!;
-      const path = this.pathWeight?.nativeElement.value!;
+      let folder = '';
+      let path = '';
+      if (this.subFolder !== undefined) {
+        folder = this.subFolder.nativeElement.value;
+      }
+      if (this.pathWeight !== undefined){
+        path = this.pathWeight.nativeElement.value;
+      }
       if (folder !== ''){
         this.list.push(['FolderFit=' + folder]);
     }
@@ -118,7 +123,7 @@ export class DialogCSVComponent implements OnInit {
 
 }
 
-function cartesianProduct(arr: any[]) {
+function cartesianProduct(arr: any[]): void {
   return arr.reduce(function(a: any[], b: any[]){
       return a.map(function(x: any[]){
           return b.map(function(y: any){

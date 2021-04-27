@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {VisualisationExploService} from "../../service/visualisation-explo.service";
+import {VisualisationExploService} from '../../service/visualisation-explo.service';
 
 
 @Component({
@@ -8,39 +8,35 @@ import {VisualisationExploService} from "../../service/visualisation-explo.servi
   styleUrls: ['./visualitation-explo.component.css']
 })
 export class VisualitationExploComponent implements OnInit {
-  isResizing: boolean=false;
-  y: number = 0;
-  height: number = 300;
+  isResizing = false;
+  y = 0;
+  height = 300;
   constructor(public serviceVisu: VisualisationExploService) { }
 
   ngOnInit(): void {
   }
 
-  mousedown($event: MouseEvent) {
-    console.log("mousedown");
+  mousedown($event: MouseEvent): void {
     console.log(this.isResizing);
     this.isResizing = true;
     this.y = $event.clientY;
 
-    document.addEventListener("mousemove", this.resize, false);
-    document.addEventListener("mouseup",this.mouseUp, false);
+    document.addEventListener('mousemove', this.resize, false);
+    document.addEventListener('mouseup', this.mouseUp, false);
   }
 
-  mouseUp(event: MouseEvent) {
+  mouseUp(event: MouseEvent): void {
     this.isResizing = false;
-    console.log("mouseUp");
     console.log(this.isResizing);
-    document.removeEventListener("mousemove",this.resize);
-    document.removeEventListener("mouseup",this.mouseUp);
+    document.removeEventListener('mousemove', this.resize);
+    document.removeEventListener('mouseup', this.mouseUp);
     event.preventDefault();
   }
 
-  resize(event: MouseEvent) {
-    console.log("resize");
+  resize(event: MouseEvent): void {
     console.log(this.isResizing);
-    if(this.isResizing){
-      console.log("should resize");
-      this.height += (this.y-event.clientY);
+    if (this.isResizing){
+      this.height += (this.y - event.clientY);
       event.preventDefault();
     }
   }

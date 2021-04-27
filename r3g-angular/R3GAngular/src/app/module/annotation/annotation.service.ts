@@ -34,6 +34,7 @@ export class AnnotationService {
   public margeEdgeMouse = 10;
   public annotationIA: Array<Eval> = [];
   public sequenceCurrent!: Sequence;
+  public gesteCouleur: Map<string, string> = new Map<string, string>();
 
 
   // Timeline
