@@ -107,10 +107,7 @@ def get_class_geste(name):
         with open('./'+name+'/tabclass.txt') as file_content:
             for line in file_content:
                 CLASSES.append(line.split(';')[1].replace('\n',''))
-    else:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-    if len(CLASSES) == 0:
-        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
 
 def delete_eval():
     """supression des anciennes eval """
@@ -169,6 +166,8 @@ def evaluation(name,sequences,model):
     name=name.replace('_inkml','')
     get_class_geste(name)
     seq=sequences.split(',')
+    if len(CLASSES) == 0:
+        return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
    # remise à zéro des séquences à évaluer
     for fichier in os.listdir('./Sequences'):
@@ -185,7 +184,7 @@ def evaluation(name,sequences,model):
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"\
     + model, "Weigths/"+model+'/weights/'])
 
- 
+
     for file in os.listdir('./EvaluationSequences/'):
         liste_annotation = []
         with open('./EvaluationSequences/' + file) as file_content:
@@ -196,7 +195,8 @@ def evaluation(name,sequences,model):
                 fin = int(tab[2])
                 annotation = Annotation(debut,fin,0,CLASSES[id_geste])
                 liste_annotation.append(annotation.__dict__)
-        EVALUATION.append(Eval(file.replace('txt','inkml').replace(model,''),liste_annotation, model).__dict__)
+        EVALUATION.append(Eval(file.replace('txt','inkml').replace(model,''),\
+        liste_annotation, model).__dict__)
 
     return json.dumps(EVALUATION)
 
@@ -275,7 +275,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
             if p_1.match(filename):
                 liste_fichier_in[filename] = path[longeur_path:]+'/'+filename
     if len(liste_fichier_in) != 0:
-        LISTE_GESTE_BDD[namebdd] = [] 
+        LISTE_GESTE_BDD[namebdd] = []
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
         metadonnes = []
         for file in liste_fichier_in:
@@ -307,6 +307,7 @@ def effacer_metadonnee_bdd(bdd):
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
     # pylint: disable-msg=too-many-branches
+    # pylint: disable-msg=too-many-nested-blocks
     """Contenu du fichier inkml."""
     global LISTE_GESTE_BDD
     filepath = LISTE_PATH_BDD[bdd] + LISTE_FICHIER_INKML[bdd][filename]
@@ -330,7 +331,8 @@ def get_meta_donnee(filename, bdd):
                         nb_annotation += 1
                         for children in children2:
                             action[children.attrib['type']] = children.text
-                            if(children.attrib['type'] == "type" and children.text not in LISTE_GESTE_BDD[bdd]):
+                            if(children.attrib['type'] == "type" and children.text \
+                            not in LISTE_GESTE_BDD[bdd]):
                                 LISTE_GESTE_BDD[bdd].append(children.text)
                         annotations[nb_annotation] = action
         elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
@@ -365,7 +367,8 @@ def get_donnee(filename, bdd):
     return donnees
 
 def add_listgeste_metadonne():
-    """Construit la structure a envoyer au serveur contenant et les liste de geste par bdd et les Metadonnee"""
+    """Construit la structure a envoyer au serveur contenant
+    et les liste de geste par bdd et les Metadonnee"""
     print(json.dumps([LISTE_GESTE_BDD, METADONNEE]))
     return [LISTE_GESTE_BDD, METADONNEE]
 #############Exploration route :##############
@@ -414,7 +417,7 @@ def route_add_bdd():
                     LISTE_GESTE_BDD[namebdd] = []
                     LISTE_PATH_BDD[namebdd] = path
                     if ajout_fichiers_inkml_in(path, namebdd):
-                        save_config()  
+                        save_config()
                     else:
                         del LISTE_GESTE_BDD[namebdd]
                         del LISTE_PATH_BDD[namebdd]
