@@ -19,12 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean code 'espère na pas tout casser'">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/config.ini" afterDir="false" />
-    </list>
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean code 'espère na pas tout casser'" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +98,7 @@
       <workItem from="1619073672022" duration="14832000" />
       <workItem from="1619184783737" duration="1857000" />
       <workItem from="1619428823121" duration="19973000" />
-      <workItem from="1619517082023" duration="1263000" />
+      <workItem from="1619517082023" duration="1777000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
