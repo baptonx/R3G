@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {EngineExplorationService} from '../component/engine-exploration/engine-exploration.service';
 import {BddService} from './bdd.service';
-import {Sequence} from '../class/commun/sequence';
 
 @Injectable({
   providedIn: 'root'

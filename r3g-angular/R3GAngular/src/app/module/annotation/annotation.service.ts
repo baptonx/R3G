@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import {AnimationAction} from 'three';
-import {EngineService} from '../../component/engine/engine.service';
-import {TimelineService} from '../../component/timeline/timeline.service';
 import {EventManager} from '@angular/platform-browser';
 import {MatButtonToggle} from '@angular/material/button-toggle';
-import * as THREE from 'three';
-import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {Annotation} from '../../class/commun/annotation/annotation';
-import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
-import { BddService } from 'src/app/service/bdd.service';
 import { Eval } from 'src/app/class/evaluation/eval';
 import { Sequence } from 'src/app/class/commun/sequence';
 
@@ -38,7 +32,6 @@ export class AnnotationService {
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
-  public geste_couleur: Map<string, string> = new Map<string, string>();
   public annotationIA: Array<Eval> = [];
   public sequenceCurrent!: Sequence;
 

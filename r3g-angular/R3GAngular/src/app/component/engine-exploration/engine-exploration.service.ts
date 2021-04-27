@@ -3,11 +3,7 @@ import * as THREE from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
-import {Sequence} from '../../class/commun/sequence';
-import {AnnotationService} from '../../module/annotation/annotation.service';
-import {SequencesChargeesService} from '../../service/sequences-chargees.service';
 import {ExplorationService} from '../../module/exploration/exploration.service';
-import {VisualisationExploService} from '../../service/visualisation-explo.service';
 import {BddService} from '../../service/bdd.service';
 
 interface MaScene {
@@ -20,7 +16,6 @@ interface MaSceneElement {
   elem: ElementRef<HTMLCanvasElement>;
   fn: (rect: DOMRect) => void;
 }
-
 
 
 @Injectable({
@@ -48,8 +43,8 @@ export class EngineExplorationService implements OnDestroy {
     }
   }
 
-  public initialize(canvas: ElementRef<HTMLCanvasElement>|undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>>|undefined, 
-    refresh: boolean): void {
+  public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
+                  , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
@@ -138,8 +133,7 @@ export class EngineExplorationService implements OnDestroy {
             positionArticulation2
           ]);
            */
-        }
-        else {
+        } else {
           this.clip = new AnimationClip('move', -1, []);
         }
 
@@ -204,8 +198,7 @@ export class EngineExplorationService implements OnDestroy {
         const sceneRenderFunction = sceneInitFunction(element.nativeElement);
         this.addScene(element, sceneRenderFunction);
       }
-    }
-    else {
+    } else {
       for (const element of this.listElementHtmlRefresh) {
         const sceneName = element.nativeElement.dataset.diagram;
         let key: 'box' = 'box';
@@ -232,16 +225,16 @@ export class EngineExplorationService implements OnDestroy {
     if (bg !== null) {
       scene.background = new THREE.Color(bg);
     }
-    scene.background = new THREE.Color( 0x707070 );
-    scene.fog = new THREE.Fog( 0x707070, 10, 50 );
+    scene.background = new THREE.Color(0x707070);
+    scene.fog = new THREE.Fog(0x707070, 10, 50);
 
     const fov = 45;
     const aspect = 2;  // the canvas default
     const near = 1;
     const far = 100;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set( 0, 1, -8 );
-    camera.lookAt( 0, 0, 0 );
+    camera.position.set(0, 1, -8);
+    camera.lookAt(0, 0, 0);
 
     scene.add(camera);
 
@@ -263,11 +256,11 @@ export class EngineExplorationService implements OnDestroy {
     scene.add(light);
 
     // ground
-    const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0x999999 } ) );
-    mesh.rotation.x = - Math.PI / 2;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({color: 0x999999}));
+    mesh.rotation.x = -Math.PI / 2;
     mesh.position.y = -1.7;
     mesh.receiveShadow = true;
-    scene.add( mesh );
+    scene.add(mesh);
 
     return {scene, camera, controls};
   }
@@ -283,7 +276,7 @@ export class EngineExplorationService implements OnDestroy {
     return needResize;
   }
 
-  public render(): void{
+  public render(): void {
     this.resizeRendererToDisplaySize();
 
     this.renderer.setScissorTest(false);
@@ -341,8 +334,7 @@ export class EngineExplorationService implements OnDestroy {
   public play(): void {
     if (this.explorationServ.pauseAction === true) {
       this.playForward();
-    }
-    else {
+    } else {
       this.explorationServ.action.timeScale = 1;
       this.explorationServ.pauseAction = true;
       this.clip.duration = this.explorationServ.action.time;
