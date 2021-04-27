@@ -1,11 +1,11 @@
-import { Hyperparameter } from "./hyperparameter";
+import { Hyperparameter } from './hyperparameter';
 
 export class HyperparameterBool extends Hyperparameter {
 
-    value:string[]
+    value: string[];
 
-    constructor(n:string,v:string[]){
+    constructor(n: string, v: string[]){
         super(n);
-        this.value=v;
+        this.value = v;
     }
 }

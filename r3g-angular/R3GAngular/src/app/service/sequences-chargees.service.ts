@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Annotation } from '../class/commun/annotation/annotation';
-import {Sequence} from "../class/commun/sequence";
+import {Sequence} from '../class/commun/sequence';
 import { Eval } from '../class/evaluation/eval';
 import {BddService} from './bdd.service';
 
@@ -9,31 +9,30 @@ import {BddService} from './bdd.service';
 })
 export class SequencesChargeesService {
   sequences: Set<Sequence>;
-  evaluation:Array<Eval>
-  evaluation_selected:Array<Annotation>
-  constructor(public bdd : BddService) {
+  evaluation: Array<Eval>;
+  evaluatedSelected: Array<Annotation>;
+  constructor(public bdd: BddService) {
     this.sequences = new Set<Sequence>();
-    this.evaluation = []
-    this.evaluation_selected = [];
-  
+    this.evaluation = [];
+    this.evaluatedSelected = [];
   }
 
   addToList(sequences: Sequence[]): void {
-    let listseqs = [];
-    for(let seq of sequences) {
+    const listseqs = [];
+    for (const seq of sequences) {
       if (this.sequences.has(seq)) {
-        listseqs.push(seq)
+        listseqs.push(seq);
       }
       this.sequences.add(seq);
     }
-    this.bdd.getDonnee(listseqs)
+    this.bdd.getDonnee(listseqs);
   }
   deleteFromList(sequence: Sequence): void {
     sequence.traceNormal = [];
-    this.sequences.delete(sequence)
+    this.sequences.delete(sequence);
   }
 
-  clear() {
+  clear(): void {
     this.sequences.clear();
   }
 }

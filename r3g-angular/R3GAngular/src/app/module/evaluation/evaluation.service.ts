@@ -131,7 +131,7 @@ public draw_ia_classes(j: number, k: number): void{
   if (k === 1){
   this.modelAnnot1 = [];
   this.annotationIA.forEach(list => {
-    if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline1.replace('Classes ', '')){
+    if (list.name === this.sequenceCurrent.id && list.idModel === this.timeline1.replace('Classes ', '')){
       this.modelAnnot1 = list.annotation;
     }
   }
@@ -163,7 +163,7 @@ public draw_ia_classes(j: number, k: number): void{
 else if (k === 2){
     this.modelAnnot2 = [];
     this.annotationIA.forEach(list => {
-     if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline2.replace('Classes ', '')){
+     if (list.name === this.sequenceCurrent.id && list.idModel === this.timeline2.replace('Classes ', '')){
        this.modelAnnot2 = list.annotation;
      }
     });
@@ -292,7 +292,7 @@ public get_annot(): void{
     if (i === 1) {
     this.gesteIA1 = [];
     this.annotationIA.forEach(list => {
-      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline1.replace('Recouvrement ', '')){
+      if (list.name === this.sequenceCurrent.id && list.idModel === this.timeline1.replace('Recouvrement ', '')){
         list.annotation.forEach(an => {
           for (let j = an.f1; j <= an.f2; j++){
             this.gesteIA1[j] = an.classe_geste;
@@ -304,7 +304,7 @@ public get_annot(): void{
     else if (i === 2){
     this.gesteIA2 = [];
     this.annotationIA.forEach(list => {
-      if (list.name === this.sequenceCurrent.id && list.id_model === this.timeline2.replace('Recouvrement ', '')){
+      if (list.name === this.sequenceCurrent.id && list.idModel === this.timeline2.replace('Recouvrement ', '')){
         list.annotation.forEach(an => {
           for (let j = an.f1; j <= an.f2; j++){
             this.gesteIA2[j] = an.classe_geste;

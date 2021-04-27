@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AnnotationComponent} from "./module/annotation/annotation.component";
-import {EvaluationComponent} from "./module/evaluation/evaluation.component";
-import {ExplorationComponent} from "./module/exploration/exploration.component";
+import {AnnotationComponent} from './module/annotation/annotation.component';
+import {EvaluationComponent} from './module/evaluation/evaluation.component';
+import {ExplorationComponent} from './module/exploration/exploration.component';
 
 const routes: Routes = [
   {path: 'annotation', component: AnnotationComponent},

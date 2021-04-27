@@ -1,13 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
-import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
-import { BddService } from 'src/app/service/bdd.service';
-import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
-import {Sequence} from "../../class/commun/sequence";
+import {HttpClient} from '@angular/common/http';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {MatInput} from '@angular/material/input';
+import {BddService} from 'src/app/service/bdd.service';
+import {Sequence} from '../../class/commun/sequence';
 
 
 @Component({
@@ -26,149 +23,110 @@ export class DialogLearningComponent implements OnInit {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   file: File | undefined;
-  isManual: boolean;
-  isCrossVal: boolean;
-  isProtocole: boolean;
 
-  constructor(private _formBuilder: FormBuilder, public http: HttpClient, public bdd: BddService, public dialog: MatDialog) {
-    this.fileCSVName="Hyperparamètres";
-    this.isManual=false;
-    this.isCrossVal=false;
-    this.isProtocole=false;
+  constructor(private formBuilder: FormBuilder, public http: HttpClient, public bdd: BddService, public dialog: MatDialog) {
+    this.fileCSVName = 'Hyperparamètres';
   }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
   }
 
-  ngAfterViewInit():void{
-
-
-    this.startLearning()
-
-
+  ngAfterInit(): void {
+    this.startLearning();
   }
 
 
-
-  startLearning():void{
-    if(this.file!=undefined){
-    const formData: FormData = new FormData();
-    formData.append('file', this.file, this.file.name);
-    var name=this.modelName?.nativeElement.value!
-    this.http.post('/models/uploadFile/'+name,formData).subscribe(
-      (response: any) => {
-          console.log(response)
-          let fileSeq=this.chooseSequence();
+  startLearning(): void {
+    if (this.file !== undefined) {
+      const formData: FormData = new FormData();
+      formData.append('file', this.file, this.file.name);
+      if (this.modelName !== undefined) {
+        const name = this.modelName.nativeElement.value;
+        this.http.post('/models/uploadFile/' + name, formData).subscribe(
+        () => {
+          const fileSeq = this.chooseSequence();
           const sequences: FormData = new FormData();
           sequences.append('file', fileSeq, fileSeq.name);
-          this.http.post('/models/uploadFile/'+name,sequences).subscribe(
-            (response: any) => {
+          this.http.post('/models/uploadFile/' + name, sequences).subscribe(
+            () => {
 
-      var ia = this.chooseIA()
-      const ia_file: FormData = new FormData();
-      ia_file.append('file',ia,ia.name)
-      this.http.post('/models/uploadFile/'+name,ia_file).subscribe(
-        (response: any) => {
+              const ia = this.chooseIA();
+              const iaFile: FormData = new FormData();
+              iaFile.append('file', ia, ia.name);
+              this.http.post('/models/uploadFile/' + name, {}).subscribe(
+                () => {
 
-      this.http.get('/models/startLearning/'+name,{}).subscribe(
-        (response: any) => {
-            console.log(response)
-        },
-        (error: any) => {
-            console.log(error)
-        });
-        },
-        (error: any) => {
-            console.log(error)
-        });
+                  this.http.get('/models/startLearning/' + name, {}).subscribe(
+                    () => {
+                    },
+                    () => {
+                    }
+                  );
+                },
+                () => {
+                });
             },
-            (error: any) => {
-                console.log(error)
+            () => {
             });
-      },
-      (error: any) => {
-          console.log(error)
-      });
+        },
+        () => {
+        });
 
-    }
+    }}
   }
 
-  chooseSequence():File{
-    let csvContent = "data:text/csv;charset=utf-8,"
-    +("Sequence1\n");
-    let train=['Train\n'];
-    let test=['\n','Test\n'];
+  chooseSequence(): File {
+    const train = ['Train\n'];
+    const test = ['\n', 'Test\n'];
     (Array.from(this.bdd.mapSequences.values()).reduce((acc, elem) => acc.concat(elem), []))
-      .forEach((seq: Sequence)=>{
-      if(seq.isTrain){
-        train.push(seq.id)
-        train.push(';')
-      }
-      else{
-        test.push(seq.id)
-        test.push(';')
-      }
-    })
-    if(test.length>1){
-    test.pop()
+      .forEach((seq: Sequence) => {
+        if (seq.isTrain) {
+          train.push(seq.id);
+          train.push(';');
+        } else {
+          test.push(seq.id);
+          test.push(';');
+        }
+      });
+    if (test.length > 1) {
+      test.pop();
     }
-    if(train.length>1){
-    train.pop()
+    if (train.length > 1) {
+      train.pop();
     }
-    let file = new File(train.concat(test), 'sequences.txt', {type: 'text/plain'});
-    return file
+    return new File(train.concat(test), 'sequences.txt', {type: 'text/plain'});
   }
 
 
   chooseIA(): File {
-    var ia = []
-    ia.push(this.pathIA?.nativeElement.value!)
-    return new File(ia,'ia.txt', {type: 'text/plain'});
+    const ia = [];
+    if (this.pathIA !== undefined) {
+      ia.push(this.pathIA.nativeElement.value);
+    }
+    return new File(ia, 'ia.txt', {type: 'text/plain'});
   }
 
 
+  openFile(event: { target: any; }): void {
+    const input = event.target;
+    input.files.forEach((f: any) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // this 'text' is the content of the file
+        this.hyperpameters = reader.result;
+        this.file = event.target.files.item(0);
 
-  openFile(event: { target: any; }) {
-    let input = event.target;
-    for (var index = 0; index < input.files.length; index++) {
-        let reader = new FileReader();
-        console.log(event.target.name)
-        reader.onload = () => {
-            // this 'text' is the content of the file
-            this.hyperpameters = reader.result;
-            this.file=event.target.files.item(0)
+      };
 
-        }
-
-        reader.readAsText(input.files[index]);
-        this.fileCSVName=input.files[index].name;
-    };
-}
-
-changeMode(i:number):void{
-  switch(i){
-    case 1:
-      this.isManual=false;
-      this.isProtocole=true;
-      this.isCrossVal=false;
-      break;
-    case 2:
-      this.isManual=true;
-      this.isProtocole=false;
-      this.isCrossVal=false;
-      break;
-    case 3:
-      this.isManual=false;
-      this.isProtocole=false;
-      this.isCrossVal=true;
-      break;
-
+      reader.readAsText(f);
+      this.fileCSVName = f.name;
+    });
   }
 }
-}
+

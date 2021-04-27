@@ -26,7 +26,7 @@ export class SequencesAnnotationComponent implements OnInit {
         this.serviceSequence.evaluation.forEach(ev => {
           // if (ev.name === this.bdd.sequenceCourante?.id) {
           if (ev.name === seq.id) {
-            this.serviceSequence.evaluation_selected = ev.annotation;
+            this.serviceSequence.evaluatedSelected = ev.annotation;
           }
         });
       }

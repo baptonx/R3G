@@ -54,7 +54,7 @@ export class EvaluationComponent implements OnInit {
         this.evalServ.draw();
         this.serviceSequence.evaluation.forEach(ev => {
           if (ev.name === this.bdd.sequenceCourante?.id) {
-            this.serviceSequence.evaluation_selected = ev.annotation;
+            this.serviceSequence.evaluatedSelected = ev.annotation;
           }
         });
       }

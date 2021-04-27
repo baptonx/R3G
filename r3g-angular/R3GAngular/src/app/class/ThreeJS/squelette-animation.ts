@@ -3,8 +3,8 @@ import {Object3D} from 'three/src/core/Object3D';
 
 export class SqueletteAnimation {
   root: Object3D;
-  //articulation1: THREE.Mesh;
-  //articulation2: THREE.Mesh;
+  // articulation1: THREE.Mesh;
+  // articulation2: THREE.Mesh;
 
   constructor(){
     this.root = new Object3D();
