@@ -12,11 +12,13 @@ export class SequencesChargeesService {
   sequences2: Set<Sequence>;
   evaluation: Array<Eval>;
   evaluatedSelected: Array<Annotation>;
+  mode: string;
   constructor(public bdd: BddService) {
     this.sequences1 = new Set<Sequence>();
     this.sequences2 = new Set<Sequence>();
     this.evaluation = [];
     this.evaluatedSelected = [];
+    this.mode = '';
   }
 
   addToList(selection: string, sequences: Sequence[]): void {

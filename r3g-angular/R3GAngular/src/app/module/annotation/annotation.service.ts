@@ -168,7 +168,7 @@ export class AnnotationService {
     this.mouseDown = true;
     if (this.buttonModeEditing.checked === true) {
       const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
-      if (tabIndiceAnnotation.length !== 0) {
+      if (tabIndiceAnnotation.length !== 0 && this.sequenceCurrent !== undefined) {
         this.annotationCurrent = this.sequenceCurrent.listAnnotation[tabIndiceAnnotation[0]];
         this.annotationCurrentIsSelected = true;
         console.log(this.annotationCurrent.pointAction);
