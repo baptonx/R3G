@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EngineService} from './engine.service';
 import {MatButtonToggle} from '@angular/material/button-toggle';
 
@@ -8,18 +8,16 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
   styleUrls: ['./engine.component.css'],
   providers: [EngineService]
 })
-export class EngineComponent implements OnInit {
+export class EngineComponent implements OnInit, OnDestroy {
 
-  // --> Visualiser les annotations des séquences
-  // Sélection d'une annotation
+  // --> Fonction qui retrie les séquences dans le bon ordre
+  // Pouvoir modifier la taille des annot avec la souris
   // Afficher les informations dans l'éditeur textuel
-  // Pouvoir modifier les annotations des séquences à la main et avec l'éditeur textuel (faire attention à l'ordre des listes !)
+  // Pouvoir modifier les annotations des séquences avec l'éditeur textuel (faire attention à l'ordre des listes !)
   // Pouvoir créer une nouvelle annotation
   // Pouvoir sauvegarder
   // Mettre l'ia -> Récupérer un tableau d'annotation à afficher
   // Bouton pour recopier liste annotation IA dans liste annotation de la séquence
-  // Evaluation pareil : liste d'annotation à afficher mais bloquer la modification
-  // (booléen mode évaluation à true et reviens à false quand on quitte le module)
 
 
 
@@ -67,6 +65,10 @@ export class EngineComponent implements OnInit {
     this.engServ.annotationServ.buttonModeEditing = this.buttonModeEditing;
     this.engServ.annotationServ.buttonModeAnnotation = this.buttonModeAnnotation;
     this.engServ.animate();
+  }
+
+  ngOnDestroy(): void {
+    this.engServ.annotationServ.sequenceCurrent = undefined;
   }
 
   updateActionTime(event: any): void {

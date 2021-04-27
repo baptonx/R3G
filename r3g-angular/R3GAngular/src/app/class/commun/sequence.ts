@@ -36,4 +36,21 @@ export class Sequence {
     return this.id === seq.id;
   }
 
+  trierAnnotation(): void {
+    let isSwapped;
+    do {
+      isSwapped = false;
+
+      for (let i = 0; i < this.listAnnotation.length - 1; i++) {
+        if (this.listAnnotation[i].f1 > this.listAnnotation[i + 1].f1) {
+          const tempLeftValue = this.listAnnotation[i];
+          this.listAnnotation[i] = this.listAnnotation[i + 1];
+          this.listAnnotation[i + 1] = tempLeftValue;
+          isSwapped = true;
+        }
+      }
+
+    } while (isSwapped === true);
+  }
+
 }

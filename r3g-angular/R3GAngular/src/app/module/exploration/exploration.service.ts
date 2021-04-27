@@ -74,14 +74,14 @@ export class ExplorationService {
           const t1 = this.convertFrameToTime(Number(frame1));
           const t2 = this.convertFrameToTime(Number(frame2));
           const color = localStorage.getItem(name);
-          if (color != null){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = color;
           }
           else {
             this.ctx.fillStyle = 'black';
           }
           this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
-          if (color != null){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = 'black';
           }
           else {

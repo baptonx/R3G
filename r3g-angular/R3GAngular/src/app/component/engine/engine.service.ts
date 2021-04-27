@@ -10,6 +10,7 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
 import {BddService} from '../../service/bdd.service';
 import {SequencesChargeesService} from '../../service/sequences-chargees.service';
 import {Sequence} from '../../class/commun/sequence';
+import {Annotation} from '../../class/commun/annotation/annotation';
 
 interface MaScene {
   scene: THREE.Scene;
@@ -33,7 +34,6 @@ export class EngineService implements OnDestroy {
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
-  public tabTimeCurrent!: Array<number>;
   public facteurGrossissement = 1.5;
   public facteurScale = 1;
 
@@ -103,7 +103,7 @@ export class EngineService implements OnDestroy {
             }
 
             if (i === 0) {
-              this.tabTimeCurrent = tabTime;
+              this.annotationServ.tabTimeCurrent = tabTime;
             }
 
             const positionArticulation = new VectorKeyframeTrack(
@@ -220,6 +220,8 @@ export class EngineService implements OnDestroy {
 
   public refreshInitialize(newSequence: Sequence|undefined): void {
     this.initialize(undefined, undefined, true, newSequence);
+    this.annotationServ.annotationCurrent = new Annotation();
+    this.annotationServ.annotationCurrentIsSelected = false;
   }
 
   public addScene(elem: ElementRef<HTMLCanvasElement>, fn: (rect: DOMRect) => void): void {
@@ -396,8 +398,8 @@ export class EngineService implements OnDestroy {
 
   updateActionFrame(event: any): void {
     const frameEditText = Number(event.target.value);
-    if (frameEditText >= 0 && frameEditText < this.tabTimeCurrent.length) {
-      this.annotationServ.action.time = this.convertFrameToTime(frameEditText);
+    if (frameEditText >= 0 && frameEditText < this.annotationServ.tabTimeCurrent.length) {
+      this.annotationServ.action.time = this.annotationServ.convertFrameToTime(frameEditText);
     }
   }
 
@@ -435,24 +437,6 @@ export class EngineService implements OnDestroy {
       average = average + Number(n);
     }
     return average / tab.length;
-  }
-
-  public convertFrameToTime(frame: number): number {
-    if (frame >= 0 && frame < this.tabTimeCurrent.length) {
-      return this.tabTimeCurrent[frame];
-    }
-    return 0;
-  }
-
-  public convertTimeToFrame(time: number): number {
-    if (time >= 0 && time < this.annotationServ.tempsTotal) {
-      for (let i = 0; i < this.tabTimeCurrent.length; i++) {
-        if (this.tabTimeCurrent[i] >= time) {
-          return i;
-        }
-      }
-    }
-    return 0;
   }
 
 }

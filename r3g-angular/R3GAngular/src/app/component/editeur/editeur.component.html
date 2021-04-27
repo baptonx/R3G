@@ -3,31 +3,31 @@
       <form>
         <ng-template matStepLabel>Editeur</ng-template>
         <mat-form-field appearance="fill">
-            <mat-label>Classe du geste</mat-label>
-        <mat-select>
-            <mat-option *ngFor="let geste of this.classeGeste" [value]="geste">
-              {{geste}}
-            </mat-option>
+          <mat-label>Classe du geste</mat-label>
+          <mat-select [(value)]="annotation.annotationCurrent.classeGeste">
+              <mat-option *ngFor="let geste of this.classeGeste" [value]="geste">
+                {{geste}}
+              </mat-option>
           </mat-select>
         </mat-form-field>
         <div>
             <mat-form-field>
               <mat-label>Début</mat-label>
-              <input matInput  #debut autocomplete="off" [value]="annotation.margeEdgeMouse">
+              <input matInput  #debut autocomplete="off" [value]="annotation.annotationCurrent.f1" (keyup.enter)="updateF1($event)">
             </mat-form-field>
           </div>
           <div>
             <mat-form-field>
               <mat-label>Fin</mat-label>
-              <input matInput  autocomplete="off" #fin>
+              <input matInput  #fin autocomplete="off" [value]="annotation.annotationCurrent.f2" (keyup.enter)="updateF2($event)">
             </mat-form-field>
           </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Point d'action</mat-label>
-              <input matInput  #action autocomplete="off">
-            </mat-form-field>
-          </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Point d'action</mat-label>
+            <input matInput  #action autocomplete="off" [value]="annotation.annotationCurrent.t1">
+          </mat-form-field>
+        </div>
       </form>
     </mat-step>
     <mat-step>
