@@ -23,7 +23,13 @@
   </div>
   <div class="boutons-aligne">
     <button (click)="choisirColonne()" mat-button><mat-icon>subject</mat-icon> Colonnes</button>
-    <button (click)="ajouterSequencesSelectionnees()" mat-button>Importer les séquences sélectionnées</button>
+    <span class="boutons-centre">
+      <mat-button-toggle-group [(ngModel)]="modeSelection" (click)="updateAll()">
+        <mat-button-toggle value="annotation">Annotation</mat-button-toggle>
+        <mat-button-toggle value="evaluation">Évaluation</mat-button-toggle>
+      </mat-button-toggle-group>
+      <button (click)="ajouterSequencesSelectionnees()" mat-button>Importer les séquences sélectionnées</button>
+    </span>
   </div>
 
 
@@ -65,9 +71,14 @@
       <td mat-cell *matCellDef="let element"><button mat-icon-button><mat-icon> vertical_align_bottom</mat-icon></button></td>
     </ng-container>
 
-    <ng-container matColumnDef="checkbox">
-      <th class="w-50" mat-header-cell *matHeaderCellDef><mat-checkbox class="allCheckbox" [checked]="allComplete" [indeterminate]="someComplete()" (change)="setAll($event.checked)"></mat-checkbox> </th>
-      <td mat-cell *matCellDef="let element"><mat-checkbox class="tab-selected" [(ngModel)]="element.selected" (change)="setSelectedSequence(element)"></mat-checkbox></td>
+    <ng-container matColumnDef="checkbox1">
+      <th class="w-50" mat-header-cell *matHeaderCellDef><mat-checkbox class="allCheckbox" [checked]="allComplete1" [indeterminate]="someComplete(allComplete1, 'select1')" (change)="setAll($event.checked, 'select1')"></mat-checkbox> </th>
+      <td mat-cell *matCellDef="let element"><mat-checkbox class="tab-selected" [(ngModel)]="element.selected1" (change)="setSelectedSequence(element, 'select1')"></mat-checkbox></td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkbox2">
+      <th class="w-50" mat-header-cell *matHeaderCellDef><mat-checkbox class="allCheckbox" [checked]="allComplete2" [indeterminate]="someComplete(allComplete2, 'select2')" (change)="setAll($event.checked,'select2')"></mat-checkbox> </th>
+      <td mat-cell *matCellDef="let element"><mat-checkbox class="tab-selected" [(ngModel)]="element.selected2" (change)="setSelectedSequence(element,'select2')"></mat-checkbox></td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="allColumns"></tr>

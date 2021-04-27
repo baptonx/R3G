@@ -67,7 +67,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
     this.bdd.closedb(namedb);
   }
   exporterSeq(): void{
-    if (this.bdd.tableauExpl.selectionListe.length === 0){
+    if (this.bdd.tableauExpl.selectionListe1.length === 0){
       window.alert('Aucune séquence sélectionnée');
     }else{
 

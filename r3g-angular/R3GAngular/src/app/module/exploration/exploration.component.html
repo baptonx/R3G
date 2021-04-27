@@ -27,7 +27,7 @@
       <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="closeDB(bddname)">{{bddname}}</button>
     </mat-menu>
     <mat-menu #listexporter="matMenu">
-      <button mat-menu-item *ngIf="this.bdd.tableauExpl.selectionListe.length !== 0">Format txt</button>
+      <button mat-menu-item *ngIf="this.bdd.tableauExpl.selectionListe1.length !== 0">Format txt</button>
       <button mat-menu-item (click)=exporterSeq()>Format txt</button>
     </mat-menu>
 

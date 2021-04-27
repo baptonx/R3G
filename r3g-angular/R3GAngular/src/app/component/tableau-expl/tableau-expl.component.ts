@@ -26,7 +26,9 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   // subscription: Subscription;
-  allComplete = false;
+  allComplete1 = false;
+  allComplete2 = false;
+  modeSelection?: string;
 
 
   constructor(public explService: TableauExplService,
@@ -53,7 +55,12 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns.push('addColumn');
     this.allColumns.push('visualisation');
     this.allColumns.push('download');
-    this.allColumns.push('checkbox');
+    if (this.modeSelection === 'annotation' || this.modeSelection === 'evaluation') {
+      this.allColumns.push('checkbox1');
+    }
+    if (this.modeSelection === 'evaluation') {
+      this.allColumns.push('checkbox2');
+    }
     this.dataSource.data = this.explService.filteredList;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -84,17 +91,17 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
   }
 
-  setSelectedSequence(element: any): void {
+  setSelectedSequence(element: any, selection: string): void {
     if (element instanceof SequenceTabImpl) {
-      if (element.selected) {
-        this.explService.selectionListe.push(element);
-        if (this.explService.filteredList.every(s => s.selected)) { this.allComplete = true; }
+      if (this.getSelected(selection, element)) {
+        this.getSelectionList(selection).push(element);
+        if (this.explService.filteredList.every(s => this.getSelected(selection, s))) { this.setAllComplete(selection, true); }
       }
       else {
-        this.allComplete = false;
+        this.setAllComplete(selection, false);
         let i = 0;
-        while (i < this.explService.selectionListe.length) {
-          if (this.explService.selectionListe[i].equals(element)) { this.explService.selectionListe.splice(i, 1); }
+        while (i < this.getSelectionList(selection).length) {
+          if (this.getSelectionList(selection)[i].equals(element)) { this.getSelectionList(selection).splice(i, 1); }
           i++;
         }
       }
@@ -102,31 +109,83 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ajouterSequencesSelectionnees(): void {
-    const seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe);
-    this.allComplete = false;
-    this.bddService.getDonnee(seqSelectionee);
-    this.sequenceChargees.addToList(seqSelectionee);
+    if (this.modeSelection === 'annotation') {
+      const seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe1);
+      this.bddService.getDonnee(seqSelectionee);
+      this.sequenceChargees.addToList('select1', seqSelectionee);
+    }
+    else {
+      let seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe1);
+      this.bddService.getDonnee(seqSelectionee);
+      this.sequenceChargees.addToList('select1', seqSelectionee);
+      seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe2);
+      this.bddService.getDonnee(seqSelectionee);
+      this.sequenceChargees.addToList('select1', seqSelectionee);
+    }
+    this.allComplete1 = false;
+    this.allComplete2 = false;
     setTimeout(() => this.engineExplorationService.refreshInitialize(), 1500);
   }
 
-  someComplete(): boolean {
+  someComplete(allComplete: boolean, selection: string): boolean {
     if (this.explService.filteredList == null) {
       return false;
     }
-    return this.explService.filteredList.filter(s => s.selected).length > 0 && ! this.allComplete;
+    return this.explService.filteredList.filter(s => this.getSelected(selection, s)).length > 0 && ! allComplete;
   }
 
-  setAll(checked: boolean): void {
-    this.explService.selectionListe = [];
-    this.allComplete = checked;
+  setAll(checked: boolean, selection: string): void {
+    this.setSelectionList(selection, []);
+    this.setAllComplete(selection, checked);
     if (this.explService.filteredList == null) {
       return;
     }
-    this.explService.filteredList.forEach(s => s.selected = checked);
+    this.explService.filteredList.forEach(s => this.setSelected(selection, s, checked));
     if (checked) {
-      this.explService.selectionListe = this.explService.filteredList.concat([]);
+      this.setSelectionList(selection, this.explService.filteredList.concat([]));
     }
   }
+  getSelected(selectType: string, seq: SequencesTab): boolean {
+    if (selectType === 'select1') {
+      return seq.selected1;
+    }
+    else {
+      return seq.selected2;
+    }
+  }
+  setSelected(selectType: string, seq: SequencesTab, value: boolean): void {
+    if (selectType === 'select1') {
+      seq.selected1 = value;
+    }
+    else {
+      seq.selected2 = value;
+    }
+  }
+  setAllComplete(selectType: string, value: boolean): void {
+    if (selectType === 'select1') {
+      this.allComplete1 = value;
+    }
+    else {
+      this.allComplete2 = value;
+    }
+  }
+  setSelectionList(selectType: string, newList: Array<SequencesTab>): void {
+    if (selectType === 'select1') {
+      this.explService.selectionListe1 = newList;
+    }
+    else {
+      this.explService.selectionListe2 = newList;
+    }
+  }
+  getSelectionList(selectType: string): Array<SequencesTab> {
+    if (selectType === 'select1') {
+      return this.explService.selectionListe1;
+    }
+    else {
+      return this.explService.selectionListe2;
+    }
+  }
+
 
   openDialogFilter(): void {
     const dialogRef = this.dialog.open(FilterComponent, {

@@ -55,3 +55,8 @@ notRotatedButton{
 .boutons-aligne {
   margin: 10px;
 }
+.boutons-centre {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
