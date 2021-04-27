@@ -20,12 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean code 'espère na pas tout casser'">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_04_2021_16_24__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/annotation/annotation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/commun/annotation/annotation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/class/exploration/format-donnees.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/class/exploration/format-donnees.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/dialog-learning/dialog-learning.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/dialog-learning/dialog-learning.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/config.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,9 +48,6 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
-  </component>
   <component name="ProjectId" id="1mvfXJZYlAI4n95p5cjDAVH09qf" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -76,7 +70,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.tslint" />
-    <property name="ts.external.directory.path" value="C:\Users\lassa\Documents\Insa\4A 2S\projet\r3g\r3g-angular\R3GAngular\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -109,6 +103,7 @@
       <workItem from="1619073672022" duration="14832000" />
       <workItem from="1619184783737" duration="1857000" />
       <workItem from="1619428823121" duration="19973000" />
+      <workItem from="1619517082023" duration="1263000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
