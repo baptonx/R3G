@@ -2,10 +2,10 @@
 <mat-label>Filtrer</mat-label>
 <input #inputFiltre matInput placeholder="Ex. Sequence 1">
 </mat-form-field>
-<button mat-button *ngIf="seqChargeesService.sequences.size > 0" (click)="seqChargeesService.clear()">Tout supprimer</button>
-<div id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences.size+'px'">
+<button mat-button *ngIf="seqChargeesService.sequences1.size > 0" (click)="seqChargeesService.clear()">Tout supprimer</button>
+<div id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences1.size+'px'">
   <mat-list>
-    <ng-container *ngFor="let sequence of this.seqChargeesService.sequences, let i = index">
+    <ng-container *ngFor="let sequence of this.seqChargeesService.sequences1, let i = index">
       <mat-list-item style ="display:flex ;justify-content: right;" [style.display]="sequence.id.includes(inputFiltre.value)?'block':'none'">
 
           <span style="padding-right: 20px">{{sequence.id}}</span>

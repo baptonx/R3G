@@ -6,7 +6,7 @@ export interface SequencesTab {
   BDD: string;
   id: string;
   idGeste?: string;
-  selected: boolean;
+  selected1: boolean;
   [key: string]: any;
   equals(seq: SequencesTab): boolean;
 }
@@ -16,7 +16,7 @@ export class SequenceTabImpl implements SequencesTab{
   idGeste?: string;
   geste?: string;
   [key: string]: any;
-  selected = false;
+  selected1 = false;
 
   constructor(ident: string, bdd: string, metadonnees: object) {
     this.BDD = bdd;
@@ -45,7 +45,8 @@ export class SequenceTabImpl implements SequencesTab{
 export class TableauExplService {
   // sequences a afficher (format lineaire)
   sequences: Array<SequencesTab>;
-  selectionListe: Array<SequencesTab>;
+  selectionListe1: Array<SequencesTab>;
+  selectionListe2: Array<SequencesTab>;
   observableSequences: BehaviorSubject<SequencesTab[]>;
   displayedColumns: string[] = new Array<string>();
   observableColumns: BehaviorSubject<string[]>;
@@ -56,7 +57,8 @@ export class TableauExplService {
   nomFiltres: string[] = [];
   filteredList: SequencesTab[] = [];
   constructor() {
-    this.selectionListe = new Array<SequencesTab>();
+    this.selectionListe1 = new Array<SequencesTab>();
+    this.selectionListe2 = new Array<SequencesTab>();
     this.sequences = new Array<SequencesTab>();
     this.observableSequences = new BehaviorSubject<SequencesTab[]>(this.filteredList);
     this.observableColumns = new BehaviorSubject<string[]>(this.displayedColumns);

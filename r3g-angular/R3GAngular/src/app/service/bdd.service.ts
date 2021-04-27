@@ -191,7 +191,6 @@ export class BddService {
         this.miseajourdbOne(dbname, returnedData);
         this.answerHere();
       });
-
   }
   getDonnee(listSequence: Array<Sequence>): void{
     this.answerWait();

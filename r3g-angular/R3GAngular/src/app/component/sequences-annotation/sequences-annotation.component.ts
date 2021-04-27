@@ -12,13 +12,13 @@ export class SequencesAnnotationComponent implements OnInit {
   sequencesList: Array<string>;
   constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService) {
     this.sequencesList = [];
-    this.serviceSequence.sequences.forEach(elt => {
+    this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
     });
   }
 
   changeValue(value: any): void{
-    this.serviceSequence.sequences.forEach(seq => {
+    this.serviceSequence.sequences1.forEach(seq => {
       if (seq.id === value) {
         console.log(seq);
         this.engineService.refreshInitialize(seq);

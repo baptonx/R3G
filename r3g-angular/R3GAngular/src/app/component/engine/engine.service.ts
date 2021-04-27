@@ -63,7 +63,7 @@ export class EngineService implements OnDestroy {
       this.annotationServ.sequenceCurrent = newSequence;
     }
     else if (this.annotationServ.sequenceCurrent === undefined) {
-      this.annotationServ.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
+      this.annotationServ.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences1.values())[0];
     }
 
     const sceneInitFunctionsByName = {

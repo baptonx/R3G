@@ -14,7 +14,7 @@ export class EvaluationComponent implements OnInit {
   sequencesList: Array<string>;
   constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public evalServ: EvaluationService) {
     this.sequencesList = [];
-    this.serviceSequence.sequences.forEach(elt => {
+    this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
     });
     this.evalServ.reset();
@@ -46,7 +46,7 @@ export class EvaluationComponent implements OnInit {
   }
 
   changeValue(value: any): void{
-    this.serviceSequence.sequences.forEach(seq => {
+    this.serviceSequence.sequences1.forEach(seq => {
       if (seq.id === value) {
         this.evalServ.sequenceCurrent = seq;
         this.evalServ.tempsTotal = this.getTempsTotal();

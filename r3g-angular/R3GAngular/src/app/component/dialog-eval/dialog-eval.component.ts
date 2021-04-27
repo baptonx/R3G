@@ -21,7 +21,7 @@ export class DialogEvalComponent implements OnInit {
               public annot: AnnotationService, public evalServ: EvaluationService,
               @Inject(MAT_DIALOG_DATA) public data: DialogData2) {
   this.model = data.model;
-  sequencesChargees.sequences.forEach(elt => {
+  sequencesChargees.sequences1.forEach(elt => {
       this.sequences.push(elt.id);
   });
   }

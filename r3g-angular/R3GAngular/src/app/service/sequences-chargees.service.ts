@@ -8,31 +8,42 @@ import {BddService} from './bdd.service';
   providedIn: 'root'
 })
 export class SequencesChargeesService {
-  sequences: Set<Sequence>;
+  sequences1: Set<Sequence>;
+  sequences2: Set<Sequence>;
   evaluation: Array<Eval>;
   evaluatedSelected: Array<Annotation>;
   constructor(public bdd: BddService) {
-    this.sequences = new Set<Sequence>();
+    this.sequences1 = new Set<Sequence>();
+    this.sequences2 = new Set<Sequence>();
     this.evaluation = [];
     this.evaluatedSelected = [];
   }
 
-  addToList(sequences: Sequence[]): void {
+  addToList(selection: string, sequences: Sequence[]): void {
     const listseqs = [];
     for (const seq of sequences) {
-      if (this.sequences.has(seq)) {
+      if (this.getList(selection).has(seq)) {
         listseqs.push(seq);
       }
-      this.sequences.add(seq);
+      this.getList(selection).add(seq);
     }
     this.bdd.getDonnee(listseqs);
   }
+  getList(selection: string): Set<Sequence> {
+    if (selection === 'select1') {
+      return this.sequences1;
+    }
+    else {
+      return this.sequences2;
+    }
+  }
+
   deleteFromList(sequence: Sequence): void {
     sequence.traceNormal = [];
-    this.sequences.delete(sequence);
+    this.sequences1.delete(sequence);
   }
 
   clear(): void {
-    this.sequences.clear();
+    this.sequences1.clear();
   }
 }
