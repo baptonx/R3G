@@ -102,7 +102,10 @@ export class DialogCSVComponent implements OnInit {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    let name = this.fileName?.nativeElement.value!;
+    let name = '';
+    if (this.fileName !== undefined){
+      name = this.fileName.nativeElement.value;
+    }
     if (name === '') { name = 'my_data'; }
     link.setAttribute('download', name + '.csv');
     document.body.appendChild(link); // Required for FF
@@ -123,12 +126,17 @@ export class DialogCSVComponent implements OnInit {
 
 }
 
-function cartesianProduct(arr: any[]): void {
+// tslint:disable-next-line:typedef
+function cartesianProduct(arr: any[]) {
+  // tslint:disable-next-line:only-arrow-functions typedef
   return arr.reduce(function(a: any[], b: any[]){
+    // tslint:disable-next-line:only-arrow-functions typedef
       return a.map(function(x: any[]){
+        // tslint:disable-next-line:only-arrow-functions typedef
           return b.map(function(y: any){
               return x.concat([y]);
           });
+        // tslint:disable-next-line:only-arrow-functions no-shadowed-variable typedef
       }).reduce(function(a: string | any[], b: any){ return a.concat(b); }, []);
   }, [[]]);
 }

@@ -60,6 +60,7 @@ export class NodeColonneComponent implements OnInit {
     this.node.completed = false;
     if (this.node.children != null) {
       let noneSelected = true;
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.node.children.length; i++) {
         noneSelected = noneSelected && !this.node.children[i].completed;
       }
@@ -73,6 +74,7 @@ export class NodeColonneComponent implements OnInit {
   onChildTrue(name: string): void {
     if (this.node.children != null) {
       let allSelected = true;
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.node.children.length; i++) {
         allSelected = allSelected && this.node.children[i].completed;
       }
