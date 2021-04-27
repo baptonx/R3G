@@ -65,36 +65,30 @@ export class ExplorationService {
       this.drawLine(this.margeTimeline, canvas.height / 2, canvas.width - this.margeTimeline, canvas.height / 2);
       this.ctx.strokeStyle = 'black';
 
-      const lengthAnnotation = this.sizeOfAnnotations();
-
-      /*
       if (this.sequenceCurrent !== undefined) {
-        console.log(this.sequenceCurrent.metaDonnees.annotation);
-      }
-       */
-
-      this.ctx.font = '12px Arial';
-      for (const annotation of this.sequenceCurrent.listAnnotation.values()) {
-        const name = annotation.classe_geste;
-        const frame1 = annotation.f1;
-        const frame2 = annotation.f2;
-        const t1 = this.convertFrameToTime(Number(frame1));
-        const t2 = this.convertFrameToTime(Number(frame2));
-        const color = localStorage.getItem(name);
-        if (color != null){
-          this.ctx.fillStyle = color;
+        this.ctx.font = '12px Arial';
+        for (const annotation of this.sequenceCurrent.listAnnotation) {
+          const name = annotation.classeGeste;
+          const frame1 = annotation.f1;
+          const frame2 = annotation.f2;
+          const t1 = this.convertFrameToTime(Number(frame1));
+          const t2 = this.convertFrameToTime(Number(frame2));
+          const color = localStorage.getItem(name);
+          if (color != null){
+            this.ctx.fillStyle = color;
+          }
+          else {
+            this.ctx.fillStyle = 'black';
+          }
+          this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
+          if (color != null){
+            this.ctx.fillStyle = 'black';
+          }
+          else {
+            this.ctx.fillStyle = 'white';
+          }
+          this.ctx.fillText(name, this.timeToPos(t1) + 5, 13);
         }
-        else {
-          this.ctx.fillStyle = 'black';
-        }
-        this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
-        if (color != null){
-          this.ctx.fillStyle = 'black';
-        }
-        else {
-          this.ctx.fillStyle = 'white';
-        }
-        this.ctx.fillText(name, this.timeToPos(t1) + 5, 13);
       }
 
       // ======================================================
@@ -109,19 +103,6 @@ export class ExplorationService {
       this.ctx.font = '15px Arial';
       this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 30, 25);
     }
-  }
-
-  public sizeOfAnnotations(): number {
-    let i = 1;
-
-    if (this.sequenceCurrent === undefined) {
-      return i;
-    }
-
-    while (this.sequenceCurrent.metaDonnees.annotation[i.toString()] !== undefined) {
-      i++;
-    }
-    return i;
   }
 
   public onResize(): void{
