@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -8,23 +8,22 @@ import {Router} from "@angular/router";
   styleUrls: ['./navigation-modules.component.css']
 })
 export class NavigationModulesComponent implements OnInit {
-  static mod: number = 2;
+  static mod = 2;
   constructor(private router: Router) {
-    let modc = this.router.getCurrentNavigation()?.extractedUrl.toString().split('/')[1];
+    const modc = this.router.getCurrentNavigation()?.extractedUrl.toString().split('/')[1];
     switch (modc) {
       case 'annotation':
-        NavigationModulesComponent.mod=1;
-        break
+        NavigationModulesComponent.mod = 1;
+        break;
       case 'evaluation':
-        NavigationModulesComponent.mod=3;
-        break
+        NavigationModulesComponent.mod = 3;
+        break;
       default:
-        NavigationModulesComponent.mod=2;
+        NavigationModulesComponent.mod = 2;
     }
   }
 
   ngOnInit(): void {
-    console.log("charger");
   }
   toAnnotation(): void{
     NavigationModulesComponent.mod = 1;

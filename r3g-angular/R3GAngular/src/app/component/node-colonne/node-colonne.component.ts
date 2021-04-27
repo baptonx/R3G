@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
-import {NgModel} from "@angular/forms";
+
 
 export interface NodeCol{
   name: string;
@@ -16,9 +16,9 @@ export interface NodeCol{
 })
 export class NodeColonneComponent implements OnInit {
   @Input() public node!: NodeCol;
-  @Output() childTrue: EventEmitter<string> = new EventEmitter<string>()
-  @Output() childFalse: EventEmitter<string> = new EventEmitter<string>()
-  public show: boolean = false;
+  @Output() childTrue: EventEmitter<string> = new EventEmitter<string>();
+  @Output() childFalse: EventEmitter<string> = new EventEmitter<string>();
+  public show = false;
 
   constructor() {
   }
@@ -35,19 +35,19 @@ export class NodeColonneComponent implements OnInit {
     return this.node.children.filter(t => t.completed).length > 0 && !this.node.completed;
   }
 
-  setAll(completed: boolean) {
+  setAll(completed: boolean): void {
     this.setAllNode(completed, this.node);
     this.sendValues(completed);
   }
 
-  setAllNode(completed: boolean, node: NodeCol) {
+  setAllNode(completed: boolean, node: NodeCol): void {
     node.completed = completed;
-    if(node.children != null) {
+    if (node.children != null) {
       node.children.forEach(t => this.setAllNode(completed, t));
     }
   }
 
-  sendValues(completed: boolean) {
+  sendValues(completed: boolean): void {
     if (completed) {
       this.childTrue.emit(this.node.name);
     }
@@ -56,27 +56,29 @@ export class NodeColonneComponent implements OnInit {
     }
   }
 
-  onChildFalse(name: string) {
+  onChildFalse(name: string): void {
     this.node.completed = false;
-    if(this.node.children != null) {
+    if (this.node.children != null) {
       let noneSelected = true;
-      for(let i = 0; i < this.node.children.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.node.children.length; i++) {
         noneSelected = noneSelected && !this.node.children[i].completed;
       }
-      if(noneSelected) {
+      if (noneSelected) {
         console.log('allSelected');
         this.setAll(false);
       }
     }
   }
 
-  onChildTrue(name: string) {
-    if(this.node.children != null) {
+  onChildTrue(name: string): void {
+    if (this.node.children != null) {
       let allSelected = true;
-      for(let i = 0; i < this.node.children.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.node.children.length; i++) {
         allSelected = allSelected && this.node.children[i].completed;
       }
-      if(allSelected) {
+      if (allSelected) {
         console.log('allSelected');
         this.setAll(true);
       }

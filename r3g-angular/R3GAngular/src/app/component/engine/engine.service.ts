@@ -47,8 +47,8 @@ export class EngineService implements OnDestroy {
     }
   }
 
-  public initialize(canvas: ElementRef<HTMLCanvasElement>|undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>>|undefined,
-    refresh: boolean, newSequence: Sequence|undefined): void {
+  public initialize(canvas: ElementRef<HTMLCanvasElement>|undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>>|undefined
+                  , refresh: boolean, newSequence: Sequence|undefined): void {
     this.sceneElements = [];
     this.frameId = 0;
 

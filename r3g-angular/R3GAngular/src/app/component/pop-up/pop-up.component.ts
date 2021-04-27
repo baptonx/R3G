@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogData} from '../../module/exploration/exploration.component';
 
 @Component({
-  selector: 'pop-up',
+  selector: 'app-pop-up',
   templateUrl: 'pop-up.component.html',
 })
 export class PopUpComponent {
