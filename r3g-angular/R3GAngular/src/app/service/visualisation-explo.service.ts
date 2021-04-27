@@ -26,10 +26,10 @@ export class VisualisationExploService {
       // console.log("added to list");
       setTimeout(() => {
         this.engineExplorationService.refreshInitialize();
-        // console.log(element['annotation.debut']);
+        console.log(element);
         this.engineExplorationService.explorationServ.action.time = Number
         (Number(this.engineExplorationService.explorationServ.
-        convertFrameToTime(Number(element['annotation.debut']))).toFixed(2));
+        convertFrameToTime(Number(element['annotation.f1']))).toFixed(2));
         console.log(this.engineExplorationService.explorationServ.action.time );
         this.engineExplorationService.play();
         this.engineExplorationService.pause();
