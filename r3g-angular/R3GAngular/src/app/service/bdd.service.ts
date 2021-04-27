@@ -134,7 +134,7 @@ export class BddService {
         const listannot = new Array<Annotation>();
         for (const annotation of Object.values(sequence.annotation)) {
           const annot = new Annotation();
-          annot.classeGeste = annotation.type;
+          annot.classe_geste = annotation.type;
           annot.t1 = parseFloat(annotation.debut);
           annot.t2 = parseFloat(annotation.fin);
           listannot.push(annot);

@@ -1,10 +1,10 @@
 export class Annotation {
-  public t1!: number;
-  public t2!: number;
-  public f1!: number;
-  public f2!: number;
-  public pointAction!: number;
-  public classeGeste!: string;
+  t1!: number;
+  t2!: number;
+  f1!: number;
+  f2!: number;
+  pointAction!: number;
+  classe_geste!: string;
 
 
   public verifyT1BeforeT2(): void {

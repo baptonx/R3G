@@ -32,12 +32,10 @@ import {EngineComponent} from './component/engine/engine.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogLearningComponent } from './component/dialog-learning/dialog-learning.component';
 import {MatStepperModule} from '@angular/material/stepper';
-import { TrainSeqComponent } from './component/train-seq/train-seq.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SequencesChargeesComponent } from './component/sequences-chargees/sequences-chargees.component';
 import { VisualitationExploComponent } from './component/visualitation-explo/visualitation-explo.component';
-import { ProtocoleSeqComponent } from './component/protocole-seq/protocole-seq.component';
 import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.component';
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -72,10 +70,8 @@ const appRoutes: Routes = [
     NavigationModulesComponent,
     EngineComponent,
     DialogLearningComponent,
-    TrainSeqComponent,
     SequencesChargeesComponent,
     VisualitationExploComponent,
-    ProtocoleSeqComponent,
     ChoixColonneComponent,
     NodeColonneComponent,
     TimelineComponent,

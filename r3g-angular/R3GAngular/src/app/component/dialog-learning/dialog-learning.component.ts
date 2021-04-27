@@ -7,6 +7,7 @@ import { MatInput } from '@angular/material/input';
 import { HyperparameterBool } from 'src/app/class/evaluation/hyperparameter-bool';
 import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
+import {Sequence} from "../../class/commun/sequence";
 
 
 @Component({
@@ -101,9 +102,10 @@ export class DialogLearningComponent implements OnInit {
   chooseSequence():File{
     let csvContent = "data:text/csv;charset=utf-8,"
     +("Sequence1\n");
-    let train=['Train\n']
-    let test=['\n','Test\n']
-    this.bdd.sequences.forEach(seq=>{
+    let train=['Train\n'];
+    let test=['\n','Test\n'];
+    (Array.from(this.bdd.mapSequences.values()).reduce((acc, elem) => acc.concat(elem), []))
+      .forEach((seq: Sequence)=>{
       if(seq.isTrain){
         train.push(seq.id)
         train.push(';')

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatButtonToggle } from '@angular/material/button-toggle';
 import { EventManager } from '@angular/platform-browser';
-import { tmpdir } from 'os';
 import { Annotation } from 'src/app/class/commun/annotation/annotation';
 import { Sequence } from 'src/app/class/commun/sequence';
 import { Eval } from 'src/app/class/evaluation/eval';

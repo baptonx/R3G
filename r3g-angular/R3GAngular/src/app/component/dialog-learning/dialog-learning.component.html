@@ -1,17 +1,17 @@
 <div class='dialog' mat-dialog-content #dialog>
 
 
- 
+
       <mat-horizontal-stepper [linear]="isLinear" #stepper >
         <mat-step [stepControl]="firstFormGroup">
           <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Sélection des Hyperparamètres et l'IA</ng-template> 
+            <ng-template matStepLabel>Sélection des Hyperparamètres et l'IA</ng-template>
     <button class='btn' type="button" mat-raised-button (click)="fileInput.click()">{{this.fileCSVName}}</button>
     <input hidden (change)='openFile($event)' #fileInput type="file" id="file">
     <div>
       <mat-form-field class="example-full-width">
         <mat-label>Chemin absolu du fichier IA</mat-label>
-        <input matInput  #pathIA placeholder="D:/Utilisateur/model.py" autocomplete="off"> 
+        <input matInput  #pathIA placeholder="D:/Utilisateur/model.py" autocomplete="off">
       </mat-form-field>
     </div>
             <div>
@@ -26,8 +26,6 @@
             <button class='btn' type="button" mat-raised-button (click)='changeMode(2)' id='manual'>Répartition manuelle</button>
             <button class='btn' type="button" mat-raised-button (click)='changeMode(3)' id='crossValid'>Validation croisée</button>
           </div>
-            <app-protocole-seq *ngIf="this.isProtocole"></app-protocole-seq>
-            <app-train-seq *ngIf="this.isManual"></app-train-seq>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext>Next</button>
@@ -47,6 +45,6 @@
           </div>
         </mat-step>
       </mat-horizontal-stepper>
-        
-    
+
+
 </div>
