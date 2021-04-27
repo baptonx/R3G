@@ -5,7 +5,7 @@ build-front:
     - cd r3g-angular/R3GAngular
     - npm install --save three
     - npm run ng build
-    - npm run eslint
+    - npm run lint
 
 build-back:
   image: python:latest
