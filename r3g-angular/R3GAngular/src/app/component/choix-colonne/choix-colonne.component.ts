@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {NodeCol} from '../node-colonne/node-colonne.component';
 import {BddService} from '../../service/bdd.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';

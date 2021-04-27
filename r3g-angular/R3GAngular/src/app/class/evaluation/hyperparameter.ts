@@ -1,9 +1,9 @@
 export abstract class Hyperparameter {
 
-    name:string;
+    name: string;
 
-    constructor(n:string){
-        this.name=n;
+    protected constructor(n: string){
+        this.name = n;
     }
 
 }

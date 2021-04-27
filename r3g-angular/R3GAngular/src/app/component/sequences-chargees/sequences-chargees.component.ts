@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {SequencesChargeesService} from "../../service/sequences-chargees.service";
-import {MatInput} from "@angular/material/input";
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
+import {MatInput} from '@angular/material/input';
 
 @Component({
   selector: 'app-sequences-chargees',

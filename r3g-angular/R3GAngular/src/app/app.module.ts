@@ -40,7 +40,7 @@ import { ChoixColonneComponent } from './component/choix-colonne/choix-colonne.c
 import { NodeColonneComponent } from './component/node-colonne/node-colonne.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
-import { MatSortModule } from "@angular/material/sort";
+import { MatSortModule } from '@angular/material/sort';
 import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
 import { PopUpComponent } from './component/pop-up/pop-up.component';
 import { EditeurComponent } from './component/editeur/editeur.component';

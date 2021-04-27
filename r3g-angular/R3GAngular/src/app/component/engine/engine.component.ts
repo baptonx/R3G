@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {EngineService} from "./engine.service";
+import {EngineService} from './engine.service';
 import {MatSlider} from '@angular/material/slider';
 import {MatButtonToggle, MatButtonToggleAppearance} from '@angular/material/button-toggle';
 
@@ -19,7 +19,8 @@ export class EngineComponent implements OnInit {
   // Pouvoir sauvegarder
   // Mettre l'ia -> Récupérer un tableau d'annotation à afficher
   // Bouton pour recopier liste annotation IA dans liste annotation de la séquence
-  // Evaluation pareil : liste d'annotation à afficher mais bloquer la modification (booléen mode évaluation à true et reviens à false quand on quitte le module)
+  // Evaluation pareil : liste d'annotation à afficher mais bloquer la modification 
+  // (booléen mode évaluation à true et reviens à false quand on quitte le module)
 
 
 

@@ -1,14 +1,14 @@
-import { Annotation } from "../commun/annotation/annotation"
+import { Annotation } from '../commun/annotation/annotation';
 
 export class Eval {
 
-    name:string
-    annotation:Array<Annotation>
-    id_model:string
+    name: string;
+    annotation: Array<Annotation>;
+    idModel: string;
 
-    constructor(name:string,annotation:Array<Annotation>,id_model:string){
-        this.name=name
-        this.annotation=annotation
-        this.id_model = id_model
+    constructor(name: string, annotation: Array<Annotation>, idModel: string){
+        this.name = name;
+        this.annotation = annotation;
+        this.idModel = idModel;
     }
 }

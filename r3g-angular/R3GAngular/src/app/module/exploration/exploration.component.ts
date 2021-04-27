@@ -39,7 +39,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.pathbdd = result;
-      if(this.pathbdd !== undefined) {
+      if (this.pathbdd !== undefined) {
         this.bdd.addbddwithpath(this.pathbdd);
       }
     });
@@ -67,8 +67,8 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
     this.bdd.closedb(namedb);
   }
   exporterSeq(): void{
-    if(this.bdd.tableauExpl.selectionListe.length == 0){
-      window.alert("Aucune séquence sélectionnée");
+    if (this.bdd.tableauExpl.selectionListe.length === 0){
+      window.alert('Aucune séquence sélectionnée');
     }else{
 
     }

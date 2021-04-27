@@ -136,7 +136,7 @@ export class ExplorationService {
     const posX = event.offsetX;
     const posY = event.offsetY;
     this.mouseDown = true;
-    //if (this.buttonModeViewing.checked === true) {
+    // if (this.buttonModeViewing.checked === true) {
     if (true === true) {
       const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
       if (tabIndiceAnnotation.length !== 0) {
@@ -158,7 +158,7 @@ export class ExplorationService {
         this.mouseDownCursor = true;
       }
     }
-    //else if (this.buttonModeAnnotation.checked === true) {
+    // else if (this.buttonModeAnnotation.checked === true) {
     else if (true === true) {
       this.annotationCurrent.t1 = this.posToTime(posX);
     }
@@ -173,7 +173,7 @@ export class ExplorationService {
     this.mouseDownAnnotationRightEdge = false;
     this.mouseDownAnnotationLeftEdge = false;
     this.mousePosJustBefore = -1;
-    //if (this.buttonModeAnnotation.checked === true) {
+    // if (this.buttonModeAnnotation.checked === true) {
     if (true === true) {
       this.annotationCurrent.t2 = this.posToTime(posX);
       this.annotationCurrent.verifyT1BeforeT2();
@@ -188,7 +188,7 @@ export class ExplorationService {
     const posY = event.offsetY;
     const newValueTime = this.posToTime(posX);
 
-    //if (this.buttonModeViewing.checked === true) {
+    // if (this.buttonModeViewing.checked === true) {
     if (true === true) {
       if (this.mouseDownAnnotationRightEdge) {
         const timeMouse = this.posToTime(posX);
@@ -229,7 +229,7 @@ export class ExplorationService {
         }
       }
     }
-    //else if (this.buttonModeAnnotation.checked === true) {
+    // else if (this.buttonModeAnnotation.checked === true) {
     else if (true === true) {
       if (newValueTime > 0 && newValueTime < this.tempsTotal) {
         this.action.time = newValueTime;

@@ -1,5 +1,5 @@
 class Model:
-  def __init__(self, _id, name, hyperparam):
+  def __init__(self, idM, name, hyperparam):
     self.hyperparam = hyperparam
     self.name = name
-    self._id = _id
+    self.idM = idM

@@ -28,7 +28,9 @@ export class VisualisationExploService {
       setTimeout(() => {
         this.engineExplorationService.refreshInitialize();
         // console.log(element['annotation.debut']);
-        this.engineExplorationService.explorationServ.action.time = Number(Number(this.engineExplorationService.explorationServ.convertFrameToTime(Number(element['annotation.debut']))).toFixed(2));
+        this.engineExplorationService.explorationServ.action.time = Number
+        (Number(this.engineExplorationService.explorationServ.
+        convertFrameToTime(Number(element['annotation.debut']))).toFixed(2));
         console.log(this.engineExplorationService.explorationServ.action.time );
         this.engineExplorationService.play();
         this.engineExplorationService.pause();

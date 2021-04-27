@@ -8,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
 export class AnnotationComponent implements OnInit {
 
   constructor() {
-    console.log("start");
   }
 
   ngOnInit(): void {

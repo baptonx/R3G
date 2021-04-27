@@ -1,14 +1,14 @@
-import { Hyperparameter } from "./hyperparameter";
+import { Hyperparameter } from './hyperparameter';
 
 export class Model {
 
-    _id:string
-    name:string
-    hyperparam:Array<Hyperparameter>
+    idM: string;
+    name: string;
+    hyperparam: Array<Hyperparameter>;
 
-    constructor(id:string,name:string,hyperparam:Array<Hyperparameter>){
-        this._id=id;
-        this.name=name;
-        this.hyperparam=hyperparam;
+    constructor(id: string, name: string, hyperparam: Array<Hyperparameter>){
+        this.idM = id;
+        this.name = name;
+        this.hyperparam = hyperparam;
     }
 }
