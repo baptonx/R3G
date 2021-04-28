@@ -24,11 +24,13 @@ export class SequencesChargeesService {
   addToList(selection: string, sequences: Sequence[]): void {
     const listseqs = [];
     for (const seq of sequences) {
-      if (this.getList(selection).has(seq)) {
+      if (!this.getList(selection).has(seq)) {
         listseqs.push(seq);
       }
       this.getList(selection).add(seq);
     }
+    console.log(this.getList(selection));
+    console.log(listseqs);
     this.bdd.getDonnee(listseqs);
   }
   getList(selection: string): Set<Sequence> {
