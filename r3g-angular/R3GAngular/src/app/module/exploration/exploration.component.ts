@@ -1,7 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BddService} from '../../service/bdd.service';
-import {VisualisationExploService} from '../../service/visualisation-explo.service';
-import {ChoixColonnesService} from '../../service/choix-colonnes.service';
 import {PopUpComponent} from '../../component/pop-up/pop-up.component';
 import {MatDialog} from '@angular/material/dialog';
 import {PopUpAddTxtBddComponent} from '../../component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
@@ -37,8 +35,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   private pathbdd: string;
   private dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
 
-  constructor(public bdd: BddService, public visuService: VisualisationExploService,
-              public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
+  constructor(public bdd: BddService, public dialog: MatDialog) {
     this.pathbdd = '';
   }
 
