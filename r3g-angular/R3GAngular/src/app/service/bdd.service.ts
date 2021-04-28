@@ -78,10 +78,26 @@ export class BddService {
         this.answerHere();
       });
   }
-  addpathtxt(): void{
+  txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{
     this.answerWait();
+    const labelsPathDossierStr = [];
+    for (let i = 0; i < labelsPathDossier.length; i++){
+      labelsPathDossierStr.push(labelsPathDossier.charCodeAt(i));
+    }
+    const dataPathDossierStr = [];
+    for (let i = 0; i < dataPathDossier.length; i++){
+      dataPathDossierStr.push(dataPathDossier.charCodeAt(i));
+    }
+    const inkmlPathDossierStr = [];
+    for (let i = 0; i < inkmlPathDossier.length; i++){
+      inkmlPathDossierStr.push(inkmlPathDossier.charCodeAt(i));
+    }
+    const pathClassStr = [];
+    for (let i = 0; i < pathClass.length; i++){
+      pathClassStr.push(pathClass.charCodeAt(i));
+    }
     this.http
-      .get<object>('/models/addBDDtxt' , {})
+      .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();
@@ -111,11 +127,19 @@ export class BddService {
     this.answerWait();
     this.http
       .get<object>(`/models/closeBDD/${dbname}` , {})
-      .subscribe((returnedData: any) => {
-        this.getlistdb();
-        this.miseajourdb(returnedData);
+      .subscribe(() => {
+        this.enleverunedb(dbname);
         this.answerHere();
       });
+  }
+
+  enleverunedb(dbname: string): void{
+    const indexlistdb = this.bddnames.indexOf(dbname, 0);
+    if (indexlistdb > -1) {
+      this.bddnames.splice(indexlistdb, 1);
+    }
+    this.mapSequences.delete(dbname);
+    this.notifyChangeData();
   }
 
   miseajourdb(returnedData: any): void{
@@ -143,24 +167,51 @@ export class BddService {
       }
       this.mapSequences.set(key, listSequence);
     }
+    this.notifyChangeData();
+  }
+
+  miseajourdbOne(nameBdd: string, returnedData: any): void{
+    this.listGesteBDD.set(nameBdd, returnedData[0]);
+    // this.sequences = [];
+    const listseq = returnedData[1] as Array<SequenceInterface>;
+    const listSequence = new Array<Sequence>();
+    for (const seqInterface of listseq) { // list sequence
+      const sequence = seqInterface as SequenceInterface;
+      const listannot = new Array<Annotation>();
+      for (const annotation of Object.values(sequence.annotation)) {
+        const annot = new Annotation();
+        annot.classeGeste = annotation.type;
+        annot.t1 = parseFloat(annotation.debut);
+        annot.t2 = parseFloat(annotation.fin);
+        listannot.push(annot);
+      }
+      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
+    }
+    this.mapSequences.set(nameBdd, listSequence);
+    this.notifyChangeData();
+  }
+
+  notifyChangeData(): void{
     this.getlistdb();
     this.updateFormat();
     this.notifyTableauService();
     this.observableSequences.next(this.mapSequences);
   }
+
+
   reloaddb(dbname: string): void{
     this.answerWait();
     this.http
       .get<object>(`/models/reload/${dbname}` , {})
       .subscribe((returnedData: any) => {
-        this.miseajourdb(returnedData);
+        this.miseajourdbOne(dbname, returnedData);
         this.answerHere();
       });
   }
   getDonnee(listSequence: Array<Sequence>): void{
-    this.answerWait();
     let counter = listSequence.length;
     for (const sequence of listSequence){
+      this.answerWait();
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {

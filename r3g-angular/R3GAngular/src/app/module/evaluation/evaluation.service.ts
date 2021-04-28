@@ -121,10 +121,14 @@ export class EvaluationService {
           this.ctx.fillStyle = 'black';
         }
         this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText(name, this.timeToPos(t1) + 5, j);
-        if (geste !== name && name !== undefined && k === 1) {
-          this.ctx.fillText(name, this.timeToPos(t1) + 5, j);
+        if (color != null) {
+          this.ctx.fillStyle = 'black';
+        }
+        else{
+          this.ctx.fillStyle = 'white';
+        }
+        if (geste !== name && name !== undefined && k === 0) {
+          this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
           geste = name;
         }
 

@@ -21,8 +21,11 @@
         </mat-step>
         <mat-step [stepControl]="secondFormGroup" label="Sélection des séquences">
           <form [formGroup]="secondFormGroup">
-            <div class='container flex'>
-          </div>
+              <h3>Train</h3>
+              <div>  <li *ngFor="let s of sequences.sequences1">{{s.id}}</li></div>
+              <h3></h3>
+              <h3>Test</h3>
+              <div><li *ngFor="let s of sequences.sequences2">{{s.id}}</li></div>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext>Next</button>

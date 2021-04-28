@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Importer une base de donnée depuis un path absolu</h1>
+<div mat-dialog-content>
+  <p>Path du dossier contenant les données : </p>
+  <mat-form-field>
+    <mat-label>path :</mat-label>
+    <input matInput [(ngModel)]="data.dataPathDossier">
+  </mat-form-field>
+  <p>Path du Dossier contenant les labels : </p>
+  <mat-form-field>
+    <mat-label>path :</mat-label>
+    <input matInput [(ngModel)]="data.labelsPathDossier">
+  </mat-form-field>
+  <p>Path du fichier contenant les correspondance Int ->class :</p>
+  <mat-form-field>
+    <mat-label>Path :</mat-label>
+    <input matInput [(ngModel)]="data.pathClass">
+  </mat-form-field>
+  <p>Nombre de frame par second dans la base de données (fps) : </p>
+  <mat-form-field>
+    <mat-label>fps : </mat-label>
+    <input matInput [(ngModel)]="data.fps">
+  </mat-form-field>
+  <p>Path vers lequel la base de données INKML sera générée : </p>
+  <mat-form-field>
+    <mat-label>path :</mat-label>
+    <input matInput [(ngModel)]="data.inkmlPathDossier">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="bouton50" (click)="onNoClick()">Annuler</button>
+  <button mat-button class="bouton50" [mat-dialog-close]="data" cdkFocusInitial>Ajouter</button>
+</div>
