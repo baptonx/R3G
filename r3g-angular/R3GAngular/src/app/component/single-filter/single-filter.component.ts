@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {SequencesTab, TableauExplService} from '../../service/tableau-expl.service';
@@ -24,6 +24,8 @@ export class SingleFilterComponent implements OnInit {
   @ViewChild('resultInput') resultInput!: ElementRef;
   @Input() isFirstFilter!: boolean;
   andOr = 'ou';
+  nameSingleFilter = '';
+  @Output() changeName = new EventEmitter();
   constructor(public tableauExpl: TableauExplService) {
     this.optionsOperande = this.tableauExpl.allAttributes;
   }
@@ -39,6 +41,13 @@ export class SingleFilterComponent implements OnInit {
         startWith(''),
         map(value => this._filter(value, this.optionsOperateur))
       );
+  }
+  majNameSingleFilter(): void {
+    this.nameSingleFilter = this.isFirstFilter ? '' : ' ' + this.andOr + ' ';
+    this.nameSingleFilter += this.operandeInput.nativeElement.value
+      + ' ' + this.operateurInput.nativeElement.value
+      + ' ' + this.resultInput.nativeElement.value;
+    this.changeName.emit();
   }
 
   private _filter(value: string, options: string[]): string[] {

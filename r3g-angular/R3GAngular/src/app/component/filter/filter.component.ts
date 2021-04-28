@@ -51,10 +51,9 @@ export class FilterComponent implements OnInit {
     let name = '';
     let i = 0;
     for (const child of this.childrenFilters) {
-      name += child.operandeInput.nativeElement.value + ' ' +
-        child.operateurInput.nativeElement.value + ' ' + child.resultInput.nativeElement.value;
+      name += child.nameSingleFilter;
       if (i !== this.childrenFilters.length) {
-        name += ' ' + child.andOr + ' ';
+        name += ' ';
       }
       i++;
     }
