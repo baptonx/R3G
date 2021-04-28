@@ -30,15 +30,16 @@
     "sweetalert": "^2.1.2",
     "three": "^0.127.0",
     "tslib": "^2.2.0",
+    "tslint-language-service": "^0.9.9",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",
     "@angular/cli": "^11.2.10",
     "@angular/compiler-cli": "^11.2.11",
-    "@types/jasmine": "^3.6.9",
+    "@types/jasmine": "^3.6.10",
     "@types/jquery": "^3.5.5",
-    "@types/node": "^12.20.10",
+    "@types/node": "^12.20.11",
     "@types/three": "^0.127.1",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",

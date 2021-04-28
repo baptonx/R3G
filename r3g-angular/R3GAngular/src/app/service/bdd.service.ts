@@ -78,10 +78,26 @@ export class BddService {
         this.answerHere();
       });
   }
-  addpathtxt(): void{
+  txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{
     this.answerWait();
+    const labelsPathDossierStr = [];
+    for (let i = 0; i < labelsPathDossier.length; i++){
+      labelsPathDossierStr.push(labelsPathDossier.charCodeAt(i));
+    }
+    const dataPathDossierStr = [];
+    for (let i = 0; i < dataPathDossier.length; i++){
+      dataPathDossierStr.push(dataPathDossier.charCodeAt(i));
+    }
+    const inkmlPathDossierStr = [];
+    for (let i = 0; i < inkmlPathDossier.length; i++){
+      inkmlPathDossierStr.push(inkmlPathDossier.charCodeAt(i));
+    }
+    const pathClassStr = [];
+    for (let i = 0; i < pathClass.length; i++){
+      pathClassStr.push(pathClass.charCodeAt(i));
+    }
     this.http
-      .get<object>('/models/addBDDtxt' , {})
+      .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
       .subscribe((returnedData: any) => {
         this.miseajourdb(returnedData);
         this.answerHere();
@@ -164,7 +180,7 @@ export class BddService {
       const listannot = new Array<Annotation>();
       for (const annotation of Object.values(sequence.annotation)) {
         const annot = new Annotation();
-        annot.classe_geste = annotation.type;
+        annot.classeGeste = annotation.type;
         annot.t1 = parseFloat(annotation.debut);
         annot.t2 = parseFloat(annotation.fin);
         listannot.push(annot);
@@ -193,9 +209,9 @@ export class BddService {
       });
   }
   getDonnee(listSequence: Array<Sequence>): void{
-    this.answerWait();
     let counter = listSequence.length;
     for (const sequence of listSequence){
+      this.answerWait();
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {
