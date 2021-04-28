@@ -20,7 +20,8 @@ from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 from Class.Annotation import Annotation
 from Class.Eval import Eval
-
+from Class.Poids import Poids
+from Model.ModelEarlyOC3D_3D import ModelEarlyOC3D_3D
 
 
 
@@ -98,7 +99,6 @@ def start_wandb_v2():
         param[run.id] = []
         model = Model(run.id, run.name, param[run.id])
         MODEL_LIST.append(model.__dict__)
-    print(MODEL_LIST)
 
 def get_class_geste(name):
     """ on recup le contenu de tab_class.txt """
@@ -111,11 +111,38 @@ def get_class_geste(name):
 
 def delete_eval():
     """supression des anciennes eval """
+    if not os.path.exists('./EvaluationSequences'):
+        os.mkdir('./EvaluationSequences')
     for fichier in os.listdir('./EvaluationSequences'):
         if os.path.exists('./EvaluationSequences/'+fichier):
             os.remove('./EvaluationSequences/'+fichier)
-        else:
-            print("The file does not exist")
+
+def load_config(path_model) -> dict:
+    # pylint: disable-msg=eval-used
+    """ recup de fichier de config """
+    finfo = open(path_model + "config.txt", "r")
+    infos = eval("\n".join(finfo.readlines()))
+    finfo.close()
+    return infos
+
+@APP.route('/models/getPoids/<id_model>/<number>')
+def get_poids(id_model, number):
+    """ a utiliser avec tensorflow pour recup les poids du model """
+    path_model = "Weigths/"+id_model+'/weights/'
+    config = load_config(path_model)
+    model = ModelEarlyOC3D_3D(nbClass=config["nbClass"], boxSize=config["boxSize"],
+                          doGLU=config["doGlu"], dropoutVal=config["dropoutVal"],
+                          denseNeurones=config["denseSize"],
+                          denseDropout=config["denseDropout"], nbFeatureMap=config["nbFeatureMap"],
+                          dilatationsRates=config["dilatationRates"],
+                          maxPoolSpatial=config["maxPoolSpatial"],
+                          poolSize=config["poolSize"], poolStrides=config["poolSize"])
+    model.load_weights(path_model + "Weights/model")
+    model.build((None,None,config["boxSize"][0],config["boxSize"][1],config["boxSize"][2]))
+    filtre = model.layersConv[int(number)].get_weights()[0].tolist()
+    biais = model.layersConv[int(number)].get_weights()[1].tolist()
+    return json.dumps(Poids(filtre, biais).__dict__)
+
 
 @APP.route('/models/getModelsNames')
 def get_models_names():
@@ -173,8 +200,6 @@ def evaluation(name,sequences,model):
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
             os.remove('./Sequences/'+fichier)
-        else:
-            print("The file does not exist")
 
 
     # run SequenceEvaluator.py pour évaluer
@@ -246,8 +271,6 @@ def get_last_config():
         LISTE_FICHIER_INKML = ast.literal_eval(cfg['server']['LISTE_FICHIER_INKML'])
         LISTE_GESTE_BDD = ast.literal_eval(cfg['server']['LISTE_GESTE_BDD'])
         METADONNEE = ast.literal_eval(cfg['server']['METADONNEE'])
-    else:
-        print("no config file")
 
 def save_config():
     """sauvegarde des dernieres valeurs lues"""
@@ -369,7 +392,6 @@ def get_donnee(filename, bdd):
 def add_listgeste_metadonne():
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste par bdd et les Metadonnee"""
-    print(json.dumps([LISTE_GESTE_BDD, METADONNEE]))
     return [LISTE_GESTE_BDD, METADONNEE]
 #############Exploration route :##############
 
@@ -382,7 +404,6 @@ def route_get_meta_donne():
 @APP.route('/models/getListBDD')
 def route_get_list_bdd():
     """Permet de télécharger la liste des BDD"""
-    print(list(LISTE_PATH_BDD))
     return json.dumps(list(LISTE_PATH_BDD.keys()))
 
 #cette route permet de recuperer les données normalisées du fichier namefichier
@@ -422,10 +443,8 @@ def route_add_bdd():
                         del LISTE_GESTE_BDD[namebdd]
                         del LISTE_PATH_BDD[namebdd]
         root.destroy()
-        print(json.dumps(add_listgeste_metadonne()))
         return json.dumps(add_listgeste_metadonne())
     except RuntimeError:
-        print("tkinter bug")
         root.destroy()
         return json.dumps(add_listgeste_metadonne())
 

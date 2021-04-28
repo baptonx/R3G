@@ -102,6 +102,8 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
                 dropOut = tf.keras.layers.Dropout(self.dropoutVal)
                 self.dropout.append(dropOut)
 
+
+
     def call(self, x, training=True, **kwargs):
         # x shape : [Batch,#segments,Xdim,Ydim,17]
         # _ = self.masker(x)  # just to init masker

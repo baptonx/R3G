@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatInput} from '@angular/material/input';
 import {BddService} from 'src/app/service/bdd.service';
 import {Sequence} from '../../class/commun/sequence';
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class DialogLearningComponent implements OnInit {
   secondFormGroup!: FormGroup;
   file: File | undefined;
 
-  constructor(private formBuilder: FormBuilder, public http: HttpClient, public bdd: BddService, public dialog: MatDialog) {
+  constructor(private formBuilder: FormBuilder, public http: HttpClient, public bdd: BddService, public dialog: MatDialog
+            , public sequences: SequencesChargeesService) {
     this.fileCSVName = 'Hyperparamètres';
   }
 
@@ -59,7 +61,7 @@ export class DialogLearningComponent implements OnInit {
               const ia = this.chooseIA();
               const iaFile: FormData = new FormData();
               iaFile.append('file', ia, ia.name);
-              this.http.post('/models/uploadFile/' + name, {}).subscribe(
+              this.http.post('/models/uploadFile/' + name, iaFile).subscribe(
                 () => {
 
                   this.http.get('/models/startLearning/' + name, {}).subscribe(
@@ -84,16 +86,14 @@ export class DialogLearningComponent implements OnInit {
   chooseSequence(): File {
     const train = ['Train\n'];
     const test = ['\n', 'Test\n'];
-    (Array.from(this.bdd.mapSequences.values()).reduce((acc, elem) => acc.concat(elem), []))
-      .forEach((seq: Sequence) => {
-        if (seq.isTrain) {
-          train.push(seq.id);
-          train.push(';');
-        } else {
-          test.push(seq.id);
-          test.push(';');
-        }
-      });
+    this.sequences.sequences1.forEach(seq => {
+      train.push(seq.id);
+      train.push(';');
+    });
+    this.sequences.sequences2.forEach(seq => {
+      test.push(seq.id);
+      test.push(';');
+    });
     if (test.length > 1) {
       test.pop();
     }
@@ -115,7 +115,8 @@ export class DialogLearningComponent implements OnInit {
 
   openFile(event: { target: any; }): void {
     const input = event.target;
-    input.files.forEach((f: any) => {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < input.files.length; i++){
       const reader = new FileReader();
       reader.onload = () => {
         // this 'text' is the content of the file
@@ -124,9 +125,10 @@ export class DialogLearningComponent implements OnInit {
 
       };
 
-      reader.readAsText(f);
-      this.fileCSVName = f.name;
-    });
+      reader.readAsText(input.files[i]);
+      this.fileCSVName = input.files[i].name;
+      console.log(input.files[i]);
+    }
   }
 }
 

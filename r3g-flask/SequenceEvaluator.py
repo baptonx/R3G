@@ -9,6 +9,8 @@ from Tools.Gesture.Morphology import Morphology
 from Tools.Gesture.MorphologyGetter import MorphologyGetter
 from Tools.Voxelizer.Voxelizer2sqCWM_CuDi_JointsAsVector_SkId import Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId
 from Tools.Voxelizer.VoxelizerCWM_CuDi_JointsAsVector import VoxelizerCWMSoupler_CuDi_JointsAsVector
+from matplotlib import pyplot
+
 #assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
 
 #configtmp = tf.config.experimental.set_memory_growth(physical_devices[0], True)
@@ -78,7 +80,38 @@ opti = tf.keras.optimizers.Adam(learning_rate=config["learning_rate"])
 model.compile(opti, loss=[lambda x, y: lossFGWithReject(x, y, config['lambdahyper']),
                           lambda x, y: lossHAux(x, y)], metrics=[])
 model.load_weights(pathModel + "Weights" + separator + "model")
+model.build((None,None,config["boxSize"][0],config["boxSize"][1],config["boxSize"][2]))
+# retrieve weights from the 3rd Conv3D layer
+filters, biases = model.layersConv[0].get_weights()
 
+"""
+# normalize filter values to 0-1 so we can visualize them
+f_min, f_max = filters.min(), filters.max()
+filters = (filters - f_min) / (f_max - f_min)
+# plot first few filters
+# n_filters = outgoing channels
+outgoing_channels = 10
+n_filters, ix = outgoing_channels, 1
+for i in range(n_filters):
+    # get the filter
+    f = filters[:, :, :, :, i]
+    # plot each channel separately
+    # Range of incoming channels
+    incoming_channels = 17
+    for j in range(incoming_channels):
+        # Range of Depth of the kernel .i.e. 3
+        Depth = 2
+        for k in range(Depth):
+            # specify subplot and turn of axis
+            ax = pyplot.subplot((outgoing_channels*3), incoming_channels, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            pyplot.imshow(f[k, :, :,j], cmap='jet')
+            ix += 1
+# show the figure
+pyplot.show()
+"""
 
 def strategyAccept(prediction,rejection,repeat):
     assert len(prediction)==len(rejection)
