@@ -68,4 +68,13 @@
   margin-top: 10px;
 }
 
+.consignesAcquisition {
+  color: white !important;
+  font-size: 15px;
+}
+
+.boutonSauvegarder{
+  background-color: rebeccapurple;
+}
+
 

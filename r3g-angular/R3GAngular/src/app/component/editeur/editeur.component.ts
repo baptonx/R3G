@@ -65,4 +65,8 @@ export class EditeurComponent implements OnInit, AfterViewInit {
     this.annotation.supprimerAnnotationCurrent();
   }
 
+  supprimerToutesAnnotations(): void {
+    this.annotation.supprimerToutesAnnotations();
+  }
+
 }

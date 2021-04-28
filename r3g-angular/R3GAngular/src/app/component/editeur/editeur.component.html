@@ -29,7 +29,12 @@
             <input matInput  #action autocomplete="off" [value]="annotation.annotationCurrent.t1">
           </mat-form-field>
         </div>
-        <button mat-raised-button (click)="supprimerAnnotationCurrent()">Supprimer</button>
+        <div>
+          <button mat-raised-button (click)="supprimerAnnotationCurrent()">Supprimer</button>
+        </div>
+        <div>
+          <button mat-raised-button (click)="supprimerToutesAnnotations()" class="supprimerToutesSéquences">Supprimer toutes les séquences</button>
+        </div>
       </form>
     </mat-step>
     <mat-step>

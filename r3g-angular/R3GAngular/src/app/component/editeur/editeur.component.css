@@ -80,3 +80,8 @@
 input, select, textarea{
     color: #fff;
 }
+
+.supprimerToutesSéquences{
+  margin-top: 5px;
+  background-color: indianred;
+}

@@ -17,7 +17,8 @@ export class EngineComponent implements OnInit, OnDestroy {
   // Pouvoir créer une nouvelle annotation
   // Pouvoir modifier la taille des annot avec la souris
   // Clean le code de explorationService
-  // --> Afficher consignes d'acquisition + IA (choisir IA + annoter avec IA + recopier IA vers vérité terrain)
+  // Afficher consignes d'acquisition + IA (choisir IA + annoter avec IA + recopier IA vers vérité terrain)
+  // --> Quand recopie IA, réinitialiser AnnotCurrent
   // Créer des nouveaux gestes
   // Pouvoir sauvegarder
   // Mettre l'ia -> Récupérer un tableau d'annotation à afficher

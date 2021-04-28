@@ -170,8 +170,9 @@ export class AnnotationService {
 
       // ======================================================
       // ActionTime
-      this.ctx.font = '20px Arial';
-      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 80, 30);
+      this.ctx.font = '16px Arial';
+      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 60, 40);
+      this.ctx.fillText(this.convertTimeToFrame(this.action.time).toString(), canvas.width - 60, 60);
     }
   }
 
@@ -390,15 +391,17 @@ export class AnnotationService {
   }
 
   public convertTimeToFrame(time: number): number {
-    if (time >= 0 && time < this.tempsTotal) {
-      for (let i = 0; i < this.tabTimeCurrent.length; i++) {
-        if (this.tabTimeCurrent[i] >= time) {
-          return i;
+    if (this.tabTimeCurrent !== undefined) {
+      if (time >= 0 && time < this.tempsTotal) {
+        for (let i = 0; i < this.tabTimeCurrent.length; i++) {
+          if (this.tabTimeCurrent[i] >= time) {
+            return i;
+          }
         }
       }
-    }
-    if (time >= this.tabTimeCurrent[this.tabTimeCurrent.length - 1]) {
-      return this.tabTimeCurrent.length - 1;
+      if (time >= this.tabTimeCurrent[this.tabTimeCurrent.length - 1]) {
+        return this.tabTimeCurrent.length - 1;
+      }
     }
     return 0;
   }
@@ -434,6 +437,13 @@ export class AnnotationService {
     }
   }
 
+  public supprimerToutesAnnotations(): void {
+    if (this.sequenceCurrent !== undefined) {
+      this.sequenceCurrent.listAnnotation = [];
+      this.initializeAnnotationCurrent();
+    }
+  }
+
   public initializeAnnotationCurrent(): void {
     this.annotationCurrent = new Annotation();
     this.annotationCurrentIsSelected = false;
@@ -445,6 +455,7 @@ export class AnnotationService {
       for (const annotationIA of this.listAnnotationIA) {
         this.sequenceCurrent.listAnnotation.push(annotationIA.clone());
       }
+      this.initializeAnnotationCurrent();
     }
   }
 
