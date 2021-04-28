@@ -24,7 +24,8 @@ export class EditeurComponent implements OnInit, AfterViewInit {
       value.forEach(elt => {
         this.classeGeste.push(elt);
       });
-  });
+    });
+
     this.classeGeste.forEach(geste => {
       const Col = localStorage.getItem(geste);
       if (Col !== null){  //  it checks values here or not to the variable
@@ -43,13 +44,29 @@ export class EditeurComponent implements OnInit, AfterViewInit {
     this.geste = this.classeGeste[i];
     localStorage.setItem(this.geste, event.target.value);
     this.annotation.gesteCouleur.set(this.geste, event.target.value);
-}
-
-ngOnInit(): void{
-
-}
-
-ngAfterViewInit(): void{
-    this.dataSource.paginator = this.paginator;
   }
+
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+  }
+
+  updateF1(event: any): void {
+    this.annotation.updateF1(event);
+  }
+
+  updateF2(event: any): void {
+    this.annotation.updateF2(event);
+  }
+
+  supprimerAnnotationCurrent(): void {
+    this.annotation.supprimerAnnotationCurrent();
+  }
+
+  supprimerToutesAnnotations(): void {
+    this.annotation.supprimerToutesAnnotations();
+  }
+
 }

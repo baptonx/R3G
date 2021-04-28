@@ -60,7 +60,6 @@ export class EngineExplorationService implements OnDestroy {
     if (s !== undefined) {
       this.explorationServ.sequenceCurrent = s;
     }
-    console.log(this.explorationServ.sequenceCurrent);
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {

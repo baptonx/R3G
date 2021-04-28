@@ -5,6 +5,7 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
 import {Annotation} from '../../class/commun/annotation/annotation';
 import { Eval } from 'src/app/class/evaluation/eval';
 import { Sequence } from 'src/app/class/commun/sequence';
+import {BddService} from '../../service/bdd.service';
 
 
 @Injectable({
@@ -27,20 +28,23 @@ export class AnnotationService {
   public mouseDownAnnotationLeftEdge!: boolean;
   public buttonModeEditing!: MatButtonToggle;
   public buttonModeAnnotation!: MatButtonToggle;
-  public annotationCurrent!: Annotation;
-  public allAnnotation: Array<Annotation> = [];
-  public indiceAnnotationSelected!: number;
+  public annotationNew!: Annotation;
+  public annotationCurrent: Annotation;
+  public annotationCurrentIsSelected: boolean;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
   public annotationIA: Array<Eval> = [];
-  public sequenceCurrent!: Sequence;
+  public sequenceCurrent: Sequence | undefined;
   public gesteCouleur: Map<string, string> = new Map<string, string>();
+  public tabTimeCurrent!: Array<number>;
+  public diffFrameAnnotCursor = 0;
+  public listAnnotationIA: Array<Annotation> = [];
 
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
 
-  constructor(private eventManager: EventManager) {
+  constructor(private eventManager: EventManager, public bddService: BddService) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
     this.sizeIndicatorTime = 20;
     this.margeTimeline = 20;
@@ -51,8 +55,10 @@ export class AnnotationService {
     this.mouseDownAnnotationMove = false;
     this.mouseDownAnnotationRightEdge = false;
     this.mouseDownAnnotationLeftEdge = false;
+    this.annotationNew = new Annotation();
     this.annotationCurrent = new Annotation();
-    this.indiceAnnotationSelected = -1;
+    this.annotationCurrentIsSelected = false;
+    // this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
   }
 
@@ -63,7 +69,6 @@ export class AnnotationService {
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-
       // ======================================================
       // RectAnnotationVeriteTerrain
       this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
@@ -71,13 +76,33 @@ export class AnnotationService {
 
       // ======================================================
       // AnnotationVeriteTerrain
-      this.ctx.fillStyle = 'rgba(0,255,0,0.6)';
-      for (let i = 0; i < this.allAnnotation.length; i++) {
-        const annot = this.allAnnotation[i];
-        const pos1 = this.timeToPos(annot.t1);
-        const pos2 = this.timeToPos(annot.t2);
-        this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
-        if (i === this.indiceAnnotationSelected){
+      if (this.sequenceCurrent !== undefined) {
+        // this.ctx.fillStyle = 'rgba(0,255,0,0.6)';
+        for (let i = 0; i < this.sequenceCurrent.listAnnotation.length; i++) {
+          const annot = this.sequenceCurrent.listAnnotation[i];
+          const name = annot.classeGeste;
+          const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
+          const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
+          const color = localStorage.getItem(name);
+          if (color !== null && color !== ' '){
+            this.ctx.fillStyle = color;
+          }
+          else {
+            this.ctx.fillStyle = 'black';
+          }
+          this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
+          this.ctx.font = '13px Arial';
+          if (color !== null && color !== ' '){
+            this.ctx.fillStyle = 'black';
+          }
+          else {
+            this.ctx.fillStyle = 'white';
+          }
+          this.ctx.fillText(name, pos1 + 5, 150);
+        }
+        if (this.annotationCurrentIsSelected === true) {
+          const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f1));
+          const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f2));
           this.ctx.strokeStyle = 'black';
           this.ctx.lineWidth = 2;
           this.ctx.strokeRect(pos1, 100, pos2 - pos1, 100);
@@ -87,11 +112,11 @@ export class AnnotationService {
 
 
       // ======================================================
-      // PreviewAnnotationCurrent
+      // PreviewAnnotationNew
       if (this.mouseDown && this.buttonModeAnnotation.checked === true) {
         this.ctx.fillStyle = 'rgba(0,255,0,0.3)';
-        const pos1 = this.timeToPos(this.annotationCurrent.t1);
-        const pos2 = this.timeToPos(this.annotationCurrent.t2);
+        const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f1));
+        const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f2));
         this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
       }
 
@@ -99,6 +124,29 @@ export class AnnotationService {
       // RectAnnotationIA
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+
+      for (let i = 0; i < this.listAnnotationIA.length; i++) {
+        const annot = this.listAnnotationIA[i];
+        const name = annot.classeGeste;
+        const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
+        const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
+        const color = localStorage.getItem(name);
+        if (color !== null && color !== ' '){
+          this.ctx.fillStyle = color;
+        }
+        else {
+          this.ctx.fillStyle = 'black';
+        }
+        this.ctx.fillRect(pos1, 230, pos2 - pos1, 100);
+        this.ctx.font = '13px Arial';
+        if (color !== null && color !== ' '){
+          this.ctx.fillStyle = 'black';
+        }
+        else {
+          this.ctx.fillStyle = 'white';
+        }
+        this.ctx.fillText(name, pos1 + 5, 280);
+      }
 
 
       // ======================================================
@@ -122,8 +170,9 @@ export class AnnotationService {
 
       // ======================================================
       // ActionTime
-      this.ctx.font = '20px Arial';
-      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 80, 30);
+      this.ctx.font = '16px Arial';
+      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 60, 40);
+      this.ctx.fillText(this.convertTimeToFrame(this.action.time).toString(), canvas.width - 60, 60);
     }
   }
 
@@ -138,106 +187,115 @@ export class AnnotationService {
 
 
   onMouseDown(event: MouseEvent): void {
-    const posX = event.offsetX;
-    const posY = event.offsetY;
-    this.mouseDown = true;
-    if (this.buttonModeEditing.checked === true) {
-      const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
-      if (tabIndiceAnnotation.length !== 0) {
-        this.indiceAnnotationSelected = tabIndiceAnnotation[0];
-        this.mouseDownAnnotationMove = true;
-      }
-      else if (tabIndiceAnnotation.length === 0) {
-        this.indiceAnnotationSelected = -1;
-      }
+    if (this.sequenceCurrent !== undefined) {
+      const posX = event.offsetX;
+      const posY = event.offsetY;
+      this.mouseDown = true;
+      if (this.buttonModeEditing.checked === true) {
+        const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
+        if (tabIndiceAnnotation.length !== 0) {
+          this.annotationCurrent = this.sequenceCurrent.listAnnotation[tabIndiceAnnotation[0]];
+          this.annotationCurrentIsSelected = true;
+          console.log(this.annotationCurrent.pointAction);
+          this.mouseDownAnnotationMove = true;
+          this.diffFrameAnnotCursor = this.convertTimeToFrame(this.posToTime(posX)) - this.annotationCurrent.f1;
+        }
+        else if (tabIndiceAnnotation.length === 0) {
+          this.annotationCurrent = new Annotation();
+          this.annotationCurrentIsSelected = false;
+        }
 
-      if (this.indiceAnnotationSelected !== -1 && this.mouseOnEdgeRightAnnotationSelected(posX, posY)) {
-        this.mouseDownAnnotationRightEdge = true;
-      }
-      else if (this.indiceAnnotationSelected !== -1 && this.mouseOnEdgeLeftAnnotationSelected(posX, posY)) {
-        this.mouseDownAnnotationLeftEdge = true;
-      }
+        if (this.annotationCurrent !== undefined && this.mouseOnEdgeRightAnnotationSelected(posX, posY)) {
+          this.mouseDownAnnotationRightEdge = true;
+        }
+        else if (this.annotationCurrent !== undefined && this.mouseOnEdgeLeftAnnotationSelected(posX, posY)) {
+          this.mouseDownAnnotationLeftEdge = true;
+        }
 
-      if (this.mouseOnCursor(posX)) {
-        this.mouseDownCursor = true;
+        if (this.mouseOnCursor(posX)) {
+          this.mouseDownCursor = true;
+        }
       }
+      else if (this.buttonModeAnnotation.checked === true) {
+        this.annotationNew.f1 = this.convertTimeToFrame(this.posToTime(posX));
+      }
+      this.mousePosJustBefore = posX;
     }
-    else if (this.buttonModeAnnotation.checked === true) {
-      this.annotationCurrent.t1 = this.posToTime(posX);
-    }
-    this.mousePosJustBefore = posX;
   }
 
   onMouseUp(event: MouseEvent): void {
-    const posX = event.offsetX;
-    this.mouseDown = false;
-    this.mouseDownCursor = false;
-    this.mouseDownAnnotationMove = false;
-    this.mouseDownAnnotationRightEdge = false;
-    this.mouseDownAnnotationLeftEdge = false;
-    this.mousePosJustBefore = -1;
-    if (this.buttonModeAnnotation.checked === true) {
-      this.annotationCurrent.t2 = this.posToTime(posX);
-      this.annotationCurrent.verifyT1BeforeT2();
-      console.log(this.annotationCurrent.t1 + ' - ' + this.annotationCurrent.t2);
-      this.allAnnotation.push(this.annotationCurrent);
-      this.annotationCurrent = new Annotation();
+    if (this.sequenceCurrent !== undefined) {
+      const posX = event.offsetX;
+      this.mouseDown = false;
+      this.mouseDownCursor = false;
+      this.mouseDownAnnotationMove = false;
+      this.mouseDownAnnotationRightEdge = false;
+      this.mouseDownAnnotationLeftEdge = false;
+      this.mousePosJustBefore = -1;
+      if (this.buttonModeAnnotation.checked === true) {
+        this.annotationNew.f2 = this.convertTimeToFrame(this.posToTime(posX));
+        this.annotationNew.verifyF1BeforeF2();
+        console.log(this.annotationNew.f1 + ' et ' + this.annotationNew.f2);
+        const listeGestesBDD = this.bddService.listGesteBDD.get(this.sequenceCurrent.bdd);
+        if (listeGestesBDD !== undefined && listeGestesBDD.length > 0) {
+          this.annotationNew.classeGeste = listeGestesBDD[0];
+        }
+        this.sequenceCurrent.listAnnotation.push(this.annotationNew);
+        this.annotationNew = new Annotation();
+      }
+      this.sequenceCurrent.trierAnnotation();
     }
   }
 
   onMouseMove(event: MouseEvent): void {
-    const posX = event.offsetX;
-    const posY = event.offsetY;
-    const newValueTime = this.posToTime(posX);
+    if (this.sequenceCurrent !== undefined) {
+      const posX = event.offsetX;
+      const posY = event.offsetY;
+      const newValueTime = this.posToTime(posX);
 
-    if (this.buttonModeEditing.checked === true) {
-      if (this.mouseDownAnnotationRightEdge) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT2 = this.allAnnotation[this.indiceAnnotationSelected].t2 + diffTime;
-        if (newT2 > this.allAnnotation[this.indiceAnnotationSelected].t1 + 0.05 && newT2 <= this.tempsTotal) {
-          this.allAnnotation[this.indiceAnnotationSelected].t2 = newT2;
+      if (this.buttonModeEditing.checked === true) {
+        if (this.mouseDownAnnotationRightEdge) {
+          const newF2 = this.convertTimeToFrame(this.posToTime(posX));
+          if (newF2 > this.annotationCurrent.f1 && newF2 <= this.tabTimeCurrent.length) {
+            this.annotationCurrent.f2 = newF2;
+            this.sequenceCurrent.trierAnnotation();
+          }
+        }
+        else if (this.mouseDownAnnotationLeftEdge) {
+          const newF1 = this.convertTimeToFrame(this.posToTime(posX));
+          if (newF1 >= 0 && newF1 < this.annotationCurrent.f2) {
+            this.annotationCurrent.f1 = newF1;
+            this.sequenceCurrent.trierAnnotation();
+          }
+        }
+        // else if (this.mouseDownAnnotationMove && this.mousePosJustBefore !== -1) {
+        else if (this.mouseDownAnnotationMove && this.annotationCurrent !== undefined) {
+          const newF1 = this.convertTimeToFrame(this.posToTime(posX)) - this.diffFrameAnnotCursor;
+          const tailleAnnotationFrame = this.annotationCurrent.f2 - this.annotationCurrent.f1;
+          const newF2 = newF1 + tailleAnnotationFrame;
+          if (newF1 >= 0 && newF2 <= this.tabTimeCurrent.length) {
+            this.annotationCurrent.f1 = newF1;
+            this.annotationCurrent.f2 = newF2;
+            if (this.sequenceCurrent !== undefined) {
+              this.sequenceCurrent.trierAnnotation();
+            }
+          }
+        }
+        else if (this.mouseDownCursor) {
+          if (this.isInsideTimeline(posX)) {
+            this.action.time = newValueTime;
+          }
         }
       }
-      else if (this.mouseDownAnnotationLeftEdge) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT1 = this.allAnnotation[this.indiceAnnotationSelected].t1 + diffTime;
-        if (newT1 < this.allAnnotation[this.indiceAnnotationSelected].t2 - 0.05 && newT1 >= 0) {
-          this.allAnnotation[this.indiceAnnotationSelected].t1 = newT1;
-        }
-      }
-      else if (this.mouseDownAnnotationMove && this.mousePosJustBefore !== -1) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT1 = this.allAnnotation[this.indiceAnnotationSelected].t1 + diffTime;
-        const newT2 = this.allAnnotation[this.indiceAnnotationSelected].t2 + diffTime;
-
-        if (newT1 >= 0 && newT2 <= this.tempsTotal) {
-          this.allAnnotation[this.indiceAnnotationSelected].t1 = newT1;
-          this.allAnnotation[this.indiceAnnotationSelected].t2 = newT2;
-        }
-      }
-      else if (this.mouseDownCursor) {
-        if (this.isInsideTimeline(posX)) {
+      else if (this.buttonModeAnnotation.checked === true) {
+        if (newValueTime > 0 && newValueTime < this.tempsTotal) {
           this.action.time = newValueTime;
+          this.annotationNew.f2 = this.convertTimeToFrame(this.posToTime(posX));
         }
       }
-    }
-    else if (this.buttonModeAnnotation.checked === true) {
-      if (newValueTime > 0 && newValueTime < this.tempsTotal) {
-        this.action.time = newValueTime;
-        this.annotationCurrent.t2 = this.posToTime(posX);
-      }
-    }
 
-    this.mousePosJustBefore = posX;
+      this.mousePosJustBefore = posX;
+    }
   }
 
   mouseOnCursor(posX: number): boolean {
@@ -251,17 +309,23 @@ export class AnnotationService {
   }
 
   mouseOnEdgeRightAnnotationSelected(posX: number, posY: number): boolean {
-    const posT2 = this.timeToPos(this.allAnnotation[this.indiceAnnotationSelected].t2);
-    if (posX > posT2 - this.margeEdgeMouse && posX < posT2 + this.margeEdgeMouse) {
-      return true;
+    if (this.sequenceCurrent !== undefined) {
+      const posT2 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f2));
+      if (posX > posT2 - this.margeEdgeMouse && posX < posT2 + this.margeEdgeMouse) {
+        return true;
+      }
+      return false;
     }
     return false;
   }
 
   mouseOnEdgeLeftAnnotationSelected(posX: number, posY: number): boolean {
-    const posT1 = this.timeToPos(this.allAnnotation[this.indiceAnnotationSelected].t1);
-    if (posX > posT1 - this.margeEdgeMouse && posX < posT1 + this.margeEdgeMouse) {
-      return true;
+    if (this.sequenceCurrent !== undefined) {
+      const posT1 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f1));
+      if (posX > posT1 - this.margeEdgeMouse && posX < posT1 + this.margeEdgeMouse) {
+        return true;
+      }
+      return false;
     }
     return false;
   }
@@ -286,12 +350,14 @@ export class AnnotationService {
 
   public isInsideAnnotationVeriteTerrain(x: number, y: number): Array<number> {
     const tab = [];
-    for (let i = 0; i < this.allAnnotation.length; i++) {
-      const annot = this.allAnnotation[i];
-      const annotPos1X = this.timeToPos(annot.t1);
-      const annotPos2X = this.timeToPos(annot.t2);
-      if (x >= annotPos1X && x <= annotPos2X && y >= 100 && y <= 200) {
-        tab.push(i);
+    if (this.sequenceCurrent !== undefined) {
+      for (let i = this.sequenceCurrent.listAnnotation.length - 1; i >= 0; i--) {
+        const annot = this.sequenceCurrent.listAnnotation[i];
+        const annotPos1X = this.timeToPos(this.convertFrameToTime(annot.f1));
+        const annotPos2X = this.timeToPos(this.convertFrameToTime(annot.f2));
+        if (x >= annotPos1X && x <= annotPos2X && y >= 100 && y <= 200) {
+          tab.push(i);
+        }
       }
     }
     return tab;
@@ -313,4 +379,84 @@ export class AnnotationService {
   public timeToPos(time: number): number {
     return time * this.unit + this.margeTimeline;
   }
+
+  public convertFrameToTime(frame: number): number {
+    if (frame >= 0 && frame < this.tabTimeCurrent.length) {
+      return Number(this.tabTimeCurrent[frame].toFixed(2));
+    }
+    if (frame >= this.tabTimeCurrent.length) {
+      return Number(this.tempsTotal.toFixed(2));
+    }
+    return 0;
+  }
+
+  public convertTimeToFrame(time: number): number {
+    if (this.tabTimeCurrent !== undefined) {
+      if (time >= 0 && time < this.tempsTotal) {
+        for (let i = 0; i < this.tabTimeCurrent.length; i++) {
+          if (this.tabTimeCurrent[i] >= time) {
+            return i;
+          }
+        }
+      }
+      if (time >= this.tabTimeCurrent[this.tabTimeCurrent.length - 1]) {
+        return this.tabTimeCurrent.length - 1;
+      }
+    }
+    return 0;
+  }
+
+  public updateF1(event: any): void {
+    if (this.sequenceCurrent !== undefined) {
+      const f1EditText = Number(event.target.value);
+      if (f1EditText >= 0 && f1EditText < this.annotationCurrent.f2) {
+        this.annotationCurrent.f1 = f1EditText;
+        this.sequenceCurrent.trierAnnotation();
+      }
+    }
+  }
+
+  public updateF2(event: any): void {
+    if (this.sequenceCurrent !== undefined) {
+      const f2EditText = Number(event.target.value);
+      if (f2EditText > this.annotationCurrent.f1 && f2EditText <= this.tabTimeCurrent.length) {
+        this.annotationCurrent.f2 = f2EditText;
+        this.sequenceCurrent.trierAnnotation();
+      }
+    }
+  }
+
+  public supprimerAnnotationCurrent(): void {
+    if (this.sequenceCurrent !== undefined) {
+      const index = this.sequenceCurrent.listAnnotation.indexOf(this.annotationCurrent);
+      if (index !== -1) {
+        this.sequenceCurrent.listAnnotation.splice(index, 1);
+        this.sequenceCurrent.trierAnnotation();
+        this.initializeAnnotationCurrent();
+      }
+    }
+  }
+
+  public supprimerToutesAnnotations(): void {
+    if (this.sequenceCurrent !== undefined) {
+      this.sequenceCurrent.listAnnotation = [];
+      this.initializeAnnotationCurrent();
+    }
+  }
+
+  public initializeAnnotationCurrent(): void {
+    this.annotationCurrent = new Annotation();
+    this.annotationCurrentIsSelected = false;
+  }
+
+  public copyListAnnotationIAToSequence(): void {
+    if (this.sequenceCurrent !== undefined) {
+      this.sequenceCurrent.listAnnotation = [];
+      for (const annotationIA of this.listAnnotationIA) {
+        this.sequenceCurrent.listAnnotation.push(annotationIA.clone());
+      }
+      this.initializeAnnotationCurrent();
+    }
+  }
+
 }

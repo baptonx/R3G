@@ -12,21 +12,25 @@ export class SequencesChargeesService {
   sequences2: Set<Sequence>;
   evaluation: Array<Eval>;
   evaluatedSelected: Array<Annotation>;
+  mode: string;
   constructor(public bdd: BddService) {
     this.sequences1 = new Set<Sequence>();
     this.sequences2 = new Set<Sequence>();
     this.evaluation = [];
     this.evaluatedSelected = [];
+    this.mode = '';
   }
 
   addToList(selection: string, sequences: Sequence[]): void {
     const listseqs = [];
     for (const seq of sequences) {
-      if (this.getList(selection).has(seq)) {
+      if (!this.getList(selection).has(seq)) {
         listseqs.push(seq);
       }
       this.getList(selection).add(seq);
     }
+    console.log(this.getList(selection));
+    console.log(listseqs);
     this.bdd.getDonnee(listseqs);
   }
   getList(selection: string): Set<Sequence> {

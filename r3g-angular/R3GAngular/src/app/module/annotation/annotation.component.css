@@ -12,3 +12,10 @@ app-navigation-modules{
   z-index: 1;
   bottom:0;
 }
+
+.boutonSauvegarder{
+  position: absolute;
+  bottom: 15px;
+  right: 25px;
+  background-color: rebeccapurple;
+}

@@ -268,7 +268,8 @@ export class BddService {
           seqTab = seqTabTab[cpt];
           if (seq.id === seqTab.id) {
             sequencesReturn.push(seq);
-            seqTab.selected = false;
+            seqTab.selected1 = false;
+            seqTab.selected2 = false;
             seqTabTab.splice(cpt, 1);
           } else {
             cpt++;

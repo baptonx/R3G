@@ -26,9 +26,7 @@ export class ExplorationService {
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
   public buttonModeViewing!: MatButtonToggle;
-  public buttonModeAnnotation!: MatButtonToggle;
   public annotationCurrent!: Annotation;
-  public allAnnotation: Array<Annotation> = [];
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public margeEdgeMouse = 10;
@@ -74,14 +72,14 @@ export class ExplorationService {
           const t1 = this.convertFrameToTime(Number(frame1));
           const t2 = this.convertFrameToTime(Number(frame2));
           const color = localStorage.getItem(name);
-          if (color != null){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = color;
           }
           else {
             this.ctx.fillStyle = 'black';
           }
           this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
-          if (color != null){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = 'black';
           }
           else {
@@ -100,8 +98,8 @@ export class ExplorationService {
 
       // ======================================================
       // ActionTime
-      this.ctx.font = '15px Arial';
-      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 30, 25);
+      this.ctx.font = '13px Arial';
+      this.ctx.fillText(Number(this.action.time).toFixed(2).toString(), canvas.width - 40, 33);
     }
   }
 
@@ -117,108 +115,25 @@ export class ExplorationService {
     const posX = event.offsetX;
     const posY = event.offsetY;
     this.mouseDown = true;
-    // if (this.buttonModeViewing.checked === true) {
-    if (true === true) {
-      const tabIndiceAnnotation = this.isInsideAnnotationVeriteTerrain(posX, posY);
-      if (tabIndiceAnnotation.length !== 0) {
-        this.indiceAnnotationSelected = tabIndiceAnnotation[0];
-        this.mouseDownAnnotationMove = true;
-      }
-      else if (tabIndiceAnnotation.length === 0) {
-        this.indiceAnnotationSelected = -1;
-      }
-
-      if (this.indiceAnnotationSelected !== -1 && this.mouseOnEdgeRightAnnotationSelected(posX, posY)) {
-        this.mouseDownAnnotationRightEdge = true;
-      }
-      else if (this.indiceAnnotationSelected !== -1 && this.mouseOnEdgeLeftAnnotationSelected(posX, posY)) {
-        this.mouseDownAnnotationLeftEdge = true;
-      }
-
-      if (this.mouseOnCursor(posX)) {
-        this.mouseDownCursor = true;
-      }
+    if (this.mouseOnCursor(posX)) {
+      this.mouseDownCursor = true;
     }
-    // else if (this.buttonModeAnnotation.checked === true) {
-    else if (true === true) {
-      this.annotationCurrent.t1 = this.posToTime(posX);
-    }
-    this.mousePosJustBefore = posX;
   }
 
   onMouseUp(event: MouseEvent): void {
     const posX = event.offsetX;
     this.mouseDown = false;
     this.mouseDownCursor = false;
-    this.mouseDownAnnotationMove = false;
-    this.mouseDownAnnotationRightEdge = false;
-    this.mouseDownAnnotationLeftEdge = false;
-    this.mousePosJustBefore = -1;
-    // if (this.buttonModeAnnotation.checked === true) {
-    if (true === true) {
-      this.annotationCurrent.t2 = this.posToTime(posX);
-      this.annotationCurrent.verifyT1BeforeT2();
-      console.log(this.annotationCurrent.t1 + ' - ' + this.annotationCurrent.t2);
-      this.allAnnotation.push(this.annotationCurrent);
-      this.annotationCurrent = new Annotation();
-    }
   }
 
   onMouseMove(event: MouseEvent): void {
     const posX = event.offsetX;
-    const posY = event.offsetY;
     const newValueTime = this.posToTime(posX);
-
-    // if (this.buttonModeViewing.checked === true) {
-    if (true === true) {
-      if (this.mouseDownAnnotationRightEdge) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT2 = this.allAnnotation[this.indiceAnnotationSelected].t2 + diffTime;
-        if (newT2 > this.allAnnotation[this.indiceAnnotationSelected].t1 + 0.05 && newT2 <= this.tempsTotal) {
-          this.allAnnotation[this.indiceAnnotationSelected].t2 = newT2;
-        }
-      }
-      else if (this.mouseDownAnnotationLeftEdge) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT1 = this.allAnnotation[this.indiceAnnotationSelected].t1 + diffTime;
-        if (newT1 < this.allAnnotation[this.indiceAnnotationSelected].t2 - 0.05 && newT1 >= 0) {
-          this.allAnnotation[this.indiceAnnotationSelected].t1 = newT1;
-        }
-      }
-      else if (this.mouseDownAnnotationMove && this.mousePosJustBefore !== -1) {
-        const timeMouse = this.posToTime(posX);
-        const timeMouseJustBefore = this.posToTime(this.mousePosJustBefore);
-        const diffTime = timeMouse - timeMouseJustBefore;
-
-        const newT1 = this.allAnnotation[this.indiceAnnotationSelected].t1 + diffTime;
-        const newT2 = this.allAnnotation[this.indiceAnnotationSelected].t2 + diffTime;
-
-        if (newT1 >= 0 && newT2 <= this.tempsTotal) {
-          this.allAnnotation[this.indiceAnnotationSelected].t1 = newT1;
-          this.allAnnotation[this.indiceAnnotationSelected].t2 = newT2;
-        }
-      }
-      else if (this.mouseDownCursor) {
-        if (this.isInsideTimeline(posX)) {
-          this.action.time = newValueTime;
-        }
-      }
-    }
-    // else if (this.buttonModeAnnotation.checked === true) {
-    else if (true === true) {
-      if (newValueTime > 0 && newValueTime < this.tempsTotal) {
+    if (this.mouseDownCursor) {
+      if (this.isInsideTimeline(posX)) {
         this.action.time = newValueTime;
-        this.annotationCurrent.t2 = this.posToTime(posX);
       }
     }
-
-    this.mousePosJustBefore = posX;
   }
 
   mouseOnCursor(posX: number): boolean {
@@ -229,22 +144,6 @@ export class ExplorationService {
     else {
       return false;
     }
-  }
-
-  mouseOnEdgeRightAnnotationSelected(posX: number, posY: number): boolean {
-    const posT2 = this.timeToPos(this.allAnnotation[this.indiceAnnotationSelected].t2);
-    if (posX > posT2 - this.margeEdgeMouse && posX < posT2 + this.margeEdgeMouse) {
-      return true;
-    }
-    return false;
-  }
-
-  mouseOnEdgeLeftAnnotationSelected(posX: number, posY: number): boolean {
-    const posT1 = this.timeToPos(this.allAnnotation[this.indiceAnnotationSelected].t1);
-    if (posX > posT1 - this.margeEdgeMouse && posX < posT1 + this.margeEdgeMouse) {
-      return true;
-    }
-    return false;
   }
 
   public drawLine(x1: number, y1: number, x2: number, y2: number): void {
@@ -259,28 +158,6 @@ export class ExplorationService {
   public isInsideTimeline(x: number): boolean{
     if (this.ctx !== null && this.ctx !== undefined) {
       if (x > this.margeTimeline && x < this.ctx.canvas.width - this.margeTimeline) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public isInsideAnnotationVeriteTerrain(x: number, y: number): Array<number> {
-    const tab = [];
-    for (let i = 0; i < this.allAnnotation.length; i++) {
-      const annot = this.allAnnotation[i];
-      const annotPos1X = this.timeToPos(annot.t1);
-      const annotPos2X = this.timeToPos(annot.t2);
-      if (x >= annotPos1X && x <= annotPos2X && y >= 100 && y <= 200) {
-        tab.push(i);
-      }
-    }
-    return tab;
-  }
-
-  public isNumberInArray(tab: Array<number>, y: number): boolean {
-    for (const x of tab) {
-      if (x === y) {
         return true;
       }
     }

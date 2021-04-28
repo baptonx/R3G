@@ -28,7 +28,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   // subscription: Subscription;
   allComplete1 = false;
   allComplete2 = false;
-  modeSelection?: string;
+  modeSelection = '';
 
 
   constructor(public explService: TableauExplService,
@@ -109,18 +109,19 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ajouterSequencesSelectionnees(): void {
+    this.sequenceChargees.mode = this.modeSelection;
     if (this.modeSelection === 'annotation') {
       const seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe1);
-      this.bddService.getDonnee(seqSelectionee);
+      // this.bddService.getDonnee(seqSelectionee);
       this.sequenceChargees.addToList('select1', seqSelectionee);
     }
     else {
       let seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe1);
-      this.bddService.getDonnee(seqSelectionee);
+      // this.bddService.getDonnee(seqSelectionee);
       this.sequenceChargees.addToList('select1', seqSelectionee);
       seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe2);
-      this.bddService.getDonnee(seqSelectionee);
-      this.sequenceChargees.addToList('select1', seqSelectionee);
+      // this.bddService.getDonnee(seqSelectionee);
+      this.sequenceChargees.addToList('select2', seqSelectionee);
     }
     this.allComplete1 = false;
     this.allComplete2 = false;
