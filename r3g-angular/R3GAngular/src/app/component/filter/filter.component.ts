@@ -53,10 +53,10 @@ export class FilterComponent implements OnInit {
   createFilter(operandeValue: string, operateurValue: string, resultValue: string): (geste: SequencesTab) => boolean {
     let operateurFunc = (geste: SequencesTab) => false;
     if (operateurValue === '=') {
-      operateurFunc = (geste: SequencesTab) => geste[operandeValue] === resultValue;
+      operateurFunc = (geste: SequencesTab) => String(geste[operandeValue]) === resultValue;
     }
     else if (operateurValue === 'contient') {
-      operateurFunc = (geste: SequencesTab) => geste[operandeValue].includes(resultValue);
+      operateurFunc = (geste: SequencesTab) => String(geste[operandeValue]).includes(resultValue);
     }
     return (geste: SequencesTab) => {
       if (geste[operandeValue] != null) {
