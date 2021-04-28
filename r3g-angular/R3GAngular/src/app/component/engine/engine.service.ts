@@ -220,8 +220,7 @@ export class EngineService implements OnDestroy {
 
   public refreshInitialize(newSequence: Sequence|undefined): void {
     this.initialize(undefined, undefined, true, newSequence);
-    this.annotationServ.annotationCurrent = new Annotation();
-    this.annotationServ.annotationCurrentIsSelected = false;
+    this.annotationServ.initializeAnnotationCurrent();
   }
 
   public addScene(elem: ElementRef<HTMLCanvasElement>, fn: (rect: DOMRect) => void): void {

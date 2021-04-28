@@ -44,7 +44,7 @@ body {
 
 *[data-diagram] {
   position: absolute;
-  width: 55em;
+  width: 70em;
   height: 35em;
   /*border: 1px solid black;*/
   left: 50%;
@@ -79,7 +79,8 @@ p {
 
 .buttonsModeAnnotation {
   position: absolute;
-  left: 5%;
+  left: 24%;
   top: 36em;
 }
+
 

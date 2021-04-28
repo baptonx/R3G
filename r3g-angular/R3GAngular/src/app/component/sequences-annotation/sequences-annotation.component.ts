@@ -9,6 +9,7 @@ import {BddService} from '../../service/bdd.service';
   styleUrls: ['./sequences-annotation.component.css']
 })
 export class SequencesAnnotationComponent implements OnInit {
+  isLinear = false;
   sequencesList: Array<string>;
   constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService) {
     this.sequencesList = [];
@@ -34,6 +35,10 @@ export class SequencesAnnotationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  copyListAnnotationIAToSequence(): void {
+    this.engineService.annotationServ.copyListAnnotationIAToSequence();
   }
 
 }

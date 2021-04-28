@@ -1,15 +1,27 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatInput} from '@angular/material/input';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BddService} from '../../service/bdd.service';
-import {VisualisationExploService} from '../../service/visualisation-explo.service';
-import {ChoixColonnesService} from '../../service/choix-colonnes.service';
 import {PopUpComponent} from '../../component/pop-up/pop-up.component';
 import {MatDialog} from '@angular/material/dialog';
+import {PopUpAddTxtBddComponent} from '../../component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
 
 export interface DialogData {
   name: string;
 }
 
+export interface DialogDataAddPathTxt {
+  labelsPathDossier: string;
+  dataPathDossier: string;
+  inkmlPathDossier: string;
+  fps: string;
+  pathClass: string;
+}
+export class DialogDataAddPathTxtclass implements DialogDataAddPathTxt{
+  labelsPathDossier = '';
+  dataPathDossier = '';
+  inkmlPathDossier = '';
+  fps = '';
+  pathClass = '';
+}
 @Component({
   selector: 'app-exploration',
   templateUrl: './exploration.component.html',
@@ -21,9 +33,9 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   picker = document.getElementById('picker');
   listing = document.getElementById('listing');
   private pathbdd: string;
+  private dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
 
-  constructor(public bdd: BddService, public visuService: VisualisationExploService,
-              public choixColonnes: ChoixColonnesService, public dialog: MatDialog) {
+  constructor(public bdd: BddService, public dialog: MatDialog) {
     this.pathbdd = '';
   }
 
@@ -44,19 +56,24 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  addPathBDDTXT(): void{
-    this.bdd.addpathtxt();
-  }
-  openDialogTXT(): void {
-    const dialogRef = this.dialog.open(PopUpComponent, {
-      width: '250px',
-      data: {name: this.pathbdd}
+  openDialogTXTtoINKML(): void {
+    this.dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
+    const dialogRef = this.dialog.open(PopUpAddTxtBddComponent, {
+      width: '800px',
+      data: {labelsPathDossier: this.dialogDataAddPathTxt.labelsPathDossier,
+        dataPathDossier: this.dialogDataAddPathTxt.dataPathDossier,
+        inkmlPathDossier: this.dialogDataAddPathTxt.inkmlPathDossier,
+        fps: this.dialogDataAddPathTxt.fps,
+        pathClass: this.dialogDataAddPathTxt.pathClass
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.pathbdd = result;
-      if (this.pathbdd !== undefined) {
-        this.bdd.addbddwithpath(this.pathbdd);
+      this.dialogDataAddPathTxt = result;
+      if (result !== undefined) {
+        const data = result as DialogDataAddPathTxt;
+        this.bdd.txtToInkml(data.labelsPathDossier, data.dataPathDossier,
+          data.inkmlPathDossier, data.fps, data.pathClass);
       }
     });
   }

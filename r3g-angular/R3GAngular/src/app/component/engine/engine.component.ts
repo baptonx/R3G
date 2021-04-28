@@ -10,34 +10,20 @@ import {MatButtonToggle} from '@angular/material/button-toggle';
 })
 export class EngineComponent implements OnInit, OnDestroy {
 
-  // --> Fonction qui retrie les séquences dans le bon ordre
-  // Pouvoir modifier la taille des annot avec la souris
-  // Afficher les informations dans l'éditeur textuel
-  // Pouvoir modifier les annotations des séquences avec l'éditeur textuel (faire attention à l'ordre des listes !)
+  // https://discoverthreejs.com/book/first-steps/animation-system/
+  // https://www.programmersought.com/article/14865706774/
+  // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
+
   // Pouvoir créer une nouvelle annotation
+  // Pouvoir modifier la taille des annot avec la souris
+  // Clean le code de explorationService
+  // Afficher consignes d'acquisition + IA (choisir IA + annoter avec IA + recopier IA vers vérité terrain)
+  // --> Quand recopie IA, réinitialiser AnnotCurrent
+  // Créer des nouveaux gestes
   // Pouvoir sauvegarder
   // Mettre l'ia -> Récupérer un tableau d'annotation à afficher
   // Bouton pour recopier liste annotation IA dans liste annotation de la séquence
 
-
-
-
-  // https://discoverthreejs.com/book/first-steps/animation-system/
-  // https://www.programmersought.com/article/14865706774/
-  // https://blog.angular-university.io/how-does-angular-2-change-detection-really-work/
-  // Chaque cube a son animation qui est joué
-  // Quand on fait pause ou reset, on boucle sur tous les cubes.
-  // Problème que l'on peut rencontrer : les cubes vont-ils être synchronisé ? Et niveau performance ?
-  // Problème : fichier d'enregistrement contient des blancs ?
-  // Données en entrée : Pour chaque articulation => positions à un instant t
-  // idées : mettre des sphères à la place des cubes ? et relier les sphères entre elles ?
-  // Pour timeline : regarder si on peut mettre l'action a un temps t, si oui faire une timeline qui set
-  // toutes les actions au temps t du curseur.
-
-
-  // Faire une classe qui regroupe toutes les sphères
-  // Utiliser les attributs pour bouger les sphères (donc que une animation sur cette classe)
-  // NomClasse.sphere1.transform ... (changer sphere1 par nom de l'articulation)
 
   showFiller = false;
 

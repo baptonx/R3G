@@ -1,11 +1,51 @@
 <div class="tab-container">
-    <mat-form-field appearance="fill">
-      <mat-label>Choisir une séquence</mat-label>
-      <mat-select (valueChange)="changeValue($event)">
-        <mat-option *ngFor="let s of sequencesList" [value]="s" >
-          {{s}}
-        </mat-option>
-      </mat-select>
-    
-    </mat-form-field>   
-    </div>
+  <mat-vertical-stepper [linear]="isLinear" position='absolute'>
+
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Sélection séquence</ng-template>
+        <mat-form-field appearance="fill">
+          <mat-label>Choisir une séquence</mat-label>
+          <mat-select (valueChange)="changeValue($event)">
+            <mat-option *ngFor="let s of sequencesList" [value]="s" >
+              {{s}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button class="boutonSauvegarder">Sauvegarder toutes les séquences</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>IA</ng-template>
+        <mat-form-field appearance="fill">
+          <mat-label>Choisir une ia</mat-label>
+          <mat-select (valueChange)="changeValue($event)">
+            <mat-option *ngFor="let s of sequencesList" [value]="s" >
+              {{s}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button>Annoter avec IA</button>
+        </div>
+        <div class="divBouton">
+          <button mat-raised-button (click)="copyListAnnotationIAToSequence()">Recopier IA</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <form>
+        <ng-template matStepLabel>Consignes d'acquisitions</ng-template>
+        <div>
+          <p class="consignesAcquisition">testtesttestjhlvhfsdh hofdsdslfhlhfsd lfhdhfsdhfdslhfd shdslhdfs lhfdlhfd lldfh ldsfhlfdsh</p>
+        </div>
+      </form>
+    </mat-step>
+
+  </mat-vertical-stepper>
+</div>
