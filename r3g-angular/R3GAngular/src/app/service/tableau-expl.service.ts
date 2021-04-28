@@ -81,6 +81,9 @@ export class TableauExplService {
   }
 
   updateAll(mapSequences: Map<string, Array<Sequence>>): void {
+    this.addAttribute('id');
+    this.addAttribute('BDD');
+    this.addAttribute('annotation.idGeste');
     this.sequences = new Array<SequencesTab>();
     let dataCourante: SequencesTab;
     for (const bdd of mapSequences.values()) {
