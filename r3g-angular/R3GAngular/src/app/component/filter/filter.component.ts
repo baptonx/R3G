@@ -1,9 +1,7 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import {SequencesTab, TableauExplService} from '../../service/tableau-expl.service';
+import {Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {SequencesTab} from '../../service/tableau-expl.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SingleFilterComponent} from '../single-filter/single-filter.component';
 
 @Component({
   selector: 'app-filter',
@@ -12,65 +10,54 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class FilterComponent implements OnInit {
   @ViewChild('nomFiltreInput') nomFiltreInput!: ElementRef;
-  // operande
-  operande = new FormControl();
-  optionsOperande: string[] = [];
-  filteredOptionsOperande: Observable<string[]> = new Observable<string[]>();
-  @ViewChild('operandeInput') operandeInput!: ElementRef;
-  // operateur
-  operateur = new FormControl();
-  optionsOperateur: string[] = ['=', 'contient'];
-  filteredOptionsOperateur: Observable<string[]> = new Observable<string[]>();
-  @ViewChild('operateurInput') operateurInput!: ElementRef;
-  // result
-  @ViewChild('resultInput') resultInput!: ElementRef;
+  filters: boolean[] = [true];
+  @ViewChildren(SingleFilterComponent) childrenFilters: QueryList<SingleFilterComponent> = new QueryList<SingleFilterComponent>();
+  nameFilter = '';
 
-  constructor(public tableauExpl: TableauExplService,
-              public dialogRef: MatDialogRef<FilterComponent>,
+  constructor(public dialogRef: MatDialogRef<FilterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: { filter: (geste: SequencesTab) => boolean, nomFiltre: string }) {
-    this.optionsOperande = this.tableauExpl.allAttributes;
   }
 
   ngOnInit(): void {
-    this.filteredOptionsOperande = this.operande.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value, this.optionsOperande))
-      );
-    this.filteredOptionsOperateur = this.operateur.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value, this.optionsOperateur))
-      );
-  }
-
-  private _filter(value: string, options: string[]): string[] {
-    const filterValue = value.toLowerCase();
-
-    return options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
-  createFilter(operandeValue: string, operateurValue: string, resultValue: string): (geste: SequencesTab) => boolean {
-    let operateurFunc = (geste: SequencesTab) => false;
-    if (operateurValue === '=') {
-      operateurFunc = (geste: SequencesTab) => String(geste[operandeValue]) === resultValue;
-    }
-    else if (operateurValue === 'contient') {
-      operateurFunc = (geste: SequencesTab) => String(geste[operandeValue]).includes(resultValue);
-    }
-    return (geste: SequencesTab) => {
-      if (geste[operandeValue] != null) {
-        return operateurFunc(geste);
-      }
-      return false;
-    };
   }
 
   close(): void {
-    const operandeValue = this.operandeInput.nativeElement.value;
-    const operateurValue = this.operateurInput.nativeElement.value;
-    const resultValue = this.resultInput.nativeElement.value;
-    const predicate: (geste: SequencesTab) => boolean = this.createFilter(operandeValue, operateurValue, resultValue);
+    const predicate: (geste: SequencesTab) => boolean = this.createFilters();
     this.dialogRef.close({filter: predicate, nomFiltre: this.nomFiltreInput.nativeElement.value});
+  }
+
+  private createFilters(): (geste: SequencesTab) => boolean {
+    const tabFilters: Array<(geste: SequencesTab) => boolean> = [];
+    const tabAndOr: Array<(f1: (geste: SequencesTab) => boolean,
+                           f2: (geste: SequencesTab) => boolean) => (geste: SequencesTab) =>  boolean> = [];
+    for (const child of this.childrenFilters) {
+      tabFilters.push(child.createSingleFilter());
+      tabAndOr.push(child.createAndOrFunction());
+    }
+    let filter: (geste: SequencesTab) => boolean = (seq: SequencesTab) => tabFilters[0](seq);
+    let newFilter: (geste: SequencesTab) => boolean;
+    for (let i = 1 ; i < tabFilters.length ; i++) {
+      newFilter = tabAndOr[i](filter, tabFilters[i]);
+      filter = newFilter;
+    }
+    return filter;
+  }
+
+  addSingleFilter(): void {
+    this.filters.push(false);
+  }
+
+  majNameFilter(): void {
+    let name = '';
+    let i = 0;
+    for (const child of this.childrenFilters) {
+      name += child.operandeInput.nativeElement.value + ' ' +
+        child.operateurInput.nativeElement.value + ' ' + child.resultInput.nativeElement.value;
+      if (i !== this.childrenFilters.length) {
+        name += ' ' + child.andOr + ' ';
+      }
+      i++;
+    }
+    this.nameFilter = name;
   }
 }

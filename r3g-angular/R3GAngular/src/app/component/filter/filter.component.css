@@ -1,19 +1,8 @@
-.mat-form-field-operand {
-  min-width: 500px;
-}
-mat-form-field {
-  margin: 2px;
-  text-align: center;
-}
-.button-submit {
-  width: 100%;
-}
+
 .w100 {
   width: 100%;
   text-align: center;
 }
-.andor {
-  display: inline-block;
-  width: 100px;
-  padding: .25em 0 .75em 0;
+.button-submit {
+  width: 100%;
 }

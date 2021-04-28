@@ -1,89 +1,56 @@
+<!--       value="{{operandeInput.value + ' ' + operateurInput.value + ' ' + resultInput.value}}"-->
 <input #nomFiltreInput class = "w100" type="text"
        placeholder="Nom du filtre"
-       value="{{operandeInput.value + ' ' + operateurInput.value + ' ' + resultInput.value}}"
+       value="{{nameFilter}}"
        matInput>
-<form class="operand-form">
-  <span class="andor"></span>
-  <mat-form-field class="mat-form-field-operand">
-    <mat-label>Operande</mat-label>
-    <input #operandeInput type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           [formControl]="operande"
-           [matAutocomplete]="autoOperande">
-    <mat-autocomplete #autoOperande="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsOperande | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
 
-  <mat-form-field class="operator-form">
-    <mat-label>Operateur</mat-label>
-    <input #operateurInput type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           [formControl]="operateur"
-           [matAutocomplete]="autoOperator">
-    <mat-autocomplete #autoOperator>
-      <mat-option *ngFor="let option of filteredOptionsOperateur | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+  <app-single-filter *ngFor="let i of filters" [isFirstFilter]="i"></app-single-filter>
+  <button (click)="addSingleFilter()" mat-button>+</button>
 
-  <mat-form-field>
-    <mat-label>Result</mat-label>
-    <input #resultInput type="text"
-           aria-label="Number"
-           matInput>
-  </mat-form-field>
-</form>
-<form class="operand-form">
-  <mat-form-field appearance="fill" class="andor">
-    <mat-label>+</mat-label>
-    <mat-select>
-      <mat-option value="et">ET</mat-option>
-      <mat-option value="ou">OU</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="mat-form-field-operand">
-    <mat-label>Operande</mat-label>
-    <input #operandeInput type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           [formControl]="operande"
-           [matAutocomplete]="autoOperande">
-    <mat-autocomplete #autoOperande="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsOperande | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<!--</form>-->
+<!--<form class="operand-form">-->
+<!--  <mat-form-field appearance="fill" class="andor">-->
+<!--    <mat-label>+</mat-label>-->
+<!--    <mat-select>-->
+<!--      <mat-option value="et">ET</mat-option>-->
+<!--      <mat-option value="ou">OU</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
+<!--  <mat-form-field class="mat-form-field-operand">-->
+<!--    <mat-label>Operande</mat-label>-->
+<!--    <input #operandeInput type="text"-->
+<!--           placeholder="Pick one"-->
+<!--           aria-label="Number"-->
+<!--           matInput-->
+<!--           [formControl]="operande"-->
+<!--           [matAutocomplete]="autoOperande">-->
+<!--    <mat-autocomplete #autoOperande="matAutocomplete">-->
+<!--      <mat-option *ngFor="let option of filteredOptionsOperande | async" [value]="option">-->
+<!--        {{option}}-->
+<!--      </mat-option>-->
+<!--    </mat-autocomplete>-->
+<!--  </mat-form-field>-->
 
-  <mat-form-field class="operator-form">
-    <mat-label>Operateur</mat-label>
-    <input #operateurInput type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           [formControl]="operateur"
-           [matAutocomplete]="autoOperator">
-    <mat-autocomplete #autoOperator>
-      <mat-option *ngFor="let option of filteredOptionsOperateur | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<!--  <mat-form-field class="operator-form">-->
+<!--    <mat-label>Operateur</mat-label>-->
+<!--    <input #operateurInput type="text"-->
+<!--           placeholder="Pick one"-->
+<!--           aria-label="Number"-->
+<!--           matInput-->
+<!--           [formControl]="operateur"-->
+<!--           [matAutocomplete]="autoOperator">-->
+<!--    <mat-autocomplete #autoOperator>-->
+<!--      <mat-option *ngFor="let option of filteredOptionsOperateur | async" [value]="option">-->
+<!--        {{option}}-->
+<!--      </mat-option>-->
+<!--    </mat-autocomplete>-->
+<!--  </mat-form-field>-->
 
-  <mat-form-field>
-    <mat-label>Résultat</mat-label>
-    <input #resultInput type="text"
-           aria-label="Number"
-           matInput>
-  </mat-form-field>
-</form>
+<!--  <mat-form-field>-->
+<!--    <mat-label>Résultat</mat-label>-->
+<!--    <input #resultInput type="text"-->
+<!--           aria-label="Number"-->
+<!--           matInput>-->
+<!--  </mat-form-field>-->
+<!--</form>-->
 <button class="button-submit" (click)="close()" mat-button>Ajouter le filtre</button>
