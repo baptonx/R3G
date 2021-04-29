@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=R1732
+# pylint: disable=E1101
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -130,6 +131,7 @@ def load_config(path_model) -> dict:
 
 @APP.route('/models/getPoids/<id_model>')
 def get_poids(id_model):
+    # pylint: disable=E1101
     """ a utiliser avec tensorflow pour recup les poids du model """
     cmap = cm.jet
     path_model = "Weigths/"+id_model+'/weights/'
