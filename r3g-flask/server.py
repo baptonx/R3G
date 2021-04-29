@@ -606,15 +606,15 @@ def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
     inkml_tree = generate_template()
     add_labels(inkml_tree, label, tableau_classe)
     add_data(inkml_tree, data, fps)
-    file = open(inkml_file, "w")
-    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
-    file.close()
-    file = open(inkml_file, "r")
-    parser = parseString(file.read())
-    file.close()
-    file = open(inkml_file, "w")
-    file.write(parser.toprettyxml())
-    file.close()
+    with open(inkml_file, "w") as file:
+        inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
+        file.close()
+    with open(inkml_file, "r") as file:
+        parser = parseString(file.read())
+        file.close()
+    with open(inkml_file, "w") as file:
+        file.write(parser.toprettyxml())
+        file.close()
 
 def rechercher_fichier_data(path_dossier_data):
     """recherche dans le repertoir des fichier contenant de la data"""
