@@ -94,6 +94,9 @@ export class TableauExplService {
       for (const sequence of bdd) {
         if (sequence.listAnnotation.length === 0) {
           dataCourante = new SequenceTabImpl(sequence.id, sequence.bdd, sequence.metaDonnees);
+          if (sequence.directives.length !== 0) {
+            dataCourante.concat(sequence.id, sequence.bdd, 'directives', sequence.directives.join(', ').slice(0, -2));
+          }
           this.sequences.push(dataCourante);
         } else {
           for (let geste = 0 ; geste < sequence.listAnnotation.length ; geste++) {

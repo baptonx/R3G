@@ -4,6 +4,7 @@ export class Sequence {
   id: string;
   bdd: string;
   listAnnotation: Array<Annotation> = [];
+  directives: Array<string> = [];
   metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
