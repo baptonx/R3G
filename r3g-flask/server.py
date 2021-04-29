@@ -352,6 +352,7 @@ def get_meta_donnee(filename, bdd):
     name = filename
     format_donnee = {}
     annotations = {}
+    directives = []
     others = {}
     tree = ET.parse(filepath)
     root = tree.getroot()
@@ -375,15 +376,21 @@ def get_meta_donnee(filename, bdd):
                         annotations[nb_annotation] = action
         elif child.tag == "{http://www.w3.org/2003/InkML}annotationXML":
             ##récupere les annotations non implÃ©menter(autres que capteur,user,action)
-            other = {}
-            nb_others += 1
-            for children in child:
-                other[children.attrib['type']] = children.text
-            others[child.attrib['type']] = other
+            if child.attrib == {'type': 'directive'}:
+                for children2 in child:
+                    if (children2.tag == "{http://www.w3.org/2003/InkML}annotation" and
+                        children2.attrib == {'type': 'gesture'}):
+                        directives.append(children2.text)
+            else:
+                other = {}
+                nb_others += 1
+                for children in child:
+                    other[children.attrib['type']] = children.text
+                others[child.attrib['type']] = other
         elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
             break
     metadonnee = {"id": name, "BDD": bdd, "format": format_donnee,
-                  "annotation": annotations, "metadonnees": others}
+                  "annotation": annotations, "directives": directives, "metadonnees": others}
     return metadonnee
 
 def get_donnee(filename, bdd):

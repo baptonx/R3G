@@ -13,7 +13,8 @@ export class Sequence {
   isTest: boolean;
   displayedMetadata: Map<string, string>;
 
-  constructor(id: string, bdd: string, pathVideoRGB: string = '', listAnnotation: Array<Annotation>, metadonnee: object = {}){
+  constructor(id: string, bdd: string, pathVideoRGB: string = '', listAnnotation: Array<Annotation>,
+              directives: Array<string>, metadonnee: object = {}){
     this.id = id;
     this.bdd = bdd;
     this.listAnnotation = listAnnotation;
@@ -26,12 +27,6 @@ export class Sequence {
     this.displayedMetadata = new Map<string, string>();
   }
 
-  setSequenceDonnee(): void {
-    // Get serveur local pour recuperer les traces ...
-  }
-
-  ajouterMetaDonnees(): void {
-  }
 
   equals(seq: Sequence): boolean{
     return this.id === seq.id;

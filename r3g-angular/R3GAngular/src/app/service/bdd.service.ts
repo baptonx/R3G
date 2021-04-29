@@ -13,6 +13,7 @@ export interface BaseDeDonne {
 }
 
 export interface SequenceInterface {
+  directives: Array<string>;
   id: string;
   BDD: string;
   format: Map<string, string>;
@@ -190,6 +191,7 @@ export class BddService {
     for (const seqInterface of listseq) { // list sequence
       const sequence = seqInterface as SequenceInterface;
       const listannot = new Array<Annotation>();
+      const listdirective = new Array<string>();
       for (const annotation of Object.values(sequence.annotation)) {
         const annot = new Annotation();
         annot.classeGeste = annotation.type;
@@ -197,8 +199,12 @@ export class BddService {
         annot.t2 = parseFloat(annotation.fin);
         listannot.push(annot);
       }
-      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
+      for (const directive of Object.values(sequence.directives)){
+        listdirective.push(String(directive));
+      }
+      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.directives, sequence.metadonnees));
     }
+    console.log(listseq);
     this.mapSequences.set(nameBdd, listSequence);
   }
   notifyChangeData(): void{
