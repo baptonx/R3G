@@ -23,6 +23,11 @@ export class DialogDataAddPathTxtclass implements DialogDataAddPathTxt{
   fps = '';
   pathClass = '';
 }
+
+export interface DialogData {
+  name: string;
+}
+
 @Component({
   selector: 'app-exploration',
   templateUrl: './exploration.component.html',
@@ -46,6 +51,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }
 
   openDialogINKML(): void {
+    this.pathbdd = '';
     const dialogRef = this.dialog.open(PopUpComponent, {
       width: '250px',
       data: {name: this.pathbdd}
@@ -85,12 +91,8 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   closeDB(namedb: string): void{
     this.bdd.closedb(namedb);
   }
-  exporterSeq(): void{
-    if (this.bdd.tableauExpl.selectionListe1.length === 0){
-      window.alert('Aucune séquence sélectionnée');
-    }else{
-
-    }
+  exporterBddTxt(namedb: string): void{
+    this.bdd.exporteBddTxt(namedb);
   }
   ngOnInit(): void {
     if (this.bdd.mapSequences.size === 0) {

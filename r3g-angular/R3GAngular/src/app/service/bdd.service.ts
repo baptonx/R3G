@@ -69,15 +69,7 @@ export class BddService {
     });
 
   }
-  addpath(): void{
-    this.answerWait();
-    this.http
-      .get<object>('/models/addBDD' , {})
-      .subscribe((returnedData: any) => {
-        this.miseajourdb(returnedData);
-        this.answerHere();
-      });
-  }
+
   txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{
     this.answerWait();
     const labelsPathDossierStr = [];
@@ -98,11 +90,21 @@ export class BddService {
     }
     this.http
       .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
-      .subscribe((returnedData: any) => {
-        this.miseajourdb(returnedData);
+      .subscribe(() => {
         this.answerHere();
       });
   }
+
+  addpath(): void{
+    this.answerWait();
+    this.http
+      .get<object>('/models/addBDD' , {})
+      .subscribe((returnedData: any) => {
+        this.ajoutdb(returnedData);
+        this.answerHere();
+      });
+  }
+
   addbddwithpath(path: string): void{
     this.answerWait();
     const str = [];
@@ -112,7 +114,16 @@ export class BddService {
     this.http
       .get<object>(`/models/addBDDwithpath/${str}` , {})
       .subscribe((returnedData: any) => {
-        this.miseajourdb(returnedData);
+        this.ajoutdb(returnedData);
+        this.answerHere();
+      });
+  }
+
+  exporteBddTxt(namedb: string): void{
+    this.http
+      .get<object>(`/models/addBDDwithpath/${namedb}` , {})
+      .subscribe((returnedData: any) => {
+        // this.miseajourdb(returnedData);
         this.answerHere();
       });
   }
@@ -142,6 +153,16 @@ export class BddService {
     this.notifyChangeData();
   }
 
+  ajoutdb(returnedData: any): void{
+    if (returnedData !== 'Erreur') {
+    const nameBdd = returnedData[0];
+    this.listGesteBDD.set(nameBdd, returnedData[1]);
+    const listseq = returnedData[2] as Array<SequenceInterface>;
+    this.ajoutSequencetobdd(nameBdd, listseq);
+    this.notifyChangeData();
+    }
+  }
+
   miseajourdb(returnedData: any): void{
     this.listGesteBDD.clear();
     for (const [namebdd, value] of Object.entries((returnedData[0]))) {
@@ -149,31 +170,22 @@ export class BddService {
        this.listGesteBDD.set(namebdd, value);
       }
     }
-    // this.sequences = [];
     for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
       const listseq = dbb as Array<SequenceInterface>;
-      const listSequence = new Array<Sequence>();
-      for (const seqInterface of listseq) { // list sequence
-        const sequence = seqInterface as SequenceInterface;
-        const listannot = new Array<Annotation>();
-        for (const annotation of Object.values(sequence.annotation)) {
-          const annot = new Annotation();
-          annot.classeGeste = annotation.type;
-          annot.f1 = parseFloat(annotation.debut);
-          annot.f2 = parseFloat(annotation.fin);
-          listannot.push(annot);
-        }
-        listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
-      }
-      this.mapSequences.set(key, listSequence);
+      console.log(key);
+      this.ajoutSequencetobdd(key, listseq);
     }
     this.notifyChangeData();
   }
 
   miseajourdbOne(nameBdd: string, returnedData: any): void{
     this.listGesteBDD.set(nameBdd, returnedData[0]);
-    // this.sequences = [];
     const listseq = returnedData[1] as Array<SequenceInterface>;
+    this.ajoutSequencetobdd(nameBdd, listseq);
+    this.notifyChangeData();
+  }
+
+  ajoutSequencetobdd(nameBdd: string, listseq: Array<SequenceInterface>): void{
     const listSequence = new Array<Sequence>();
     for (const seqInterface of listseq) { // list sequence
       const sequence = seqInterface as SequenceInterface;
@@ -188,9 +200,7 @@ export class BddService {
       listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.metadonnees));
     }
     this.mapSequences.set(nameBdd, listSequence);
-    this.notifyChangeData();
   }
-
   notifyChangeData(): void{
     this.getlistdb();
     this.updateFormat();
