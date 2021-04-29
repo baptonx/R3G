@@ -36,12 +36,6 @@ export class SqueletteAnimation {
     this.root.add(articulation);
   }
 
-  public rgba2hex(r: number, g: number, b: number, a: number): string {
-    if (r > 255 || g > 255 || b > 255 || a > 255){
-      throw 'Invalid color component';
-    }
-    return (256 + r).toString(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).toString(16).substr(1);
-  }
 
 addArticulationPoids(list: Array<number>): void {
     const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
@@ -59,4 +53,4 @@ addArticulationPoids(list: Array<number>): void {
 
 
 
-};
+}

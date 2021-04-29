@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=R1732
+# pylint: disable=E1101
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -122,13 +124,14 @@ def delete_eval():
 def load_config(path_model) -> dict:
     # pylint: disable-msg=eval-used
     """ recup de fichier de config """
-    finfo = open(path_model + "config.txt", "r")
-    infos = eval("\n".join(finfo.readlines()))
-    finfo.close()
+    with open(path_model + "config.txt", "r") as finfo:
+        infos = eval("\n".join(finfo.readlines()))
+        finfo.close()
     return infos
 
 @APP.route('/models/getPoids/<id_model>')
 def get_poids(id_model):
+    # pylint: disable=E1101
     """ a utiliser avec tensorflow pour recup les poids du model """
     cmap = cm.jet
     path_model = "Weigths/"+id_model+'/weights/'
@@ -410,6 +413,11 @@ def add_listgeste_metadonnee_one(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
     return [LISTE_GESTE_BDD[name], METADONNEE[name]]
+
+def add_listgeste_metadonnee_one_and_name(name):
+    """Construit la structure a envoyer au serveur contenant
+    et les liste de geste pour une bdd et ses Metadonnee"""
+    return [name, LISTE_GESTE_BDD[name], METADONNEE[name]]
 #############Exploration route :##############
 
 @APP.route('/models/getMetaDonnee')
@@ -460,10 +468,10 @@ def route_add_bdd():
                         del LISTE_GESTE_BDD[namebdd]
                         del LISTE_PATH_BDD[namebdd]
         root.destroy()
-        return json.dumps(add_listgeste_metadonne())
+        return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
     except RuntimeError:
         root.destroy()
-        return json.dumps(add_listgeste_metadonne())
+        return json.dumps("Erreur")
 
 @APP.route('/models/addBDDwithpath/<path>')
 def route_add_bdd_path(path):
@@ -559,56 +567,57 @@ def generate_template():
 def add_labels(inkmltree, labels, dictclass):
     """on ajoute les annotations a l'arbre passe en param"""
     root = inkmltree.getroot()
-    filelabels = open(labels, 'r')
-    unit = SubElement(root, 'unit')
-    for line in filelabels:
-        label = line[:-1].split(',')
-        annotation_xml = SubElement(unit, 'annotationXML')
-        annotation_xml.set('type', 'actions')
-        annotation = SubElement(annotation_xml, 'annotation')
-        annotation.set('type', 'type')
-        annotation.text = dictclass[label[0]]
-        annotation = SubElement(annotation_xml, 'annotation')
-        annotation.set('type', 'start')
-        annotation.text = label[1]
-        annotation = SubElement(annotation_xml, 'annotation')
-        annotation.set('type', 'end')
-        annotation.text = label[2]
-    filelabels.close()
+    with open(labels, 'r') as filelabels:
+        unit = SubElement(root, 'unit')
+        for line in filelabels:
+            label = line[:-1].split(',')
+            annotation_xml = SubElement(unit, 'annotationXML')
+            annotation_xml.set('type', 'actions')
+            annotation = SubElement(annotation_xml, 'annotation')
+            annotation.set('type', 'type')
+            annotation.text = dictclass[label[0]]
+            annotation = SubElement(annotation_xml, 'annotation')
+            annotation.set('type', 'start')
+            annotation.text = label[1]
+            annotation = SubElement(annotation_xml, 'annotation')
+            annotation.set('type', 'end')
+            annotation.text = label[2]
+        filelabels.close()
 
 def add_data(inkmltree, data, fps):
     """ajout des donnees a l'arbre inkml"""
     root = inkmltree.getroot()
-    filedata = open(data, 'r')
-    timestamp = 0
-    traces = {}
-    tracegroup = SubElement(root, 'traceGroup')
-    for line in filedata:
-        positions = line[:-1].split(' ')
-        for i in range(int(len(positions) / 3)):
-            traces.setdefault(str(i), [])
-            traces[str(i)] += [[positions[3 * i],
-                                positions[3 * i + 1], positions[3 * i + 2],
-                                str(timestamp)]]
-        timestamp += 1 / fps
-    for articulation in traces:
-        trace = SubElement(tracegroup, 'trace')
-        trace.text = ''
-        for tab in traces[articulation]:
-            for elem in tab:
-                trace.text = str(trace.text) + str(elem) + ' '
-            trace.text = trace.text[:-1] + ', '
-        trace.text = trace.text[:-2]
-    filedata.close()
+    with open(data, 'r') as filedata:
+        timestamp = 0
+        traces = {}
+        tracegroup = SubElement(root, 'traceGroup')
+        for line in filedata:
+            positions = line[:-1].split(' ')
+            for i in range(int(len(positions) / 3)):
+                traces.setdefault(str(i), [])
+                traces[str(i)] += [[positions[3 * i],
+                                    positions[3 * i + 1], positions[3 * i + 2],
+                                    str(timestamp)]]
+            timestamp += 1 / fps
+        for articulation in traces:
+            trace = SubElement(tracegroup, 'trace')
+            trace.text = ''
+            for tab in traces[articulation]:
+                for elem in tab:
+                    trace.text = str(trace.text) + str(elem) + ' '
+                trace.text = trace.text[:-1] + ', '
+            trace.text = trace.text[:-2]
+        filedata.close()
 
 def read_class(pathclass):
     """lecture tableau correspondance de classe"""
-    fileclass = open(pathclass, 'r')
     dictclass = {}
-    for line in fileclass:
-        line = line.replace('\n', '')
-        tabtemp = line.split(';')
-        dictclass[tabtemp[0]] = tabtemp[1]
+    with open(pathclass, 'r') as fileclass:
+        for line in fileclass:
+            line = line.replace('\n', '')
+            tabtemp = line.split(';')
+            dictclass[tabtemp[0]] = tabtemp[1]
+        fileclass.close()
     return dictclass
 
 def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
