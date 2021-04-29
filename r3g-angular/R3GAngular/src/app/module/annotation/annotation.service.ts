@@ -78,8 +78,7 @@ export class AnnotationService {
       // AnnotationVeriteTerrain
       if (this.sequenceCurrent !== undefined) {
         // this.ctx.fillStyle = 'rgba(0,255,0,0.6)';
-        for (let i = 0; i < this.sequenceCurrent.listAnnotation.length; i++) {
-          const annot = this.sequenceCurrent.listAnnotation[i];
+        for (const annot of this.sequenceCurrent.listAnnotation) {
           const name = annot.classeGeste;
           const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
           const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
@@ -125,8 +124,7 @@ export class AnnotationService {
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
 
-      for (let i = 0; i < this.listAnnotationIA.length; i++) {
-        const annot = this.listAnnotationIA[i];
+      for (const annot of this.listAnnotationIA) {
         const name = annot.classeGeste;
         const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
         const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
