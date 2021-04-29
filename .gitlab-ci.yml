@@ -18,7 +18,6 @@ build-back:
     - pip install pylint
     - pip install matplotlib
     - pylint server.py --disable=global-statement
-    - pylint test.py
-    - python3 test.py
+
 
 
