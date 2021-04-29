@@ -250,6 +250,9 @@ export class BddService {
             this.ajouterFormat(value, ['annotation']);
           }
         }
+        if (sequence.directives.length !== 0) {
+          this.formatSequence.add(['directives']);
+        }
       }
     }
   }

@@ -95,7 +95,8 @@ export class TableauExplService {
         if (sequence.listAnnotation.length === 0) {
           dataCourante = new SequenceTabImpl(sequence.id, sequence.bdd, sequence.metaDonnees);
           if (sequence.directives.length !== 0) {
-            dataCourante.concat(sequence.id, sequence.bdd, 'directives', sequence.directives.join(', ').slice(0, -2));
+            dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, '',
+              {directives: sequence.directives.join(', ')}));
           }
           this.sequences.push(dataCourante);
         } else {
@@ -104,6 +105,10 @@ export class TableauExplService {
             dataCourante['annotation.idGeste'] = geste;
             dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, 'annotation', sequence.listAnnotation[geste]));
             dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, '', sequence.metaDonnees));
+            if (sequence.directives.length !== 0) {
+              dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, '',
+                {directives: sequence.directives.join(', ')}));
+            }
             this.sequences.push(dataCourante);
           }
         }
