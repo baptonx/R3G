@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {Object3D} from 'three/src/core/Object3D';
 
+
+
 export class SqueletteAnimation {
   root: Object3D;
   // articulation1: THREE.Mesh;
@@ -34,10 +36,27 @@ export class SqueletteAnimation {
     this.root.add(articulation);
   }
 
+  public rgba2hex(r: number, g: number, b: number, a: number): string {
+    if (r > 255 || g > 255 || b > 255 || a > 255){
+      throw 'Invalid color component';
+    }
+    return (256 + r).toString(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).toString(16).substr(1);
+  }
+
+addArticulationPoids(list: Array<number>): void {
+    const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+    const material = new THREE.MeshPhongMaterial( {color: 'rgba(' + Math.floor(list[0]) + ',' +
+        Math.floor(list[1]) + ',' + Math.floor(list[2]) + ',' + Math.floor(list[3]) + ')'} );
+    const articulation = new THREE.Mesh(geometry, material);
+    articulation.receiveShadow = true;
+    articulation.castShadow = true;
+    this.root.add(articulation);
+  }
+
   public initialize(): void {
     this.root = new Object3D();
   }
 
 
 
-}
+};

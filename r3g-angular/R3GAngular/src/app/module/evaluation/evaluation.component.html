@@ -7,8 +7,8 @@
             <mat-option *ngFor="let s of sequencesList" [value]="s" >
               {{s}}
             </mat-option>
-        </mat-select> 
-        </mat-form-field>   
+        </mat-select>
+        </mat-form-field>
         <div>
         <mat-form-field appearance="fill">
           <mat-label>Affichage timeline 1</mat-label>
@@ -16,9 +16,9 @@
             <mat-option *ngFor="let an of evalServ.modelEval1" [value]="an" >
               {{an}}
             </mat-option>
-           
-        </mat-select> 
-        </mat-form-field>   
+
+        </mat-select>
+        </mat-form-field>
         </div>
         <div>
           <mat-form-field appearance="fill">
@@ -27,11 +27,12 @@
               <mat-option *ngFor="let an of evalServ.modelEval2" [value]="an" >
                 {{an}}
               </mat-option>
-          </mat-select> 
-          </mat-form-field>   
+          </mat-select>
+          </mat-form-field>
           </div>
     </div>
 </div>
 
 <app-timeline-evaluation></app-timeline-evaluation>
+<app-engine-evaluation></app-engine-evaluation>
 <app-navigation-modules></app-navigation-modules>

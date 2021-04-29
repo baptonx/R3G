@@ -52,6 +52,7 @@ import {SequencesAnnotationComponent} from './component/sequences-annotation/seq
 import {MatChipsModule} from '@angular/material/chips';
 import { TimelineEvaluationComponent } from './component/timeline-evaluation/timeline-evaluation.component';
 import { PopUpAddTxtBddComponent } from './component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
+import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
     TimelineExplorationComponent,
     TimelineEvaluationComponent,
     PopUpAddTxtBddComponent,
+    EngineEvaluationComponent,
   ],
     imports: [
         BrowserModule,
