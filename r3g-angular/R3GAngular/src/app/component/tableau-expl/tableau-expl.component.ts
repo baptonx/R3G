@@ -210,4 +210,11 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.explService.reloadFiltres();
     this.updateAll();
   }
+
+  reduceName(element: string): string {
+    if (element === undefined) {
+      return '';
+    }
+    return String(element).length < 25 ? String(element) : String(element.slice(0, 25)) + '...';
+  }
 }
