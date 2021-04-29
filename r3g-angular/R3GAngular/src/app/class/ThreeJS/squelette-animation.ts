@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {Object3D} from 'three/src/core/Object3D';
 
+
+
 export class SqueletteAnimation {
   root: Object3D;
   // articulation1: THREE.Mesh;
@@ -28,6 +30,17 @@ export class SqueletteAnimation {
   addArticulation(): void {
     const geometry = new THREE.BoxGeometry( 0.15, 0.15, 0.15 );
     const material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
+    const articulation = new THREE.Mesh(geometry, material);
+    articulation.receiveShadow = true;
+    articulation.castShadow = true;
+    this.root.add(articulation);
+  }
+
+
+addArticulationPoids(list: Array<number>): void {
+    const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+    const material = new THREE.MeshPhongMaterial( {color: 'rgba(' + Math.floor(list[0]) + ',' +
+        Math.floor(list[1]) + ',' + Math.floor(list[2]) + ',' + Math.floor(list[3]) + ')'} );
     const articulation = new THREE.Mesh(geometry, material);
     articulation.receiveShadow = true;
     articulation.castShadow = true;

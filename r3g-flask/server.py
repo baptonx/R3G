@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=R1732
+# pylint: disable=E1101
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -19,13 +21,13 @@ from shutil import copyfile
 from flask import Flask, request, flash, redirect
 import wandb
 from werkzeug.utils import secure_filename
+import matplotlib.cm as cm
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 from Class.Annotation import Annotation
 from Class.Eval import Eval
 from Class.Poids import Poids
 from Model.ModelEarlyOC3D_3D import ModelEarlyOC3D_3D
-
 
 
 APP = Flask(__name__)
@@ -127,9 +129,11 @@ def load_config(path_model) -> dict:
         finfo.close()
     return infos
 
-@APP.route('/models/getPoids/<id_model>/<number>')
-def get_poids(id_model, number):
+@APP.route('/models/getPoids/<id_model>')
+def get_poids(id_model):
+    # pylint: disable=E1101
     """ a utiliser avec tensorflow pour recup les poids du model """
+    cmap = cm.jet
     path_model = "Weigths/"+id_model+'/weights/'
     config = load_config(path_model)
     model = ModelEarlyOC3D_3D(nbClass=config["nbClass"], boxSize=config["boxSize"],
@@ -141,9 +145,18 @@ def get_poids(id_model, number):
                           poolSize=config["poolSize"], poolStrides=config["poolSize"])
     model.load_weights(path_model + "Weights/model")
     model.build((None,None,config["boxSize"][0],config["boxSize"][1],config["boxSize"][2]))
-    filtre = model.layersConv[int(number)].get_weights()[0].tolist()
-    biais = model.layersConv[int(number)].get_weights()[1].tolist()
-    return json.dumps(Poids(filtre, biais).__dict__)
+    llist = []
+    for elt in model.layersConv:
+        name = elt.name
+        biais = elt.get_weights()[1].tolist()
+        outgoing_channels = len(biais)
+        for i in range(outgoing_channels):
+            filtre = elt.get_weights()[0]
+            filtre = filtre[:, :, :, :, i]
+            filtre = cmap(filtre)*255
+            filtre = filtre.tolist()
+            llist.append(Poids(name,filtre, biais, i).__dict__)
+    return json.dumps(llist)
 
 
 @APP.route('/models/getModelsNames')
@@ -612,15 +625,15 @@ def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
     inkml_tree = generate_template()
     add_labels(inkml_tree, label, tableau_classe)
     add_data(inkml_tree, data, fps)
-    with open(inkml_file, "w") as file:
-        inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
-        file.close()
-    with open(inkml_file, "r") as file:
-        parser = parseString(file.read())
-        file.close()
-    with open(inkml_file, "w") as file:
-        file.write(parser.toprettyxml())
-        file.close()
+    file = open(inkml_file, "w")
+    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
+    file.close()
+    file = open(inkml_file, "r")
+    parser = parseString(file.read())
+    file.close()
+    file = open(inkml_file, "w")
+    file.write(parser.toprettyxml())
+    file.close()
 
 def rechercher_fichier_data(path_dossier_data):
     """recherche dans le repertoir des fichier contenant de la data"""

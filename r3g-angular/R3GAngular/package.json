@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^11.2.11",
     "@angular/router": "^11.2.11",
     "@goldsam/ng-golden-layout": "0.0.3",
+    "colormap": "^2.3.2",
     "golden-layout": "^1.5.9",
     "jquery": "^3.6.0",
     "material": "^0.4.3",

@@ -1,0 +1,26 @@
+<canvas #rendererCanvas id="renderCanvas"></canvas>
+<span #box data-diagram="box"></span>
+
+
+<div class="tab-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Choisir la couche de convolution</mat-label>
+  <mat-select (valueChange)="changeValue($event)">
+
+    <mat-option *ngFor="let elt of this.engServ.layerList" [value]="elt">
+      {{elt}}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
+
+  <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="getPoids()">Visualiser les poids de {{this.engServ.model}}</button></span>
+
+  <div><mat-form-field appearance="fill">
+    <mat-label>Choisir le filtre</mat-label>
+    <mat-select (valueChange)="changeFilter($event)">
+      <mat-option *ngFor="let elt of this.engServ.filtre" [value]="elt">
+        {{elt}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field></div>
+</div>

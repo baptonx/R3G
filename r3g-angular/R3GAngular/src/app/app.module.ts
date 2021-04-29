@@ -53,6 +53,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { TimelineEvaluationComponent } from './component/timeline-evaluation/timeline-evaluation.component';
 import { SingleFilterComponent } from './component/single-filter/single-filter.component';
 import { PopUpAddTxtBddComponent } from './component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
+import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -87,6 +88,7 @@ const appRoutes: Routes = [
     TimelineEvaluationComponent,
     SingleFilterComponent,
     PopUpAddTxtBddComponent,
+    EngineEvaluationComponent,
   ],
     imports: [
         BrowserModule,

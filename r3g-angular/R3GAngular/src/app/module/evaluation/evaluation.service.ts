@@ -3,6 +3,7 @@ import {EventManager} from '@angular/platform-browser';
 import {Annotation} from 'src/app/class/commun/annotation/annotation';
 import {Sequence} from 'src/app/class/commun/sequence';
 import {Eval} from 'src/app/class/evaluation/eval';
+import {AnimationAction} from 'three';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ export class EvaluationService {
   public margeTimeline!: number;
   public marge!: number;
   public unit!: number;
+  public action!: AnimationAction;
   public widthCanvas!: number;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
@@ -92,48 +94,49 @@ export class EvaluationService {
   }
 
   public draw_tmp(j: number, k: number): void {
-    let list = this.sequenceCurrent.listAnnotation;
-    this.annotationIA.forEach(ev => {
-        if (ev.name === this.sequenceCurrent.id) {
-          if (k === 1 && ev.idModel === this.timeline1.replace('Classes ', '')) {
-            this.modelAnnot1 = ev.annotation;
-            list = ev.annotation;
-          } else if (k === 2 && ev.idModel === this.timeline2.replace('Classes ', '')) {
-            this.modelAnnot2 = ev.annotation;
-            list = ev.annotation;
+    if (this.sequenceCurrent !== undefined) {
+      let list = this.sequenceCurrent.listAnnotation;
+      this.annotationIA.forEach(ev => {
+          if (ev.name === this.sequenceCurrent.id) {
+            if (k === 1 && ev.idModel === this.timeline1.replace('Classes ', '')) {
+              this.modelAnnot1 = ev.annotation;
+              list = ev.annotation;
+            } else if (k === 2 && ev.idModel === this.timeline2.replace('Classes ', '')) {
+              this.modelAnnot2 = ev.annotation;
+              list = ev.annotation;
+            }
           }
         }
-      }
-    );
-    let geste = '';
-    list.forEach(an => {
-      if (this.ctx !== null && this.ctx !== undefined) {
-        const name = an.classeGeste;
-        const frame1 = an.f1;
-        const frame2 = an.f2;
+      );
+      let geste = '';
+      list.forEach(an => {
+        if (this.ctx !== null && this.ctx !== undefined) {
+          const name = an.classeGeste;
+          const frame1 = an.f1;
+          const frame2 = an.f2;
 
-        const t1 = this.convertFrameToTime(Number(frame1));
-        const t2 = this.convertFrameToTime(Number(frame2));
-        const color = localStorage.getItem(name);
-        if (color != null) {
-          this.ctx.fillStyle = color;
-        } else {
-          this.ctx.fillStyle = 'black';
-        }
-        this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-        if (color != null) {
-          this.ctx.fillStyle = 'black';
-        }
-        else{
-          this.ctx.fillStyle = 'white';
-        }
-        if (geste !== name && name !== undefined && k === 0) {
-          this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
-          geste = name;
-        }
+          const t1 = this.convertFrameToTime(Number(frame1));
+          const t2 = this.convertFrameToTime(Number(frame2));
+          const color = localStorage.getItem(name);
+          if (color != null) {
+            this.ctx.fillStyle = color;
+          } else {
+            this.ctx.fillStyle = 'black';
+          }
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          if (color != null) {
+            this.ctx.fillStyle = 'black';
+          } else {
+            this.ctx.fillStyle = 'white';
+          }
+          if (geste !== name && name !== undefined && k === 0) {
+            this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
+            geste = name;
+          }
 
-      }
-    });
+        }
+      });
+    }
   }
 
 
@@ -203,15 +206,17 @@ export class EvaluationService {
 
 
   public get_verite(): void {
-    this.sequenceCurrent.listAnnotation.forEach(an => {
-      const name = an.classeGeste;
-      const frame1 = an.f1;
-      const frame2 = an.f2;
-      for (let j = Number(frame1); j <= Number(frame2); j++) {
-        this.veriteTerrain[j] = name;
-      }
+    if (this.sequenceCurrent !== undefined) {
+      this.sequenceCurrent.listAnnotation.forEach(an => {
+        const name = an.classeGeste;
+        const frame1 = an.f1;
+        const frame2 = an.f2;
+        for (let j = Number(frame1); j <= Number(frame2); j++) {
+          this.veriteTerrain[j] = name;
+        }
 
-    });
+      });
+    }
   }
 
 
