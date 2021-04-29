@@ -194,8 +194,8 @@ export class BddService {
   notifyChangeData(): void{
     this.getlistdb();
     this.updateFormat();
-    this.notifyTableauService();
     this.observableSequences.next(this.mapSequences);
+    this.notifyTableauService();
   }
 
 
@@ -266,7 +266,7 @@ export class BddService {
         cpt = 0;
         while (cpt < seqTabTab.length) {
           seqTab = seqTabTab[cpt];
-          if (seq.id === seqTab.id) {
+          if (seqTab.equalsSeq(seq)) {
             sequencesReturn.push(seq);
             seqTab.selected1 = false;
             seqTab.selected2 = false;

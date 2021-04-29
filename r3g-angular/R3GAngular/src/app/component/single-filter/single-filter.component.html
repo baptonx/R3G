@@ -1,0 +1,54 @@
+<form class="operand-form">
+  <ng-template *ngIf="isFirstFilter;then space; else andOrInput"></ng-template>
+  <ng-template #space>
+    <span class="andor"></span>
+  </ng-template>
+  <ng-template #andOrInput>
+  <mat-form-field appearance="fill" class="andor">
+    <mat-label></mat-label>
+      <mat-select [(value)]="andOr" (valueChange)="majNameSingleFilter()">
+        <mat-option value="et">ET</mat-option>
+        <mat-option value="ou">OU</mat-option>
+      </mat-select>
+  </mat-form-field>
+  </ng-template>
+  <mat-form-field class="mat-form-field-operand">
+    <mat-label>Operande</mat-label>
+    <input #operandeInput type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           (ngModelChange)="majNameSingleFilter()"
+           [formControl]="operande"
+           [matAutocomplete]="autoOperande">
+    <mat-autocomplete #autoOperande="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsOperande | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="operator-form">
+    <mat-label>Operateur</mat-label>
+    <input #operateurInput type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           (ngModelChange)="majNameSingleFilter()"
+           [formControl]="operateur"
+           [matAutocomplete]="autoOperator">
+    <mat-autocomplete #autoOperator>
+      <mat-option *ngFor="let option of filteredOptionsOperateur | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Result</mat-label>
+    <input #resultInput type="text"
+           (keyup)="majNameSingleFilter()"
+           aria-label="Number"
+           matInput>
+  </mat-form-field>
+</form>

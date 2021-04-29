@@ -19,13 +19,13 @@ from shutil import copyfile
 from flask import Flask, request, flash, redirect
 import wandb
 from werkzeug.utils import secure_filename
+import matplotlib.cm as cm
 from Class.Hyperparameters import Hyperparameters
 from Class.Model import Model
 from Class.Annotation import Annotation
 from Class.Eval import Eval
 from Class.Poids import Poids
 from Model.ModelEarlyOC3D_3D import ModelEarlyOC3D_3D
-import matplotlib.cm as cm
 
 
 APP = Flask(__name__)
@@ -153,7 +153,6 @@ def get_poids(id_model):
             filtre = cmap(filtre)*255
             filtre = filtre.tolist()
             llist.append(Poids(name,filtre, biais, i).__dict__)
-   
     return json.dumps(llist)
 
 

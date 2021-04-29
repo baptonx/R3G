@@ -22,8 +22,8 @@ export class ChoixColonneComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: { colonnes: string[] }) {}
 
   ngOnInit(): void {
-
     this.donneesTabulees = this.nodeToTab(this.choixColService.node);
+    console.log(this.choixColService.node);
   }
 
 

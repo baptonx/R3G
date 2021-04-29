@@ -51,6 +51,7 @@ import { TimelineExplorationComponent } from './component/timeline-exploration/t
 import {SequencesAnnotationComponent} from './component/sequences-annotation/sequences-annotation.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { TimelineEvaluationComponent } from './component/timeline-evaluation/timeline-evaluation.component';
+import { SingleFilterComponent } from './component/single-filter/single-filter.component';
 import { PopUpAddTxtBddComponent } from './component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
 import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
 
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
     EngineExplorationComponent,
     TimelineExplorationComponent,
     TimelineEvaluationComponent,
+    SingleFilterComponent,
     PopUpAddTxtBddComponent,
     EngineEvaluationComponent,
   ],

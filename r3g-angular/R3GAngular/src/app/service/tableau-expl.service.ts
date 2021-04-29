@@ -9,6 +9,7 @@ export interface SequencesTab {
   selected1: boolean;
   [key: string]: any;
   equals(seq: SequencesTab): boolean;
+  equalsSeq(seq: Sequence): boolean;
 }
 export class SequenceTabImpl implements SequencesTab{
   BDD: string;
@@ -26,7 +27,10 @@ export class SequenceTabImpl implements SequencesTab{
     }
   }
   equals(seq: SequencesTab): boolean {
-    return this.id === seq.id && this.geste === seq.geste;
+    return this.id === seq.id && this.idGeste === seq.idGeste && seq.BDD === this.BDD;
+  }
+  equalsSeq(seq: Sequence): boolean {
+    return this.id === seq.id && this.BDD === seq.bdd;
   }
 
   push(k: string, v: any): void{

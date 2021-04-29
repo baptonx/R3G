@@ -197,6 +197,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
       if (result !== undefined) {
         this.explService.nomFiltres.push(result.nomFiltre);
         this.explService.filtres.push(result.filter);
+        console.log(result.filter(this.explService.filteredList[0]));
         this.explService.filteredList = this.explService.filteredList.filter(result.filter);
         this.updateAll();
       }
