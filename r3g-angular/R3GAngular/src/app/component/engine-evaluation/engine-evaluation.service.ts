@@ -3,10 +3,7 @@ import * as THREE from 'three';
 import {AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
-import {ExplorationService} from '../../module/exploration/exploration.service';
 import {BddService} from '../../service/bdd.service';
-import {HttpClient, HttpUserEvent} from '@angular/common/http';
-import {Eval} from '../../class/evaluation/eval';
 import {Poids} from '../../class/evaluation/poids';
 import {EvaluationService} from '../../module/evaluation/evaluation.service';
 import {SequencesChargeesService} from '../../service/sequences-chargees.service';
@@ -40,8 +37,6 @@ export class EngineEvaluationService implements OnDestroy {
   private frameId!: number;
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
-  public facteurGrossissement = 1.5;
-  public facteurScale = 1;
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService) {
@@ -56,7 +51,7 @@ export class EngineEvaluationService implements OnDestroy {
   }
 
   public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
-    , refresh: boolean): void {
+                  , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
     console.log('ici');
@@ -75,12 +70,9 @@ export class EngineEvaluationService implements OnDestroy {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
         const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
-
-        const tabPosX: Array<number> = [];
-        const tabPosY: Array<number> = [];
-        const tabPosZ: Array<number> = [];
         this.squelette.initialize();
-        this.poids.forEach(elem => {
+        // tslint:disable-next-line:no-shadowed-variable
+        this.poids.forEach( elem => {
           if (this.layerSelected === elem.name && elem.numero === Number(this.filtreSelected) - 1) {
           for (let temps = 0; temps < elem.filtre.length; temps++) {
             for (let x = 0; x < elem.filtre[temps].length; x++) {
@@ -106,7 +98,7 @@ export class EngineEvaluationService implements OnDestroy {
             }
           }
         });
-        console.log(tabPositionArticulation.length)
+        console.log(tabPositionArticulation.length);
         this.clip = new AnimationClip('move', 0, tabPositionArticulation);
 
 

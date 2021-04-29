@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=R1732
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os

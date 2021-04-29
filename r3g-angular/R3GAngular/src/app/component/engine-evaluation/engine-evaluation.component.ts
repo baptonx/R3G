@@ -48,7 +48,6 @@ export class EngineEvaluationComponent implements OnInit {
 
 
   getPoids(): void {
-    console.log(this.engServ)
     if (this.engServ.model !== undefined && this.engServ.filtreSelected !== undefined && this.engServ.layerSelected !== undefined){
       this.engServ.initialize(undefined, undefined, true);
     }
