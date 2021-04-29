@@ -10,18 +10,23 @@ import {TableauExplService} from './tableau-expl.service';
 export class ChoixColonnesService {
   public node: NodeCol = {name: 'root', path: '', completed: false, children: []};
   constructor(public bdd: BddService, public tablExpl: TableauExplService) {
-    const str = localStorage.getItem('displayedColumns');
-    if (str != null){
-      this.node = JSON.parse(str);
-      this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
-      this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
-    }
     this.bdd.observableSequences.subscribe((sequence) => {
       this.node = {name: 'root', path: '', completed: false, children: []};
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
+      console.log(this.node);
     });
   }
 
+  parseNode(): void {
+    const str = localStorage.getItem('displayedColumns');
+    if (str != null){
+      this.node = JSON.parse(str);
+      console.log(this.node);
+      this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
+      this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
+      this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
+    }
+  }
   // cree l'arboresecence de noeud (pour les choix des colonnes) a partir du format des sequences de la BDD
   public updateNodeFromBDD(formatSequence: FormatDonnees, node: NodeCol, path: string): void {
     let estPresent = false;

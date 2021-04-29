@@ -3,6 +3,7 @@ import {BddService} from '../../service/bdd.service';
 import {PopUpComponent} from '../../component/pop-up/pop-up.component';
 import {MatDialog} from '@angular/material/dialog';
 import {PopUpAddTxtBddComponent} from '../../component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
+import {ChoixColonnesService} from '../../service/choix-colonnes.service';
 
 export interface DialogData {
   name: string;
@@ -35,8 +36,9 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   private pathbdd: string;
   private dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
 
-  constructor(public bdd: BddService, public dialog: MatDialog) {
+  constructor(public bdd: BddService, public dialog: MatDialog, public choixColonnesService: ChoixColonnesService) {
     this.pathbdd = '';
+    choixColonnesService.parseNode();
   }
 
   addPathBDDINKML(): void{
