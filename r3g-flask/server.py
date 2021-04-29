@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=R1732
 # pylint: disable=E1101
+# pylint: disable=R0914
+# pylint: disable=R1702
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -379,7 +380,7 @@ def get_meta_donnee(filename, bdd):
             if child.attrib == {'type': 'directive'}:
                 for children2 in child:
                     if (children2.tag == "{http://www.w3.org/2003/InkML}annotation" and
-                        children2.attrib == {'type': 'gesture'}):
+                            children2.attrib == {'type': 'gesture'}):
                         directives.append(children2.text)
             else:
                 other = {}
@@ -529,7 +530,7 @@ def route_reload_bdd(name):
     save_config()
     return json.dumps(add_listgeste_metadonnee_one(name))
 
-#############Ajouter Fichier INKML depuis TXT route :##############
+#############Route CREER Base de Donnée inkml depuis txt :##############
 
 @APP.route('/models/txtToInkml/<labels_path_dossier>'+
            '/<data_path_dossier>/<inkml_path_dossier>/<fps>/<path_class>')
@@ -560,7 +561,7 @@ def route_add_bdd_path_txt(labels_path_dossier, data_path_dossier,
     copy_file_tabclass(inkml_path_dossier_tr, path_class_tr)
     generate_database(liste_data, liste_label, tab_class, inkml_path_dossier_tr, fps_tr)
     return json.dumps("worked")
-#############BDD TXT vers INKML##############
+#############fonction BDD TXT vers INKML##############
 def generate_template():
     """On genere un template"""
     root = ET.Element('ink', {"xmlns":"http://www.w3.org/2003/InkML"})
@@ -668,11 +669,113 @@ def generate_database(liste_data, liste_label, tableau_classe, inkml_path_dossie
         generatefile_inkml(liste_data[file_data], liste_label[file_data], tableau_classe,
                            inkml_path_dossier + "/" + file_data[:-3] + "inkml", fps)
 def copy_file_tabclass(inkml_path_dossier, path_class):
-    """construit l'ensemble de la base de donnée inkml"""
+    """copier et renommer le fichier tabclass"""
     path_dossier_class = os.path.join(inkml_path_dossier, 'DataClasses')
     os.makedirs(path_dossier_class)
     shutil.move(path_class, path_dossier_class+'/Actions.csv')
-    # copier et renommer le fichier tabclass
+
+#############Route CREER Base de Donnée txt depuis inkml :##############
+@APP.route('/models/inkmlToTxt/<inkml_path_dossier>'+
+           '/<txt_path_dossier>/<path_class>')
+def route_inkml_to_txt(inkml_path_dossier, txt_path_dossier, path_class):
+    """add new path ddb and translate it to inkml"""
+    inkml_path_dossier_tr = ""
+    for char in inkml_path_dossier.split(','):
+        inkml_path_dossier_tr += chr(int(char))
+    txt_path_dossier_tr = ""
+    for char in txt_path_dossier.split(','):
+        txt_path_dossier_tr += chr(int(char))
+    path_class_tr = ""
+    for char in path_class.split(','):
+        path_class_tr += chr(int(char))
+    print(inkml_path_dossier_tr)
+    print(txt_path_dossier_tr)
+    print(path_class_tr)
+
+    tab_class = read_class(path_class_tr)
+    liste_inkml = rechercher_fichier_inkml(inkml_path_dossier_tr)
+    write_labels(liste_inkml, txt_path_dossier_tr, tab_class)
+    write_data(liste_inkml, txt_path_dossier_tr)
+    copy_file_tabclass(inkml_path_dossier_tr, path_class_tr)
+    return json.dumps("worked")
+
+#############Fonctions CREER Base de Donnée txt depuis inkml :##############
+def rechercher_fichier_inkml(inkml_path_dossier):
+    """On ajoute les fichiers de présent à ce path BDD."""
+    # pylint: disable-msg=global-statement
+    p_1 = re.compile(r'.*[.](?=inkml$)[^.]*$')
+    liste_fichier_in = {}
+    for path, _, files in walk(inkml_path_dossier):
+        for filename in files:
+            if p_1.match(filename):
+                liste_fichier_in[filename] = path +'/'+filename
+    return liste_fichier_in
+
+def write_labels(liste_inkml, path_txt, path_class):
+    """ajout des annotations au fichier labeltxt"""
+    dictclass = {}
+    with open(path_class) as fileclass:
+        for line in fileclass:
+            tabtemp = line.replace('\n', '').split(';')
+            dictclass[tabtemp[1]] = tabtemp[0]
+    for key in liste_inkml:
+        annotations = {}
+        nb_annotation = 0
+        file = liste_inkml[key]
+        for child in ET.parse(file).getroot():
+            if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                for children in child:
+                    if (children.tag == "{http://www.w3.org/2003/InkML}annotationXML" and
+                            children.attrib == {'type': 'actions'}):
+                        action = {}
+                        nb_annotation += 1
+                        for children2 in children:
+                            action[children2.attrib['type']] = children2.text
+                        annotations[nb_annotation] = action
+            elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+                break
+        if len(annotations) > 0:
+            filename = path_txt + os.path.splitext(os.path.basename(file))[0] + "_label.txt"
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            with open(filename, "w") as flabel:
+                for id_elem in annotations:
+                    line = ""
+                    line += dictclass[annotations[id_elem]["type"]]
+                    line += ","
+                    line += annotations[id_elem]["start"]
+                    line += ","
+                    line += annotations[id_elem]["end"]
+                    flabel.write(line + "\n")
+
+def write_data(liste_inkml, path_txt):
+    """ajout des donnees au fichier datatxt"""
+    for key in liste_inkml:
+        file = liste_inkml[key]
+        nb_articulations = 0
+        donnees = {}
+        string = ""
+        for child in ET.parse(file).getroot():
+            if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+                for children in child:
+                    if children.tag == "{http://www.w3.org/2003/InkML}trace":
+                        dict_final = []
+                        dict_1 = children.text.split(", ")
+                        for point in dict_1:
+                            tab_2 = point.split(" ")
+                            dict_final.append(tab_2)
+                        donnees[nb_articulations] = dict_final
+                        nb_articulations += 1
+        for id_elem in range(len(donnees[0])):
+            string = ""
+            filename = path_txt + os.path.splitext(os.path.basename(file))[0] + "_data.txt"
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            with open(filename, "w") as fdata:
+                for articulation in donnees:
+                    ## -1 sur len car on ne veut pas lire le timestamp
+                    for point in range(len(donnees[articulation][id_elem]) - 1):
+                        string += donnees[articulation][id_elem][point] + " "
+                        print(donnees[articulation][id_elem][point])
+                fdata.write(string + "\n")
 ########### MAIN ########################
 
 if __name__ == "__main__":

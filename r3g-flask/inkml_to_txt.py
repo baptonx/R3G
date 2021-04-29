@@ -30,9 +30,9 @@ def write_label(tree, flabel, fclass):
         line = ""
         line += dictclass[annotations[id_elem]["type"]]
         line += ","
-        line += annotations[id_elem]["debut"]
+        line += annotations[id_elem]["start"]
         line += ","
-        line += annotations[id_elem]["fin"]
+        line += annotations[id_elem]["end"]
         flabel.write(line + "\n")
 
 def write_data(tree, fdata):
