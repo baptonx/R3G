@@ -202,9 +202,11 @@ export class BddService {
       for (const directive of Object.values(sequence.directives)){
         listdirective.push(String(directive));
       }
-      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, sequence.directives, sequence.metadonnees));
+      console.log('directive: ' + listdirective);
+      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, listdirective, sequence.metadonnees));
     }
     console.log(listseq);
+    console.log(listSequence);
     this.mapSequences.set(nameBdd, listSequence);
   }
   notifyChangeData(): void{
@@ -255,6 +257,9 @@ export class BddService {
             this.formatSequence.add(['annotation', 'idGeste']);
             this.ajouterFormat(value, ['annotation']);
           }
+        }
+        if (sequence.directives.length !== 0) {
+          this.formatSequence.add(['directives']);
         }
       }
     }

@@ -25,11 +25,12 @@ export class Sequence {
     this.isTrain = true;
     this.isTest = false;
     this.displayedMetadata = new Map<string, string>();
+    this.directives = directives;
   }
 
 
   equals(seq: Sequence): boolean{
-    return this.id === seq.id;
+    return this.id === seq.id && this.bdd === seq.bdd;
   }
 
   trierAnnotation(): void {
