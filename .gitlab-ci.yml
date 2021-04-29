@@ -16,6 +16,7 @@ build-back:
     - pip install flask
     - wandb login 041f848335f8b0cc034a549438bfd49bd2d229e7
     - pip install pylint
+    - pip install matplotlib
     - pylint server.py --disable=global-statement
     - pylint test.py
     - python3 test.py
