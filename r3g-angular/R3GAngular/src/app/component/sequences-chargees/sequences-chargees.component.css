@@ -20,3 +20,6 @@
 #sequencesChargeesContainer{
   overflow: auto;
 }
+.w100 {
+  width: 100%;
+}

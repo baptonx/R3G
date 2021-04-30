@@ -7,6 +7,7 @@ export interface SequencesTab {
   id: string;
   idGeste?: string;
   selected1: boolean;
+  selected2: boolean;
   [key: string]: any;
   equals(seq: SequencesTab): boolean;
   equalsSeq(seq: Sequence): boolean;
@@ -18,6 +19,7 @@ export class SequenceTabImpl implements SequencesTab{
   geste?: string;
   [key: string]: any;
   selected1 = false;
+  selected2 = false;
 
   constructor(ident: string, bdd: string, metadonnees: object) {
     this.BDD = bdd;

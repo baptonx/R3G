@@ -34,7 +34,8 @@
 </div>
 <div *ngIf="seqChargeesService.mode === 'evaluation'">
     <mat-tab-group>
-      <mat-tab *ngFor="let set of ['Train', 'Test']" label="{{set}}">
+      <mat-tab *ngFor="let set of ['Train', 'Test'] ; let i = index" label="{{set}}">
+        <button class="w100" (click)="supprimerSequenceDejaChargees(set)" mat-button>Supprimer les séquences de {{['Test','Train'][i]}}</button>
         <mat-list>
           <ng-container *ngFor="let sequence of set === 'Train'?this.seqChargeesService.sequences1:this.seqChargeesService.sequences2, let i = index">
             <mat-list-item style ="display:flex ;justify-content: right;" [style.display]="sequence.id.includes(inputFiltre.value)?'block':'none'">
