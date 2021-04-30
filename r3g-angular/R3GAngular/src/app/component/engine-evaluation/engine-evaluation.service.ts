@@ -1,6 +1,6 @@
 import {ElementRef, Injectable, NgZone, OnDestroy, OnInit} from '@angular/core';
 import * as THREE from 'three';
-import {AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
+import {AnimationAction, AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {BddService} from '../../service/bdd.service';
@@ -44,14 +44,15 @@ export class EngineEvaluationService implements OnDestroy {
   public controls!: TrackballControls;
   public sequences: Set<Sequence> = new Set<Sequence>();
   public sequenceCurrent!: Sequence;
-  public facteurGrossissement = 1.5;
-  public facteurScale = 0.001;
+  public tempsTotal!: number;
+  public action!: AnimationAction;
+  public pauseAction: boolean;
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
     this.layerList = new Set<string>();
     this.sequences = this.sequencesChargeesService.sequences1;
-    this.evalService.pauseAction = true;
+    this.pauseAction = true;
 
   }
 
@@ -91,7 +92,9 @@ export class EngineEvaluationService implements OnDestroy {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
         const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
-        for (let x = 0; x < 16; x++) {
+        this.squelette.addArticulation();
+        this.squelette.addArticulation();
+       /*  for (let x = 0; x < 16; x++) {
           for (let y = 0; y < 16; y++) {
             for (let z = 0; z < 16; z++) {
               const tabPosXYZ: Array<number> = [];
@@ -112,17 +115,30 @@ export class EngineEvaluationService implements OnDestroy {
               tabPositionArticulation.push(positionArticulation1);
             }
           }
-        }
-
-        this.clip = new AnimationClip('move', 0, tabPositionArticulation);
+        } */
+        const positionArticulation1 = new VectorKeyframeTrack(
+          '.children[0].position',
+          [0, 4, 6],
+          [-2, 1, 0, -2, 2, 0, -2, 1, 0],
+        );
+        const positionArticulation2 = new VectorKeyframeTrack(
+          '.children[1].position',
+          [0, 4, 6],
+          [2, 1, 0, 2, 2, 0, 2, 1, 0],
+        );
+        this.clip = new AnimationClip('move', -1, [
+          positionArticulation1,
+          positionArticulation2
+        ]);
         scene.add(this.squelette.root);
         const mixer = new AnimationMixer(this.squelette.root);
-        this.evalService.action = mixer.clipAction(this.clip);
-        this.evalService.action.loop = THREE.LoopOnce;
-        this.evalService.action.clampWhenFinished = true;
+        this.action = mixer.clipAction(this.clip);
+        this.action.loop = THREE.LoopOnce;
+        this.action.clampWhenFinished = true;
         // this.action.time = 4;
+        this.tempsTotal = 6;
         // this.clip.duration = this.action.time;
-        this.stopToStart();
+        // this.stopToStart();
 
         const clock = new Clock();
         return (rect: DOMRect) => {
@@ -201,6 +217,7 @@ export class EngineEvaluationService implements OnDestroy {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.squelette = new SqueletteAnimation();
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
     const s = this.bddService.sequenceCourante;
@@ -263,9 +280,9 @@ export class EngineEvaluationService implements OnDestroy {
 
         scene.add(this.squelette.root);
         const mixer = new AnimationMixer(this.squelette.root);
-        this.evalService.action = mixer.clipAction(this.clip);
-        this.evalService.action.loop = THREE.LoopOnce;
-        this.evalService.action.clampWhenFinished = true;
+        this.action = mixer.clipAction(this.clip);
+        this.action.loop = THREE.LoopOnce;
+        this.action.clampWhenFinished = true;
         // this.clip.duration = this.action.time;
         this.stopToStart();
 
@@ -337,12 +354,12 @@ export class EngineEvaluationService implements OnDestroy {
 
 
   public stopToStart(): void {
-    this.evalService.action.timeScale = 1;
-    this.evalService.action.stop();
-    this.evalService.action.time = 0;
+    this.action.timeScale = 1;
+    this.action.stop();
+    this.action.time = 0;
     this.clip.duration = 0;
-    this.evalService.action.play();
-    this.evalService.pauseAction = true;
+    this.action.play();
+    this.pauseAction = true;
   }
 
 
@@ -462,14 +479,13 @@ export class EngineEvaluationService implements OnDestroy {
   }
 
   public playForward(): void {
-    this.evalService.pauseAction = false;
-    const t = this.evalService.action.time;
-    console.log(this.evalService.action);
-    this.evalService.action.stop();
-    this.evalService.action.time = t;
-    this.clip.duration = this.evalService.tempsTotal;
-    this.evalService.action.timeScale = 1;
-    this.evalService.action.play();
+    this.pauseAction = false;
+    const t = this.action.time;
+    this.action.stop();
+    this.action.time = t;
+    this.clip.duration = this.tempsTotal;
+    this.action.timeScale = 1;
+    this.action.play();
   }
 
   public refreshInitialize(): void {
@@ -478,21 +494,16 @@ export class EngineEvaluationService implements OnDestroy {
 
 
   public play(): void {
-    if (this.evalService.pauseAction === true) {
+    if (this.pauseAction === true) {
       this.playForward();
+    } else {
+      this.action.timeScale = 1;
+      this.pauseAction = true;
+      this.clip.duration = this.action.time;
+      this.action.play();
     }
-    this.evalService.action.timeScale = 1;
-    this.evalService.pauseAction = true;
-    this.clip.duration = this.evalService.action.time;
-    this.evalService.action.play();
   }
 
-
-  public pause(): void {
-    this.evalService.pauseAction = true;
-    this.clip.duration = this.evalService.action.time;
-    this.evalService.action.play();
-  }
 
 
   public resetCamera(): void {

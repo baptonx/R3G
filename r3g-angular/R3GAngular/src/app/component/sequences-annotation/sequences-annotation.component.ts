@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 import { EngineService } from '../engine/engine.service';
 import {BddService} from '../../service/bdd.service';
+import {Model} from '../../class/evaluation/model';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-sequences-annotation',
@@ -10,12 +12,24 @@ import {BddService} from '../../service/bdd.service';
 })
 export class SequencesAnnotationComponent implements OnInit {
   isLinear = false;
+  modelList: Array<Model> = [];
+  modelSelected = '';
   sequencesList: Array<string>;
-  constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService) {
+  constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService
+            , public http: HttpClient) {
     this.sequencesList = [];
     this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
     });
+  }
+
+  changeModel(value: any): void {
+    this.modelList.forEach(elt => {
+        if (elt.idM === value) {
+          this.modelSelected = elt.idM;
+        }
+      }
+    );
   }
 
   changeValue(value: any): void{
@@ -35,6 +49,7 @@ export class SequencesAnnotationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.http.get<Array<Model>>('/models/getModelsNames', {}).subscribe((returnedData: Array<Model>) => this.modelList = returnedData);
   }
 
   copyListAnnotationIAToSequence(): void {

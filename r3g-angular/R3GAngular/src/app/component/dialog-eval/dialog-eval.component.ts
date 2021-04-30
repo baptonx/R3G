@@ -16,6 +16,7 @@ import {DialogData2 } from '../apprentissage/apprentissage.component';
 export class DialogEvalComponent implements OnInit {
   model = '';
   chargement = '';
+  bddSelected = '';
   sequences: Array<string> = [];
   constructor(public http: HttpClient, public bdd: BddService, public sequencesChargees: SequencesChargeesService,
               public annot: AnnotationService, public evalServ: EvaluationService,
@@ -23,6 +24,7 @@ export class DialogEvalComponent implements OnInit {
   this.model = data.model;
   sequencesChargees.sequences1.forEach(elt => {
       this.sequences.push(elt.id);
+      this.bddSelected = elt.bdd;
   });
   }
 
@@ -32,7 +34,7 @@ export class DialogEvalComponent implements OnInit {
   eval(): void{
     if (this.model !== null){
       this.chargement = 'Evaluation en cours, veuillez patienter.';
-      this.http.get<Array<Eval>>('/models/evaluation/' + this.bdd.bddnames + '/' + this.sequences +
+      this.http.get<Array<Eval>>('/models/evaluation/' + this.bddSelected + '/' + this.sequences +
     '/' + this.model).subscribe(
       (returnedData: Array<Eval>) => {
         this.chargement = 'Evaluation terminée';

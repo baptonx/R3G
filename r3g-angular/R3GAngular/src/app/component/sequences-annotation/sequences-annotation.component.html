@@ -23,9 +23,9 @@
         <ng-template matStepLabel>IA</ng-template>
         <mat-form-field appearance="fill">
           <mat-label>Choisir une ia</mat-label>
-          <mat-select (valueChange)="changeValue($event)">
-            <mat-option *ngFor="let s of sequencesList" [value]="s" >
-              {{s}}
+          <mat-select (valueChange)="changeModel($event)">
+            <mat-option *ngFor="let m of modelList" [value]="m.idM" >
+              {{m.idM}}
             </mat-option>
           </mat-select>
         </mat-form-field>

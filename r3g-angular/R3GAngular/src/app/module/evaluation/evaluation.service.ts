@@ -70,6 +70,18 @@ export class EvaluationService {
       this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
       this.ctx.fillRect(this.margeTimeline, 100, this.unit * this.tempsTotal, 100);
 
+      // IndicatorTime
+      this.ctx.fillStyle = 'black';
+      let pas = 1;
+      if (this.tempsTotal > 40) {
+        pas = 5;
+      }
+      for (let i = 0; i < this.tempsTotal + 1; i = i + pas) {
+        const posIndicatorTime = i * this.unit + this.margeTimeline;
+        this.drawLine(posIndicatorTime, 0, posIndicatorTime, this.sizeIndicatorTime);
+        this.ctx.font = '10px Arial';
+        this.ctx.fillText(i.toString(), posIndicatorTime + 8, 10);
+      }
 
       this.get_verite();
       this.ctx.font = '12px Arial';
@@ -180,6 +192,16 @@ export class EvaluationService {
         this.ctx.fillText('Taux de recouvrement : ' + pourcentage + '%', nb, 20);
       }
       this.ctx.font = '12px Arial';
+    }
+  }
+
+
+  public drawLine(x1: number, y1: number, x2: number, y2: number): void {
+    if (this.ctx !== null && this.ctx !== undefined) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(x1, y1);
+      this.ctx.lineTo(x2, y2);
+      this.ctx.stroke();
     }
   }
 

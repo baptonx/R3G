@@ -80,9 +80,9 @@ opti = tf.keras.optimizers.Adam(learning_rate=config["learning_rate"])
 model.compile(opti, loss=[lambda x, y: lossFGWithReject(x, y, config['lambdahyper']),
                           lambda x, y: lossHAux(x, y)], metrics=[])
 model.load_weights(pathModel + "Weights" + separator + "model")
-model.build((None,None,config["boxSize"][0],config["boxSize"][1],config["boxSize"][2]))
+#model.build((None,None,config["boxSize"][0],config["boxSize"][1],config["boxSize"][2]))
 # retrieve weights from the 3rd Conv3D layer
-filters, biases = model.layersConv[0].get_weights()
+#filters, biases = model.layersConv[0].get_weights()
 
 """
 # normalize filter values to 0-1 so we can visualize them

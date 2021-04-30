@@ -211,8 +211,8 @@ export class BddService {
       for (const annotation of Object.values(sequence.annotation)) {
         const annot = new Annotation();
         annot.classeGeste = annotation.type;
-        annot.f1 = parseFloat(annotation.debut);
-        annot.f2 = parseFloat(annotation.fin);
+        annot.f1 = parseFloat(annotation.start);
+        annot.f2 = parseFloat(annotation.end);
         listannot.push(annot);
       }
       for (const directive of Object.values(sequence.directives)){

@@ -107,9 +107,8 @@ def start_wandb_v2():
 
 def get_class_geste(name):
     """ on recup le contenu de tab_class.txt """
-    name = name.replace('_inkml', '')
-    if os.path.exists('./'+name+'/tabclass.txt'):
-        with open('./'+name+'/tabclass.txt') as file_content:
+    if os.path.exists('./'+name+'/Actions.csv'):
+        with open('./'+name+'/Actions.csv') as file_content:
             for line in file_content:
                 CLASSES.append(line.split(';')[1].replace('\n', ''))
 
@@ -206,7 +205,6 @@ def upload_file(name):
 def evaluation(name, sequences, model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
     download_weights(model)
-    name = name.replace('_inkml', '')
     get_class_geste(name)
     seq = sequences.split(',')
     if len(CLASSES) == 0:
