@@ -45,7 +45,7 @@ export class EngineEvaluationService implements OnDestroy {
   public sequences: Set<Sequence> = new Set<Sequence>();
   public sequenceCurrent!: Sequence;
   public facteurGrossissement = 1.5;
-  public facteurScale = 1;
+  public facteurScale = 0.001;
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
@@ -72,8 +72,8 @@ export class EngineEvaluationService implements OnDestroy {
   }
 
 
-  public initVoxel(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
-    , refresh: boolean): void {
+  public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
+                  , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
@@ -83,7 +83,6 @@ export class EngineEvaluationService implements OnDestroy {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.squelette = new SqueletteAnimation();
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
 
@@ -91,78 +90,31 @@ export class EngineEvaluationService implements OnDestroy {
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
-        if (this.sequenceCurrent !== undefined) {
-          const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
-
-          const tabPosX: Array<number> = [];
-          const tabPosY: Array<number> = [];
-          const tabPosZ: Array<number> = [];
-          let averageX: number;
-          let averageY: number;
-          let averageZ: number;
-
-          for (const frame of this.sequenceCurrent.traceNormal[0]) {
-            tabPosX.push(frame[0]);
-            tabPosY.push(frame[1]);
-            tabPosZ.push(frame[2]);
-          }
-
-          averageX = this.calculateAverage(tabPosX);
-          averageY = this.calculateAverage(tabPosY);
-          averageZ = this.calculateAverage(tabPosZ);
-
-
-          this.squelette.initialize();
-          for (let i = 0; i < this.sequenceCurrent.traceNormal.length; i++) {
-            const tabPosXYZ: Array<number> = [];
-            const tabTime: Array<number> = [];
-            this.squelette.addArticulation();
-
-            for (const frame of this.sequenceCurrent.traceNormal[i]) {
-              tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
-              tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
-              tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3] * this.facteurScale);
+        const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
+        for (let x = 0; x < 16; x++) {
+          for (let y = 0; y < 16; y++) {
+            for (let z = 0; z < 16; z++) {
+              const tabPosXYZ: Array<number> = [];
+              if (z === 3 && y === 2) {
+                this.squelette.addArticulationBlackAndWhite('black');
+              } else {
+                this.squelette.addArticulationBlackAndWhite('white');
+              }
+              tabPosXYZ.push(x);
+              tabPosXYZ.push(y);
+              tabPosXYZ.push(z);
+              const id = x + y * 16 + z * 16 * 16;
+              const positionArticulation1 = new VectorKeyframeTrack(
+                '.children[' + id + '].position',
+                [0],
+                tabPosXYZ,
+              );
+              tabPositionArticulation.push(positionArticulation1);
             }
-
-            if (i === 0) {
-              this.evalService.tabTimeCurrent = tabTime;
-            }
-
-            const positionArticulation = new VectorKeyframeTrack(
-              '.children[' + i + '].position',
-              tabTime,
-              tabPosXYZ,
-            );
-            tabPositionArticulation.push(positionArticulation);
-            this.evalService.tempsTotal = tabTime[tabTime.length - 1];
           }
-
-          console.log('temps total : ' + this.evalService.tempsTotal);
-          this.clip = new AnimationClip('move', -1, tabPositionArticulation);
-
-          /*
-          // ANIMATION
-          const positionArticulation1 = new VectorKeyframeTrack(
-            '.children[0].position',
-            [0, 4, 6],
-            [-2, 1, 0, -2, 2, 0, -2, 1, 0],
-          );
-          const positionArticulation2 = new VectorKeyframeTrack(
-            '.children[1].position',
-            [0, 4, 6],
-            [2, 1, 0, 2, 2, 0, 2, 1, 0],
-          );
-          this.annotationServ.tempsTotal = 6;
-          this.clip = new AnimationClip('move', -1, [
-            positionArticulation1,
-            positionArticulation2
-          ]);
-           */
-        } else {
-          this.clip = new AnimationClip('move', -1, []);
         }
 
+        this.clip = new AnimationClip('move', 0, tabPositionArticulation);
         scene.add(this.squelette.root);
         const mixer = new AnimationMixer(this.squelette.root);
         this.evalService.action = mixer.clipAction(this.clip);
@@ -238,8 +190,8 @@ export class EngineEvaluationService implements OnDestroy {
     }
   }
 
-  public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
-    , refresh: boolean): void {
+  public initPoids(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
+                 , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
@@ -508,7 +460,8 @@ export class EngineEvaluationService implements OnDestroy {
   public getRandomInt(max: number): number {
     return Math.floor(Math.random() * Math.floor(max));
   }
-  public playForward(): void{
+
+  public playForward(): void {
     this.evalService.pauseAction = false;
     const t = this.evalService.action.time;
     console.log(this.evalService.action);
@@ -519,6 +472,11 @@ export class EngineEvaluationService implements OnDestroy {
     this.evalService.action.play();
   }
 
+  public refreshInitialize(): void {
+    this.initialize(undefined, undefined, true);
+  }
+
+
   public play(): void {
     if (this.evalService.pauseAction === true) {
       this.playForward();
@@ -526,7 +484,6 @@ export class EngineEvaluationService implements OnDestroy {
     this.evalService.action.timeScale = 1;
     this.evalService.pauseAction = true;
     this.clip.duration = this.evalService.action.time;
-    this.evalService.action.reset();
     this.evalService.action.play();
   }
 

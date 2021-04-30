@@ -26,8 +26,7 @@ export class EngineEvaluationComponent implements OnInit {
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
-    // this.engServ.initialize(this.rendererCanvas, this.listElementHTML, false);
-    this.engServ.initVoxel(this.rendererCanvas, this.listElementHTML, false);
+    this.engServ.initialize(this.rendererCanvas, this.listElementHTML, false);
     this.engServ.animate();
     this.http.get<Array<Model>>('/models/getModelsNames', {}).
     subscribe((returnedData: Array<Model>) => this.engServ.modelesList = returnedData);
@@ -40,13 +39,14 @@ export class EngineEvaluationComponent implements OnInit {
     this.engServ.sequences.forEach(seq => {
       if (seq.id === value){
         this.engServ.sequenceCurrent = seq;
+        this.engServ.refreshInitialize();
       }
-    })
+    });
   }
   view(): void{
     if (this.engServ.modelSelected !== undefined && this.engServ.layerSelected !== undefined
     && this.engServ.filtreSelected !== undefined){
-      this.engServ.initialize(undefined, undefined, true);
+      this.engServ.initPoids(undefined, undefined, true);
     }
   }
 
@@ -54,7 +54,7 @@ export class EngineEvaluationComponent implements OnInit {
     if (this.engServ.modelSelected !== undefined) {
       this.engServ.layerSelected = '';
       this.engServ.filtreSelected = '';
-      this.engServ.initialize(undefined, undefined, true);
+      this.engServ.initPoids(undefined, undefined, true);
       this.http.get<Array<Poids>>('/models/getPoids/' + this.engServ.modelSelected).subscribe(
         (returnedData: Array<Poids>) => {
           this.engServ.poids = returnedData;

@@ -40,7 +40,7 @@ export class SqueletteAnimation {
     const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
     const material = new THREE.MeshPhongMaterial({
       color,
-      opacity: 0.5,
+      opacity: 0.2,
       transparent: true,
     });
     const articulation = new THREE.Mesh(geometry, material);

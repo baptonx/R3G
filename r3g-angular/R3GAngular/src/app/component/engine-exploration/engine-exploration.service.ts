@@ -147,7 +147,6 @@ export class EngineExplorationService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.explorationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;
@@ -337,7 +336,6 @@ export class EngineExplorationService implements OnDestroy {
       this.explorationServ.action.timeScale = 1;
       this.explorationServ.pauseAction = true;
       this.clip.duration = this.explorationServ.action.time;
-      console.log(this.explorationServ.action)
       this.explorationServ.action.play();
     }
   }

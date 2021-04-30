@@ -633,7 +633,7 @@ def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
     inkml_tree = generate_template()
     add_labels(inkml_tree, label, tableau_classe)
     add_data(inkml_tree, data, fps)
-    with open(inkml_file, "w") as file: 
+    with open(inkml_file, "w") as file:
         inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
         parser = parseString(file.read())
         file.write(parser.toprettyxml())
