@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Importer une base de donnée depuis un path absolu</h1>
+<div mat-dialog-content>
+  <p>Path vers lequel la base de données TXT sera générée : </p>
+  <mat-form-field>
+    <mat-label>path :</mat-label>
+    <label>
+      <input matInput [(ngModel)]="data.txtPathDossier">
+    </label>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="bouton50" (click)="onNoClick()">Annuler</button>
+  <button mat-button class="bouton50" [mat-dialog-close]="data" cdkFocusInitial>Générer</button>
+</div>
