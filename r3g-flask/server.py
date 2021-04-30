@@ -502,7 +502,7 @@ def route_add_bdd_path(path):
                 else:
                     del LISTE_GESTE_BDD[namebdd]
                     del LISTE_PATH_BDD[namebdd]
-    return json.dumps(add_listgeste_metadonne())
+    return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
 
 
 @APP.route('/models/closeBDD/<name>')

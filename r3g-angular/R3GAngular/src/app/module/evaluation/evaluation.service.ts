@@ -39,6 +39,7 @@ export class EvaluationService {
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
+  public pauseAction!: boolean;
 
   constructor(private eventManager: EventManager) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));

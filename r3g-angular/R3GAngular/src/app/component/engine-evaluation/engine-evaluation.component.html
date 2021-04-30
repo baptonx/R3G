@@ -1,26 +1,62 @@
 <canvas #rendererCanvas id="renderCanvas"></canvas>
 <span #box data-diagram="box"></span>
 
+<div class="barButtonsEngine">
+  <button mat-raised-button (click)="engServ.resetCamera()" class="resetCameraButton">Reset camera</button>
+  <button mat-raised-button (click)="engServ.stopToStart()"><<</button>
+  <button mat-raised-button (click)="engServ.play()">Play</button>
 
-<div class="tab-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Choisir la couche de convolution</mat-label>
-  <mat-select (valueChange)="changeValue($event)">
-
-    <mat-option *ngFor="let elt of this.engServ.layerList" [value]="elt">
-      {{elt}}
-    </mat-option>
-  </mat-select>
-  </mat-form-field>
-
-  <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="getPoids()">Visualiser les poids de {{this.engServ.model}}</button></span>
-
-  <div><mat-form-field appearance="fill">
-    <mat-label>Choisir le filtre</mat-label>
-    <mat-select (valueChange)="changeFilter($event)">
-      <mat-option *ngFor="let elt of this.engServ.filtre" [value]="elt">
-        {{elt}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field></div>
 </div>
+
+
+<mat-tab-group animationDuration="0ms" dynamicHeight style="margin-top: 50px;">
+  <mat-tab label="Poids du réseaux">
+    <div class="tab-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Choisir un modèle</mat-label>
+        <mat-select (valueChange)="changeModel($event)">
+          <mat-option *ngFor="let m of this.engServ.modelesList" [value]="m.idM">
+            {{m.idM}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="getPoids()">Obtenir les poids</button>
+      <button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="view()">Visualiser</button></span>
+      <div><mat-form-field appearance="fill">
+        <mat-label>Choisir la couche de convolution</mat-label>
+        <mat-select (valueChange)="changeValue($event)">
+
+          <mat-option *ngFor="let elt of this.engServ.layerList" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field></div>
+
+
+      <div><mat-form-field appearance="fill">
+        <mat-label>Choisir le filtre</mat-label>
+        <mat-select (valueChange)="changeFilter($event)">
+          <mat-option *ngFor="let elt of this.engServ.filtre" [value]="elt">
+            {{elt}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field></div>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Squelette voxelisé">
+    <div class="tab-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Choisir une séquence</mat-label>
+        <mat-select (valueChange)='changeSeq($event)'>
+          <mat-option *ngFor="let s of this.engServ.sequences" [value]="s.id" >
+            {{s.id}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="this.engServ.initVoxel(undefined, undefined, false)">Visualiser</button></span>
+    </div>
+</mat-tab>
+</mat-tab-group>

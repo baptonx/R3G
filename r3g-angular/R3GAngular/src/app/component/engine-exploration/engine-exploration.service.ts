@@ -337,6 +337,7 @@ export class EngineExplorationService implements OnDestroy {
       this.explorationServ.action.timeScale = 1;
       this.explorationServ.pauseAction = true;
       this.clip.duration = this.explorationServ.action.time;
+      console.log(this.explorationServ.action)
       this.explorationServ.action.play();
     }
   }
