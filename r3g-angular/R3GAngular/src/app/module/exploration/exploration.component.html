@@ -19,7 +19,7 @@
       <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="closeDB(bddname)">{{bddname}}</button>
     </mat-menu>
     <mat-menu #listexporter="matMenu">
-      <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="exporterBddTxt(bddname)">{{bddname}}</button>
+      <button mat-menu-item *ngFor="let bddname of this.bdd.bddnames" (click)="openDialogINKMLtoTXT(bddname)">{{bddname}}</button>
     </mat-menu>
 
 

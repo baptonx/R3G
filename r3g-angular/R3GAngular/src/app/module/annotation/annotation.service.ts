@@ -457,4 +457,7 @@ export class AnnotationService {
     }
   }
 
+  sauvegardeAnnotation(): void{
+    this.bddService.sauvegardeAnnot(this.sequenceCurrent);
+  }
 }

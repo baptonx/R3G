@@ -4,13 +4,13 @@ import {DialogDataAddPathTxt} from '../../module/exploration/exploration.compone
 
 @Component({
   selector: 'app-pop-up-add-txt-bdd',
-  templateUrl: './pop-up-bdd-txt-to-inkml.html',
+  templateUrl: './pop-up-bdd-txt-to-inkml.component.html',
   styleUrls: ['./pop-up-bdd-txt-to-inkml.component.css']
 })
-export class PopUpBddTxtToInkmlcomponent {
+export class PopUpBddTxtToInkmlComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<PopUpBddTxtToInkmlcomponent>,
+    public dialogRef: MatDialogRef<PopUpBddTxtToInkmlComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataAddPathTxt) {}
 
   onNoClick(): void {

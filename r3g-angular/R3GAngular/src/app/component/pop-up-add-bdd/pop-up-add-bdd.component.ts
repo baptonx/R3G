@@ -4,12 +4,12 @@ import {DialogData} from '../../module/exploration/exploration.component';
 
 @Component({
   selector: 'app-pop-up',
-  templateUrl: 'pop-up.component.html',
+  templateUrl: 'pop-up-add-bdd.component.html',
 })
-export class PopUpComponent {
+export class PopUpAddBddComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<PopUpComponent>,
+    public dialogRef: MatDialogRef<PopUpAddBddComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   onNoClick(): void {

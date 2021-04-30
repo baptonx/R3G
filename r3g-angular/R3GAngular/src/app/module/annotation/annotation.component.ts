@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AnnotationService} from './annotation.service';
 
 @Component({
   selector: 'app-annotation',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnnotationComponent implements OnInit {
 
-  constructor() {
+  constructor(public annotationService: AnnotationService) {
   }
 
   ngOnInit(): void {
+  }
+
+  sauvegarder(): void {
+    this.annotationService.sauvegardeAnnotation();
   }
 }

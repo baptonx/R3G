@@ -1,22 +1,29 @@
-<h1 mat-dialog-title>Importer une base de donnée depuis un path absolu</h1>
+<h1 mat-dialog-title>Importer une base de données depuis un path absolu</h1>
 <div mat-dialog-content>
+  <p>Nom de la future base de données Inkml: </p>
+  <mat-form-field>
+    <mat-label>Nom de la base de données :</mat-label>
+    <label>
+      <input matInput [(ngModel)]="data.dataname">
+    </label>
+  </mat-form-field>
   <p>Path du dossier contenant les données : </p>
   <mat-form-field>
-    <mat-label>path :</mat-label>
+    <mat-label>Chemin d'accès :</mat-label>
     <label>
       <input matInput [(ngModel)]="data.dataPathDossier">
     </label>
   </mat-form-field>
   <p>Path du Dossier contenant les labels : </p>
   <mat-form-field>
-    <mat-label>path :</mat-label>
+    <mat-label>Chemin d'accès :</mat-label>
     <label>
       <input matInput [(ngModel)]="data.labelsPathDossier">
     </label>
   </mat-form-field>
-  <p>Path du fichier contenant les correspondance Int ->class :</p>
+  <p>Path du dossier contenant le fichier 'Action.csv' int <-> name :</p>
   <mat-form-field>
-    <mat-label>Path :</mat-label>
+    <mat-label>Chemin d'accès : </mat-label>
     <label>
       <input matInput [(ngModel)]="data.pathClass">
     </label>
@@ -30,7 +37,7 @@
   </mat-form-field>
   <p>Path vers lequel la base de données INKML sera générée : </p>
   <mat-form-field>
-    <mat-label>path :</mat-label>
+    <mat-label>Chemin d'accès :</mat-label>
     <label>
       <input matInput [(ngModel)]="data.inkmlPathDossier">
     </label>
@@ -38,5 +45,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button class="bouton50" (click)="onNoClick()">Annuler</button>
-  <button mat-button class="bouton50" [mat-dialog-close]="data" cdkFocusInitial>Ajouter</button>
+  <button mat-button class="bouton50" [mat-dialog-close]="data" cdkFocusInitial>Générer</button>
 </div>

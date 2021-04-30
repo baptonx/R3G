@@ -120,14 +120,20 @@ export class BddService {
       });
   }
 
-  exporteBddTxt(namedb: string): void{
+  inkmlTotxt(bddname: string, txtPathDossier: string): void {
+    this.answerWait();
+    const str = [];
+    for (let i = 0; i < txtPathDossier.length; i++){
+      str.push(txtPathDossier.charCodeAt(i));
+    }
     this.http
-      .get<object>(`/models/addBDDwithpath/${namedb}` , {})
+      .get<object>(`/models/inkmlToTxt/${bddname}/${str}` , {})
       .subscribe((returnedData: any) => {
         // this.miseajourdb(returnedData);
         this.answerHere();
       });
   }
+
   getlistdb(): void{
     this.http
       .get<Array<string>>(`/models/getListBDD` , {})
@@ -186,6 +192,16 @@ export class BddService {
     this.notifyChangeData();
   }
 
+  sauvegardeAnnot(seq: Sequence | undefined): void{
+    if (seq !== undefined){
+      this.answerWait();
+      this.http
+        .get<object>(`/models/saveAnnot/${seq.bdd}/${seq.id}/${JSON.stringify(seq.listAnnotation)}` , {})
+        .subscribe(() => {
+          this.answerHere();
+        });
+    }
+  }
   ajoutSequencetobdd(nameBdd: string, listseq: Array<SequenceInterface>): void{
     const listSequence = new Array<Sequence>();
     for (const seqInterface of listseq) { // list sequence
@@ -227,7 +243,7 @@ export class BddService {
       });
   }
   getDonnee(listSequence: Array<Sequence>): void{
-    let counter = listSequence.length;
+    let counter = listSequence.length * 2;
     for (const sequence of listSequence){
       this.answerWait();
       this.http
@@ -235,6 +251,19 @@ export class BddService {
         .subscribe((returnedData: any) => {
           if (sequence !== undefined){
             sequence.traceNormal = (returnedData);
+          }
+          counter--;
+          if (counter === 0){
+            this.answerHere();
+          }
+        });
+    }
+    for (const sequence of listSequence){
+      this.http
+        .get<object>(`/models/getDonneeVoxel/${sequence.bdd}/${sequence.id}` , {})
+        .subscribe((returnedData: any) => {
+          if (sequence !== undefined){
+            sequence.traceVoxel = (returnedData);
           }
           counter--;
           if (counter === 0){
@@ -312,4 +341,6 @@ export class BddService {
     }
     return undefined;
   }
+
+
 }

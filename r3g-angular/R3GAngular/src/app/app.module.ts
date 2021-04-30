@@ -42,7 +42,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { TimelineComponent } from './component/timeline/timeline.component';
 import { MatSortModule } from '@angular/material/sort';
 import { DialogEvalComponent } from './component/dialog-eval/dialog-eval.component';
-import { PopUpComponent } from './component/pop-up/pop-up.component';
+import { PopUpAddBddComponent } from './component/pop-up-add-bdd/pop-up-add-bdd.component';
 import { EditeurComponent } from './component/editeur/editeur.component';
 import { FilterComponent } from './component/filter/filter.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -52,8 +52,9 @@ import {SequencesAnnotationComponent} from './component/sequences-annotation/seq
 import {MatChipsModule} from '@angular/material/chips';
 import { TimelineEvaluationComponent } from './component/timeline-evaluation/timeline-evaluation.component';
 import { SingleFilterComponent } from './component/single-filter/single-filter.component';
-import { PopUpAddTxtBddComponent } from './component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
+import { PopUpBddTxtToInkmlComponent } from './component/pop-up-bdd-txt-to-inkml/pop-up-bdd-txt-to-inkml.component';
 import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
+import { PopUpBddInkmlToTxtComponent } from './component/pop-up-bdd-inkml-to-txt/pop-up-bdd-inkml-to-txt.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -81,14 +82,15 @@ const appRoutes: Routes = [
     DialogEvalComponent,
     EditeurComponent,
     FilterComponent,
-    PopUpComponent,
+    PopUpAddBddComponent,
     SequencesAnnotationComponent,
     EngineExplorationComponent,
     TimelineExplorationComponent,
     TimelineEvaluationComponent,
     SingleFilterComponent,
-    PopUpAddTxtBddComponent,
+    PopUpBddTxtToInkmlComponent,
     EngineEvaluationComponent,
+    PopUpBddInkmlToTxtComponent,
   ],
     imports: [
         BrowserModule,

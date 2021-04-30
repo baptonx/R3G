@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopUpBddTxtToInkmlcomponent } from './pop-up-bdd-txt-to-inkmlcomponent';
+import { PopUpBddTxtToInkmlComponent } from './pop-up-bdd-txt-to-inkml.component';
 
 describe('PopUpAddTxtBddComponent', () => {
-  let component: PopUpBddTxtToInkmlcomponent;
-  let fixture: ComponentFixture<PopUpBddTxtToInkmlcomponent>;
+  let component: PopUpBddTxtToInkmlComponent;
+  let fixture: ComponentFixture<PopUpBddTxtToInkmlComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PopUpBddTxtToInkmlcomponent ]
+      declarations: [ PopUpBddTxtToInkmlComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PopUpBddTxtToInkmlcomponent);
+    fixture = TestBed.createComponent(PopUpBddTxtToInkmlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

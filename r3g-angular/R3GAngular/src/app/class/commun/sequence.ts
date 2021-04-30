@@ -8,7 +8,7 @@ export class Sequence {
   metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
-  traceVoxel: Array<Array<number>>;
+  traceVoxel: Array<Array<Array<Array<number>>>>;
   isTrain: boolean;
   isTest: boolean;
   displayedMetadata: Map<string, string>;
@@ -21,7 +21,7 @@ export class Sequence {
     this.pathVideoRGB = pathVideoRGB;
     this.metaDonnees = metadonnee;
     this.traceNormal = new Array<Array<Array<number>>>();
-    this.traceVoxel = new Array<Array<number>>();
+    this.traceVoxel = new Array<Array<Array<Array<number>>>>();
     this.isTrain = true;
     this.isTest = false;
     this.displayedMetadata = new Map<string, string>();

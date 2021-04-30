@@ -1,15 +1,23 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BddService} from '../../service/bdd.service';
-import {PopUpComponent} from '../../component/pop-up/pop-up.component';
+import {PopUpAddBddComponent} from '../../component/pop-up-add-bdd/pop-up-add-bdd.component';
 import {MatDialog} from '@angular/material/dialog';
-import {PopUpAddTxtBddComponent} from '../../component/pop-up-add-txt-bdd/pop-up-add-txt-bdd.component';
+import {PopUpBddTxtToInkmlComponent} from '../../component/pop-up-bdd-txt-to-inkml/pop-up-bdd-txt-to-inkml.component';
 import {ChoixColonnesService} from '../../service/choix-colonnes.service';
+import {PopUpBddInkmlToTxtComponent} from '../../component/pop-up-bdd-inkml-to-txt/pop-up-bdd-inkml-to-txt.component';
 
 export interface DialogData {
   name: string;
 }
+export interface DialogDataInkmlToTxt {
+  txtPathDossier: string;
+}
+export class DialogDataInkmlToTxtClass implements DialogDataInkmlToTxt{
+  txtPathDossier = '';
+}
 
 export interface DialogDataAddPathTxt {
+  dataname: string;
   labelsPathDossier: string;
   dataPathDossier: string;
   inkmlPathDossier: string;
@@ -17,6 +25,7 @@ export interface DialogDataAddPathTxt {
   pathClass: string;
 }
 export class DialogDataAddPathTxtclass implements DialogDataAddPathTxt{
+  dataname = '';
   labelsPathDossier = '';
   dataPathDossier = '';
   inkmlPathDossier = '';
@@ -40,6 +49,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   listing = document.getElementById('listing');
   private pathbdd: string;
   private dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
+  private  dialogDataInkmltoTxt = new DialogDataInkmlToTxtClass();
 
   constructor(public bdd: BddService, public dialog: MatDialog, public choixColonnesService: ChoixColonnesService) {
     this.pathbdd = '';
@@ -52,7 +62,7 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
 
   openDialogINKML(): void {
     this.pathbdd = '';
-    const dialogRef = this.dialog.open(PopUpComponent, {
+    const dialogRef = this.dialog.open(PopUpAddBddComponent, {
       width: '250px',
       data: {name: this.pathbdd}
     });
@@ -66,11 +76,12 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   }
   openDialogTXTtoINKML(): void {
     this.dialogDataAddPathTxt = new DialogDataAddPathTxtclass();
-    const dialogRef = this.dialog.open(PopUpAddTxtBddComponent, {
+    const dialogRef = this.dialog.open(PopUpBddTxtToInkmlComponent, {
       width: '800px',
       data: {labelsPathDossier: this.dialogDataAddPathTxt.labelsPathDossier,
         dataPathDossier: this.dialogDataAddPathTxt.dataPathDossier,
         inkmlPathDossier: this.dialogDataAddPathTxt.inkmlPathDossier,
+        dataname: this.dialogDataAddPathTxt.dataname,
         fps: this.dialogDataAddPathTxt.fps,
         pathClass: this.dialogDataAddPathTxt.pathClass
       }
@@ -81,7 +92,23 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
       if (result !== undefined) {
         const data = result as DialogDataAddPathTxt;
         this.bdd.txtToInkml(data.labelsPathDossier, data.dataPathDossier,
-          data.inkmlPathDossier, data.fps, data.pathClass);
+          data.inkmlPathDossier + '/' + data.dataname, data.fps, data.pathClass);
+      }
+    });
+  }
+  openDialogINKMLtoTXT(bddname: string): void {
+    this.dialogDataInkmltoTxt = new DialogDataInkmlToTxtClass();
+    const dialogRef = this.dialog.open(PopUpBddInkmlToTxtComponent, {
+      width: '800px',
+      data: {txtPathDossier: this.dialogDataInkmltoTxt.txtPathDossier
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.dialogDataInkmltoTxt = result;
+      if (result !== undefined) {
+        const data = result as DialogDataInkmlToTxt;
+        this.exporterBddTxt(bddname, data.txtPathDossier);
       }
     });
   }
@@ -91,8 +118,8 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
   closeDB(namedb: string): void{
     this.bdd.closedb(namedb);
   }
-  exporterBddTxt(namedb: string): void{
-    this.bdd.exporteBddTxt(namedb);
+  exporterBddTxt(namedb: string, pathtxt: string): void{
+    this.bdd.inkmlTotxt(namedb, pathtxt);
   }
   ngOnInit(): void {
     if (this.bdd.mapSequences.size === 0) {
@@ -100,21 +127,6 @@ export class ExplorationComponent implements OnInit, AfterViewInit {
       this.bdd.getlistdb();
     }
   }
-  /*
-  importBase(): void{
-
-    // @ts-ignore
-    picker.addEventListener('change', e => {
-      // @ts-ignore
-      for (const file of Array.from(e.target.files)) {
-        const item = document.createElement('li');
-        // @ts-ignore
-        item.textContent = file.webkitRelativePath;
-        // @ts-ignore
-        listing.appendChild(item);
-      }
-    });
-  }*/
 
   ngAfterViewInit(): void {
   }
