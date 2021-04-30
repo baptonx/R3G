@@ -36,6 +36,19 @@ export class SqueletteAnimation {
     this.root.add(articulation);
   }
 
+  addArticulationBlackAndWhite(color: string): void{
+    const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+    const material = new THREE.MeshPhongMaterial({
+      color,
+      opacity: 0.2,
+      transparent: true,
+    });
+    const articulation = new THREE.Mesh(geometry, material);
+    articulation.receiveShadow = true;
+    articulation.castShadow = true;
+    this.root.add(articulation);
+  }
+
 
 addArticulationPoids(list: Array<number>): void {
     const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );

@@ -3,6 +3,7 @@ import {EngineExplorationService} from '../engine-exploration/engine-exploration
 import {EngineEvaluationService} from './engine-evaluation.service';
 import {HttpClient} from '@angular/common/http';
 import {Poids} from '../../class/evaluation/poids';
+import {Model} from '../../class/evaluation/model';
 
 @Component({
   selector: 'app-engine-evaluation',
@@ -27,10 +28,49 @@ export class EngineEvaluationComponent implements OnInit {
     this.listElementHTML.push(this.box);
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML, false);
     this.engServ.animate();
+    this.http.get<Array<Model>>('/models/getModelsNames', {}).
+    subscribe((returnedData: Array<Model>) => this.engServ.modelesList = returnedData);
   }
 
-  changeFilter(value: any): void{
+  changeFilter(value: any): void {
     this.engServ.filtreSelected = value;
+  }
+  changeSeq(value: any): void{
+    this.engServ.sequences.forEach(seq => {
+      if (seq.id === value){
+        this.engServ.sequenceCurrent = seq;
+        this.engServ.refreshInitialize();
+      }
+    });
+  }
+  view(): void{
+    if (this.engServ.modelSelected !== undefined && this.engServ.layerSelected !== undefined
+    && this.engServ.filtreSelected !== undefined){
+      this.engServ.initPoids(undefined, undefined, true);
+    }
+  }
+
+  getPoids(): void {
+    if (this.engServ.modelSelected !== undefined) {
+      this.engServ.layerSelected = '';
+      this.engServ.filtreSelected = '';
+      this.engServ.initPoids(undefined, undefined, true);
+      this.http.get<Array<Poids>>('/models/getPoids/' + this.engServ.modelSelected).subscribe(
+        (returnedData: Array<Poids>) => {
+          this.engServ.poids = returnedData;
+          console.log(returnedData);
+          this.engServ.poids.forEach(elem => {
+            this.engServ.layerList.add(elem.name);
+          });
+        },
+        () => {
+
+        });
+    }
+  }
+
+  changeModel(value: any): void{
+    this.engServ.modelSelected = value;
   }
 
   changeValue(value: any): void{
@@ -44,12 +84,5 @@ export class EngineEvaluationComponent implements OnInit {
       }
     });
 
-  }
-
-
-  getPoids(): void {
-    if (this.engServ.model !== undefined && this.engServ.filtreSelected !== undefined && this.engServ.layerSelected !== undefined){
-      this.engServ.initialize(undefined, undefined, true);
-    }
   }
 }

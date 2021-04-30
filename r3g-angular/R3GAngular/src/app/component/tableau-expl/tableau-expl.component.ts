@@ -186,8 +186,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
       return this.explService.selectionListe2;
     }
   }
-
-
   openDialogFilter(): void {
     const dialogRef = this.dialog.open(FilterComponent, {
       data: {}

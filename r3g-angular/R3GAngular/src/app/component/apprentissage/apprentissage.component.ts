@@ -43,30 +43,6 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-  getPoids(): void {
-    this.modelesList.forEach(elt => {
-        if (elt.idM === this.modelSelected) {
-          this.engineEval.model = elt.idM;
-        }
-      }
-    );
-    this.engineEval.layerSelected = '';
-    this.engineEval.filtreSelected = '';
-    this.engineEval.initialize(undefined, undefined, true);
-    this.http.get<Array<Poids>>('/models/getPoids/' + this.engineEval.model).subscribe(
-      (returnedData: Array<Poids>) => {
-        this.engineEval.poids = returnedData;
-        console.log(returnedData);
-        this.engineEval.poids.forEach(elem => {
-          this.engineEval.layerList.add(elem.name);
-        });
-      },
-      () => {
-
-      });
-  }
-
   openEval(): void {
     this.dialog.open(DialogEvalComponent, {
       data: {

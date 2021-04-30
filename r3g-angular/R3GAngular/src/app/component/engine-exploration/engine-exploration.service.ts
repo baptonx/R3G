@@ -147,7 +147,6 @@ export class EngineExplorationService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.explorationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;

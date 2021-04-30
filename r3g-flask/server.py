@@ -263,70 +263,9 @@ def start_learning(name):
             return json.dumps({'success': False}), 500, {'ContentType': 'application/json'}
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-#############Evaluation route :##############
-@APP.route('/models/getDonneeVoxel/<bdd>/<namefichier>')
-def route_get_donnee_voxel(bdd, namefichier):
-    """Permet de télécharger donnée a partir du nom de fichier """
-    print(bdd)
-    print(namefichier)
-    if bdd in LISTE_PATH_BDD:
-        if namefichier in LISTE_FICHIER_INKML[bdd]:
-            filepath = (LISTE_PATH_BDD[bdd]+ '/' + 'Voxelized/' +
-                        namefichier.split('/')[len(namefichier.split('/'))-1][:-5] + 'txt')
-            print(filepath)
-            with open(filepath, 'r') as file:
-                lines = file.readlines()
-                dim = list(map(int, lines[0].split(',')))
-                print(dim)
-                boxes = []
-                for xit in range(1, len(lines), dim[1]*dim[0]):
-                    list3d = []
-                    for yit in range(0, dim[1]*dim[0], dim[1]):
-                        list2d = []
-                        for zit in range(0, dim[1], 1):
-                            list2d.append(list(map(int, lines[xit+yit+zit].split(','))))
-                        list3d.append(list2d)
-                    boxes.append(list3d)
-                file.close()
-            return json.dumps(boxes)
-    return json.dumps('Failed')
 
-#############Annotation route :##############
-@APP.route('/models/saveAnnot/<bdd>/<namefichier>/<annotationsstr>')
-def route_save_annot(bdd, namefichier,annotationsstr):
-    """Permet de sauvegarder les annotations de cette sequence"""
-    annotations = json.loads(annotationsstr)
-    print(annotations[0])
-    if bdd in LISTE_PATH_BDD:
-        if namefichier in LISTE_FICHIER_INKML[bdd]:
-            filepath = LISTE_PATH_BDD[bdd]+ '/Inkml/' + namefichier
-            ET.register_namespace('', "http://www.w3.org/2003/InkML")
-            tree = ET.parse(filepath)
-            root = tree.getroot()
-            for child in root:
-                if child.tag == "{http://www.w3.org/2003/InkML}unit":
-                    for children2 in child:
-                        if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-                            if children2.attrib == {'type': 'actions'}:
-                                child.remove(children2)
-            for child in root:
-                if child.tag == "{http://www.w3.org/2003/InkML}unit":
-                    for annot in annotations:
-                        print("hello")
-                        annotation_xml = SubElement(child, 'annotationXML')
-                        annotation_xml.set('type', 'actions')
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'type')
-                        annotation.text = annot['classeGeste']
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'start')
-                        annotation.text = annot['t1']
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'end')
-                        annotation.text = annot['t2']
-                    tree.write(filepath, encoding="UTF-8", xml_declaration=True)
-            return json.dumps('saved')
-    return None
+
+
 #############Exploration methode##############
 
 def get_last_config():
@@ -487,7 +426,6 @@ def add_listgeste_metadonnee_one_and_name(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
     return [name, LISTE_GESTE_BDD[name], METADONNEE[name]]
-
 #############Exploration route :##############
 
 @APP.route('/models/getMetaDonnee')
@@ -564,7 +502,7 @@ def route_add_bdd_path(path):
                 else:
                     del LISTE_GESTE_BDD[namebdd]
                     del LISTE_PATH_BDD[namebdd]
-    return json.dumps(add_listgeste_metadonne())
+    return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
 
 
 @APP.route('/models/closeBDD/<name>')
@@ -612,11 +550,15 @@ def route_add_bdd_path_txt(labels_path_dossier, data_path_dossier,
     for char in inkml_path_dossier.split(','):
         inkml_path_dossier_tr += chr(int(char))
     fps_tr = int(fps)
-    path_class_tr = os.path.join(path_class_tr, 'Actions.csv')
+    print(path_class_tr)
+    print(data_path_dossier_tr)
+    print(labels_path_dossier_tr)
+    print(inkml_path_dossier_tr)
+    print(fps)
     tab_class = read_class(path_class_tr)
     liste_data = rechercher_fichier_data(data_path_dossier_tr)
     liste_label = rechercher_fichier_label(labels_path_dossier_tr)
-    copy_file_tabclass_to_inkml(inkml_path_dossier_tr, path_class_tr)
+    copy_file_tabclass(inkml_path_dossier_tr, path_class_tr)
     generate_database(liste_data, liste_label, tab_class, inkml_path_dossier_tr, fps_tr)
     return json.dumps("worked")
 #############fonction BDD TXT vers INKML##############
@@ -691,7 +633,7 @@ def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
     inkml_tree = generate_template()
     add_labels(inkml_tree, label, tableau_classe)
     add_data(inkml_tree, data, fps)
-    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
+#    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True) # utile seulement si inkml pas indenté
     with open(inkml_file, "r") as file:
         parser = parseString(file.read())
         file.close()
@@ -721,29 +663,38 @@ def rechercher_fichier_label(path_dossier_label):
 
 def generate_database(liste_data, liste_label, tableau_classe, inkml_path_dossier, fps):
     """construit l'ensemble de la base de donnée inkml"""
-    os.makedirs(os.path.join(inkml_path_dossier, 'Inkml'), exist_ok=True)
     for file_data in liste_data:
         generatefile_inkml(liste_data[file_data], liste_label[file_data], tableau_classe,
-                           inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
-def copy_file_tabclass_to_inkml(inkml_path_dossier, path_class):
+                           inkml_path_dossier + "/" + file_data[:-3] + "inkml", fps)
+def copy_file_tabclass(inkml_path_dossier, path_class):
     """copier et renommer le fichier tabclass"""
-    shutil.copy(path_class, os.path.join(inkml_path_dossier, 'Actions.csv'))
+    path_dossier_class = os.path.join(inkml_path_dossier, 'DataClasses')
+    os.makedirs(path_dossier_class)
+    shutil.move(path_class, path_dossier_class+'/Actions.csv')
 
 #############Route CREER Base de Donnée txt depuis inkml :##############
-@APP.route('/models/inkmlToTxt/<bddname>'+
-           '/<txt_path_dossier>')
-def route_inkml_to_txt(bddname, txt_path_dossier):
+@APP.route('/models/inkmlToTxt/<inkml_path_dossier>'+
+           '/<txt_path_dossier>/<path_class>')
+def route_inkml_to_txt(inkml_path_dossier, txt_path_dossier, path_class):
     """add new path ddb and translate it to inkml"""
-    inkml_path_dossier_tr = LISTE_PATH_BDD[bddname]
+    inkml_path_dossier_tr = ""
+    for char in inkml_path_dossier.split(','):
+        inkml_path_dossier_tr += chr(int(char))
     txt_path_dossier_tr = ""
     for char in txt_path_dossier.split(','):
         txt_path_dossier_tr += chr(int(char))
-    path_class_tr = os.path.join(inkml_path_dossier_tr, "Actions.csv")
+    path_class_tr = ""
+    for char in path_class.split(','):
+        path_class_tr += chr(int(char))
+    print(inkml_path_dossier_tr)
+    print(txt_path_dossier_tr)
+    print(path_class_tr)
+
+    tab_class = read_class(path_class_tr)
     liste_inkml = rechercher_fichier_inkml(inkml_path_dossier_tr)
-    print(liste_inkml)
-    write_labels(liste_inkml, txt_path_dossier_tr, path_class_tr)
+    write_labels(liste_inkml, txt_path_dossier_tr, tab_class)
     write_data(liste_inkml, txt_path_dossier_tr)
-    copy_file_tabclass_to_txt(inkml_path_dossier_tr, path_class_tr)
+    copy_file_tabclass(inkml_path_dossier_tr, path_class_tr)
     return json.dumps("worked")
 
 #############Fonctions CREER Base de Donnée txt depuis inkml :##############
@@ -781,11 +732,10 @@ def write_labels(liste_inkml, path_txt, path_class):
                         annotations[nb_annotation] = action
             elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
                 break
-        filename = os.path.join(path_txt, "Label",
-                                os.path.splitext(os.path.basename(file))[0] + "_label.txt")
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "w") as flabel:
-            if len(annotations) > 0:
+        if len(annotations) > 0:
+            filename = path_txt + os.path.splitext(os.path.basename(file))[0] + "_label.txt"
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            with open(filename, "w") as flabel:
                 for id_elem in annotations:
                     line = ""
                     line += dictclass[annotations[id_elem]["type"]]
@@ -794,7 +744,6 @@ def write_labels(liste_inkml, path_txt, path_class):
                     line += ","
                     line += annotations[id_elem]["end"]
                     flabel.write(line + "\n")
-            flabel.close()
 
 def write_data(liste_inkml, path_txt):
     """ajout des donnees au fichier datatxt"""
@@ -803,12 +752,6 @@ def write_data(liste_inkml, path_txt):
         nb_articulations = 0
         donnees = {}
         string = ""
-        with open(file, "r") as fileopen:
-            parser = parseString(fileopen.read())
-            fileopen.close()
-        with open(file, "w") as fileopen:
-            fileopen.write(parser.toprettyxml())
-            fileopen.close()
         for child in ET.parse(file).getroot():
             if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
                 for children in child:
@@ -820,24 +763,17 @@ def write_data(liste_inkml, path_txt):
                             dict_final.append(tab_2)
                         donnees[nb_articulations] = dict_final
                         nb_articulations += 1
-        filename = os.path.join(path_txt, "Data",
-                                os.path.splitext(os.path.basename(file))[0] + "_data.txt")
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "w") as fdata:
-            for id_elem in range(len(donnees[0])):
-                string = ""
+        for id_elem in range(len(donnees[0])):
+            string = ""
+            filename = path_txt + os.path.splitext(os.path.basename(file))[0] + "_data.txt"
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            with open(filename, "w") as fdata:
                 for articulation in donnees:
                     ## -1 sur len car on ne veut pas lire le timestamp
                     for point in range(len(donnees[articulation][id_elem]) - 1):
                         string += donnees[articulation][id_elem][point] + " "
+                        print(donnees[articulation][id_elem][point])
                 fdata.write(string + "\n")
-            fdata.close()
-
-def copy_file_tabclass_to_txt(inkml_path_dossier, txt_path_dossier):
-    """copier le fichier Actions.csv vers txt"""
-    path_tabclass_class = os.path.join(inkml_path_dossier, 'Actions.csv')
-    print(path_tabclass_class)
-    shutil.copy(path_tabclass_class, txt_path_dossier)
 ########### MAIN ########################
 
 if __name__ == "__main__":
