@@ -36,7 +36,7 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
         self.dropoutVal = dropoutVal
         self.boxSize = boxSize
         self.doGLU = doGLU
-        self.nbClass = nbClass
+        self.nbClass = nbClass+1 # +1 for the background
 
         if dilatationsRates is None:
             self.dilatationsRates = [1, 2, 4, 8, 16,1,2,4,8,16]
@@ -54,8 +54,8 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
             self.layersDense.append(denseLayer)
         self.dropout1Classif = tf.keras.layers.Dropout(self.denseDropout)
 
-        self.classi = tf.keras.layers.Dense(nbClass, activation="softmax", name="classification")
-        self.auxiliaire = tf.keras.layers.Dense(nbClass, activation="softmax", name="classification_aux")
+        self.classi = tf.keras.layers.Dense(self.nbClass, activation="softmax", name="classification")
+        self.auxiliaire = tf.keras.layers.Dense(self.nbClass, activation="softmax", name="classification_aux")
         self.selectionHead_1 = tf.keras.layers.Dense(self.DENSE_NEURONS, activation="relu", name="select1")
         self.selectionHead_final = tf.keras.layers.Dense(1, activation="sigmoid", name="selectFinal")
 
@@ -101,8 +101,6 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
             if self.dropoutVal > 0:
                 dropOut = tf.keras.layers.Dropout(self.dropoutVal)
                 self.dropout.append(dropOut)
-
-
 
     def call(self, x, training=True, **kwargs):
         # x shape : [Batch,#segments,Xdim,Ydim,17]
@@ -196,11 +194,10 @@ class ModelEarlyOC3D_3D(tf.keras.Model):
         # auxilaire head
         resAuxiliaire = self.auxiliaire(resClassif)  # [batch, sequence, nbClasse]
 
-        resConcat = self.concat([resSelection,resClassifPred])
+        resConcat = self.concat([resSelection,resClassifPred])#reject(1) + nbClass+1(background)
         # tf.print("after resConcat shape of x ", tf.shape(resConcat))
 
-        resConcatAux = self.concat([resSelection,resAuxiliaire])
 
         # resConcatWithoutPad = tf.boolean_mask(resConcat, theMask)  # [batch*nbSequence -masked ,nbclasse]
         # resAuxiliaireWithoutPad = tf.boolean_mask(resAuxiliaire, theMask)  # [batch*nbSequence -masked ,nbclasse]
-        return resConcat, resConcatAux
+        return resConcat, resAuxiliaire

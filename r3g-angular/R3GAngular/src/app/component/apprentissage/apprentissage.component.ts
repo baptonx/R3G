@@ -85,7 +85,10 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Array<Model>>('/models/getModelsNames', {}).subscribe((returnedData: Array<Model>) => this.modelesList = returnedData);
+    this.http.get<Array<Model>>('/models/getModelsNames', {}).subscribe((returnedData: Array<Model>) => {
+      this.modelesList = returnedData;
+      this.engineEval.modelesList = returnedData;
+    });
     console.log(this.modelesList);
   }
 

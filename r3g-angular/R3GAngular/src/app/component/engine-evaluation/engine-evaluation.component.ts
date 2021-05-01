@@ -28,8 +28,6 @@ export class EngineEvaluationComponent implements OnInit {
     this.listElementHTML.push(this.box);
     this.engServ.initialize(this.rendererCanvas, this.listElementHTML, false);
     this.engServ.animate();
-    this.http.get<Array<Model>>('/models/getModelsNames', {}).
-    subscribe((returnedData: Array<Model>) => this.engServ.modelesList = returnedData);
   }
 
   changeFilter(value: any): void {

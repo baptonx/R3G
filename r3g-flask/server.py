@@ -105,6 +105,7 @@ def start_wandb_v2():
         model = Model(run.id, run.name, param[run.id])
         MODEL_LIST.append(model.__dict__)
 
+
 def get_class_geste(name):
     """ on recup le contenu de tab_class.txt """
     if os.path.exists('./'+name+'/Actions.csv'):
@@ -129,12 +130,22 @@ def load_config(path_model) -> dict:
         finfo.close()
     return infos
 
+@APP.route('/models/getGesteZero/<name_bdd>')
+def get_geste_zero(name_bdd):
+    if os.path.exists('./'+name_bdd+'/Actions.csv'):
+        with open('./'+name_bdd+'/Actions.csv') as file_content:
+            for line in file_content:
+                if (line.split(';')[0] == '0'):
+                    return json.dumps(line.split(';')[1].replace('\n', ''))
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'} 
+
 @APP.route('/models/getPoids/<id_model>')
 def get_poids(id_model):
     # pylint: disable=E1101
     """ a utiliser avec tensorflow pour recup les poids du model """
     cmap = cm.jet
     path_model = "Weigths/"+id_model+'/weights/'
+    download_weights(id_model)
     config = load_config(path_model)
     model = ModelEarlyOC3D_3D(nbClass=config["nbClass"], boxSize=config["boxSize"],
                           doGLU=config["doGlu"], dropoutVal=config["dropoutVal"],
@@ -445,6 +456,71 @@ def route_get_sequence(bdd, namefichier):
         if namefichier in LISTE_FICHIER_INKML[bdd]:
             return json.dumps(get_donnee(namefichier, bdd))
     return None
+
+@APP.route('/models/getDonneeVoxel/<bdd>/<namefichier>')
+def route_get_donnee_voxel(bdd, namefichier):
+    """Permet de télécharger donnée a partir du nom de fichier """
+    print(bdd)
+    print(namefichier)
+    if bdd in LISTE_PATH_BDD:
+        if namefichier in LISTE_FICHIER_INKML[bdd]:
+            filepath = (LISTE_PATH_BDD[bdd]+ '/' + 'Voxelized/' +
+                        namefichier.split('/')[len(namefichier.split('/'))-1][:-5] + 'txt')
+            print(filepath)
+            with open(filepath, 'r') as file:
+                lines = file.readlines()
+                dim = list(map(int, lines[0].split(',')))
+                print(dim)
+                boxes = []
+                for xit in range(1, len(lines), dim[1]*dim[0]):
+                    list3d = []
+                    for yit in range(0, dim[1]*dim[0], dim[1]):
+                        list2d = []
+                        for zit in range(0, dim[1], 1):
+                            list2d.append(list(map(int, lines[xit+yit+zit].split(','))))
+                        list3d.append(list2d)
+                    boxes.append(list3d)
+                file.close()
+            return json.dumps(boxes)
+    return json.dumps('Failed')
+
+#############Annotation route :##############
+@APP.route('/models/saveAnnot/<bdd>/<namefichier>/<annotationsstr>')
+def route_save_annot(bdd, namefichier,annotationsstr):
+    """Permet de sauvegarder les annotations de cette sequence"""
+    annotations = json.loads(annotationsstr)
+    print(annotations[0])
+    if bdd in LISTE_PATH_BDD:
+        if namefichier in LISTE_FICHIER_INKML[bdd]:
+            filepath = LISTE_PATH_BDD[bdd]+ '/Inkml/' + namefichier
+            ET.register_namespace('', "http://www.w3.org/2003/InkML")
+            tree = ET.parse(filepath)
+            root = tree.getroot()
+            for child in root:
+                if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                    for children2 in child:
+                        if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+                            if children2.attrib == {'type': 'actions'}:
+                                child.remove(children2)
+            for child in root:
+                if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                    for annot in annotations:
+                        print("hello")
+                        annotation_xml = SubElement(child, 'annotationXML')
+                        annotation_xml.set('type', 'actions')
+                        annotation = SubElement(annotation_xml, 'annotation')
+                        annotation.set('type', 'type')
+                        annotation.text = annot['classeGeste']
+                        annotation = SubElement(annotation_xml, 'annotation')
+                        annotation.set('type', 'start')
+                        annotation.text = annot['t1']
+                        annotation = SubElement(annotation_xml, 'annotation')
+                        annotation.set('type', 'end')
+                        annotation.text = annot['t2']
+                    tree.write(filepath, encoding="UTF-8", xml_declaration=True)
+            return json.dumps('saved')
+    return None
+
 
 @APP.route('/models/addBDD')
 def route_add_bdd():
