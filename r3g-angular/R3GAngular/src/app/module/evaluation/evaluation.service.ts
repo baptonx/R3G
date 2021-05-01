@@ -257,6 +257,7 @@ export class EvaluationService {
 
   public get_verite(): void {
     if (this.sequenceCurrent !== undefined) {
+      this.veriteTerrain = [];
       this.sequenceCurrent.listAnnotation.forEach(an => {
         const name = an.classeGeste;
         const frame1 = an.f1;

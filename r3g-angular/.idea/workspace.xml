@@ -67,11 +67,11 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_interpreter_path" value="wsl://Ubuntu-18.04@/usr/bin/node" />
+    <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.tslint" />
-    <property name="ts.external.directory.path" value="D:\4A\r3g\r3g-angular\R3GAngular\node_modules\typescript\lib" />
+    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -83,7 +83,7 @@
     <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/R3GAngular/package.json" />
       <command value="start" />
-      <node-interpreter value="project" />
+      <node-interpreter value="wsl://Ubuntu-18.04@/usr/bin/node" />
       <envs />
       <method v="2" />
     </configuration>
@@ -117,8 +117,7 @@
       <workItem from="1619676565354" duration="21836000" />
       <workItem from="1619712463558" duration="6108000" />
       <workItem from="1619764879294" duration="22619000" />
-      <workItem from="1619798136871" duration="4424000" />
-      <workItem from="1619852745828" duration="15827000" />
+      <workItem from="1619873798189" duration="785000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
