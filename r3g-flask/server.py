@@ -14,6 +14,7 @@ import tkinter.filedialog
 import shutil
 
 from os import walk
+from xml.dom import minidom
 import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import SubElement
@@ -32,8 +33,8 @@ from Model.ModelEarlyOC3D_3D import ModelEarlyOC3D_3D
 
 
 APP = Flask(__name__)
-API = wandb.Api()
-RUNS = API.runs("precoce3d-OC3D")
+#API = wandb.Api()
+#RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
 CLASSES = []
 EVALUATION = []
@@ -296,6 +297,7 @@ def route_save_annot(bdd, namefichier,annotationsstr):
     """Permet de sauvegarder les annotations de cette sequence"""
     annotations = json.loads(annotationsstr)
     print(annotations[0])
+    listsuprimer = []
     if bdd in LISTE_PATH_BDD:
         if namefichier in LISTE_FICHIER_INKML[bdd]:
             filepath = LISTE_PATH_BDD[bdd]+ '/Inkml/' + namefichier
@@ -305,9 +307,15 @@ def route_save_annot(bdd, namefichier,annotationsstr):
             for child in root:
                 if child.tag == "{http://www.w3.org/2003/InkML}unit":
                     for children2 in child:
+                        print(children2)
                         if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
                             if children2.attrib == {'type': 'actions'}:
-                                child.remove(children2)
+                                listsuprimer.append(children2)
+            print(listsuprimer)
+            for child in root:
+                if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                    for elem in listsuprimer:
+                        child.remove(elem)
             for child in root:
                 if child.tag == "{http://www.w3.org/2003/InkML}unit":
                     for annot in annotations:
@@ -319,14 +327,31 @@ def route_save_annot(bdd, namefichier,annotationsstr):
                         annotation.text = annot['classeGeste']
                         annotation = SubElement(annotation_xml, 'annotation')
                         annotation.set('type', 'start')
-                        annotation.text = annot['t1']
+                        annotation.text = str(annot['f1'])
                         annotation = SubElement(annotation_xml, 'annotation')
                         annotation.set('type', 'end')
-                        annotation.text = annot['t2']
-                    tree.write(filepath, encoding="UTF-8", xml_declaration=True)
+                        annotation.text = str(annot['f2'])
+                        if(annot['pointAction'] != 0):
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'pointAction')
+                            annotation.text = str(annot['pointAction'])
+            _pretty_print(root)
+            tree = ET.ElementTree(root)
+            tree.write(filepath, encoding="UTF-8", xml_declaration=True)
+            tree = ET.ElementTree(root)
             return json.dumps('saved')
     return None
 
+def _pretty_print(current, parent=None, index=-1, depth=0):
+    for i, node in enumerate(current):
+        _pretty_print(node, current, i, depth + 1)
+    if parent is not None:
+        if index == 0:
+            parent.text = '\n' + ('\t' * depth)
+        else:
+            parent[index - 1].tail = '\n' + ('\t' * depth)
+        if index == len(parent) - 1:
+            current.tail = '\n' + ('\t' * (depth - 1))
 #############Exploration methode##############
 
 def get_last_config():
@@ -839,8 +864,7 @@ def copy_file_tabclass_to_txt(inkml_path_dossier, txt_path_dossier):
 if __name__ == "__main__":
     get_last_config()
     delete_eval()
-    download_hyperparameters()
-    start_wandb_v2()
+#    start_wandb_v2()
     APP.run(host='0.0.0.0')
     save_config()
 
