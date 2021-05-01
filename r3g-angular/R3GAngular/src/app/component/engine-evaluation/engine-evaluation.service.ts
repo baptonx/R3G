@@ -84,73 +84,73 @@ export class EngineEvaluationService implements OnDestroy {
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
-
-    console.log(this.sequenceCurrent);
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
-        const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
+        const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
         const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
-        this.squelette.addArticulation();
-        this.squelette.addArticulation();
-       /*  for (let x = 0; x < 16; x++) {
-          for (let y = 0; y < 16; y++) {
-            for (let z = 0; z < 16; z++) {
-              const tabPosXYZ: Array<number> = [];
-              if (z === 3 && y === 2) {
-                this.squelette.addArticulationBlackAndWhite('black');
-              } else {
-                this.squelette.addArticulationBlackAndWhite('white');
-              }
-              tabPosXYZ.push(x);
-              tabPosXYZ.push(y);
-              tabPosXYZ.push(z);
-              const id = x + y * 16 + z * 16 * 16;
-              const positionArticulation1 = new VectorKeyframeTrack(
-                '.children[' + id + '].position',
-                [0],
-                tabPosXYZ,
-              );
-              tabPositionArticulation.push(positionArticulation1);
-            }
-          }
-        } */
-        const positionArticulation1 = new VectorKeyframeTrack(
-          '.children[0].position',
-          [0, 4, 6],
-          [-2, 1, 0, -2, 2, 0, -2, 1, 0],
-        );
-        const positionArticulation2 = new VectorKeyframeTrack(
-          '.children[1].position',
-          [0, 4, 6],
-          [2, 1, 0, 2, 2, 0, 2, 1, 0],
-        );
-        this.clip = new AnimationClip('move', -1, [
-          positionArticulation1,
-          positionArticulation2
-        ]);
-        scene.add(this.squelette.root);
-        const mixer = new AnimationMixer(this.squelette.root);
-        this.action = mixer.clipAction(this.clip);
-        this.action.loop = THREE.LoopOnce;
-        this.action.clampWhenFinished = true;
-        // this.action.time = 4;
-        this.tempsTotal = 6;
-        // this.clip.duration = this.action.time;
-        // this.stopToStart();
+        this.squelette = new SqueletteAnimation();
+        this.squelette.initialize();
+        console.log(this.sequenceCurrent);
+        if (this.sequenceCurrent !== undefined) {
+          let elem = this.sequenceCurrent.traceVoxel;
+          elem = [[[[0],[1],[0]]], [[[1],[0],[1]]]];
+          this.squelette.initialize();
+          let id = 0;
+          // tslint:disable-next-line:no-shadowed-variable
+                for (let x = 0; x < elem[0].length; x++) {
+                  for (let y = 0; y < elem[0][x].length; y++) {
+                    for (let z = 0; z < elem[0][x][y].length; z++) {
+                      const tabPosXYZ: Array<number> = [];
+                      const tabTemps: Array<number> = [];
+                      if (elem[0][x][y][z] === 1){
+                        this.squelette.addArticulationBlackAndWhite('black');
+                        console.log('here');
+                      }
+                      else {
+                        this.squelette.addArticulationBlackAndWhite('white');
+                      }
+                      for (let t = 0; t < elem.length; t ++) {
+                        tabPosXYZ.push(x);
+                        tabPosXYZ.push(y);
+                        tabPosXYZ.push(z);
+                        tabTemps.push(t);
+                      }
+                      const positionArticulation1 = new VectorKeyframeTrack(
+                        '.children[' + id + '].position',
+                        tabTemps,
+                        tabPosXYZ,
+                      );
+                      id++;
+                      tabPositionArticulation.push(positionArticulation1);
+                    }
+                  }
+                }
+              console.log(tabPositionArticulation);
+          this.clip = new AnimationClip('move', -1, tabPositionArticulation);
+        } else {
+          this.clip = new AnimationClip('move', -1, []);
+        }
+          scene.add(this.squelette.root);
+          const mixer = new AnimationMixer(this.squelette.root);
+          this.action = mixer.clipAction(this.clip);
+          this.action.loop = THREE.LoopOnce;
+          this.action.clampWhenFinished = true;
+          // this.action.time = 4;
+          this.tempsTotal = 6;
+          // this.clip.duration = this.action.time;
+          // this.stopToStart();
+          const clock = new Clock();
+          return (rect: DOMRect) => {
+            this.evalService.draw();
+            const delta = clock.getDelta();
+            mixer.update(delta);
+            camera.aspect = rect.width / rect.height;
+            camera.updateProjectionMatrix();
+            controls.handleResize();
+            controls.update();
+            this.renderer.render(scene, camera);
+          };
 
-        const clock = new Clock();
-        return (rect: DOMRect) => {
-          this.evalService.draw();
-          const delta = clock.getDelta();
-          mixer.update(delta);
-          camera.aspect = rect.width / rect.height;
-          camera.updateProjectionMatrix();
-          controls.handleResize();
-          controls.update();
-          this.renderer.render(scene, camera);
-        };
       }/*,
       ['pyramid']: () => {
         let {scene, camera, mesh} = this.makeScene('black');
@@ -171,6 +171,7 @@ export class EngineEvaluationService implements OnDestroy {
           this.renderer.render(scene, camera);
         };
       },*/
+
     };
 
     if (refresh === false && listElementHtml !== undefined) {
@@ -204,6 +205,7 @@ export class EngineEvaluationService implements OnDestroy {
         this.addScene(element, sceneRenderFunction);
       }
     }
+
   }
 
   public initPoids(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
@@ -224,7 +226,7 @@ export class EngineEvaluationService implements OnDestroy {
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
-        const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
+        const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 0);
         const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
         this.squelette.initialize();
         // tslint:disable-next-line:no-shadowed-variable
@@ -367,7 +369,7 @@ export class EngineEvaluationService implements OnDestroy {
     this.sceneElements.push({elem, fn});
   }
 
-  public makeScene(bg: string, elem: HTMLCanvasElement): MaScene {
+  public makeScene(bg: string, elem: HTMLCanvasElement, x: number): MaScene {
     const scene = new THREE.Scene();
     if (bg !== null) {
       scene.background = new THREE.Color(bg);
@@ -380,8 +382,14 @@ export class EngineEvaluationService implements OnDestroy {
     const near = 1;
     const far = 100;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 1, -8);
-    camera.lookAt(0, 0, 0);
+    if (x === 0) {
+      camera.position.set(0, 1, -8);
+      camera.lookAt(0, 0, 0);
+    }
+    else if (x === 1) {
+      camera.position.set(8, 8, -30);
+      camera.rotateZ(90);
+    }
 
     scene.add(camera);
 

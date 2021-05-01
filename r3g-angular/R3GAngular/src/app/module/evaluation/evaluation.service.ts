@@ -26,6 +26,7 @@ export class EvaluationService {
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public annotationIA: Array<Eval> = [];
+  public classZero = '';
   public modelEval1: Set<string> = new Set<string>();
   public modelEval2: Set<string> = new Set<string>();
   public sequenceCurrent!: Sequence;
@@ -142,7 +143,7 @@ export class EvaluationService {
           } else {
             this.ctx.fillStyle = 'white';
           }
-          if (geste !== name && name !== undefined && k === 0) {
+          if (geste !== name && name !== undefined && (k === 0 || k === 1 || k === 2)) {
             this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
             geste = name;
           }
@@ -164,9 +165,10 @@ export class EvaluationService {
       let nbCorrect = 0;
       const nbFrame = this.convertTimeToFrame(Number(this.tempsTotal));
       for (let i = 0; i < this.veriteTerrain.length; i++) {
+        if (Number(i) < nbFrame){
         const t1 = this.convertFrameToTime(Number(i));
         const t2 = this.convertFrameToTime(Number(i + 1));
-        if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined) {
+        if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
           this.ctx.fillStyle = 'green';
           nbCorrect++;
           this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
@@ -179,6 +181,31 @@ export class EvaluationService {
             geste = this.veriteTerrain[i];
           }
         }
+        else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
+          && tmp[i] === this.classZero) {
+          console.log(this.veriteTerrain[i]);
+          this.ctx.fillStyle = 'gray';
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillStyle = 'black';
+        }
+        else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
+          && tmp[i] !== this.classZero) {
+          this.ctx.fillStyle = 'red';
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillStyle = 'black';
+        }
+        else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero){
+          this.ctx.fillStyle = 'orange';
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillStyle = 'black';
+        }
+        else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
+          this.ctx.fillStyle = 'lime';
+          nbCorrect++;
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillStyle = 'black';
+        }
+        }
       }
 
       if (nbCorrect > 0) {
@@ -189,7 +216,7 @@ export class EvaluationService {
         }
         this.ctx.font = '14px Arial';
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('Taux de recouvrement : ' + pourcentage + '%', nb, 20);
+        this.ctx.fillText('Taux de recouvrement : ' + pourcentage + '%', nb, 50);
       }
       this.ctx.font = '12px Arial';
     }
@@ -230,6 +257,7 @@ export class EvaluationService {
 
   public get_verite(): void {
     if (this.sequenceCurrent !== undefined) {
+      this.veriteTerrain = [];
       this.sequenceCurrent.listAnnotation.forEach(an => {
         const name = an.classeGeste;
         const frame1 = an.f1;
@@ -283,6 +311,5 @@ export class EvaluationService {
   public timeToPos(time: number): number {
     return time * this.unit + this.margeTimeline;
   }
-
 
 }

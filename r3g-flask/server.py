@@ -33,8 +33,8 @@ from Model.ModelEarlyOC3D_3D import ModelEarlyOC3D_3D
 
 
 APP = Flask(__name__)
-#API = wandb.Api()
-#RUNS = API.runs("precoce3d-OC3D")
+API = wandb.Api()
+RUNS = API.runs("precoce3d-OC3D")
 MODEL_LIST = []
 CLASSES = []
 EVALUATION = []
@@ -98,6 +98,7 @@ def start_api_wandb():
                 model = Model(run.id, run.name, param[run.id])
                 MODEL_LIST.append(model.__dict__)
 
+
 def start_wandb_v2():
     """v2 pour l'autre depot"""
     param = {}
@@ -105,6 +106,7 @@ def start_wandb_v2():
         param[run.id] = []
         model = Model(run.id, run.name, param[run.id])
         MODEL_LIST.append(model.__dict__)
+
 
 def get_class_geste(name):
     """ on recup le contenu de tab_class.txt """
@@ -130,12 +132,23 @@ def load_config(path_model) -> dict:
         finfo.close()
     return infos
 
+
+@APP.route('/models/getGesteZero/<name_bdd>')
+def get_geste_zero(name_bdd):
+    if os.path.exists('./'+name_bdd+'/Actions.csv'):
+        with open('./'+name_bdd+'/Actions.csv') as file_content:
+            for line in file_content:
+                if (line.split(';')[0] == '0'):
+                    return json.dumps(line.split(';')[1].replace('\n', ''))
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
 @APP.route('/models/getPoids/<id_model>')
 def get_poids(id_model):
     # pylint: disable=E1101
     """ a utiliser avec tensorflow pour recup les poids du model """
     cmap = cm.jet
     path_model = "Weigths/"+id_model+'/weights/'
+    download_weights(id_model)
     config = load_config(path_model)
     model = ModelEarlyOC3D_3D(nbClass=config["nbClass"], boxSize=config["boxSize"],
                           doGLU=config["doGlu"], dropoutVal=config["dropoutVal"],
@@ -218,9 +231,17 @@ def evaluation(name, sequences, model):
 
 
     # run SequenceEvaluator.py pour évaluer
+    file_to_convert = {}
+    for id,elt in enumerate(seq):
+        if not os.path.exists('./' + name + '/Data/' + elt.replace('inkml','txt')):
+            file_to_convert[id]='./' + name + '/Inkml/' + elt
+
+    write_data(file_to_convert, './' + name)
+
     for elt in seq:
         copyfile('./' + name + '/Data/' + elt.replace('.inkml', '') + '.txt', './Sequences/' + \
         elt.replace('.inkml', '') + '.txt')
+
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"\
     + model, "Weigths/"+model+'/weights/'])
 
@@ -534,6 +555,7 @@ def route_get_sequence(bdd, namefichier):
             return json.dumps(get_donnee(namefichier, bdd))
     return None
 
+
 @APP.route('/models/addBDD')
 def route_add_bdd():
     """add new path ddb"""
@@ -823,6 +845,7 @@ def write_labels(liste_inkml, path_txt, path_class):
                     line += annotations[id_elem]["end"]
                     flabel.write(line + "\n")
             flabel.close()
+
 def write_data(liste_inkml, path_txt):
     """ajout des donnees au fichier datatxt"""
     for key in liste_inkml:
@@ -842,7 +865,7 @@ def write_data(liste_inkml, path_txt):
                         donnees[nb_articulations] = dict_final
                         nb_articulations += 1
         filename = os.path.join(path_txt, "Data",
-                                os.path.splitext(os.path.basename(file))[0] + "_data.txt")
+                                os.path.splitext(os.path.basename(file))[0] + ".txt")
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w") as fdata:
             for id_elem in range(len(donnees[0])):
@@ -864,7 +887,7 @@ def copy_file_tabclass_to_txt(inkml_path_dossier, txt_path_dossier):
 if __name__ == "__main__":
     get_last_config()
     delete_eval()
-#    start_wandb_v2()
+    start_wandb_v2()
     APP.run(host='0.0.0.0')
     save_config()
 
