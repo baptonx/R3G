@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {FormatDonnees} from '../class/exploration/format-donnees';
 import {BddService} from './bdd.service';
 import {TableauExplService} from './tableau-expl.service';
 import {NodeCol, NodeColImpl} from '../class/exploration/node-col-impl';
