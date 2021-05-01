@@ -22,7 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="push server python sans print" />
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="my workspace">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -118,7 +120,7 @@
       <workItem from="1619712463558" duration="6108000" />
       <workItem from="1619764879294" duration="22619000" />
       <workItem from="1619798136871" duration="4269000" />
-      <workItem from="1619868517045" duration="2962000" />
+      <workItem from="1619868517045" duration="3905000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -260,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619527123696</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="my workspace">
+      <created>1619880368297</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1619880368297</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,7 +305,8 @@
     <MESSAGE value="rework server" />
     <MESSAGE value="clean code 'espère na pas tout casser'" />
     <MESSAGE value="push server python sans print" />
-    <option name="LAST_COMMIT_MESSAGE" value="push server python sans print" />
+    <MESSAGE value="my workspace" />
+    <option name="LAST_COMMIT_MESSAGE" value="my workspace" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
