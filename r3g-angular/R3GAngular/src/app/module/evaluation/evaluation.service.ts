@@ -173,13 +173,6 @@ export class EvaluationService {
           nbCorrect++;
           this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
           this.ctx.fillStyle = 'black';
-          if (geste === this.veriteTerrain[i]) {
-          } else {
-            if (this.veriteTerrain[i] !== undefined) {
-              this.ctx.fillText(this.veriteTerrain[i], this.timeToPos(t1) + 5, j);
-            }
-            geste = this.veriteTerrain[i];
-          }
         }
         else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
           && tmp[i] === this.classZero) {

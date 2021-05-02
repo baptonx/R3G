@@ -273,7 +273,10 @@ export class BddService {
 
   }
 
+  // recherche tous les attributs des sequences de geste et les conserve dans l'objet recursif NodeCol
+  // (utilise pour le choix des colonnes a afficher)
   private updateFormat(): void {
+    const oldNode = this.node;
     this.node = new NodeColImpl('root');
     this.node.push(['BDD']);
     this.node.push(['id']);
@@ -291,8 +294,22 @@ export class BddService {
         }
       }
     }
+    this.setSelected(oldNode, this.node);
+  }
+  // Methode qui donne la valeur completed a vrai pour tous les noeuds qui avaient la valeur a vrai
+  private setSelected(oldNode: NodeCol, node: NodeCol): void {
+    node.completed = oldNode.completed;
+    let idxChildNode;
+    for (const child of oldNode.children) {
+      idxChildNode = node.children.findIndex((n: NodeCol) => n.name === child.name);
+      if (idxChildNode >= 0) {
+        this.setSelected(child, node.children[idxChildNode]);
+      }
+    }
   }
 
+  // Lorsqu'on doit ajouter au format des donnees un dictionnaire dont on ne connait pas les cles et la profondeur,
+  // on peut utiliser la methode ajouterFormat qui parcours recursivement le dictionnaire et ajoute un a un les attributs.
   private ajouterFormat(metaDonnees: object, path: string[]): void {
     for (const [key, value] of Object.entries(metaDonnees)) {
       path.push(key);
@@ -305,6 +322,7 @@ export class BddService {
       path.pop();
     }
   }
+  // convertit le tableau de SequencestTab en tableau de Sequences en les recherchant dans this.sequences.
   chercherSequenceTableau(seqTabTab: SequencesTab[]): Sequence[] {
     const sequencesReturn: Sequence[] = [];
     let seqTab;
@@ -330,6 +348,7 @@ export class BddService {
     return sequencesReturn;
   }
 
+  // recherche une sequence dans les sequences chargees.
   chercherSequence(sequenceLigneTableau: SequencesTab): Sequence|undefined {
     for (const listseq of this.mapSequences.values()) {
         for (const seq of listseq){

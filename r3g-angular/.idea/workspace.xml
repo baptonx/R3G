@@ -22,16 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="my workspace">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/choix-colonnes.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/choix-colonnes.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/sequences-chargees.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/sequences-chargees.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/BDD-Copie/Inkml/sequence1.inkml" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/BDD-Copie/Inkml/sequence1.inkml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/BDD/Inkml/sequence1.inkml" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/BDD/Inkml/sequence1.inkml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
-    </list>
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="my workspace" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -77,7 +68,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_interpreter_path" value="$PROJECT_DIR$/../../../../../../../../Program Files/nodejs/node" />
+    <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
@@ -93,7 +84,7 @@
     <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/R3GAngular/package.json" />
       <command value="start" />
-      <node-interpreter value="project" />
+      <node-interpreter value="wsl://Ubuntu-18.04@/usr/bin/node" />
       <envs />
       <method v="2" />
     </configuration>
@@ -129,6 +120,7 @@
       <workItem from="1619764879294" duration="22619000" />
       <workItem from="1619798136871" duration="4269000" />
       <workItem from="1619868517045" duration="7610000" />
+      <workItem from="1619947865804" duration="3502000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>

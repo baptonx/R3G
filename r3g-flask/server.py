@@ -14,7 +14,6 @@ import tkinter.filedialog
 import shutil
 
 from os import walk
-from xml.dom import minidom
 import re
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import SubElement
@@ -135,10 +134,11 @@ def load_config(path_model) -> dict:
 
 @APP.route('/models/getGesteZero/<name_bdd>')
 def get_geste_zero(name_bdd):
+    """ on recup le geste identifié par 0 dans la bdd"""
     if os.path.exists('./'+name_bdd+'/Actions.csv'):
         with open('./'+name_bdd+'/Actions.csv') as file_content:
             for line in file_content:
-                if (line.split(';')[0] == '0'):
+                if line.split(';')[0] == '0':
                     return json.dumps(line.split(';')[1].replace('\n', ''))
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
@@ -232,9 +232,9 @@ def evaluation(name, sequences, model):
 
     # run SequenceEvaluator.py pour évaluer
     file_to_convert = {}
-    for id,elt in enumerate(seq):
+    for iid,elt in enumerate(seq):
         if not os.path.exists('./' + name + '/Data/' + elt.replace('inkml','txt')):
-            file_to_convert[id]='./' + name + '/Inkml/' + elt
+            file_to_convert[iid]='./' + name + '/Inkml/' + elt
 
     write_data(file_to_convert, './' + name)
 
@@ -308,13 +308,12 @@ def route_get_donnee_voxel(bdd, namefichier):
                         boxes.append(list3d)
                     file.close()
                 return json.dumps(boxes)
-            else:
-                return json.dumps("NoFileExist")
     return json.dumps('Failed')
 
 #############Annotation route :##############
 @APP.route('/models/saveAnnot/<bdd>/<namefichier>/<annotationsstr>')
 def route_save_annot(bdd, namefichier,annotationsstr):
+    # pylint: disable-msg=too-many-branches
     """Permet de sauvegarder les annotations de cette sequence"""
     annotations = json.loads(annotationsstr)
     print(annotations[0])
@@ -352,7 +351,7 @@ def route_save_annot(bdd, namefichier,annotationsstr):
                         annotation = SubElement(annotation_xml, 'annotation')
                         annotation.set('type', 'end')
                         annotation.text = str(annot['f2'])
-                        if(annot['pointAction'] != 0):
+                        if annot['pointAction'] != 0:
                             annotation = SubElement(annotation_xml, 'annotation')
                             annotation.set('type', 'pointAction')
                             annotation.text = str(annot['pointAction'])

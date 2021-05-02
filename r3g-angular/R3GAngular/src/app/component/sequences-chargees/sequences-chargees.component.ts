@@ -16,6 +16,7 @@ export class SequencesChargeesComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Supprime les doublons
   supprimerSequenceDejaChargees(set: string): void {
     let sequencesFiltre: Set<Sequence>;
     let sequencesNonFiltre: Set<Sequence>;

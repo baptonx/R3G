@@ -26,12 +26,13 @@ export class ChoixColonneComponent implements OnInit {
   }
 
 
-
+  // ferme la fenetre de dialogue en envoyant les noms des noeuds choisis
   sendColonnesChoisies(): void {
     this.dialogRef.close({colonnes: this.choixColService.selectionnes(this.choixColService.node, '')});
     localStorage.setItem('displayedColumns', JSON.stringify(this.choixColService.node));
   }
 
+  // Renvoie toutes les feuilles accessibles a partir d'un noeud
   nodeToTab(currentNode: NodeCol): Array<NodeCol> {
     const tab = new Array<NodeCol>();
     if (currentNode.children == null) {
@@ -45,7 +46,8 @@ export class ChoixColonneComponent implements OnInit {
     return tab;
   }
 
-  afficherDonneees(event: any): void {
+  // afficher les donnees correspondantes dans la barre de recherche
+  afficherDonneees(): void {
     const word = this.searchInput.nativeElement.value;
     if (word !== undefined) {
       if (word === '') {
@@ -74,6 +76,7 @@ export class ChoixColonneComponent implements OnInit {
   //   }
   // }
 
+  // Modifie la selection du noeud
   setNode(line: NodeCol): void {
     line.completed = !line.completed;
   }

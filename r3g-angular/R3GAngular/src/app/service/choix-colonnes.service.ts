@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BddService} from './bdd.service';
 import {TableauExplService} from './tableau-expl.service';
-import {NodeCol, NodeColImpl} from '../class/exploration/node-col-impl';
+import {NodeCol, NodeColForParsing, NodeColImpl} from '../class/exploration/node-col-impl';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,10 @@ export class ChoixColonnesService {
   parseNode(): void {
     const str = localStorage.getItem('displayedColumns');
     if (str != null){
-      this.node = JSON.parse(str);
-      this.node = this.bdd.node;
+      const n: NodeColForParsing = JSON.parse(str);
+      this.node = new NodeColImpl();
+      this.node.convertNodeColForParsingToNodeCol(n);
+      this.bdd.node = this.node;
       // this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
       this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
       this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
@@ -64,7 +66,7 @@ export class ChoixColonnesService {
   // }
 
 
-  // convertit l'abre de metadonnees en liste de string
+  // convertit l'objet recursif NodeCol en liste de string
   selectionnes(node: NodeCol, path: string): string[] {
     if ((node.children == null || node.children.length === 0) && !node.completed) {
       return [];
