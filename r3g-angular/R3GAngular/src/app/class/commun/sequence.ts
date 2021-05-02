@@ -13,6 +13,7 @@ export class Sequence {
   isTrain: boolean;
   isTest: boolean;
   displayedMetadata: Map<string, string>;
+  listAnnotationIA: Array<Annotation> = [];
 
   constructor(id: string, bdd: string, pathVideoRGB: string = '', listAnnotation: Array<Annotation>,
               directives: Array<string>, metadonnee: object = {}){

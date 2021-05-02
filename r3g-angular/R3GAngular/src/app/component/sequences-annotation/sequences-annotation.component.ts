@@ -75,7 +75,9 @@ export class SequencesAnnotationComponent implements OnInit {
               a.classeGeste = a.classeGeste !== undefined ? a.classeGeste : '';
               a.ia = true;
             }
-            this.engineService.annotationServ.listAnnotationIA = returnedData[0].annotation;
+            if (this.engineService.annotationServ.sequenceCurrent !== undefined) {
+              this.engineService.annotationServ.sequenceCurrent.listAnnotationIA = returnedData[0].annotation;
+            }
           }
           /*
           this.annot.annotationIA = returnedData;

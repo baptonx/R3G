@@ -38,7 +38,6 @@ export class AnnotationService {
   public gesteCouleur: Map<string, string> = new Map<string, string>();
   public tabTimeCurrent!: Array<number>;
   public diffFrameAnnotCursor = 0;
-  public listAnnotationIA: Array<Annotation> = [];
 
 
   // Timeline
@@ -83,18 +82,16 @@ export class AnnotationService {
           const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
           const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
           const color = localStorage.getItem(name);
-          if (color !== null && color !== ''){
+          if (color !== null && color !== '') {
             this.ctx.fillStyle = color;
-          }
-          else {
+          } else {
             this.ctx.fillStyle = 'black';
           }
           this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
           this.ctx.font = '13px Arial';
-          if (color !== null && color !== ''){
+          if (color !== null && color !== '') {
             this.ctx.fillStyle = 'black';
-          }
-          else {
+          } else {
             this.ctx.fillStyle = 'white';
           }
           this.ctx.fillText(name, pos1 + 5, 150);
@@ -113,57 +110,55 @@ export class AnnotationService {
           this.ctx.strokeRect(pos1, 100, pos2 - pos1, 100);
           this.ctx.lineWidth = 1;
         }
-      }
 
 
-      // ======================================================
-      // PreviewAnnotationNew
-      if (this.mouseDown && this.buttonModeAnnotation.checked === true) {
-        this.ctx.fillStyle = 'rgba(0,255,0,0.3)';
-        const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f1));
-        const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f2));
-        this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
-      }
+        // ======================================================
+        // PreviewAnnotationNew
+        if (this.mouseDown && this.buttonModeAnnotation.checked === true) {
+          this.ctx.fillStyle = 'rgba(0,255,0,0.3)';
+          const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f1));
+          const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationNew.f2));
+          this.ctx.fillRect(pos1, 100, pos2 - pos1, 100);
+        }
 
-      // ======================================================
-      // RectAnnotationIA
-      this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
-      this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
+        // ======================================================
+        // RectAnnotationIA
+        this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
 
-      for (const annot of this.listAnnotationIA) {
-        const name = annot.classeGeste;
-        const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
-        const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
-        const color = localStorage.getItem(name);
-        if (color !== null && color !== ''){
-          this.ctx.fillStyle = color;
-        }
-        else {
-          this.ctx.fillStyle = 'black';
-        }
-        this.ctx.fillRect(pos1, 230, pos2 - pos1, 100);
-        this.ctx.font = '13px Arial';
-        if (color !== null && color !== ''){
-          this.ctx.fillStyle = 'black';
-        }
-        else {
-          this.ctx.fillStyle = 'white';
-        }
-        this.ctx.fillText(name, pos1 + 5, 280);
+        for (const annot of this.sequenceCurrent.listAnnotationIA) {
+          const name = annot.classeGeste;
+          const pos1 = this.timeToPos(this.convertFrameToTime(annot.f1));
+          const pos2 = this.timeToPos(this.convertFrameToTime(annot.f2));
+          const color = localStorage.getItem(name);
+          if (color !== null && color !== '') {
+            this.ctx.fillStyle = color;
+          } else {
+            this.ctx.fillStyle = 'black';
+          }
+          this.ctx.fillRect(pos1, 230, pos2 - pos1, 100);
+          this.ctx.font = '13px Arial';
+          if (color !== null && color !== '') {
+            this.ctx.fillStyle = 'black';
+          } else {
+            this.ctx.fillStyle = 'white';
+          }
+          this.ctx.fillText(name, pos1 + 5, 280);
 
-        if (annot.pointAction > annot.f1 && annot.pointAction < annot.f2) {
-          const posPointAction = this.timeToPos(this.convertFrameToTime(annot.pointAction));
-          this.ctx.fillStyle = 'blue';
-          this.ctx.fillRect(posPointAction, 230, 2, 100);
+          if (annot.pointAction > annot.f1 && annot.pointAction < annot.f2) {
+            const posPointAction = this.timeToPos(this.convertFrameToTime(annot.pointAction));
+            this.ctx.fillStyle = 'blue';
+            this.ctx.fillRect(posPointAction, 230, 2, 100);
+          }
         }
-      }
-      if (this.annotationCurrentIsSelected === true && this.annotationCurrent.ia === true) {
-        const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f1));
-        const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f2));
-        this.ctx.strokeStyle = 'black';
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(pos1, 230, pos2 - pos1, 100);
-        this.ctx.lineWidth = 1;
+        if (this.annotationCurrentIsSelected === true && this.annotationCurrent.ia === true) {
+          const pos1 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f1));
+          const pos2 = this.timeToPos(this.convertFrameToTime(this.annotationCurrent.f2));
+          this.ctx.strokeStyle = 'black';
+          this.ctx.lineWidth = 2;
+          this.ctx.strokeRect(pos1, 230, pos2 - pos1, 100);
+          this.ctx.lineWidth = 1;
+        }
       }
 
 
@@ -220,7 +215,7 @@ export class AnnotationService {
           this.diffFrameAnnotCursor = this.convertTimeToFrame(this.posToTime(posX)) - this.annotationCurrent.f1;
         }
         else if (tabIndiceAnnotationIA.length !== 0) {
-          this.annotationCurrent = this.listAnnotationIA[tabIndiceAnnotationIA[0]];
+          this.annotationCurrent = this.sequenceCurrent.listAnnotationIA[tabIndiceAnnotationIA[0]];
           this.annotationCurrentIsSelected = true;
           this.mouseDownAnnotationMove = true;
           this.diffFrameAnnotCursor = this.convertTimeToFrame(this.posToTime(posX)) - this.annotationCurrent.f1;
@@ -402,8 +397,8 @@ export class AnnotationService {
   public isInsideAnnotationIA(x: number, y: number): Array<number> {
     const tab = [];
     if (this.sequenceCurrent !== undefined) {
-      for (let i = this.listAnnotationIA.length - 1; i >= 0; i--) {
-        const annot = this.listAnnotationIA[i];
+      for (let i = this.sequenceCurrent.listAnnotationIA.length - 1; i >= 0; i--) {
+        const annot = this.sequenceCurrent.listAnnotationIA[i];
         const annotPos1X = this.timeToPos(this.convertFrameToTime(annot.f1));
         const annotPos2X = this.timeToPos(this.convertFrameToTime(annot.f2));
         if (x >= annotPos1X && x <= annotPos2X && y >= 230 && y <= 330) {
@@ -518,7 +513,7 @@ export class AnnotationService {
   public copyListAnnotationIAToSequence(): void {
     if (this.sequenceCurrent !== undefined) {
       this.sequenceCurrent.listAnnotation = [];
-      for (const a of this.listAnnotationIA) {
+      for (const a of this.sequenceCurrent.listAnnotationIA) {
         const newA = new Annotation();
         newA.t1 = a.t1 !== undefined ? a.t1 : 0;
         newA.t2 = a.t2 !== undefined ? a.t2 : 0;
