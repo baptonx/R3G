@@ -5,6 +5,7 @@ export class Sequence {
   bdd: string;
   listAnnotation: Array<Annotation> = [];
   directives: Array<string> = [];
+  directivesString = '';
   metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
@@ -12,6 +13,7 @@ export class Sequence {
   isTrain: boolean;
   isTest: boolean;
   displayedMetadata: Map<string, string>;
+  listAnnotationIA: Array<Annotation> = [];
 
   constructor(id: string, bdd: string, pathVideoRGB: string = '', listAnnotation: Array<Annotation>,
               directives: Array<string>, metadonnee: object = {}){
@@ -26,6 +28,10 @@ export class Sequence {
     this.isTest = false;
     this.displayedMetadata = new Map<string, string>();
     this.directives = directives;
+    this.directivesString = '';
+    for (const dir of this.directives) {
+      this.directivesString += dir;
+    }
   }
 
 

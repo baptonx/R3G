@@ -82,6 +82,24 @@ input, select, textarea{
 }
 
 .supprimerToutesSéquences{
-  margin-top: 5px;
   background-color: indianred;
+}
+
+.validerCreationGeste{
+  background-color: limegreen;
+}
+
+.inputFrame {
+  width: 60px;
+  margin-right: 50px;
+}
+
+.inputFrame2 {
+  width: 90px;
+  margin-right: 50px;
+}
+
+.inputFrame3 {
+  width: 180px;
+  margin-right: 20px;
 }

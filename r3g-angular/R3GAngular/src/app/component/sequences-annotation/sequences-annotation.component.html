@@ -30,7 +30,7 @@
           </mat-select>
         </mat-form-field>
         <div>
-          <button mat-raised-button>Annoter avec IA</button>
+          <button mat-raised-button (click)="eval()">Annoter avec IA</button>
         </div>
         <div class="divBouton">
           <button mat-raised-button (click)="copyListAnnotationIAToSequence()">Recopier IA</button>
@@ -41,8 +41,8 @@
     <mat-step>
       <form>
         <ng-template matStepLabel>Consignes d'acquisitions</ng-template>
-        <div>
-          <p class="consignesAcquisition">testtesttestjhlvhfsdh hofdsdslfhlhfsd lfhdhfsdhfdslhfd shdslhdfs lhfdlhfd lldfh ldsfhlfdsh</p>
+        <div *ngIf="engineService.annotationServ.sequenceCurrent !== undefined">
+          <p class="consignesAcquisition"><span *ngFor="let dir of engineService.annotationServ.sequenceCurrent.directives">{{dir+' '}}</span></p>
         </div>
       </form>
     </mat-step>

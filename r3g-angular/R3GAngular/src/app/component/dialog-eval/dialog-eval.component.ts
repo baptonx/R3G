@@ -38,7 +38,7 @@ export class DialogEvalComponent implements OnInit {
     '/' + this.model).subscribe(
       (returnedData: Array<Eval>) => {
         this.chargement = 'Evaluation terminée';
-        this.annot.annotationIA = returnedData;
+        // this.annot.annotationIA = returnedData;
         this.evalServ.annotationIA = returnedData;
         this.http.get<string>('/models/getGesteZero/' + this.bddSelected).subscribe(
           (returnedData2: string) => {
