@@ -1,6 +1,6 @@
 import {ElementRef, Injectable, NgZone, OnDestroy, OnInit} from '@angular/core';
 import * as THREE from 'three';
-import {AnimationAction, AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
+import {AnimationAction, AnimationClip, AnimationMixer, BoxGeometry, Clock, ColorKeyframeTrack, VectorKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {BddService} from '../../service/bdd.service';
@@ -87,60 +87,25 @@ export class EngineEvaluationService implements OnDestroy {
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
-        const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
+        const tabPositionArticulation: Array<ColorKeyframeTrack> = [];
         this.squelette = new SqueletteAnimation();
         this.squelette.initialize();
-        console.log(this.sequenceCurrent);
-        if (this.sequenceCurrent !== undefined) {
-          let elem = this.sequenceCurrent.traceVoxel;
-          elem = [[[[0],[1],[0]]], [[[1],[0],[1]]]];
-          this.squelette.initialize();
-          let id = 0;
-          // tslint:disable-next-line:no-shadowed-variable
-                for (let x = 0; x < elem[0].length; x++) {
-                  for (let y = 0; y < elem[0][x].length; y++) {
-                    for (let z = 0; z < elem[0][x][y].length; z++) {
-                      const tabPosXYZ: Array<number> = [];
-                      const tabTemps: Array<number> = [];
-                      if (elem[0][x][y][z] === 1){
-                        this.squelette.addArticulationBlackAndWhite('black');
-                        console.log('here');
-                      }
-                      else {
-                        this.squelette.addArticulationBlackAndWhite('white');
-                      }
-                      for (let t = 0; t < elem.length; t ++) {
-                        tabPosXYZ.push(x);
-                        tabPosXYZ.push(y);
-                        tabPosXYZ.push(z);
-                        tabTemps.push(t);
-                      }
-                      const positionArticulation1 = new VectorKeyframeTrack(
-                        '.children[' + id + '].position',
-                        tabTemps,
-                        tabPosXYZ,
-                      );
-                      id++;
-                      tabPositionArticulation.push(positionArticulation1);
-                    }
-                  }
-                }
-              console.log(tabPositionArticulation);
-          this.clip = new AnimationClip('move', -1, tabPositionArticulation);
-        } else {
-          this.clip = new AnimationClip('move', -1, []);
-        }
-          scene.add(this.squelette.root);
-          const mixer = new AnimationMixer(this.squelette.root);
-          this.action = mixer.clipAction(this.clip);
-          this.action.loop = THREE.LoopOnce;
-          this.action.clampWhenFinished = true;
+
+
+
+        this.clip = new AnimationClip('move', -1, []);
+
+
+        const mixer = new AnimationMixer(this.squelette.root);
+        this.action = mixer.clipAction(this.clip);
+        this.action.loop = THREE.LoopOnce;
+        console.log(this.action);
+        this.action.clampWhenFinished = true;
           // this.action.time = 4;
-          this.tempsTotal = 6;
           // this.clip.duration = this.action.time;
           // this.stopToStart();
-          const clock = new Clock();
-          return (rect: DOMRect) => {
+        const clock = new Clock();
+        return (rect: DOMRect) => {
             this.evalService.draw();
             const delta = clock.getDelta();
             mixer.update(delta);

@@ -1,16 +1,6 @@
 <canvas #rendererCanvas id="renderCanvas"></canvas>
 <span #box data-diagram="box"></span>
 
-<div class="barButtonsEngine">
-  <button mat-raised-button (click)="engServ.resetCamera()" class="resetCameraButton">Reset camera</button>
-  <button mat-raised-button (click)="engServ.stopToStart()"><<</button>
-  <button mat-raised-button (click)="engServ.play()">Play</button>
-
-</div>
-
-
-<mat-tab-group animationDuration="0ms" dynamicHeight style="margin-top: 50px;">
-  <mat-tab label="Poids du réseaux">
     <div class="tab-container">
       <mat-form-field appearance="fill">
         <mat-label>Choisir un modèle</mat-label>
@@ -43,20 +33,3 @@
       </mat-form-field></div>
     </div>
 
-  </mat-tab>
-
-  <mat-tab label="Squelette voxelisé">
-    <div class="tab-container">
-      <mat-form-field appearance="fill">
-        <mat-label>Choisir une séquence</mat-label>
-        <mat-select (valueChange)='changeSeq($event)'>
-          <mat-option *ngFor="let s of this.engServ.sequences" [value]="s.id" >
-            {{s.id}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="this.engServ.initialize(undefined, undefined, true)">Visualiser</button></span>
-    </div>
-</mat-tab>
-</mat-tab-group>
