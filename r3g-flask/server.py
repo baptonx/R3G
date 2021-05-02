@@ -288,28 +288,28 @@ def start_learning(name):
 @APP.route('/models/getDonneeVoxel/<bdd>/<namefichier>')
 def route_get_donnee_voxel(bdd, namefichier):
     """Permet de télécharger donnée a partir du nom de fichier """
-    print(bdd)
-    print(namefichier)
     if bdd in LISTE_PATH_BDD:
         if namefichier in LISTE_FICHIER_INKML[bdd]:
             filepath = (LISTE_PATH_BDD[bdd]+ '/' + 'Voxelized/' +
                         namefichier.split('/')[len(namefichier.split('/'))-1][:-5] + 'txt')
-            print(filepath)
-            with open(filepath, 'r') as file:
-                lines = file.readlines()
-                dim = list(map(int, lines[0].split(',')))
-                print(dim)
-                boxes = []
-                for xit in range(1, len(lines), dim[1]*dim[0]):
-                    list3d = []
-                    for yit in range(0, dim[1]*dim[0], dim[1]):
-                        list2d = []
-                        for zit in range(0, dim[1], 1):
-                            list2d.append(list(map(int, lines[xit+yit+zit].split(','))))
-                        list3d.append(list2d)
-                    boxes.append(list3d)
-                file.close()
-            return json.dumps(boxes)
+            if os.path.isfile(filepath):
+                with open(filepath, 'r') as file:
+                    lines = file.readlines()
+                    dim = list(map(int, lines[0].split(',')))
+                    print(dim)
+                    boxes = []
+                    for xit in range(1, len(lines), dim[1]*dim[0]):
+                        list3d = []
+                        for yit in range(0, dim[1]*dim[0], dim[1]):
+                            list2d = []
+                            for zit in range(0, dim[1], 1):
+                                list2d.append(list(map(int, lines[xit+yit+zit].split(','))))
+                            list3d.append(list2d)
+                        boxes.append(list3d)
+                    file.close()
+                return json.dumps(boxes)
+            else:
+                return json.dumps("NoFileExist")
     return json.dumps('Failed')
 
 #############Annotation route :##############

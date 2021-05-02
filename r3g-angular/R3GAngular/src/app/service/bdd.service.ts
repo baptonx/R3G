@@ -7,7 +7,6 @@ import {BehaviorSubject} from 'rxjs';
 import {Annotation} from '../class/commun/annotation/annotation';
 
 
-
 export interface BaseDeDonne {
   BDD: Array<SequenceInterface>;
 }
@@ -37,6 +36,8 @@ export class BddService {
   observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
   formatSequence: FormatDonnees = new FormatDonnees();
   waitanswer = true;
+  inwaiting = 0;
+  counter = 0;
   classesGestes: Array<string> = [];
   listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
   public sequenceCourante: Sequence|undefined;
@@ -179,7 +180,6 @@ export class BddService {
     }
     for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
       const listseq = dbb as Array<SequenceInterface>;
-      console.log(key);
       this.ajoutSequencetobdd(key, listseq);
     }
     this.notifyChangeData();
@@ -218,11 +218,8 @@ export class BddService {
       for (const directive of Object.values(sequence.directives)){
         listdirective.push(String(directive));
       }
-      // console.log('directive: ' + listdirective);
       listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, listdirective, sequence.metadonnees));
     }
-    console.log(listseq);
-    console.log(listSequence);
     this.mapSequences.set(nameBdd, listSequence);
   }
   notifyChangeData(): void{
@@ -243,18 +240,18 @@ export class BddService {
       });
   }
   getDonnee(listSequence: Array<Sequence>): void{
-    let counter = listSequence.length * 2;
+    this.inwaiting = listSequence.length * 2;
+    this.counter = this.inwaiting;
     for (const sequence of listSequence){
-      this.answerWait();
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {
           if (sequence !== undefined){
             sequence.traceNormal = (returnedData);
           }
-          counter--;
-          if (counter === 0){
-            this.answerHere();
+          this.counter--;
+          if (this.counter === 0){
+            this.inwaiting = 0;
           }
         });
     }
@@ -262,12 +259,14 @@ export class BddService {
       this.http
         .get<object>(`/models/getDonneeVoxel/${sequence.bdd}/${sequence.id}` , {})
         .subscribe((returnedData: any) => {
-          if (sequence !== undefined){
-            sequence.traceVoxel = (returnedData);
+          if (returnedData !== undefined){
+            if (returnedData !== 'NoFileExist'){
+              sequence.traceVoxel = (returnedData);
+            }
           }
-          counter--;
-          if (counter === 0){
-            this.answerHere();
+          this.counter--;
+          if (this.counter === 0){
+            this.inwaiting = 0;
           }
         });
     }

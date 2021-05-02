@@ -13,7 +13,6 @@ export class ChoixColonnesService {
     this.bdd.observableSequences.subscribe((sequence) => {
       this.node = {name: 'root', path: '', completed: false, children: []};
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
-      console.log(this.node);
     });
   }
 
@@ -21,7 +20,6 @@ export class ChoixColonnesService {
     const str = localStorage.getItem('displayedColumns');
     if (str != null){
       this.node = JSON.parse(str);
-      console.log(this.node);
       this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
       this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
       this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);

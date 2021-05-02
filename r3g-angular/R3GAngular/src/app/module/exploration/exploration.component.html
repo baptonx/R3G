@@ -82,11 +82,16 @@
   <mat-tab-group animationDuration="0ms" dynamicHeight>
     <mat-tab class="ongletBDD" label="Base de données">
       <ng-container *ngIf="this.bdd.waitanswer">
-        <span>Chargement en cours..</span>
+        <span style="display:table; margin:0 auto;">Chargement en cours..</span>
+        <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+      </ng-container>
+      <ng-container *ngIf="this.bdd.inwaiting != 0">
+        <span style="display:table; margin:0 auto;">Chargement en cours {{this.bdd.inwaiting / 2 - this.bdd.counter / 2}}/{{this.bdd.inwaiting / 2}}..</span>
         <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
       </ng-container>
 
-     <app-tableau-expl></app-tableau-expl>
+
+      <app-tableau-expl></app-tableau-expl>
     </mat-tab>
 
     <mat-tab label="Graphique">Graphique</mat-tab>

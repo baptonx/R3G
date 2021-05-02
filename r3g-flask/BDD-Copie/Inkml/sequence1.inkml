@@ -19,32 +19,32 @@
   <unit>
     <annotationXML type="actions">
       <annotation type="type">coup de poing droit</annotation>
-      <annotation type="debut">10</annotation>
-      <annotation type="fin">30</annotation>
+      <annotation type="start">10</annotation>
+      <annotation type="end">30</annotation>
       <annotation type="pointAction">15</annotation>
     </annotationXML>
     <annotationXML type="actions">
       <annotation type="type">coup de poing gauche</annotation>
-      <annotation type="debut">35</annotation>
-      <annotation type="fin">45</annotation>
+      <annotation type="start">35</annotation>
+      <annotation type="end">45</annotation>
       <annotation type="pointAction">40</annotation>
     </annotationXML>
     <annotationXML type="actions">
       <annotation type="type">coup de poing droit</annotation>
-      <annotation type="debut">50</annotation>
-      <annotation type="fin">60</annotation>
+      <annotation type="start">50</annotation>
+      <annotation type="end">60</annotation>
       <annotation type="pointAction">55</annotation>
     </annotationXML>
     <annotationXML type="actions">
       <annotation type="type">coup de poing gauche</annotation>
-      <annotation type="debut">70</annotation>
-      <annotation type="fin">80</annotation>
+      <annotation type="start">70</annotation>
+      <annotation type="end">80</annotation>
       <annotation type="pointAction">75</annotation>
     </annotationXML>
     <annotationXML type="actions">
       <annotation type="type">coup de pied droit</annotation>
-      <annotation type="debut">90</annotation>
-      <annotation type="fin">100</annotation>
+      <annotation type="start">90</annotation>
+      <annotation type="end">100</annotation>
       <annotation type="pointAction">95</annotation>
     </annotationXML>
   </unit>

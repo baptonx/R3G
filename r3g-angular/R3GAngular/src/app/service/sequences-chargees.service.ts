@@ -29,8 +29,6 @@ export class SequencesChargeesService {
       }
       this.getList(selection).add(seq);
     }
-    console.log(this.getList(selection));
-    console.log(listseqs);
     this.bdd.getDonnee(listseqs);
   }
   getList(selection: string): Set<Sequence> {
