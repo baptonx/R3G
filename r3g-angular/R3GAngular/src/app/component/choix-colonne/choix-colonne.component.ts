@@ -1,8 +1,8 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {NodeCol} from '../node-colonne/node-colonne.component';
 import {BddService} from '../../service/bdd.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ChoixColonnesService} from '../../service/choix-colonnes.service';
+import {NodeCol} from '../../class/exploration/node-col-impl';
 
 
 @Component({
@@ -23,7 +23,6 @@ export class ChoixColonneComponent implements OnInit {
 
   ngOnInit(): void {
     this.donneesTabulees = this.nodeToTab(this.choixColService.node);
-    console.log(this.choixColService.node);
   }
 
 

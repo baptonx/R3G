@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {Sequence} from '../class/commun/sequence';
 import {SequencesTab, TableauExplService} from './tableau-expl.service';
 import {HttpClient} from '@angular/common/http';
-import {FormatDonnees} from '../class/exploration/format-donnees';
 import {BehaviorSubject} from 'rxjs';
 import {Annotation} from '../class/commun/annotation/annotation';
+import {NodeCol, NodeColImpl} from '../class/exploration/node-col-impl';
 
 
 export interface BaseDeDonne {
@@ -34,7 +34,7 @@ export class BddService {
   mapSequences: Map<string, Array<Sequence>> = new Map<string, Array<Sequence>>();
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
-  formatSequence: FormatDonnees = new FormatDonnees();
+  node: NodeCol = new NodeColImpl();
   waitanswer = true;
   inwaiting = 0;
   counter = 0;
@@ -274,20 +274,20 @@ export class BddService {
   }
 
   private updateFormat(): void {
-    this.formatSequence = new FormatDonnees();
-    this.formatSequence.add(['BDD']);
-    this.formatSequence.add(['id']);
+    this.node = new NodeColImpl('root');
+    this.node.push(['BDD']);
+    this.node.push(['id']);
     for (const listsequence of this.mapSequences.values()) {
       for (const sequence of listsequence) {
         this.ajouterFormat(sequence.metaDonnees, []);
         for (const value of sequence.listAnnotation) {
           if (typeof value === 'object' && value != null) {
-            this.formatSequence.add(['annotation', 'idGeste']);
+            this.node.push(['annotation', 'idGeste']);
             this.ajouterFormat(value, ['annotation']);
           }
         }
         if (sequence.directives.length !== 0) {
-          this.formatSequence.add(['directives']);
+          this.node.push(['directives']);
         }
       }
     }
@@ -300,7 +300,7 @@ export class BddService {
         this.ajouterFormat(value, path);
       }
       else{
-        this.formatSequence.add(path.slice());
+        this.node.push(path.slice());
       }
       path.pop();
     }

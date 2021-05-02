@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {NodeCol} from '../../class/exploration/node-col-impl';
 
 
-export interface NodeCol{
-  name: string;
-  path: string;
-  completed: boolean;
-  children?: NodeCol[];
-}
+// export interface NodeCol{
+//   name: string;
+//   path: string;
+//   completed: boolean;
+//   children?: NodeCol[];
+// }
 
 
 @Component({
@@ -65,7 +66,6 @@ export class NodeColonneComponent implements OnInit {
         noneSelected = noneSelected && !this.node.children[i].completed;
       }
       if (noneSelected) {
-        console.log('allSelected');
         this.setAll(false);
       }
     }
@@ -79,7 +79,6 @@ export class NodeColonneComponent implements OnInit {
         allSelected = allSelected && this.node.children[i].completed;
       }
       if (allSelected) {
-        console.log('allSelected');
         this.setAll(true);
       }
     }
