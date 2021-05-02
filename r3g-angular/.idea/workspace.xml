@@ -22,7 +22,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="my workspace" />
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean database">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +42,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -269,7 +273,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619880368297</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="clean database">
+      <created>1619953828461</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1619953828461</updated>
+    </task>
+    <task id="LOCAL-00023" summary="clean database">
+      <created>1619953879304</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1619953879304</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -306,7 +324,8 @@
     <MESSAGE value="clean code 'espère na pas tout casser'" />
     <MESSAGE value="push server python sans print" />
     <MESSAGE value="my workspace" />
-    <option name="LAST_COMMIT_MESSAGE" value="my workspace" />
+    <MESSAGE value="clean database" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean database" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

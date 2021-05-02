@@ -17,6 +17,11 @@
 .picker{
 
 }
+.spanchargement{
+  display:table;
+  margin:0 auto;
+}
+
 app-navigation-modules{
   display:flex;
   width:100%;
@@ -36,7 +41,3 @@ app-visualitation-explo{
   color: #303030;
 }
 
-.spanchargement{
-  display:table;
-  margin:0 auto;
-}
