@@ -22,10 +22,10 @@ export class ChoixColonnesService {
       const n: NodeColForParsing = JSON.parse(str);
       this.node = new NodeColImpl();
       this.node.convertNodeColForParsingToNodeCol(n);
+      this.bdd.node = this.node;
       // this.updateNodeFromBDD(this.bdd.formatSequence, this.node, '');
       this.tablExpl.displayedColumns = this.selectionnes(this.node, '');
       this.tablExpl.observableColumns.next(this.tablExpl.displayedColumns);
-      console.log(this.node);
     }
   }
   // cree l'arboresecence de noeud (pour les choix des colonnes) a partir du format des sequences de la BDD
