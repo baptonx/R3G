@@ -206,7 +206,7 @@ export class BddService {
 
   miseajourdbOne(nameBdd: string, returnedData: any): void{
     this.listGesteBDD.set(nameBdd, returnedData[0]);
-    this.listGesteBDDAction.set(nameBdd, returnedData[1])
+    this.listGesteBDDAction.set(nameBdd, returnedData[1]);
     console.log(this.listGesteBDDAction);
     const listseq = returnedData[2] as Array<SequenceInterface>;
     this.ajoutSequencetobdd(nameBdd, listseq);

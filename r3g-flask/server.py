@@ -312,7 +312,7 @@ def route_get_donnee_voxel(bdd, namefichier):
 
 #############Annotation route :##############
 @APP.route('/models/saveAnnot/<bdd>/<namefichier>/<annotationsstr>')
-def route_save_annot(bdd, namefichier,annotationsstr):
+def route_save_annot(bdd, namefichier, annotationsstr):
     # pylint: disable-msg=too-many-branches
     """Permet de sauvegarder les annotations de cette sequence"""
     annotations = json.loads(annotationsstr)
@@ -421,7 +421,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
     if len(liste_fichier_in) != 0:
         LISTE_GESTE_BDD[namebdd] = []
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
-        rechercherActionCsv(pathbdd, namebdd)
+        rechercher_action_csv(pathbdd, namebdd)
         metadonnes = []
         for file in liste_fichier_in:
             metadonnes.append(get_meta_donnee(file, namebdd))
@@ -522,11 +522,11 @@ def get_donnee(filename, bdd):
                     donnees.append(dict_final)
     return donnees
 
-def rechercherActionCsv(strpath,name):
+def rechercher_action_csv(strpath, name):
     """telecharger la liste des geste de Action.csv"""
     global LISTE_GESTE_BDD_ACTION
     tabclass = []
-    filepath = os.path.join(strpath,'Actions.csv')
+    filepath = os.path.join(strpath, 'Actions.csv')
     if os.path.isfile(filepath):
         with open(filepath, 'r') as fileclass:
             for line in fileclass:
@@ -536,39 +536,41 @@ def rechercherActionCsv(strpath,name):
             fileclass.close()
     LISTE_GESTE_BDD_ACTION[name] = tabclass
 
-def route_ajouter_class_actioncsv(bdd, name_action):
+def ajouter_class_actioncsv(bdd, name_action):
+    """ajout a la fin du ficheier Action.csv un nouveau geste"""
     global LISTE_GESTE_BDD_ACTION
     LISTE_GESTE_BDD_ACTION[bdd].append(name_action)
-    filepath = os.path.join(LISTE_PATH_BDD[bdd],'Actions.csv')
-    nb = -1 
+    filepath = os.path.join(LISTE_PATH_BDD[bdd], 'Actions.csv')
+    nb_geste = -1
     if os.path.isfile(filepath):
         with open(filepath, 'r') as fileclass:
-            nb = len(fileclass.readlines())
+            nb_geste = len(fileclass.readlines())
             fileclass.close()
-        if nb != -1:
+        if nb_geste != -1:
             with open(filepath, 'a') as fileclass:
-                fileclass.write(str(nb) + ";" + name_action)
+                fileclass.write(str(nb_geste) + ";" + name_action)
                 fileclass.close()
 
 def add_listgeste_metadonne():
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste par bdd et les Metadonnee"""
-    return [LISTE_GESTE_BDD,LISTE_GESTE_BDD_ACTION, METADONNEE]
+    return [LISTE_GESTE_BDD, LISTE_GESTE_BDD_ACTION, METADONNEE]
 
 def add_listgeste_metadonnee_one(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
-    return [LISTE_GESTE_BDD[name],LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
+    return [LISTE_GESTE_BDD[name], LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
 
 def add_listgeste_metadonnee_one_and_name(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
-    return [name, LISTE_GESTE_BDD[name],LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
+    return [name, LISTE_GESTE_BDD[name], LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
 #############Exploration route :##############
 
 
 @APP.route('/models/ajoutClass/<bdd>/<action>')
 def route_ajouter_class_actioncsv(bdd, action):
+    """ajoute au fichier Actions csv la nouvelle classe de geste"""
     ajouter_class_actioncsv(bdd, action)
     return json.dumps(LISTE_GESTE_BDD_ACTION[bdd])
 
@@ -615,16 +617,15 @@ def route_add_bdd():
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = path
                 if ajout_fichiers_inkml_in(path, namebdd):
-                    rechercherActionCsv(path, namebdd)
+                    rechercher_action_csv(path, namebdd)
                     save_config()
                 else:
                     del LISTE_GESTE_BDD[namebdd]
                     del LISTE_PATH_BDD[namebdd]
             root.destroy()
             return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
-        else:
-            root.destroy()
-            return json.dumps('directory not found')
+        root.destroy()
+        return json.dumps('directory not found')
     except RuntimeError:
         root.destroy()
         return json.dumps("Erreur")
@@ -646,7 +647,7 @@ def route_add_bdd_path(path):
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = strpath
                 if ajout_fichiers_inkml_in(strpath, namebdd):
-                    chercheActionCsv(strpath)
+                    rechercher_action_csv(strpath, namebdd)
                     save_config()
                 else:
                     del LISTE_GESTE_BDD[namebdd]
@@ -787,7 +788,7 @@ def generatefile_inkml_with_label(data, label, tableau_classe, inkml_file, fps):
         file.write(parser.toprettyxml())
         file.close()
 
-def generatefile_inkml(data, tableau_classe, inkml_file, fps):
+def generatefile_inkml(data, inkml_file, fps):
     """construit le fichier inkml sans annotation"""
     inkml_tree = generate_template()
     add_data(inkml_tree, data, fps)
@@ -823,18 +824,17 @@ def rechercher_fichier_label(path_dossier_label):
 def generate_database(liste_data, liste_label, tableau_classe, inkml_path_dossier, fps):
     """construit l'ensemble de la base de donnée inkml"""
     os.makedirs(os.path.join(inkml_path_dossier, 'Inkml'), exist_ok=True)
-    
     for file_data in liste_data:
         if file_data in liste_label:
-            generatefile_inkml_with_label(liste_data[file_data], liste_label[file_data], tableau_classe,
-                            inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
-        else: 
-            generatefile_inkml(liste_data[file_data], tableau_classe,
-                            inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
+            generatefile_inkml_with_label(liste_data[file_data],
+                                          liste_label[file_data], tableau_classe,
+                                          inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml",
+                                          fps)
+        else:
+            generatefile_inkml(liste_data[file_data],
+                               inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
 def copy_file_tabclass_to_inkml(inkml_path_dossier, path_class):
     """copier et renommer le fichier tabclass"""
-    path_dossier_class = os.path.join(inkml_path_dossier, 'DataClasses')
-    os.makedirs(path_dossier_class)
     shutil.copy(path_class, os.path.join(inkml_path_dossier, 'Actions.csv'))
 
 #############Route CREER Base de Donnée txt depuis inkml :##############
