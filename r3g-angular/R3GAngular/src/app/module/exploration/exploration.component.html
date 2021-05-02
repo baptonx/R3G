@@ -86,7 +86,7 @@
         <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
       </ng-container>
       <ng-container *ngIf="this.bdd.inwaiting != 0">
-        <span style="display:table; margin:0 auto;">Chargement en cours {{this.bdd.inwaiting / 2 - this.bdd.counter / 2}}/{{this.bdd.inwaiting / 2}}..</span>
+        <span class="spanchargement">Chargement en cours {{this.bdd.counterfloor}}/{{this.bdd.inwaiting / 2}}..</span>
         <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
       </ng-container>
 

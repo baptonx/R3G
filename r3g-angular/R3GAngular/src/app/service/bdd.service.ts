@@ -30,14 +30,13 @@ export interface Metadonnee {
 })
 
 export class BddService {
-  // sequences: Sequence[];
   mapSequences: Map<string, Array<Sequence>> = new Map<string, Array<Sequence>>();
   bddnames: Array<string> = [];
   observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
   node: NodeCol = new NodeColImpl();
   waitanswer = true;
   inwaiting = 0;
-  counter = 0;
+  counterfloor = 0;
   classesGestes: Array<string> = [];
   listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
   public sequenceCourante: Sequence|undefined;
@@ -50,10 +49,6 @@ export class BddService {
 
   notifyTableauService(): void{
     this.tableauExpl.updateAll(this.mapSequences);
-  }
-
-  getClasses(): void{
-
   }
   answerWait(): void{
     this.waitanswer = true;
@@ -73,7 +68,7 @@ export class BddService {
   }
 
   txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{
-    this.answerWait();
+
     const labelsPathDossierStr = [];
     for (let i = 0; i < labelsPathDossier.length; i++){
       labelsPathDossierStr.push(labelsPathDossier.charCodeAt(i));
@@ -90,11 +85,16 @@ export class BddService {
     for (let i = 0; i < pathClass.length; i++){
       pathClassStr.push(pathClass.charCodeAt(i));
     }
-    this.http
-      .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
-      .subscribe(() => {
-        this.answerHere();
-      });
+    if (pathClass.length > 0 && inkmlPathDossier.length > 0 && dataPathDossier.length > 0 && labelsPathDossier.length > 0 ){
+      this.answerWait();
+      this.http
+        .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
+        .subscribe(() => {
+          this.answerHere();
+        });
+    }else{
+      window.alert('informations manquantes');
+    }
   }
 
   addpath(): void{
@@ -102,23 +102,35 @@ export class BddService {
     this.http
       .get<object>('/models/addBDD' , {})
       .subscribe((returnedData: any) => {
-        this.ajoutdb(returnedData);
+        if (returnedData === 'directory not found'){
+          window.alert('dossier non choisi');
+        }else{
+          this.ajoutdb(returnedData);
+        }
         this.answerHere();
       });
   }
 
   addbddwithpath(path: string): void{
-    this.answerWait();
     const str = [];
     for (let i = 0; i < path.length; i++){
       str.push(path.charCodeAt(i));
     }
-    this.http
-      .get<object>(`/models/addBDDwithpath/${str}` , {})
-      .subscribe((returnedData: any) => {
-        this.ajoutdb(returnedData);
-        this.answerHere();
-      });
+    if (path.length > 0){
+      this.answerWait();
+      this.http
+        .get<object>(`/models/addBDDwithpath/${str}` , {})
+        .subscribe((returnedData: any) => {
+          if (returnedData === 'directory empty' || returnedData === 'empty path'){
+            window.alert(returnedData);
+          }else{
+            this.ajoutdb(returnedData);
+          }
+          this.answerHere();
+        });
+    }else {
+      window.alert('path vide');
+    }
   }
 
   inkmlTotxt(bddname: string, txtPathDossier: string): void {
@@ -130,7 +142,7 @@ export class BddService {
     this.http
       .get<object>(`/models/inkmlToTxt/${bddname}/${str}` , {})
       .subscribe((returnedData: any) => {
-        // this.miseajourdb(returnedData);
+        window.alert(returnedData);
         this.answerHere();
       });
   }
@@ -241,7 +253,8 @@ export class BddService {
   }
   getDonnee(listSequence: Array<Sequence>): void{
     this.inwaiting = listSequence.length * 2;
-    this.counter = this.inwaiting;
+    let counter = this.inwaiting;
+    this.counterfloor = 0;
     for (const sequence of listSequence){
       this.http
         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
@@ -249,8 +262,9 @@ export class BddService {
           if (sequence !== undefined){
             sequence.traceNormal = (returnedData);
           }
-          this.counter--;
-          if (this.counter === 0){
+          counter--;
+          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
+          if (counter === 0){
             this.inwaiting = 0;
           }
         });
@@ -264,8 +278,9 @@ export class BddService {
               sequence.traceVoxel = (returnedData);
             }
           }
-          this.counter--;
-          if (this.counter === 0){
+          counter--;
+          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
+          if (counter === 0){
             this.inwaiting = 0;
           }
         });

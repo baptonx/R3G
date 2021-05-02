@@ -1,6 +1,6 @@
 class Annotation:
-  def __init__(self, f1, f2, point_action,classeGeste):
+  def __init__(self, f1, f2, point_action,actionPoint):
     self.f1 = f1
     self.f2 = f2
-    self.point_action = point_action
+    self.actionPoint = actionPoint
     self.classeGeste = classeGeste

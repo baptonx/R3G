@@ -35,3 +35,8 @@ app-visualitation-explo{
   width: 100%;
   color: #303030;
 }
+
+.spanchargement{
+  display:table;
+  margin:0 auto;
+}
