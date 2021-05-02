@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Commit Paul 1 image milieu" />
+    <list default="true" id="519e02b4-6e60-4590-96a9-f98603c17f6b" name="Default Changelist" comment="Commit Paul" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,6 +63,7 @@
       <workItem from="1616783964515" duration="66000" />
       <workItem from="1616858286295" duration="587000" />
       <workItem from="1617022465550" duration="7000" />
+      <workItem from="1619777518565" duration="36000" />
     </task>
     <task id="LOCAL-00001" summary="base annotation">
       <created>1615820270297</created>

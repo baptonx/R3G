@@ -4,6 +4,7 @@ import { EngineService } from '../engine/engine.service';
 import {BddService} from '../../service/bdd.service';
 import {Model} from '../../class/evaluation/model';
 import {HttpClient} from '@angular/common/http';
+import {Eval} from '../../class/evaluation/eval';
 
 @Component({
   selector: 'app-sequences-annotation',
@@ -21,6 +22,10 @@ export class SequencesAnnotationComponent implements OnInit {
     this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
     });
+  }
+
+  ngOnInit(): void {
+    this.http.get<Array<Model>>('/models/getModelsNames', {}).subscribe((returnedData: Array<Model>) => this.modelList = returnedData);
   }
 
   changeModel(value: any): void {
@@ -48,8 +53,49 @@ export class SequencesAnnotationComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.http.get<Array<Model>>('/models/getModelsNames', {}).subscribe((returnedData: Array<Model>) => this.modelList = returnedData);
+  eval(): void{
+    if (this.modelSelected !== null && this.engineService.annotationServ.sequenceCurrent !== undefined){
+      console.log('Evaluation en cours, veuillez patienter.');
+      const arraySequence: Array<string> = [];
+      arraySequence.push(this.engineService.annotationServ.sequenceCurrent.id);
+      this.http.get<Array<Eval>>('/models/evaluation/' + this.engineService.annotationServ.sequenceCurrent.bdd + '/' + arraySequence +
+        '/' + this.modelSelected).subscribe(
+        (returnedData: Array<Eval>) => {
+          console.log('Evaluation terminée');
+          if (returnedData.length !== 1) {
+            console.log('Attention returnedData !== 1, taille : ' + returnedData.length);
+          }
+          if (returnedData.length > 0) {
+            for (const a of returnedData[0].annotation) {
+              a.t1 = a.t1 !== undefined ? a.t1 : 0;
+              a.t2 = a.t2 !== undefined ? a.t2 : 0;
+              a.f1 = a.f1 !== undefined ? a.f1 : 0;
+              a.f2 = a.f2 !== undefined ? a.f2 : 0;
+              a.pointAction = a.pointAction !== undefined ? a.pointAction : 0;
+              a.classeGeste = a.classeGeste !== undefined ? a.classeGeste : '';
+              a.ia = true;
+            }
+            this.engineService.annotationServ.listAnnotationIA = returnedData[0].annotation;
+          }
+          /*
+          this.annot.annotationIA = returnedData;
+          this.evalServ.annotationIA = returnedData;
+          this.http.get<string>('/models/getGesteZero/' + this.bddSelected).subscribe(
+            (returnedData2: string) => {
+              this.evalServ.classZero = returnedData2;
+            }
+          );
+          this.evalServ.modelEval1.add('Recouvrement ' + this.model);
+          this.evalServ.modelEval1.add('Classes ' + this.model);
+          this.evalServ.modelEval2.add('Recouvrement ' + this.model);
+          this.evalServ.modelEval2.add('Classes ' + this.model);
+          this.evalServ.draw();
+           */
+        },
+        () => {
+          console.log('Echec de l\'évaluation');
+        });
+    }
   }
 
   copyListAnnotationIAToSequence(): void {

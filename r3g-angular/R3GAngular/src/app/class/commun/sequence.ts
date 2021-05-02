@@ -5,6 +5,7 @@ export class Sequence {
   bdd: string;
   listAnnotation: Array<Annotation> = [];
   directives: Array<string> = [];
+  directivesString = '';
   metaDonnees: any;
   pathVideoRGB: string;
   traceNormal: Array<Array<Array<number>>>;
@@ -26,6 +27,10 @@ export class Sequence {
     this.isTest = false;
     this.displayedMetadata = new Map<string, string>();
     this.directives = directives;
+    this.directivesString = '';
+    for (const dir of this.directives) {
+      this.directivesString += dir;
+    }
   }
 
 

@@ -5,6 +5,7 @@ export class Annotation {
   f2 = 0;
   pointAction = 0;
   classeGeste = '';
+  ia = false;
 
 
   public verifyF1BeforeF2(): void {
@@ -23,7 +24,7 @@ export class Annotation {
     }
   }
 
-  public clone(): Annotation {
+  public cloneTest(): Annotation {
     const a = new Annotation();
     a.t1 = this.t1;
     a.t2 = this.t2;

@@ -71,6 +71,7 @@
 .consignesAcquisition {
   color: white !important;
   font-size: 15px;
+  line-height: 1em;
 }
 
 .boutonSauvegarder{
