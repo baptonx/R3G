@@ -27,7 +27,6 @@ cd r3g-angular/R3GAngular
 npm install --save three
 ng serve
 ```
--- 
 
 # Installation automatisée avec Docker
 
