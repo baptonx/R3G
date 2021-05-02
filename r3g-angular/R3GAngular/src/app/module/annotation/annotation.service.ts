@@ -6,6 +6,7 @@ import {Annotation} from '../../class/commun/annotation/annotation';
 import { Eval } from 'src/app/class/evaluation/eval';
 import { Sequence } from 'src/app/class/commun/sequence';
 import {BddService} from '../../service/bdd.service';
+import {MatTableDataSource} from '@angular/material/table';
 
 
 @Injectable({
@@ -38,6 +39,11 @@ export class AnnotationService {
   public gesteCouleur: Map<string, string> = new Map<string, string>();
   public tabTimeCurrent!: Array<number>;
   public diffFrameAnnotCursor = 0;
+
+  public classeGeste: Array<string> = [];
+  public couleur: Array<string> = [];
+  public geste = '';
+  public dataSource!: MatTableDataSource<string>;
 
 
   // Timeline
@@ -529,5 +535,34 @@ export class AnnotationService {
 
   sauvegardeAnnotation(): void{
     this.bddService.sauvegardeAnnot(this.sequenceCurrent);
+  }
+
+  initializeClasseGesteEditeur(): void {
+    this.classeGeste = [];
+    this.couleur = [];
+    this.geste = '';
+    if (this.sequenceCurrent !== undefined) {
+      this.bddService.listGesteBDDAction.forEach((value: string[], key: string) => {
+        console.log('key : ' + key);
+        console.log('bdd : ' + this.sequenceCurrent?.bdd);
+        if (this.sequenceCurrent?.bdd === key) {
+          value.forEach(elt => {
+            this.classeGeste.push(elt);
+          });
+        }
+      });
+    }
+
+    this.classeGeste.forEach(geste => {
+      const Col = localStorage.getItem(geste);
+      if (Col !== null){  //  it checks values here or not to the variable
+        this.couleur.push(Col);
+        this.gesteCouleur.set(geste, Col);
+      }
+      else {
+        this.couleur.push('');
+      }
+    });
+    this.dataSource = new MatTableDataSource<string>(this.classeGeste);
   }
 }

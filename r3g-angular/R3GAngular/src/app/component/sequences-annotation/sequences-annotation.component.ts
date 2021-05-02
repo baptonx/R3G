@@ -42,9 +42,8 @@ export class SequencesAnnotationComponent implements OnInit {
       if (seq.id === value) {
         console.log(seq);
         this.engineService.refreshInitialize(seq);
-        // this.bdd.sequenceCourante = seq;
+        this.engineService.annotationServ.initializeClasseGesteEditeur();
         this.serviceSequence.evaluation.forEach(ev => {
-          // if (ev.name === this.bdd.sequenceCourante?.id) {
           if (ev.name === seq.id) {
             this.serviceSequence.evaluatedSelected = ev.annotation;
           }
