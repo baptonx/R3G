@@ -10,6 +10,7 @@ import {SingleFilterComponent} from '../single-filter/single-filter.component';
 })
 export class FilterComponent implements OnInit {
   @ViewChild('nomFiltreInput') nomFiltreInput!: ElementRef;
+  // Tableau de boolean binde dans le template html avec les components SingleFiltres. Le booleen indique si c'est le premier filtre ou non.
   filters: boolean[] = [true];
   @ViewChildren(SingleFilterComponent) childrenFilters: QueryList<SingleFilterComponent> = new QueryList<SingleFilterComponent>();
   nameFilter = '';
@@ -21,11 +22,13 @@ export class FilterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Ferme la fenetre de dialogue
   close(): void {
     const predicate: (geste: SequencesTab) => boolean = this.createFilters();
     this.dialogRef.close({filter: predicate, nomFiltre: this.nomFiltreInput.nativeElement.value});
   }
 
+  // Cree un filtre a partir des singleFiltres
   private createFilters(): (geste: SequencesTab) => boolean {
     const tabFilters: Array<(geste: SequencesTab) => boolean> = [];
     const tabAndOr: Array<(f1: (geste: SequencesTab) => boolean,
@@ -43,10 +46,12 @@ export class FilterComponent implements OnInit {
     return filter;
   }
 
+  // Ajoute un component filtre
   addSingleFilter(): void {
     this.filters.push(false);
   }
 
+  // Met a jour le nom du filtre en fonction des singleFiltres fils
   majNameFilter(): void {
     let name = '';
     let i = 0;

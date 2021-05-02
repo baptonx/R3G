@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Sequence} from '../class/commun/sequence';
 import {BehaviorSubject} from 'rxjs';
 
+// Sequences a afficher dans le tableau. Une sequencesTab equivaut a une ligne et un attribut de sequencesTab a une colonne.
 export interface SequencesTab {
   BDD: string;
   id: string;
@@ -34,7 +35,6 @@ export class SequenceTabImpl implements SequencesTab{
   equalsSeq(seq: Sequence): boolean {
     return this.id === seq.id && this.BDD === seq.bdd;
   }
-
   push(k: string, v: any): void{
     this[k] = v;
   }
@@ -49,19 +49,28 @@ export class SequenceTabImpl implements SequencesTab{
   providedIn: 'root'
 })
 export class TableauExplService {
-  // sequences a afficher (format lineaire)
+  // sequencesTab convertis directement depuis le service bdd
   sequences: Array<SequencesTab>;
+  observableSequences: BehaviorSubject<SequencesTab[]>;
+
+  // Tableau des sequences selectionnees
   selectionListe1: Array<SequencesTab>;
   selectionListe2: Array<SequencesTab>;
-  observableSequences: BehaviorSubject<SequencesTab[]>;
+
+  // colonnes a afficher
   displayedColumns: string[] = new Array<string>();
   observableColumns: BehaviorSubject<string[]>;
+  // tous les attributs du tableau de sequencesTab
   allAttributes: string[] = [];
 
   // Filtres
+  // filtres est un tableau de filtres (fonction qui renvoient un booleen)
   filtres: Array<(seqtab: SequencesTab) => boolean> = [];
+  // nomFiltre est le tableau indiquant le nom du filtre dans le tableau "filtres" au meme indice
   nomFiltres: string[] = [];
+  // filteredList est la liste ne contenant que les sequences filtrees.
   filteredList: SequencesTab[] = [];
+
   constructor() {
     this.selectionListe1 = new Array<SequencesTab>();
     this.selectionListe2 = new Array<SequencesTab>();
@@ -70,8 +79,9 @@ export class TableauExplService {
     this.observableColumns = new BehaviorSubject<string[]>(this.displayedColumns);
   }
 
-
-  ajouterMetadonnee(fileName: string, bdd: string, prefix: string, metadonnee: object): SequencesTab{
+  // methode recursive appelee dans updateAll pour creer un objet SequenceTab a partir d'un id (filename), d'une base de
+  // donnees (bdd), d'un prefix utilise pour tous les attributs de la sequencesTab et d'un dictionnaire de donnees.
+  private ajouterMetadonnee(fileName: string, bdd: string, prefix: string, metadonnee: object): SequencesTab{
     prefix = prefix === '' ? '' : prefix + '.';
     const sequenceData = new SequenceTabImpl(fileName, bdd, {});
     for (const [key, value] of Object.entries(metadonnee)){
@@ -86,6 +96,7 @@ export class TableauExplService {
     return sequenceData;
   }
 
+  // met a jour la liste this.sequences de sequencesTab en convertissant les listes de Sequence passees en parametre.
   updateAll(mapSequences: Map<string, Array<Sequence>>): void {
     this.addAttribute('id');
     this.addAttribute('BDD');
@@ -95,7 +106,7 @@ export class TableauExplService {
     for (const bdd of mapSequences.values()) {
       for (const sequence of bdd) {
         if (sequence.listAnnotation.length === 0) {
-          dataCourante = new SequenceTabImpl(sequence.id, sequence.bdd, sequence.metaDonnees);
+          dataCourante = this.ajouterMetadonnee(sequence.id, sequence.bdd, '', sequence.metaDonnees);
           if (sequence.directives.length !== 0) {
             dataCourante.concat(this.ajouterMetadonnee(sequence.id, sequence.bdd, '',
               {directives: sequence.directives.join(', ')}));
@@ -120,6 +131,8 @@ export class TableauExplService {
     this.observableSequences.next(this.filteredList);
   }
 
+  // Methode utilisee dans updateAll et ajouterMetadonnee pour ajouter un attribut au tableau this.allAttributes,
+  // representant tous les attributs du tableau de sequencesTab
   private addAttribute(prefix: string): void {
     let idx = this.allAttributes.findIndex((value) => prefix === value);
     if (idx < 0) {
@@ -131,6 +144,7 @@ export class TableauExplService {
     }
   }
 
+  // Methode pour regenerer la liste filteredList a partir de this sequences
   reloadFiltres(): void {
     this.filteredList = this.sequences;
     for (const filtre of this.filtres) {

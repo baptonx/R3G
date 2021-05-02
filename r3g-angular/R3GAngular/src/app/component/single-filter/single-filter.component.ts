@@ -42,6 +42,7 @@ export class SingleFilterComponent implements OnInit {
         map(value => this._filter(value, this.optionsOperateur))
       );
   }
+  // Met a jour le nom du sigleFilter
   majNameSingleFilter(): void {
     this.nameSingleFilter = this.isFirstFilter ? '' : ' ' + this.andOr + ' ';
     this.nameSingleFilter += this.operandeInput.nativeElement.value
@@ -50,12 +51,14 @@ export class SingleFilterComponent implements OnInit {
     this.changeName.emit();
   }
 
+  // Filtre le nom des noms recommandes
   private _filter(value: string, options: string[]): string[] {
     const filterValue = value.toLowerCase();
 
     return options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
+  // cree un predicat a partir des entrees
   createSingleFilter(): (geste: SequencesTab) => boolean {
     const operandeValue = this.operandeInput.nativeElement.value;
     const operateurValue = this.operateurInput.nativeElement.value;
@@ -74,6 +77,7 @@ export class SingleFilterComponent implements OnInit {
       return false;
     };
   }
+  // renvoie la disjonction ou la conjonction de deux predicats
   createAndOrFunction(): (f1: (geste: SequencesTab) => boolean,
                           f2: (geste: SequencesTab) => boolean) => (geste: SequencesTab) => boolean {
     console.log(this.andOr);

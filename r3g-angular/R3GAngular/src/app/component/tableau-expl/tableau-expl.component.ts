@@ -20,12 +20,14 @@ import {EngineExplorationService} from '../engine-exploration/engine-exploration
   styleUrls: ['./tableau-expl.component.css']
 })
 export class TableauExplComponent implements AfterViewInit, OnInit {
-
+  // Toutes les colonnes a afficher
   allColumns: string[] = new Array<string>();
+  // Tableau des donnees a afficher
   dataSource: MatTableDataSource<SequencesTab> = new MatTableDataSource<SequencesTab>();
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   // subscription: Subscription;
+
   allComplete1 = false;
   allComplete2 = false;
   modeSelection = '';
@@ -48,22 +50,26 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   }
 
-
+  // Met a jour le tableau
   updateAll(): void{
     // this.displayedColumns = Object.keys(this.explService.colonnesAfficher);
     this.allColumns = Object.assign([], this.explService.displayedColumns);
-    this.allColumns.push('addColumn');
-    this.allColumns.push('visualisation');
-    this.allColumns.push('download');
-    if (this.modeSelection === 'annotation' || this.modeSelection === 'evaluation') {
-      this.allColumns.push('checkbox1');
+    if (this.explService.displayedColumns.length > 0) {
+      this.allColumns.push('visualisation');
+      this.allColumns.push('download');
+      if (this.modeSelection === 'annotation' || this.modeSelection === 'evaluation') {
+        this.allColumns.push('checkbox1');
+      }
+      if (this.modeSelection === 'evaluation') {
+        this.allColumns.push('checkbox2');
+      }
+      this.dataSource.data = this.explService.filteredList;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     }
-    if (this.modeSelection === 'evaluation') {
-      this.allColumns.push('checkbox2');
+    else {
+      this.dataSource = new MatTableDataSource();
     }
-    this.dataSource.data = this.explService.filteredList;
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
@@ -75,9 +81,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  tournerBouton(): void {
-  }
-
+  // Ouvre la fenetre de dialogue ChoixColonne
   public choisirColonne(): void {
     const dialogRef = this.dialog.open(ChoixColonneComponent, {
       data: {colonnes: []}
@@ -92,6 +96,7 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // Modifie la valeur de l'attribut selected
   setSelectedSequence(element: any, selection: string): void {
     if (element instanceof SequenceTabImpl) {
       if (this.getSelected(selection, element)) {

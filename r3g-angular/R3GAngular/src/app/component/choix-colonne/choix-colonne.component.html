@@ -1,7 +1,7 @@
 <div class="container-choix-colonne">
   <mat-form-field id="chercherDonnee" appearance="fill">
     <mat-label >Rechercher un type de donnée</mat-label>
-    <input #searchInput (keyup)="afficherDonneees($event)" matInput>
+    <input #searchInput (keyup)="afficherDonneees()" matInput>
   </mat-form-field>
   <div class="donneesTab">
     <ng-container *ngFor="let line of donneesTabulees; let index = index">

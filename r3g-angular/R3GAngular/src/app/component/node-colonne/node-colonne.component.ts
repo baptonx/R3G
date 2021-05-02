@@ -27,27 +27,27 @@ export class NodeColonneComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
+  // Vrai ssi au moin une case est cochee mais pas toutes
   someComplete(): boolean {
     if (this.node.children == null) {
       return false;
     }
- //   this.sendValues();
     return this.node.children.filter(t => t.completed).length > 0 && !this.node.completed;
   }
 
+  // Vrai ssi toutes les cases sont cochees
   setAll(completed: boolean): void {
     this.setAllNode(completed, this.node);
     this.sendValues(completed);
   }
-
+  // Coche toutes les cases
   setAllNode(completed: boolean, node: NodeCol): void {
     node.completed = completed;
     if (node.children != null) {
       node.children.forEach(t => this.setAllNode(completed, t));
     }
   }
-
+  // envoie aux noeud fils la consigne de tout selectionner ou deselectionner
   sendValues(completed: boolean): void {
     if (completed) {
       this.childTrue.emit(this.node.name);
@@ -57,7 +57,8 @@ export class NodeColonneComponent implements OnInit {
     }
   }
 
-  onChildFalse(name: string): void {
+  // deselectionne le noeud et tous ses fils
+  onChildFalse(): void {
     this.node.completed = false;
     if (this.node.children != null) {
       let noneSelected = true;
@@ -71,7 +72,8 @@ export class NodeColonneComponent implements OnInit {
     }
   }
 
-  onChildTrue(name: string): void {
+  // selectionne le noeud et tous ses fils
+  onChildTrue(): void {
     if (this.node.children != null) {
       let allSelected = true;
       // tslint:disable-next-line:prefer-for-of
