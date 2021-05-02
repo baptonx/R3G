@@ -23,8 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="update exploration">
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +62,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/R3GAngular" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -125,7 +124,7 @@
       <workItem from="1619947865804" duration="3502000" />
       <workItem from="1619956916129" duration="15000" />
       <workItem from="1619957058114" duration="5144000" />
-      <workItem from="1619968546456" duration="333000" />
+      <workItem from="1619968546456" duration="1005000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>

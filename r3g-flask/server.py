@@ -323,34 +323,63 @@ def route_save_annot(bdd, namefichier, annotationsstr):
             ET.register_namespace('', "http://www.w3.org/2003/InkML")
             tree = ET.parse(filepath)
             root = tree.getroot()
-            for child in root:
-                if child.tag == "{http://www.w3.org/2003/InkML}unit":
-                    for children2 in child:
-                        if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
-                            if children2.attrib == {'type': 'actions'}:
-                                listsuprimer.append(children2)
-            for child in root:
-                if child.tag == "{http://www.w3.org/2003/InkML}unit":
-                    for elem in listsuprimer:
-                        child.remove(elem)
-            for child in root:
-                if child.tag == "{http://www.w3.org/2003/InkML}unit":
-                    for annot in annotations:
-                        annotation_xml = SubElement(child, 'annotationXML')
-                        annotation_xml.set('type', 'actions')
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'type')
-                        annotation.text = annot['classeGeste']
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'start')
-                        annotation.text = str(annot['f1'])
-                        annotation = SubElement(annotation_xml, 'annotation')
-                        annotation.set('type', 'end')
-                        annotation.text = str(annot['f2'])
-                        if annot['pointAction'] != 0:
+            if (root.find("{http://www.w3.org/2003/InkML}unit") != None):
+                for child in root:
+                    if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                        for children2 in child:
+                            if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
+                                if children2.attrib == {'type': 'actions'}:
+                                    listsuprimer.append(children2)
+                for child in root:
+                    if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                        for elem in listsuprimer:
+                            if elem in child:
+                                child.remove(elem)
+                for child in root:
+                    if child.tag == "{http://www.w3.org/2003/InkML}unit":
+                        for annot in annotations:
+                            annotation_xml = SubElement(child, 'annotationXML')
+                            annotation_xml.set('type', 'actions')
                             annotation = SubElement(annotation_xml, 'annotation')
-                            annotation.set('type', 'pointAction')
-                            annotation.text = str(annot['pointAction'])
+                            annotation.set('type', 'type')
+                            annotation.text = annot['classeGeste']
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'start')
+                            annotation.text = str(annot['f1'])
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'end')
+                            annotation.text = str(annot['f2'])
+                            if annot['pointAction'] != 0:
+                                annotation = SubElement(annotation_xml, 'annotation')
+                                annotation.set('type', 'pointAction')
+                                annotation.text = str(annot['pointAction'])
+            else:
+                counter = 0
+                for child in root:
+                    if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
+                        break
+                    if (child.attrib != "{http://www.w3.org/2003/InkML}annotationXML" or
+                                    child.attrib != {'type': 'directive'}):
+                                    print("directive")
+                                    counter = counter + 1
+                annotation_unit = SubElement(root, 'unit')
+                for annot in annotations:
+                            annotation_xml = SubElement(annotation_unit, 'annotationXML')
+                            annotation_xml.set('type', 'actions')
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'type')
+                            annotation.text = annot['classeGeste']
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'start')
+                            annotation.text = str(annot['f1'])
+                            annotation = SubElement(annotation_xml, 'annotation')
+                            annotation.set('type', 'end')
+                            annotation.text = str(annot['f2'])
+                            if annot['pointAction'] != 0:
+                                annotation = SubElement(annotation_xml, 'annotation')
+                                annotation.set('type', 'pointAction')
+                                annotation.text = str(annot['pointAction'])
+                root.insert(counter- 1 , annotation_unit)
             _pretty_print(root)
             tree = ET.ElementTree(root)
             tree.write(filepath, encoding="UTF-8", xml_declaration=True)

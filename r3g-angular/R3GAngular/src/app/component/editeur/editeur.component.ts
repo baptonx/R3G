@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AnnotationService } from 'src/app/module/annotation/annotation.service';
 import { BddService } from 'src/app/service/bdd.service';
-import {AbstractControl, FormControl, NgControl, Validator, ValidatorFn} from '@angular/forms';
 
 @Component({
   selector: 'app-editeur',
@@ -35,7 +34,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (this.annotation.sequenceCurrent !== undefined) {
-      this.bdd.listGesteBDD.forEach((value: string[], key: string) => {
+      this.bdd.listGesteBDDAction.forEach((value: string[], key: string) => {
         console.log('key : ' + key);
         console.log('bdd : ' + this.annotation.sequenceCurrent?.bdd);
         if (this.annotation.sequenceCurrent?.bdd === key) {
@@ -85,7 +84,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
 
   validerCreationGeste(): void {
     if (this.annotation.sequenceCurrent !== undefined) {
-      const gestes = this.bdd.listGesteBDD.get(this.annotation.sequenceCurrent.bdd);
+      const gestes = this.bdd.listGesteBDDAction.get(this.annotation.sequenceCurrent.bdd);
       if (gestes !== undefined) {
         const valInputGeste = this.inputGeste.nativeElement.value;
         if (valInputGeste !== '' && gestes.findIndex(element => element === valInputGeste) === -1) {
@@ -94,7 +93,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
           this.inputGeste.nativeElement.value = '';
         }
       }
-      console.log(this.bdd.listGesteBDD);
+      console.log(this.bdd.listGesteBDDAction);
     }
   }
 
