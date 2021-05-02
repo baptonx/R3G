@@ -40,6 +40,7 @@ export class BddService {
   classesGestes: Array<string> = [];
   listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
   public sequenceCourante: Sequence|undefined;
+  listGesteBDDAction: Map<string, Array<string>> = new Map<string, Array<string>>();
 
   constructor(private http: HttpClient, public tableauExpl: TableauExplService) {
    // this.sequences = [];
@@ -177,7 +178,8 @@ export class BddService {
     if (returnedData !== 'Erreur') {
     const nameBdd = returnedData[0];
     this.listGesteBDD.set(nameBdd, returnedData[1]);
-    const listseq = returnedData[2] as Array<SequenceInterface>;
+    this.listGesteBDDAction.set(nameBdd, returnedData[2]);
+    const listseq = returnedData[3] as Array<SequenceInterface>;
     this.ajoutSequencetobdd(nameBdd, listseq);
     this.notifyChangeData();
     }
@@ -190,7 +192,12 @@ export class BddService {
        this.listGesteBDD.set(namebdd, value);
       }
     }
-    for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd
+    for (const [namebdd, value] of Object.entries((returnedData[1]))) {
+      if (Array.isArray(value)){
+        this.listGesteBDDAction.set(namebdd, value);
+      }
+    }
+    for (const [key, dbb] of Object.entries((returnedData[2]))) { // list bdd
       const listseq = dbb as Array<SequenceInterface>;
       this.ajoutSequencetobdd(key, listseq);
     }
@@ -199,7 +206,9 @@ export class BddService {
 
   miseajourdbOne(nameBdd: string, returnedData: any): void{
     this.listGesteBDD.set(nameBdd, returnedData[0]);
-    const listseq = returnedData[1] as Array<SequenceInterface>;
+    this.listGesteBDDAction.set(nameBdd, returnedData[1])
+    console.log(this.listGesteBDDAction);
+    const listseq = returnedData[2] as Array<SequenceInterface>;
     this.ajoutSequencetobdd(nameBdd, listseq);
     this.notifyChangeData();
   }

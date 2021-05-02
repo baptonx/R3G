@@ -22,10 +22,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="clean database">
+    <list default="true" id="7284c3b8-889c-4c1e-a67c-6ed02237cd23" name="Default Changelist" comment="update exploration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/module/exploration/exploration.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/component/engine-exploration/engine-exploration.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/R3GAngular/src/app/service/bdd.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../r3g-flask/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/../r3g-flask/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +65,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/R3GAngular" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -125,6 +125,8 @@
       <workItem from="1619798136871" duration="4269000" />
       <workItem from="1619868517045" duration="7610000" />
       <workItem from="1619947865804" duration="3502000" />
+      <workItem from="1619956916129" duration="15000" />
+      <workItem from="1619957058114" duration="5144000" />
     </task>
     <task id="LOCAL-00001" summary="add style">
       <created>1610379297694</created>
@@ -287,11 +289,28 @@
       <option name="project" value="LOCAL" />
       <updated>1619953879304</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="update exploration">
+      <created>1619956037241</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1619956037241</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -325,7 +344,8 @@
     <MESSAGE value="push server python sans print" />
     <MESSAGE value="my workspace" />
     <MESSAGE value="clean database" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean database" />
+    <MESSAGE value="update exploration" />
+    <option name="LAST_COMMIT_MESSAGE" value="update exploration" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

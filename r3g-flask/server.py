@@ -40,7 +40,7 @@ EVALUATION = []
 LISTE_PATH_BDD = {}
 LISTE_FICHIER_INKML = {}
 LISTE_GESTE_BDD = {}
-Liste_GESTE_BDD_ACTION = {}
+LISTE_GESTE_BDD_ACTION = {}
 METADONNEE = {}
 UPLOAD_FOLDER = './Upload'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -297,7 +297,6 @@ def route_get_donnee_voxel(bdd, namefichier):
                 with open(filepath, 'r') as file:
                     lines = file.readlines()
                     dim = list(map(int, lines[0].split(',')))
-                    print(dim)
                     boxes = []
                     for xit in range(1, len(lines), dim[1]*dim[0]):
                         list3d = []
@@ -317,7 +316,6 @@ def route_save_annot(bdd, namefichier,annotationsstr):
     # pylint: disable-msg=too-many-branches
     """Permet de sauvegarder les annotations de cette sequence"""
     annotations = json.loads(annotationsstr)
-    print(annotations[0])
     listsuprimer = []
     if bdd in LISTE_PATH_BDD:
         if namefichier in LISTE_FICHIER_INKML[bdd]:
@@ -328,11 +326,9 @@ def route_save_annot(bdd, namefichier,annotationsstr):
             for child in root:
                 if child.tag == "{http://www.w3.org/2003/InkML}unit":
                     for children2 in child:
-                        print(children2)
                         if children2.tag == "{http://www.w3.org/2003/InkML}annotationXML":
                             if children2.attrib == {'type': 'actions'}:
                                 listsuprimer.append(children2)
-            print(listsuprimer)
             for child in root:
                 if child.tag == "{http://www.w3.org/2003/InkML}unit":
                     for elem in listsuprimer:
@@ -340,7 +336,6 @@ def route_save_annot(bdd, namefichier,annotationsstr):
             for child in root:
                 if child.tag == "{http://www.w3.org/2003/InkML}unit":
                     for annot in annotations:
-                        print("hello")
                         annotation_xml = SubElement(child, 'annotationXML')
                         annotation_xml.set('type', 'actions')
                         annotation = SubElement(annotation_xml, 'annotation')
@@ -383,16 +378,17 @@ def get_last_config():
     global LISTE_FICHIER_INKML
     global METADONNEE
     global LISTE_GESTE_BDD
+    global LISTE_GESTE_BDD_ACTION
 
     fcfg = 'config.ini'
     cfg = configparser.ConfigParser()
 
     if len(cfg.read(fcfg)) == 1:
-
         # lecture des valeurs
         LISTE_PATH_BDD = ast.literal_eval(cfg['server']['LISTE_PATH_BDD'])
         LISTE_FICHIER_INKML = ast.literal_eval(cfg['server']['LISTE_FICHIER_INKML'])
         LISTE_GESTE_BDD = ast.literal_eval(cfg['server']['LISTE_GESTE_BDD'])
+        LISTE_GESTE_BDD_ACTION = ast.literal_eval(cfg['server']['LISTE_GESTE_BDD_ACTION'])
         METADONNEE = ast.literal_eval(cfg['server']['METADONNEE'])
 
 def save_config():
@@ -403,6 +399,7 @@ def save_config():
     cfg['server'] = {'LISTE_PATH_BDD': str(LISTE_PATH_BDD),
                      'LISTE_FICHIER_INKML': str(LISTE_FICHIER_INKML),
                      'LISTE_GESTE_BDD': str(LISTE_GESTE_BDD),
+                     'LISTE_GESTE_BDD_ACTION': str(LISTE_GESTE_BDD_ACTION),
                      'METADONNEE': str(METADONNEE)}
     # écriture du fichier modifié
     with open(fcfg, 'w') as file:
@@ -416,6 +413,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
     longeur_path = len(pathbdd)
     global METADONNEE
     global LISTE_GESTE_BDD
+    global LISTE_GESTE_BDD_ACTION
     for path, _, files in walk(pathbdd):
         for filename in files:
             if p_1.match(filename):
@@ -423,6 +421,7 @@ def ajout_fichiers_inkml_in(pathbdd, namebdd):
     if len(liste_fichier_in) != 0:
         LISTE_GESTE_BDD[namebdd] = []
         LISTE_FICHIER_INKML[namebdd] = liste_fichier_in
+        rechercherActionCsv(pathbdd, namebdd)
         metadonnes = []
         for file in liste_fichier_in:
             metadonnes.append(get_meta_donnee(file, namebdd))
@@ -436,19 +435,23 @@ def fermer_bdd_inkml(bdd):
     global LISTE_FICHIER_INKML
     global LISTE_GESTE_BDD
     global LISTE_PATH_BDD
+    global LISTE_GESTE_BDD_ACTION
     del LISTE_PATH_BDD[bdd]
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
     del LISTE_GESTE_BDD[bdd]
+    del LISTE_GESTE_BDD_ACTION[bdd]
 
 def effacer_metadonnee_bdd(bdd):
     """ferme une bdd """
     global METADONNEE
     global LISTE_FICHIER_INKML
     global LISTE_GESTE_BDD
+    global LISTE_GESTE_BDD_ACTION
     del METADONNEE[bdd]
     del LISTE_FICHIER_INKML[bdd]
     del LISTE_GESTE_BDD[bdd]
+    del LISTE_GESTE_BDD_ACTION[bdd]
 
 def get_meta_donnee(filename, bdd):
     # pylint: disable-msg=too-many-locals
@@ -519,26 +522,59 @@ def get_donnee(filename, bdd):
                     donnees.append(dict_final)
     return donnees
 
+def rechercherActionCsv(strpath,name):
+    """telecharger la liste des geste de Action.csv"""
+    global LISTE_GESTE_BDD_ACTION
+    tabclass = []
+    filepath = os.path.join(strpath,'Actions.csv')
+    if os.path.isfile(filepath):
+        with open(filepath, 'r') as fileclass:
+            for line in fileclass:
+                line = line.replace('\n', '')
+                tabtemp = line.split(';')
+                tabclass.append(tabtemp[1])
+            fileclass.close()
+    LISTE_GESTE_BDD_ACTION[name] = tabclass
+
+def route_ajouter_class_actioncsv(bdd, name_action):
+    global LISTE_GESTE_BDD_ACTION
+    LISTE_GESTE_BDD_ACTION[bdd].append(name_action)
+    filepath = os.path.join(LISTE_PATH_BDD[bdd],'Actions.csv')
+    nb = -1 
+    if os.path.isfile(filepath):
+        with open(filepath, 'r') as fileclass:
+            nb = len(fileclass.readlines())
+            fileclass.close()
+        if nb != -1:
+            with open(filepath, 'a') as fileclass:
+                fileclass.write(str(nb) + ";" + name_action)
+                fileclass.close()
+
 def add_listgeste_metadonne():
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste par bdd et les Metadonnee"""
-    return [LISTE_GESTE_BDD, METADONNEE]
+    return [LISTE_GESTE_BDD,LISTE_GESTE_BDD_ACTION, METADONNEE]
 
 def add_listgeste_metadonnee_one(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
-    return [LISTE_GESTE_BDD[name], METADONNEE[name]]
+    return [LISTE_GESTE_BDD[name],LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
 
 def add_listgeste_metadonnee_one_and_name(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
-    return [name, LISTE_GESTE_BDD[name], METADONNEE[name]]
+    return [name, LISTE_GESTE_BDD[name],LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
 #############Exploration route :##############
+
+
+@APP.route('/models/ajoutClass/<bdd>/<action>')
+def route_ajouter_class_actioncsv(bdd, action):
+    ajouter_class_actioncsv(bdd, action)
+    return json.dumps(LISTE_GESTE_BDD_ACTION[bdd])
 
 @APP.route('/models/getMetaDonnee')
 def route_get_meta_donne():
     """Permet de télécharger l'ensemble des méta_donnée"""
-
     return json.dumps(add_listgeste_metadonne())
 
 @APP.route('/models/getListBDD')
@@ -567,24 +603,28 @@ def route_add_bdd():
     top.withdraw()
     root.update()
     top.update()
+    namebdd = ""
     try:
         path = tkinter.filedialog.askdirectory(mustexist=True)
         #Permet de télécharger donnée a partir du nom de fichier
-        if path != "":
-            p_2 = re.compile(r'[^/]*$')
-            namebdd = p_2.search(path)
-            if namebdd is not None:
-                namebdd = namebdd.group(0)
-                if namebdd not in LISTE_PATH_BDD:
-                    LISTE_GESTE_BDD[namebdd] = []
-                    LISTE_PATH_BDD[namebdd] = path
-                    if ajout_fichiers_inkml_in(path, namebdd):
-                        save_config()
-                    else:
-                        del LISTE_GESTE_BDD[namebdd]
-                        del LISTE_PATH_BDD[namebdd]
-        root.destroy()
-        return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+        p_2 = re.compile(r'[^/]*$')
+        namebdd = p_2.search(path)
+        namebdd = namebdd.group(0)
+        if len(namebdd) > 0:
+            if namebdd not in LISTE_PATH_BDD:
+                LISTE_GESTE_BDD[namebdd] = []
+                LISTE_PATH_BDD[namebdd] = path
+                if ajout_fichiers_inkml_in(path, namebdd):
+                    rechercherActionCsv(path, namebdd)
+                    save_config()
+                else:
+                    del LISTE_GESTE_BDD[namebdd]
+                    del LISTE_PATH_BDD[namebdd]
+            root.destroy()
+            return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+        else:
+            root.destroy()
+            return json.dumps('directory not found')
     except RuntimeError:
         root.destroy()
         return json.dumps("Erreur")
@@ -606,11 +646,13 @@ def route_add_bdd_path(path):
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = strpath
                 if ajout_fichiers_inkml_in(strpath, namebdd):
+                    chercheActionCsv(strpath)
                     save_config()
                 else:
                     del LISTE_GESTE_BDD[namebdd]
                     del LISTE_PATH_BDD[namebdd]
     return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+
 
 
 @APP.route('/models/closeBDD/<name>')
@@ -630,8 +672,6 @@ def route_close_bdd(name):
 @APP.route('/models/reload/<name>')
 def route_reload_bdd(name):
     """Permet de télécharger donnée a partir du nom de fichier """
-    global LISTE_FICHIER_INKML
-    global METADONNEE
     if name in LISTE_PATH_BDD:
         effacer_metadonnee_bdd(name)
         ajout_fichiers_inkml_in(LISTE_PATH_BDD[name], name)
@@ -733,12 +773,25 @@ def read_class(pathclass):
         fileclass.close()
     return dictclass
 
-def generatefile_inkml(data, label, tableau_classe, inkml_file, fps):
-    """construit le fichier inkml"""
+def generatefile_inkml_with_label(data, label, tableau_classe, inkml_file, fps):
+    """construit le fichier inkml avec annotation"""
     inkml_tree = generate_template()
     add_labels(inkml_tree, label, tableau_classe)
     add_data(inkml_tree, data, fps)
-#    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
+    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
+# utile seulement si inkml pas indenté
+    with open(inkml_file, "r") as file:
+        parser = parseString(file.read())
+        file.close()
+    with open(inkml_file, "w") as file:
+        file.write(parser.toprettyxml())
+        file.close()
+
+def generatefile_inkml(data, tableau_classe, inkml_file, fps):
+    """construit le fichier inkml sans annotation"""
+    inkml_tree = generate_template()
+    add_data(inkml_tree, data, fps)
+    inkml_tree.write(inkml_file, encoding="UTF-8", xml_declaration=True)
 # utile seulement si inkml pas indenté
     with open(inkml_file, "r") as file:
         parser = parseString(file.read())
@@ -770,10 +823,14 @@ def rechercher_fichier_label(path_dossier_label):
 def generate_database(liste_data, liste_label, tableau_classe, inkml_path_dossier, fps):
     """construit l'ensemble de la base de donnée inkml"""
     os.makedirs(os.path.join(inkml_path_dossier, 'Inkml'), exist_ok=True)
+    
     for file_data in liste_data:
-        generatefile_inkml(liste_data[file_data], liste_label[file_data], tableau_classe,
-                        inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
-
+        if file_data in liste_label:
+            generatefile_inkml_with_label(liste_data[file_data], liste_label[file_data], tableau_classe,
+                            inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
+        else: 
+            generatefile_inkml(liste_data[file_data], tableau_classe,
+                            inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
 def copy_file_tabclass_to_inkml(inkml_path_dossier, path_class):
     """copier et renommer le fichier tabclass"""
     path_dossier_class = os.path.join(inkml_path_dossier, 'DataClasses')
@@ -789,11 +846,13 @@ def route_inkml_to_txt(bddname, txt_path_dossier):
     txt_path_dossier_tr = ""
     for char in txt_path_dossier.split(','):
         txt_path_dossier_tr += chr(int(char))
+    txt_path_dossier_tr = os.path.join(txt_path_dossier_tr, bddname)
+    os.makedirs(txt_path_dossier_tr)
     path_class_tr = os.path.join(inkml_path_dossier_tr, "Actions.csv")
     liste_inkml = rechercher_fichier_inkml(inkml_path_dossier_tr)
     write_labels(liste_inkml, txt_path_dossier_tr, path_class_tr)
     write_data(liste_inkml, txt_path_dossier_tr)
-    copy_file_tabclass_to_txt(inkml_path_dossier_tr, path_class_tr)
+    copy_file_tabclass_to_txt(path_class_tr, txt_path_dossier_tr)
     return json.dumps("worked")
 
 #############Fonctions CREER Base de Donnée txt depuis inkml :##############
@@ -832,7 +891,7 @@ def write_labels(liste_inkml, path_txt, path_class):
             elif child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
                 break
         filename = os.path.join(path_txt, "Label",
-                                os.path.splitext(os.path.basename(file))[0] + "_label.txt")
+                                os.path.splitext(os.path.basename(file))[0] + ".txt")
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w") as flabel:
             if len(annotations) > 0:
@@ -876,11 +935,9 @@ def write_data(liste_inkml, path_txt):
                         string += donnees[articulation][id_elem][point] + " "
                 fdata.write(string + "\n")
             fdata.close()
-def copy_file_tabclass_to_txt(inkml_path_dossier, txt_path_dossier):
+def copy_file_tabclass_to_txt(path_tabclass, txt_path_dossier):
     """copier le fichier Actions.csv vers txt"""
-    path_tabclass_class = os.path.join(inkml_path_dossier, 'Actions.csv')
-    print(path_tabclass_class)
-    shutil.copy(path_tabclass_class, txt_path_dossier)
+    shutil.copy(path_tabclass, txt_path_dossier)
 
 ########### MAIN ########################
 

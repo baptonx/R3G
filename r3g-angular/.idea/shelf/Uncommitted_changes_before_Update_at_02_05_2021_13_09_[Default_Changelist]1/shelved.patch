@@ -1,0 +1,193 @@
+Index: R3GAngular/src/app/service/bdd.service.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { Injectable } from '@angular/core';\r\nimport {Sequence} from '../class/commun/sequence';\r\nimport {SequencesTab, TableauExplService} from './tableau-expl.service';\r\nimport {HttpClient} from '@angular/common/http';\r\nimport {BehaviorSubject} from 'rxjs';\r\nimport {Annotation} from '../class/commun/annotation/annotation';\r\nimport {NodeCol, NodeColImpl} from '../class/exploration/node-col-impl';\r\n\r\n\r\nexport interface BaseDeDonne {\r\n  BDD: Array<SequenceInterface>;\r\n}\r\n\r\nexport interface SequenceInterface {\r\n  directives: Array<string>;\r\n  id: string;\r\n  BDD: string;\r\n  format: Map<string, string>;\r\n  annotation: object;\r\n  metadonnees: Metadonnee;\r\n}\r\n\r\n\r\nexport interface Metadonnee {\r\n  [metadonnee: string]: string | Metadonnee;\r\n}\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\n\r\nexport class BddService {\r\n  // sequences: Sequence[];\r\n  mapSequences: Map<string, Array<Sequence>> = new Map<string, Array<Sequence>>();\r\n  bddnames: Array<string> = [];\r\n  observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;\r\n  node: NodeCol = new NodeColImpl();\r\n  waitanswer = true;\r\n  inwaiting = 0;\r\n  counter = 0;\r\n  classesGestes: Array<string> = [];\r\n  listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();\r\n  public sequenceCourante: Sequence|undefined;\r\n\r\n  constructor(private http: HttpClient, public tableauExpl: TableauExplService) {\r\n   // this.sequences = [];\r\n    this.notifyTableauService();\r\n    this.observableSequences = new BehaviorSubject<Map<string, Array<Sequence>>>(this.mapSequences);\r\n  }\r\n\r\n  notifyTableauService(): void{\r\n    this.tableauExpl.updateAll(this.mapSequences);\r\n  }\r\n\r\n  getClasses(): void{\r\n\r\n  }\r\n  answerWait(): void{\r\n    this.waitanswer = true;\r\n  }\r\n  answerHere(): void{\r\n    this.waitanswer = false;\r\n  }\r\n setMetaData(): void{\r\n    this.answerWait();\r\n    this.http\r\n      .get<object>('/models/getMetaDonnee' , {})\r\n      .subscribe((returnedData: any) => {\r\n        this.miseajourdb(returnedData);\r\n        this.answerHere();\r\n    });\r\n\r\n  }\r\n\r\n  txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{\r\n    this.answerWait();\r\n    const labelsPathDossierStr = [];\r\n    for (let i = 0; i < labelsPathDossier.length; i++){\r\n      labelsPathDossierStr.push(labelsPathDossier.charCodeAt(i));\r\n    }\r\n    const dataPathDossierStr = [];\r\n    for (let i = 0; i < dataPathDossier.length; i++){\r\n      dataPathDossierStr.push(dataPathDossier.charCodeAt(i));\r\n    }\r\n    const inkmlPathDossierStr = [];\r\n    for (let i = 0; i < inkmlPathDossier.length; i++){\r\n      inkmlPathDossierStr.push(inkmlPathDossier.charCodeAt(i));\r\n    }\r\n    const pathClassStr = [];\r\n    for (let i = 0; i < pathClass.length; i++){\r\n      pathClassStr.push(pathClass.charCodeAt(i));\r\n    }\r\n    this.http\r\n      .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})\r\n      .subscribe(() => {\r\n        this.answerHere();\r\n      });\r\n  }\r\n\r\n  addpath(): void{\r\n    this.answerWait();\r\n    this.http\r\n      .get<object>('/models/addBDD' , {})\r\n      .subscribe((returnedData: any) => {\r\n        this.ajoutdb(returnedData);\r\n        this.answerHere();\r\n      });\r\n  }\r\n\r\n  addbddwithpath(path: string): void{\r\n    this.answerWait();\r\n    const str = [];\r\n    for (let i = 0; i < path.length; i++){\r\n      str.push(path.charCodeAt(i));\r\n    }\r\n    this.http\r\n      .get<object>(`/models/addBDDwithpath/${str}` , {})\r\n      .subscribe((returnedData: any) => {\r\n        this.ajoutdb(returnedData);\r\n        this.answerHere();\r\n      });\r\n  }\r\n\r\n  inkmlTotxt(bddname: string, txtPathDossier: string): void {\r\n    this.answerWait();\r\n    const str = [];\r\n    for (let i = 0; i < txtPathDossier.length; i++){\r\n      str.push(txtPathDossier.charCodeAt(i));\r\n    }\r\n    this.http\r\n      .get<object>(`/models/inkmlToTxt/${bddname}/${str}` , {})\r\n      .subscribe((returnedData: any) => {\r\n        // this.miseajourdb(returnedData);\r\n        this.answerHere();\r\n      });\r\n  }\r\n\r\n  getlistdb(): void{\r\n    this.http\r\n      .get<Array<string>>(`/models/getListBDD` , {})\r\n      .subscribe((returnedData: any) => {\r\n        this.bddnames = returnedData;\r\n        });\r\n  }\r\n  closedb(dbname: string): void{\r\n    this.answerWait();\r\n    this.http\r\n      .get<object>(`/models/closeBDD/${dbname}` , {})\r\n      .subscribe(() => {\r\n        this.enleverunedb(dbname);\r\n        this.answerHere();\r\n      });\r\n  }\r\n\r\n  enleverunedb(dbname: string): void{\r\n    const indexlistdb = this.bddnames.indexOf(dbname, 0);\r\n    if (indexlistdb > -1) {\r\n      this.bddnames.splice(indexlistdb, 1);\r\n    }\r\n    this.mapSequences.delete(dbname);\r\n    this.notifyChangeData();\r\n  }\r\n\r\n  ajoutdb(returnedData: any): void{\r\n    if (returnedData !== 'Erreur') {\r\n    const nameBdd = returnedData[0];\r\n    this.listGesteBDD.set(nameBdd, returnedData[1]);\r\n    const listseq = returnedData[2] as Array<SequenceInterface>;\r\n    this.ajoutSequencetobdd(nameBdd, listseq);\r\n    this.notifyChangeData();\r\n    }\r\n  }\r\n\r\n  miseajourdb(returnedData: any): void{\r\n    this.listGesteBDD.clear();\r\n    for (const [namebdd, value] of Object.entries((returnedData[0]))) {\r\n      if (Array.isArray(value)){\r\n       this.listGesteBDD.set(namebdd, value);\r\n      }\r\n    }\r\n    for (const [key, dbb] of Object.entries((returnedData[1]))) { // list bdd\r\n      const listseq = dbb as Array<SequenceInterface>;\r\n      this.ajoutSequencetobdd(key, listseq);\r\n    }\r\n    this.notifyChangeData();\r\n  }\r\n\r\n  miseajourdbOne(nameBdd: string, returnedData: any): void{\r\n    this.listGesteBDD.set(nameBdd, returnedData[0]);\r\n    const listseq = returnedData[1] as Array<SequenceInterface>;\r\n    this.ajoutSequencetobdd(nameBdd, listseq);\r\n    this.notifyChangeData();\r\n  }\r\n\r\n  sauvegardeAnnot(seq: Sequence | undefined): void{\r\n    if (seq !== undefined){\r\n      this.answerWait();\r\n      this.http\r\n        .get<object>(`/models/saveAnnot/${seq.bdd}/${seq.id}/${JSON.stringify(seq.listAnnotation)}` , {})\r\n        .subscribe(() => {\r\n          this.answerHere();\r\n        });\r\n    }\r\n  }\r\n  ajoutSequencetobdd(nameBdd: string, listseq: Array<SequenceInterface>): void{\r\n    const listSequence = new Array<Sequence>();\r\n    for (const seqInterface of listseq) { // list sequence\r\n      const sequence = seqInterface as SequenceInterface;\r\n      const listannot = new Array<Annotation>();\r\n      const listdirective = new Array<string>();\r\n      for (const annotation of Object.values(sequence.annotation)) {\r\n        const annot = new Annotation();\r\n        annot.classeGeste = annotation.type;\r\n        annot.f1 = parseFloat(annotation.start);\r\n        annot.f2 = parseFloat(annotation.end);\r\n        listannot.push(annot);\r\n      }\r\n      for (const directive of Object.values(sequence.directives)){\r\n        listdirective.push(String(directive));\r\n      }\r\n      listSequence.push(new Sequence(sequence.id, sequence.BDD, '', listannot, listdirective, sequence.metadonnees));\r\n    }\r\n    this.mapSequences.set(nameBdd, listSequence);\r\n  }\r\n  notifyChangeData(): void{\r\n    this.getlistdb();\r\n    this.updateFormat();\r\n    this.observableSequences.next(this.mapSequences);\r\n    this.notifyTableauService();\r\n  }\r\n\r\n\r\n  reloaddb(dbname: string): void{\r\n    this.answerWait();\r\n    this.http\r\n      .get<object>(`/models/reload/${dbname}` , {})\r\n      .subscribe((returnedData: any) => {\r\n        this.miseajourdbOne(dbname, returnedData);\r\n        this.answerHere();\r\n      });\r\n  }\r\n  getDonnee(listSequence: Array<Sequence>): void{\r\n    this.inwaiting = listSequence.length * 2;\r\n    this.counter = this.inwaiting;\r\n    for (const sequence of listSequence){\r\n      this.http\r\n        .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})\r\n        .subscribe((returnedData: any) => {\r\n          if (sequence !== undefined){\r\n            sequence.traceNormal = (returnedData);\r\n          }\r\n          this.counter--;\r\n          if (this.counter === 0){\r\n            this.inwaiting = 0;\r\n          }\r\n        });\r\n    }\r\n    for (const sequence of listSequence){\r\n      this.http\r\n        .get<object>(`/models/getDonneeVoxel/${sequence.bdd}/${sequence.id}` , {})\r\n        .subscribe((returnedData: any) => {\r\n          if (returnedData !== undefined){\r\n            if (returnedData !== 'NoFileExist'){\r\n              sequence.traceVoxel = (returnedData);\r\n            }\r\n          }\r\n          this.counter--;\r\n          if (this.counter === 0){\r\n            this.inwaiting = 0;\r\n          }\r\n        });\r\n    }\r\n\r\n  }\r\n\r\n  private updateFormat(): void {\r\n    this.node = new NodeColImpl('root');\r\n    this.node.push(['BDD']);\r\n    this.node.push(['id']);\r\n    for (const listsequence of this.mapSequences.values()) {\r\n      for (const sequence of listsequence) {\r\n        this.ajouterFormat(sequence.metaDonnees, []);\r\n        for (const value of sequence.listAnnotation) {\r\n          if (typeof value === 'object' && value != null) {\r\n            this.node.push(['annotation', 'idGeste']);\r\n            this.ajouterFormat(value, ['annotation']);\r\n          }\r\n        }\r\n        if (sequence.directives.length !== 0) {\r\n          this.node.push(['directives']);\r\n        }\r\n      }\r\n    }\r\n  }\r\n\r\n  private ajouterFormat(metaDonnees: object, path: string[]): void {\r\n    for (const [key, value] of Object.entries(metaDonnees)) {\r\n      path.push(key);\r\n      if (typeof value === 'object' && !Array.isArray(value) && value != null && key !== 'annotation') {\r\n        this.ajouterFormat(value, path);\r\n      }\r\n      else{\r\n        this.node.push(path.slice());\r\n      }\r\n      path.pop();\r\n    }\r\n  }\r\n  chercherSequenceTableau(seqTabTab: SequencesTab[]): Sequence[] {\r\n    const sequencesReturn: Sequence[] = [];\r\n    let seqTab;\r\n    let cpt;\r\n    for (const listseq of this.mapSequences.values()) {\r\n      for (const seq of listseq)\r\n      {\r\n        cpt = 0;\r\n        while (cpt < seqTabTab.length) {\r\n          seqTab = seqTabTab[cpt];\r\n          if (seqTab.equalsSeq(seq)) {\r\n            sequencesReturn.push(seq);\r\n            seqTab.selected1 = false;\r\n            seqTab.selected2 = false;\r\n            seqTabTab.splice(cpt, 1);\r\n          } else {\r\n            cpt++;\r\n          }\r\n        }\r\n      }\r\n      if (seqTabTab.length === 0) { break; }\r\n    }\r\n    return sequencesReturn;\r\n  }\r\n\r\n  chercherSequence(sequenceLigneTableau: SequencesTab): Sequence|undefined {\r\n    for (const listseq of this.mapSequences.values()) {\r\n        for (const seq of listseq){\r\n          if (seq.id === sequenceLigneTableau.id) {\r\n            return seq;\r\n          }\r\n        }\r\n    }\r\n    return undefined;\r\n  }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/R3GAngular/src/app/service/bdd.service.ts b/R3GAngular/src/app/service/bdd.service.ts
+--- a/R3GAngular/src/app/service/bdd.service.ts	
++++ b/R3GAngular/src/app/service/bdd.service.ts	
+@@ -30,14 +30,13 @@
+ })
+ 
+ export class BddService {
+-  // sequences: Sequence[];
+   mapSequences: Map<string, Array<Sequence>> = new Map<string, Array<Sequence>>();
+   bddnames: Array<string> = [];
+   observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
+   node: NodeCol = new NodeColImpl();
+   waitanswer = true;
+   inwaiting = 0;
+-  counter = 0;
++  counterfloor = 0;
+   classesGestes: Array<string> = [];
+   listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
+   public sequenceCourante: Sequence|undefined;
+@@ -51,10 +50,6 @@
+   notifyTableauService(): void{
+     this.tableauExpl.updateAll(this.mapSequences);
+   }
+-
+-  getClasses(): void{
+-
+-  }
+   answerWait(): void{
+     this.waitanswer = true;
+   }
+@@ -73,7 +68,7 @@
+   }
+ 
+   txtToInkml(labelsPathDossier: string, dataPathDossier: string, inkmlPathDossier: string, fps: string, pathClass: string ): void{
+-    this.answerWait();
++
+     const labelsPathDossierStr = [];
+     for (let i = 0; i < labelsPathDossier.length; i++){
+       labelsPathDossierStr.push(labelsPathDossier.charCodeAt(i));
+@@ -90,11 +85,16 @@
+     for (let i = 0; i < pathClass.length; i++){
+       pathClassStr.push(pathClass.charCodeAt(i));
+     }
+-    this.http
+-      .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
+-      .subscribe(() => {
+-        this.answerHere();
+-      });
++    if (pathClass.length > 0 && inkmlPathDossier.length > 0 && dataPathDossier.length > 0 && labelsPathDossier.length > 0 ){
++      this.answerWait();
++      this.http
++        .get<object>(`/models/txtToInkml/${labelsPathDossierStr}/${dataPathDossierStr}/${inkmlPathDossierStr}/${fps}/${pathClassStr}` , {})
++        .subscribe(() => {
++          this.answerHere();
++        });
++    }else{
++      window.alert('informations manquantes');
++    }
+   }
+ 
+   addpath(): void{
+@@ -102,23 +102,35 @@
+     this.http
+       .get<object>('/models/addBDD' , {})
+       .subscribe((returnedData: any) => {
+-        this.ajoutdb(returnedData);
++        if (returnedData === 'directory not found'){
++          window.alert('dossier non choisi');
++        }else{
++          this.ajoutdb(returnedData);
++        }
+         this.answerHere();
+       });
+   }
+ 
+   addbddwithpath(path: string): void{
+-    this.answerWait();
+     const str = [];
+     for (let i = 0; i < path.length; i++){
+       str.push(path.charCodeAt(i));
+     }
+-    this.http
+-      .get<object>(`/models/addBDDwithpath/${str}` , {})
+-      .subscribe((returnedData: any) => {
+-        this.ajoutdb(returnedData);
+-        this.answerHere();
+-      });
++    if (path.length > 0){
++      this.answerWait();
++      this.http
++        .get<object>(`/models/addBDDwithpath/${str}` , {})
++        .subscribe((returnedData: any) => {
++          if (returnedData === 'directory empty' || returnedData === 'empty path'){
++            window.alert(returnedData);
++          }else{
++            this.ajoutdb(returnedData);
++          }
++          this.answerHere();
++        });
++    }else {
++      window.alert('path vide');
++    }
+   }
+ 
+   inkmlTotxt(bddname: string, txtPathDossier: string): void {
+@@ -130,7 +142,7 @@
+     this.http
+       .get<object>(`/models/inkmlToTxt/${bddname}/${str}` , {})
+       .subscribe((returnedData: any) => {
+-        // this.miseajourdb(returnedData);
++        window.alert(returnedData);
+         this.answerHere();
+       });
+   }
+@@ -241,7 +253,8 @@
+   }
+   getDonnee(listSequence: Array<Sequence>): void{
+     this.inwaiting = listSequence.length * 2;
+-    this.counter = this.inwaiting;
++    let counter = this.inwaiting;
++    this.counterfloor = 0;
+     for (const sequence of listSequence){
+       this.http
+         .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
+@@ -249,8 +262,9 @@
+           if (sequence !== undefined){
+             sequence.traceNormal = (returnedData);
+           }
+-          this.counter--;
+-          if (this.counter === 0){
++          counter--;
++          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
++          if (counter === 0){
+             this.inwaiting = 0;
+           }
+         });
+@@ -264,8 +278,9 @@
+               sequence.traceVoxel = (returnedData);
+             }
+           }
+-          this.counter--;
+-          if (this.counter === 0){
++          counter--;
++          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
++          if (counter === 0){
+             this.inwaiting = 0;
+           }
+         });
+Index: R3GAngular/src/app/module/exploration/exploration.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><div style=\"height: 100%\">\r\n<mat-toolbar>\r\n  <button mat-icon-button aria-label=\"Example icon-button with menu icon\" [matMenuTriggerFor]=\"menuExplo\"><!--(click)=\"drawerExplo.toggle()\"-->\r\n    <mat-menu #menuExplo=\"matMenu\">\r\n      <button mat-menu-item [matMenuTriggerFor]=\"addPath\">Importer une BDD au format INKML</button>\r\n      <button mat-menu-item *ngIf=\"this.bdd.bddnames.length !== 0\" [matMenuTriggerFor]=\"listbddreload\">Recharger une BDD</button>\r\n      <button mat-menu-item *ngIf=\"this.bdd.bddnames.length !== 0\" [matMenuTriggerFor]=\"listclosebdd\">Fermer une BDD</button>\r\n      <button mat-menu-item (click)=\"openDialogTXTtoINKML()\">BDD Txt -> Inkml</button>\r\n      <button mat-menu-item *ngIf=\"this.bdd.bddnames.length !== 0\" [matMenuTriggerFor]=\"listexporter\">BDD Inkml -> Txt</button>\r\n    </mat-menu>\r\n    <mat-menu #addPath=\"matMenu\">\r\n      <button mat-menu-item (click)=\"openDialogINKML()\">A partir d'un path</button>\r\n      <button mat-menu-item (click)=\"addPathBDDINKML()\">Via le serveur</button>\r\n    </mat-menu>\r\n    <mat-menu  #listbddreload=\"matMenu\">\r\n      <button mat-menu-item *ngFor=\"let bddname of this.bdd.bddnames\" (click)=\"reloadDB(bddname)\">{{bddname}}</button>\r\n    </mat-menu>\r\n    <mat-menu #listclosebdd=\"matMenu\">\r\n      <button mat-menu-item *ngFor=\"let bddname of this.bdd.bddnames\" (click)=\"closeDB(bddname)\">{{bddname}}</button>\r\n    </mat-menu>\r\n    <mat-menu #listexporter=\"matMenu\">\r\n      <button mat-menu-item *ngFor=\"let bddname of this.bdd.bddnames\" (click)=\"openDialogINKMLtoTXT(bddname)\">{{bddname}}</button>\r\n    </mat-menu>\r\n\r\n\r\n    <mat-icon>menu</mat-icon>\r\n  </button>\r\n  <span>Exploration</span>\r\n  <span class=\"navbar-spacer\"></span>\r\n  <button mat-icon-button [matMenuTriggerFor]=\"menuAffichage\" aria-label=\"Example icon-button with a menu\">\r\n    <span>Affichage</span>\r\n  </button>\r\n  <mat-menu #menuAffichage=\"matMenu\">\r\n    <button mat-menu-item>\r\n      <span>Vidéo</span>\r\n    </button>\r\n    <button mat-menu-item>\r\n      <span>Squelette sans transformation</span>\r\n    </button>\r\n    <button mat-menu-item disabled>\r\n      <span>Squelette normalisé</span>\r\n    </button>\r\n    <button mat-menu-item>\r\n      <span>Squelette voxélisé</span>\r\n    </button>\r\n  </mat-menu>\r\n</mat-toolbar>\r\n\r\n<mat-drawer-container autosize>\r\n\r\n    <!--\r\n    <mat-list>\r\n      <button class=\"bouton-menu\" mat-button>\r\n        <mat-list-item>Créer une colonne</mat-list-item>\r\n      </button>\r\n      <mat-divider></mat-divider>\r\n      <button class=\"bouton-menu\" mat-button>\r\n        <mat-list-item #savebtn>Sauvegarder la BDD</mat-list-item>\r\n      </button>\r\n      <mat-divider></mat-divider>\r\n      <button class=\"bouton-menu\" (click)=\"addPathBDD()\"  mat-button>\r\n        <mat-list-item>Importer une BDD</mat-list-item>\r\n      </button>\r\n      <mat-divider></mat-divider>\r\n      <button class=\"bouton-menu\" [matMenuTriggerFor]=\"menu\" (click)=\"reloadDB()\" mat-button>\r\n        <mat-list-item>recharger une BDD\r\n          <mat-menu #menu=\"matMenu\">\r\n            <button mat-menu-item>Item 1</button>\r\n            <button mat-menu-item>Item 2</button>\r\n          </mat-menu>\r\n        </mat-list-item>\r\n      </button>\r\n      <button class=\"bouton-menu\" mat-button>\r\n        <mat-list-item>Charger une IA</mat-list-item>\r\n      </button>\r\n      <mat-divider></mat-divider>\r\n      <button class=\"bouton-menu\" mat-button>\r\n        <mat-list-item>Exporter les séquences sélectionnées</mat-list-item>\r\n      </button>\r\n      <mat-divider></mat-divider>\r\n    </mat-list>-->\r\n  <mat-tab-group animationDuration=\"0ms\" dynamicHeight>\r\n    <mat-tab class=\"ongletBDD\" label=\"Base de données\">\r\n      <ng-container *ngIf=\"this.bdd.waitanswer\">\r\n        <span style=\"display:table; margin:0 auto;\">Chargement en cours..</span>\r\n        <mat-progress-bar mode=\"indeterminate\" ></mat-progress-bar>\r\n      </ng-container>\r\n      <ng-container *ngIf=\"this.bdd.inwaiting != 0\">\r\n        <span style=\"display:table; margin:0 auto;\">Chargement en cours {{this.bdd.inwaiting / 2 - this.bdd.counter / 2}}/{{this.bdd.inwaiting / 2}}..</span>\r\n        <mat-progress-bar mode=\"indeterminate\" ></mat-progress-bar>\r\n      </ng-container>\r\n\r\n\r\n      <app-tableau-expl></app-tableau-expl>\r\n    </mat-tab>\r\n\r\n    <mat-tab label=\"Graphique\">Graphique</mat-tab>\r\n  </mat-tab-group>\r\n</mat-drawer-container>\r\n\r\n  <app-engine-exploration></app-engine-exploration>\r\n  <app-timeline-exploration></app-timeline-exploration>\r\n</div>\r\n\r\n<!--<app-visualitation-explo [style.display]=\"this.visuService.componentHidden?'none':'block'\"></app-visualitation-explo>-->\r\n\r\n<app-navigation-modules></app-navigation-modules>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/R3GAngular/src/app/module/exploration/exploration.component.html b/R3GAngular/src/app/module/exploration/exploration.component.html
+--- a/R3GAngular/src/app/module/exploration/exploration.component.html	
++++ b/R3GAngular/src/app/module/exploration/exploration.component.html	
+@@ -86,7 +86,7 @@
+         <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+       </ng-container>
+       <ng-container *ngIf="this.bdd.inwaiting != 0">
+-        <span style="display:table; margin:0 auto;">Chargement en cours {{this.bdd.inwaiting / 2 - this.bdd.counter / 2}}/{{this.bdd.inwaiting / 2}}..</span>
++        <span class="spanchargement">Chargement en cours {{this.bdd.counterfloor}}/{{this.bdd.inwaiting / 2}}..</span>
+         <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+       </ng-container>
+ 
+Index: R3GAngular/src/app/module/exploration/exploration.component.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\n.navbar-spacer{\r\n  width: 2%;\r\n}\r\n.bouton-menu{\r\n  width:100%;\r\n}\r\n.lien-container{\r\n  position: absolute;\r\n  margin-left: -200px;\r\n  bottom: 0;\r\n  left: 50%;\r\n}\r\n.ongletBDD{\r\n  width:100%;\r\n}\r\n.picker{\r\n\r\n}\r\napp-navigation-modules{\r\n  display:flex;\r\n  width:100%;\r\n  flex-direction: row;\r\n  position:fixed;\r\n  z-index: 1;\r\n  bottom:0;\r\n}\r\nmat-toolbar{\r\n  color:white;\r\n}\r\napp-visualitation-explo{\r\n  position: fixed;\r\n  z-index:1;\r\n  bottom: 0;\r\n  width: 100%;\r\n  color: #303030;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/R3GAngular/src/app/module/exploration/exploration.component.css b/R3GAngular/src/app/module/exploration/exploration.component.css
+--- a/R3GAngular/src/app/module/exploration/exploration.component.css	
++++ b/R3GAngular/src/app/module/exploration/exploration.component.css	
+@@ -35,3 +35,8 @@
+   width: 100%;
+   color: #303030;
+ }
++
++.spanchargement{
++  display:table;
++  margin:0 auto;
++}
