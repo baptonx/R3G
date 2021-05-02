@@ -104,4 +104,9 @@ export class SequencesAnnotationComponent implements OnInit {
     this.engineService.annotationServ.copyListAnnotationIAToSequence();
   }
 
+  saveAnnot(): void {
+    for (const seq of this.serviceSequence.sequences1) {
+      this.bdd.sauvegardeAnnot(seq);
+    }
+  }
 }

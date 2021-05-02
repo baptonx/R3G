@@ -2,6 +2,7 @@
 # pylint: disable=E1101
 # pylint: disable=R0914
 # pylint: disable=R1702
+# pylint: disable=C0301
 """Programme permettant de faire tourner le serveur utilise par R3G."""
 
 import os
@@ -323,7 +324,7 @@ def route_save_annot(bdd, namefichier, annotationsstr):
             ET.register_namespace('', "http://www.w3.org/2003/InkML")
             tree = ET.parse(filepath)
             root = tree.getroot()
-            if (root.find("{http://www.w3.org/2003/InkML}unit") != None):
+            if root.find("{http://www.w3.org/2003/InkML}unit") is not None:
                 for child in root:
                     if child.tag == "{http://www.w3.org/2003/InkML}unit":
                         for children2 in child:
@@ -351,35 +352,32 @@ def route_save_annot(bdd, namefichier, annotationsstr):
                             annotation.text = str(annot['f2'])
                             if annot['pointAction'] != 0:
                                 annotation = SubElement(annotation_xml, 'annotation')
-                                annotation.set('type', 'pointAction')
+                                annotation.set('type', 'ActionPoint')
                                 annotation.text = str(annot['pointAction'])
             else:
                 counter = 0
                 for child in root:
-                    if child.tag == "{http://www.w3.org/2003/InkML}traceGroup":
-                        break
-                    if (child.attrib != "{http://www.w3.org/2003/InkML}annotationXML" or
-                                    child.attrib != {'type': 'directive'}):
-                                    print("directive")
-                                    counter = counter + 1
-                annotation_unit = SubElement(root, 'unit')
+                    if child.attrib != "{http://www.w3.org/2003/InkML}traceGroup":
+                        if child.attrib != "{http://www.w3.org/2003/InkML}annotationXML" or child.attrib != {'type': 'directive'}:
+                            counter = counter + 1
+                annotation_unit = ET.Element('unit')
+                root.insert(counter - 2, annotation_unit)
                 for annot in annotations:
-                            annotation_xml = SubElement(annotation_unit, 'annotationXML')
-                            annotation_xml.set('type', 'actions')
-                            annotation = SubElement(annotation_xml, 'annotation')
-                            annotation.set('type', 'type')
-                            annotation.text = annot['classeGeste']
-                            annotation = SubElement(annotation_xml, 'annotation')
-                            annotation.set('type', 'start')
-                            annotation.text = str(annot['f1'])
-                            annotation = SubElement(annotation_xml, 'annotation')
-                            annotation.set('type', 'end')
-                            annotation.text = str(annot['f2'])
-                            if annot['pointAction'] != 0:
-                                annotation = SubElement(annotation_xml, 'annotation')
-                                annotation.set('type', 'pointAction')
-                                annotation.text = str(annot['pointAction'])
-                root.insert(counter- 1 , annotation_unit)
+                    annotation_xml = SubElement(annotation_unit, 'annotationXML')
+                    annotation_xml.set('type', 'actions')
+                    annotation = SubElement(annotation_xml, 'annotation')
+                    annotation.set('type', 'type')
+                    annotation.text = annot['classeGeste']
+                    annotation = SubElement(annotation_xml, 'annotation')
+                    annotation.set('type', 'start')
+                    annotation.text = str(annot['f1'])
+                    annotation = SubElement(annotation_xml, 'annotation')
+                    annotation.set('type', 'end')
+                    annotation.text = str(annot['f2'])
+                    if annot['pointAction'] != 0:
+                        annotation = SubElement(annotation_xml, 'annotation')
+                        annotation.set('type', 'ActionPoint')
+                        annotation.text = str(annot['pointAction'])
             _pretty_print(root)
             tree = ET.ElementTree(root)
             tree.write(filepath, encoding="UTF-8", xml_declaration=True)
@@ -628,6 +626,7 @@ def route_add_bdd():
     """add new path ddb"""
     global LISTE_PATH_BDD
     global LISTE_GESTE_BDD
+    global LISTE_GESTE_BDD_ACTION
     root = tkinter.Tk()
     root.withdraw()
     top = tkinter.Toplevel(root)
@@ -645,14 +644,16 @@ def route_add_bdd():
             if namebdd not in LISTE_PATH_BDD:
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = path
+                LISTE_GESTE_BDD_ACTION = []
                 if ajout_fichiers_inkml_in(path, namebdd):
                     rechercher_action_csv(path, namebdd)
                     save_config()
                 else:
                     del LISTE_GESTE_BDD[namebdd]
                     del LISTE_PATH_BDD[namebdd]
-            root.destroy()
-            return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+                    del LISTE_GESTE_BDD_ACTION[namebdd]
+                root.destroy()
+                return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
         root.destroy()
         return json.dumps('directory not found')
     except RuntimeError:
@@ -664,24 +665,25 @@ def route_add_bdd_path(path):
     """add new path ddb"""
     global LISTE_PATH_BDD
     global LISTE_GESTE_BDD
+    global LISTE_GESTE_BDD_ACTION
     strpath = ""
     for char in path.split(','):
         strpath += chr(int(char))
     if strpath != "":
-        p_2 = re.compile(r'[^/]*$')
-        namebdd = p_2.search(strpath)
-        if namebdd is not None:
-            namebdd = namebdd.group(0)
-            if namebdd not in LISTE_PATH_BDD:
-                LISTE_GESTE_BDD[namebdd] = []
-                LISTE_PATH_BDD[namebdd] = strpath
-                if ajout_fichiers_inkml_in(strpath, namebdd):
-                    rechercher_action_csv(strpath, namebdd)
-                    save_config()
-                else:
-                    del LISTE_GESTE_BDD[namebdd]
-                    del LISTE_PATH_BDD[namebdd]
-    return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+        namebdd = os.path.basename(strpath)
+        if namebdd not in LISTE_PATH_BDD:
+            LISTE_GESTE_BDD[namebdd] = []
+            LISTE_PATH_BDD[namebdd] = strpath
+            LISTE_GESTE_BDD_ACTION[namebdd] = []
+            if ajout_fichiers_inkml_in(strpath, namebdd):
+                rechercher_action_csv(strpath, namebdd)
+                save_config()
+            else:
+                del LISTE_GESTE_BDD[namebdd]
+                del LISTE_PATH_BDD[namebdd]
+                del LISTE_GESTE_BDD_ACTION[namebdd]
+            return json.dumps(add_listgeste_metadonnee_one_and_name(namebdd))
+    return json.dumps('directory not found or empty')
 
 
 
@@ -689,14 +691,10 @@ def route_add_bdd_path(path):
 def route_close_bdd(name):
     """Permet de fermer une base donnée"""
     global LISTE_PATH_BDD
-    p_2 = re.compile(r'[^/]*$')
-    namebdd = p_2.search(name)
-    if namebdd is not None:
-        namebdd = namebdd.group(0)
-        if namebdd in LISTE_PATH_BDD:
-            fermer_bdd_inkml(namebdd)
-            save_config()
-            return json.dumps("Bdd well deleted")
+    if name in LISTE_PATH_BDD:
+        fermer_bdd_inkml(name)
+        save_config()
+        return json.dumps("Bdd well deleted")
     return json.dumps("Bdd doesn't exist")
 
 @APP.route('/models/reload/<name>')

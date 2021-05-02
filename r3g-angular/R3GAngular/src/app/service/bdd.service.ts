@@ -122,7 +122,7 @@ export class BddService {
       this.http
         .get<object>(`/models/addBDDwithpath/${str}` , {})
         .subscribe((returnedData: any) => {
-          if (returnedData === 'directory empty' || returnedData === 'empty path'){
+          if (returnedData === 'directory not found or empty'){
             window.alert(returnedData);
           }else{
             this.ajoutdb(returnedData);
