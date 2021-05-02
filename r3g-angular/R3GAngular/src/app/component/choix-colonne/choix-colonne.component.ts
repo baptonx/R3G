@@ -35,7 +35,7 @@ export class ChoixColonneComponent implements OnInit {
   // Renvoie toutes les feuilles accessibles a partir d'un noeud
   nodeToTab(currentNode: NodeCol): Array<NodeCol> {
     const tab = new Array<NodeCol>();
-    if (currentNode.children == null) {
+    if (currentNode.children.length === 0) {
       return [currentNode];
     }
     for (const child of currentNode.children) {
