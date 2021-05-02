@@ -348,6 +348,7 @@ export class EngineService implements OnDestroy {
         this.clip.duration = this.annotationServ.action.time;
         this.annotationServ.action.play();
       }
+      console.log(this.annotationServ.sequenceCurrent);
   }
 
   public playForward(): void {

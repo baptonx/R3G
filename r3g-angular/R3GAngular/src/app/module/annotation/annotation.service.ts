@@ -177,7 +177,22 @@ export class AnnotationService {
       // IndicatorTime
       this.ctx.fillStyle = 'black';
       let pas = 1;
-      if (this.tempsTotal > 40) {
+      if (this.tempsTotal > 1000) {
+        pas = 500;
+      }
+      else if (this.tempsTotal > 300) {
+        pas = 50;
+      }
+      else if (this.tempsTotal > 300) {
+        pas = 50;
+      }
+      else if (this.tempsTotal > 200) {
+        pas = 25;
+      }
+      else if (this.tempsTotal > 100) {
+        pas = 10;
+      }
+      else if (this.tempsTotal > 40) {
         pas = 5;
       }
       for (let i = 0; i < this.tempsTotal + 1; i = i + pas) {
@@ -266,7 +281,12 @@ export class AnnotationService {
         if (listeGestesBDD !== undefined && listeGestesBDD.length > 0) {
           this.annotationNew.classeGeste = listeGestesBDD[0];
         }
-        this.sequenceCurrent.listAnnotation.push(this.annotationNew);
+        if (this.classeGeste.length > 0) {
+          this.annotationNew.classeGeste = this.classeGeste[0];
+        }
+        if (this.annotationNew.f1 !== this.annotationNew.f2) {
+          this.sequenceCurrent.listAnnotation.push(this.annotationNew);
+        }
         this.annotationNew = new Annotation();
       }
       this.sequenceCurrent.trierAnnotation();
