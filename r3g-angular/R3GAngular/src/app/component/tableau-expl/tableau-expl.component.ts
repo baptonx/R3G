@@ -56,7 +56,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns = Object.assign([], this.explService.displayedColumns);
     if (this.explService.displayedColumns.length > 0) {
       this.allColumns.push('visualisation');
-      this.allColumns.push('download');
       if (this.modeSelection === 'annotation' || this.modeSelection === 'evaluation') {
         this.allColumns.push('checkbox1');
       }
