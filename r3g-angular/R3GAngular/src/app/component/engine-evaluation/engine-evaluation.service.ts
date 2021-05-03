@@ -47,6 +47,7 @@ export class EngineEvaluationService implements OnDestroy {
   public tempsTotal!: number;
   public action!: AnimationAction;
   public pauseAction: boolean;
+  public box:THREE.Group=new THREE.Group();
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
@@ -72,6 +73,19 @@ export class EngineEvaluationService implements OnDestroy {
     }
   }
 
+  public animate2()
+  {
+    console.log("animate()");
+    this._render();
+    requestAnimationFrame(()=>this.animate2());
+
+  }
+
+  private _render(): void
+  {
+
+  }
+
 
   public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
                   , refresh: boolean): void {
@@ -88,19 +102,38 @@ export class EngineEvaluationService implements OnDestroy {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
         const tabPositionArticulation: Array<ColorKeyframeTrack> = [];
+        const arr: Array<THREE.Mesh> = [];
         this.squelette = new SqueletteAnimation();
         this.squelette.initialize();
 
+       /* this.box = new THREE.Group();
+        scene.add(this.box);
+        let cubeArray = [];
+        for (var k = -4.5; k < 5; k++) {
+          for (var j = -4.5; j < 5; j++) {
+            for (var i = -4.5; i < 5; i++) {
+              let object = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshNormalMaterial());
+              object.position.x = i;
+              object.position.y = j;
+              object.position.z = k;
+              cubeArray.push(object);
+              this.box.add(object);
+            }
+          }
+        } */
+
+       //this.animate2();
 
 
-        this.clip = new AnimationClip('move', -1, []);
 
 
-        const mixer = new AnimationMixer(this.squelette.root);
-        this.action = mixer.clipAction(this.clip);
-        this.action.loop = THREE.LoopOnce;
-        console.log(this.action);
+
+        var colorClip = new THREE.AnimationClip("test", 2, tabPositionArticulation);
+        console.log(colorClip)
+        var mixer = new THREE.AnimationMixer(this.box);
+        this.action = mixer.clipAction(colorClip);
         this.action.clampWhenFinished = true;
+        this.action.play();
           // this.action.time = 4;
           // this.clip.duration = this.action.time;
           // this.stopToStart();
@@ -172,6 +205,9 @@ export class EngineEvaluationService implements OnDestroy {
     }
 
   }
+
+
+
 
   public initPoids(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
                  , refresh: boolean): void {

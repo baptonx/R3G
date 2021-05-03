@@ -161,7 +161,7 @@ export class EvaluationService {
       if (k === 2) {
         tmp = this.gesteIA2;
       }
-      let geste = '';
+      const geste = '';
       let nbCorrect = 0;
       const nbFrame = this.convertTimeToFrame(Number(this.tempsTotal));
       for (let i = 0; i < this.veriteTerrain.length; i++) {
