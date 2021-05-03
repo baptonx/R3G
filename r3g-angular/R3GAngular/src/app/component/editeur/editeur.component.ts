@@ -71,7 +71,6 @@ export class EditeurComponent implements OnInit, AfterViewInit {
           this.inputGeste.nativeElement.value = '';
         }
       }
-      console.log(this.bdd.listGesteBDDAction);
     }
   }
 

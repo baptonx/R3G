@@ -278,7 +278,6 @@ export class AnnotationService {
       if (this.buttonModeAnnotation.checked === true) {
         this.annotationNew.f2 = this.convertTimeToFrame(this.posToTime(posX));
         this.annotationNew.verifyF1BeforeF2();
-        console.log(this.annotationNew.f1 + ' et ' + this.annotationNew.f2);
         const listeGestesBDD = this.bddService.listGesteBDD.get(this.sequenceCurrent.bdd);
         if (listeGestesBDD !== undefined && listeGestesBDD.length > 0) {
           this.annotationNew.classeGeste = listeGestesBDD[0];
@@ -565,8 +564,6 @@ export class AnnotationService {
     this.geste = '';
     if (this.sequenceCurrent !== undefined) {
       this.bddService.listGesteBDDAction.forEach((value: string[], key: string) => {
-        console.log('key : ' + key);
-        console.log('bdd : ' + this.sequenceCurrent?.bdd);
         if (this.sequenceCurrent?.bdd === key) {
           value.forEach(elt => {
             this.classeGeste.push(elt);
