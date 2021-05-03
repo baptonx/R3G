@@ -1,9 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {EngineExplorationService} from '../engine-exploration/engine-exploration.service';
 import {EngineEvaluationService} from './engine-evaluation.service';
 import {HttpClient} from '@angular/common/http';
 import {Poids} from '../../class/evaluation/poids';
-import {Model} from '../../class/evaluation/model';
 
 @Component({
   selector: 'app-engine-evaluation',

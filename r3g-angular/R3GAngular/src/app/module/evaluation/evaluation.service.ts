@@ -103,12 +103,11 @@ export class EvaluationService {
         this.draw_ia_recouvrement(230, 2);
       } else if (this.timeline2.includes('Classes')) {
         this.draw_tmp(230, 2);
-
       }
-      // cursor
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
-
+      if (this.action !== undefined) {
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
+      }
     }
   }
 
@@ -318,7 +317,7 @@ export class EvaluationService {
       const posX = event.offsetX;
       const newValueTime = this.posToTime(posX);
 
-      if (newValueTime > 0 && newValueTime < this.tempsTotal) {
+      if (newValueTime > 0 && newValueTime < this.tempsTotal && this.action !== undefined) {
         this.action.time = newValueTime;
       }
 
