@@ -3,7 +3,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  width: 80%;
   height: 100%;
   display: block;
   z-index: -1;
@@ -44,14 +44,6 @@
 }
 
  */
-
-.barButtonsEngine {
-  position: absolute;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  padding-bottom: 10em;
-  margin-top: 1em;
-}
 
 .tab-container{
   display:inline-block;

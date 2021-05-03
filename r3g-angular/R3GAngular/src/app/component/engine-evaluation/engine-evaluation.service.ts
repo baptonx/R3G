@@ -1,6 +1,7 @@
 import {ElementRef, Injectable, NgZone, OnDestroy, OnInit} from '@angular/core';
 import * as THREE from 'three';
-import {AnimationAction, AnimationClip, AnimationMixer, BoxGeometry, Clock, ColorKeyframeTrack, VectorKeyframeTrack} from 'three';
+import {AnimationAction, AnimationClip, AnimationMixer, BoxGeometry, Clock, ColorKeyframeTrack,
+        VectorKeyframeTrack, NumberKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {BddService} from '../../service/bdd.service';
@@ -47,6 +48,8 @@ export class EngineEvaluationService implements OnDestroy {
   public tempsTotal!: number;
   public action!: AnimationAction;
   public pauseAction: boolean;
+  public traceVoxel: Array<Array<Array<Array<number>>>> = [];
+  public arr3: Array<AnimationAction> = [];
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
@@ -88,19 +91,81 @@ export class EngineEvaluationService implements OnDestroy {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
         const tabPositionArticulation: Array<ColorKeyframeTrack> = [];
+        const arr: Array<AnimationAction> = [];
+        const arr2: Array<THREE.Mesh> = [];
         this.squelette = new SqueletteAnimation();
         this.squelette.initialize();
+        this.arr3 = [];
+        const mixers: Array<THREE.AnimationMixer> = [];
+        if (this.sequenceCurrent !== undefined) {
+          this.traceVoxel = this.sequenceCurrent.traceVoxel;
+          const numberX = this.traceVoxel[0].length;
+          const numberY = this.traceVoxel[0][0].length;
+          const numberZ = this.traceVoxel[0][0][0].length;
+          for (let k = 0; k < numberX; k++) {
+            for (let j = 0; j < numberY; j++) {
+              for (let i = 0; i < numberZ; i++) {
+                const material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.2, transparent: true});
+                const object = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), material);
+                object.position.x = k;
+                object.position.y = j;
+                object.position.z = i;
+                scene.add(object);
+                arr2.push(object);
+
+              }
+            }
+          }
+          let index = 0;
+          for (let x = 0; x < this.traceVoxel[0].length; x++) {
+            for (let y = 0; y < this.traceVoxel[0][0].length; y++) {
+              for (let z = 0; z < this.traceVoxel[0][0][0].length; z++) {
+                const tabColor: Array<number> = [];
+                const tabTemps: Array<number> = [];
+                const opacityKF: Array<number> = [];
+                for (let temps = 0; temps < this.traceVoxel.length; temps++) {
+                  tabTemps.push(temps);
+                  if (this.traceVoxel[temps][x][y][z] === 0) {
+                    tabColor.push(1);
+                    tabColor.push(1);
+                    tabColor.push(1);
+                    opacityKF.push(0.2);
+                    opacityKF.push(0.2);
+                    opacityKF.push(0.2);
+                  } else {
+                    tabColor.push(0);
+                    tabColor.push(0);
+                    tabColor.push(0);
+                    opacityKF.push(0.8);
+                    opacityKF.push(0.8);
+                    opacityKF.push(0.8);
+                  }
+                }
+                const positionArticulation1 = new ColorKeyframeTrack(
+                  '.material.color',
+                  tabTemps,
+                  tabColor,
+                );
+                const positionArticulation2 = new NumberKeyframeTrack(
+                  '.material.opacity',
+                  tabTemps,
+                  opacityKF,
+                );
 
 
+                const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
+                const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
+                const mixer = new THREE.AnimationMixer(arr2[index]);
+                index++;
+                mixers.push(mixer);
+                const ac = mixer.clipAction(colorClip);
+                this.arr3.push(ac);
+              }
+            }
+          }
+        }
 
-        this.clip = new AnimationClip('move', -1, []);
 
-
-        const mixer = new AnimationMixer(this.squelette.root);
-        this.action = mixer.clipAction(this.clip);
-        this.action.loop = THREE.LoopOnce;
-        console.log(this.action);
-        this.action.clampWhenFinished = true;
           // this.action.time = 4;
           // this.clip.duration = this.action.time;
           // this.stopToStart();
@@ -108,7 +173,12 @@ export class EngineEvaluationService implements OnDestroy {
         return (rect: DOMRect) => {
             this.evalService.draw();
             const delta = clock.getDelta();
-            mixer.update(delta);
+            for ( let i = 0, l = mixers.length; i < l; i ++ ) {
+
+
+            mixers[ i ].update( delta );
+
+          }
             camera.aspect = rect.width / rect.height;
             camera.updateProjectionMatrix();
             controls.handleResize();
@@ -172,6 +242,14 @@ export class EngineEvaluationService implements OnDestroy {
     }
 
   }
+
+  public playSeq(): void{
+    this.arr3.forEach(elt => {
+      elt.play();
+    });
+  }
+
+
 
   public initPoids(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
                  , refresh: boolean): void {
@@ -352,8 +430,8 @@ export class EngineEvaluationService implements OnDestroy {
       camera.lookAt(0, 0, 0);
     }
     else if (x === 1) {
-      camera.position.set(8, 8, -30);
-      camera.rotateZ(90);
+      camera.position.set(8, 30, -30);
+      camera.lookAt(16, 50, 16);
     }
 
     scene.add(camera);
