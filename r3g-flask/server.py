@@ -230,7 +230,7 @@ def evaluation(name, sequences, model):
 
    # remise à zéro des séquences à évaluer
     if not os.path.exists('./Sequences'):
-       os.mkdir('./Sequences')
+        os.mkdir('./Sequences')
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
             os.remove('./Sequences/'+fichier)
