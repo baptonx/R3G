@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { AnnotationService } from 'src/app/module/annotation/annotation.service';
 import { BddService } from 'src/app/service/bdd.service';
 
@@ -19,6 +18,11 @@ export class EditeurComponent implements OnInit, AfterViewInit {
   public inputGeste!: ElementRef<HTMLInputElement>;
 
   constructor(public http: HttpClient, public bdd: BddService, public annotation: AnnotationService) {
+    this.annotation.observableData.subscribe(dataSource => {
+      if (dataSource !== undefined) {
+        dataSource.paginator = this.paginator;
+      }
+    });
   }
 
   changeVal(event: any, i: number): void {

@@ -3,10 +3,10 @@ import {AnimationAction} from 'three';
 import {EventManager} from '@angular/platform-browser';
 import {MatButtonToggle} from '@angular/material/button-toggle';
 import {Annotation} from '../../class/commun/annotation/annotation';
-import { Eval } from 'src/app/class/evaluation/eval';
 import { Sequence } from 'src/app/class/commun/sequence';
 import {BddService} from '../../service/bdd.service';
 import {MatTableDataSource} from '@angular/material/table';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Injectable({
@@ -44,6 +44,7 @@ export class AnnotationService {
   public couleur: Array<string> = [];
   public geste = '';
   public dataSource!: MatTableDataSource<string>;
+  public observableData: BehaviorSubject<MatTableDataSource<string>>;
 
 
   // Timeline
@@ -65,6 +66,7 @@ export class AnnotationService {
     this.annotationCurrentIsSelected = false;
     // this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
+    this.observableData = new BehaviorSubject<MatTableDataSource<string>>(this.dataSource);
   }
 
   draw(): void {
@@ -572,7 +574,6 @@ export class AnnotationService {
         }
       });
     }
-
     this.classeGeste.forEach(geste => {
       const Col = localStorage.getItem(geste);
       if (Col !== null){  //  it checks values here or not to the variable
@@ -584,5 +585,7 @@ export class AnnotationService {
       }
     });
     this.dataSource = new MatTableDataSource<string>(this.classeGeste);
+    this.observableData.next(this.dataSource);
+
   }
 }
