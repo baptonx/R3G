@@ -644,7 +644,7 @@ def route_add_bdd():
             if namebdd not in LISTE_PATH_BDD:
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = path
-                LISTE_GESTE_BDD_ACTION = []
+                LISTE_GESTE_BDD_ACTION[namebdd] = []
                 if ajout_fichiers_inkml_in(path, namebdd):
                     rechercher_action_csv(path, namebdd)
                     save_config()
