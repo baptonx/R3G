@@ -85,8 +85,8 @@ export class EngineEvaluationService implements OnDestroy {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    //this.renderer.shadowMap.enabled = true;
-    //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
