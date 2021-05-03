@@ -12,10 +12,6 @@ import { BddService } from 'src/app/service/bdd.service';
 })
 export class EditeurComponent implements OnInit, AfterViewInit {
   isLinear = false;
-  classeGeste: Array<string> = [];
-  couleur: Array<string> = [];
-  geste = '';
-  dataSource!: MatTableDataSource<string>;
   displayedColumns = ['Geste', 'Couleur'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -26,40 +22,18 @@ export class EditeurComponent implements OnInit, AfterViewInit {
   }
 
   changeVal(event: any, i: number): void {
-    this.couleur[i] = event.target.value;
-    this.geste = this.classeGeste[i];
-    localStorage.setItem(this.geste, event.target.value);
-    this.annotation.gesteCouleur.set(this.geste, event.target.value);
+    this.annotation.couleur[i] = event.target.value;
+    this.annotation.geste = this.annotation.classeGeste[i];
+    localStorage.setItem(this.annotation.geste, event.target.value);
+    this.annotation.gesteCouleur.set(this.annotation.geste, event.target.value);
   }
 
   ngOnInit(): void {
-    if (this.annotation.sequenceCurrent !== undefined) {
-      this.bdd.listGesteBDDAction.forEach((value: string[], key: string) => {
-        console.log('key : ' + key);
-        console.log('bdd : ' + this.annotation.sequenceCurrent?.bdd);
-        if (this.annotation.sequenceCurrent?.bdd === key) {
-          value.forEach(elt => {
-            this.classeGeste.push(elt);
-          });
-        }
-      });
-    }
-
-    this.classeGeste.forEach(geste => {
-      const Col = localStorage.getItem(geste);
-      if (Col !== null){  //  it checks values here or not to the variable
-        this.couleur.push(Col);
-        this.annotation.gesteCouleur.set(geste, Col);
-      }
-      else {
-        this.couleur.push('');
-      }
-    });
-    this.dataSource = new MatTableDataSource<string>(this.classeGeste);
+    this.annotation.initializeClasseGesteEditeur();
   }
 
   ngAfterViewInit(): void {
-      this.dataSource.paginator = this.paginator;
+      this.annotation.dataSource.paginator = this.paginator;
   }
 
   updateF1(event: any): void {
@@ -89,7 +63,7 @@ export class EditeurComponent implements OnInit, AfterViewInit {
         const valInputGeste = this.inputGeste.nativeElement.value;
         if (valInputGeste !== '' && gestes.findIndex(element => element === valInputGeste) === -1) {
           gestes.push(valInputGeste);
-          this.classeGeste.push(valInputGeste);
+          this.annotation.classeGeste.push(valInputGeste);
           this.inputGeste.nativeElement.value = '';
         }
       }

@@ -1,10 +1,10 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ink xmlns="http://www.w3.org/2003/InkML">
 	<traceFormat>
-		<channel name="x" type="Decimal"/>
-		<channel name="y" type="Decimal"/>
-		<channel name="z" type="Decimal"/>
-		<channel name="timestamp" type="Decimal"/>
+		<channel name="x" type="Decimal" />
+		<channel name="y" type="Decimal" />
+		<channel name="z" type="Decimal" />
+		<channel name="timestamp" type="Decimal" />
 	</traceFormat>
 	<unit>
 		<annotationXML type="actions">
@@ -70,7 +70,7 @@
 		<annotationXML type="actions">
 			<annotation type="type">buonissimo</annotation>
 			<annotation type="start">800</annotation>
-			<annotation type="end">859</annotation>
+			<annotation type="end">817</annotation>
 		</annotationXML>
 		<annotationXML type="actions">
 			<annotation type="type">vattene</annotation>
