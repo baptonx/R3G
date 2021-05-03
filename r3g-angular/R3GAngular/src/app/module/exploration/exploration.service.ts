@@ -165,4 +165,10 @@ export class ExplorationService {
     }
     return 0;
   }
+
+  onMouseUp(event: MouseEvent): void {
+    this.mouseDown = false;
+    this.mouseDownCursor = false;
+  }
+
 }
