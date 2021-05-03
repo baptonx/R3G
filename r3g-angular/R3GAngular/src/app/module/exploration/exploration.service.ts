@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {AnimationAction} from 'three';
-import {MatButtonToggle} from '@angular/material/button-toggle';
 import {Annotation} from '../../class/commun/annotation/annotation';
 import {EventManager} from '@angular/platform-browser';
 import {Sequence} from '../../class/commun/sequence';
@@ -25,11 +24,9 @@ export class ExplorationService {
   public mouseDownAnnotationMove!: boolean;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
-  public buttonModeViewing!: MatButtonToggle;
   public annotationCurrent!: Annotation;
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
-  public margeEdgeMouse = 10;
   public sequenceCurrent!: Sequence;
   public tabTimeCurrent!: Array<number>;
 
@@ -62,7 +59,6 @@ export class ExplorationService {
       this.ctx.strokeStyle = 'white';
       this.drawLine(this.margeTimeline, canvas.height / 2, canvas.width - this.margeTimeline, canvas.height / 2);
       this.ctx.strokeStyle = 'black';
-
       if (this.sequenceCurrent !== undefined) {
         this.ctx.font = '12px Arial';
         for (const annotation of this.sequenceCurrent.listAnnotation) {
@@ -72,14 +68,14 @@ export class ExplorationService {
           const t1 = this.convertFrameToTime(Number(frame1));
           const t2 = this.convertFrameToTime(Number(frame2));
           const color = localStorage.getItem(name);
-          if (color !== null && color !== ''){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = color;
           }
           else {
             this.ctx.fillStyle = 'black';
           }
           this.ctx.fillRect(this.timeToPos(t1), 0, this.timeToPos(t2) - this.timeToPos(t1), 20);
-          if (color !== null && color !== ''){
+          if (color !== null && color !== ' '){
             this.ctx.fillStyle = 'black';
           }
           else {
@@ -87,8 +83,8 @@ export class ExplorationService {
           }
           this.ctx.fillText(name, this.timeToPos(t1) + 5, 13);
         }
-      }
 
+        }
       // ======================================================
       // CURSOR
       // console.log('time : ' + this.action.time);
@@ -113,17 +109,10 @@ export class ExplorationService {
 
   onMouseDown(event: MouseEvent): void {
     const posX = event.offsetX;
-    const posY = event.offsetY;
     this.mouseDown = true;
     if (this.mouseOnCursor(posX)) {
       this.mouseDownCursor = true;
     }
-  }
-
-  onMouseUp(event: MouseEvent): void {
-    const posX = event.offsetX;
-    this.mouseDown = false;
-    this.mouseDownCursor = false;
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -138,12 +127,7 @@ export class ExplorationService {
 
   mouseOnCursor(posX: number): boolean {
     const posCursor = this.timeToPos(this.action.time);
-    if ((posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
   }
 
   public drawLine(x1: number, y1: number, x2: number, y2: number): void {
@@ -178,20 +162,6 @@ export class ExplorationService {
     }
     if (frame >= this.tabTimeCurrent.length) {
       return this.tempsTotal;
-    }
-    return 0;
-  }
-
-  public convertTimeToFrame(time: number): number {
-    if (time >= 0 && time < this.tempsTotal) {
-      for (let i = 0; i < this.tabTimeCurrent.length; i++) {
-        if (this.tabTimeCurrent[i] >= time) {
-          return i;
-        }
-      }
-    }
-    if (time >= this.tabTimeCurrent[this.tabTimeCurrent.length - 1]) {
-      return this.tabTimeCurrent.length - 1;
     }
     return 0;
   }

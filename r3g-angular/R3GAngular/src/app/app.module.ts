@@ -55,6 +55,7 @@ import { SingleFilterComponent } from './component/single-filter/single-filter.c
 import { PopUpBddTxtToInkmlComponent } from './component/pop-up-bdd-txt-to-inkml/pop-up-bdd-txt-to-inkml.component';
 import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
 import { PopUpBddInkmlToTxtComponent } from './component/pop-up-bdd-inkml-to-txt/pop-up-bdd-inkml-to-txt.component';
+import { EngineEvaluationSqueletteComponent} from './component/engine-evaluation-squelette/engine-evaluation-squelette.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -91,6 +92,7 @@ const appRoutes: Routes = [
     PopUpBddTxtToInkmlComponent,
     EngineEvaluationComponent,
     PopUpBddInkmlToTxtComponent,
+    EngineEvaluationSqueletteComponent
   ],
     imports: [
         BrowserModule,

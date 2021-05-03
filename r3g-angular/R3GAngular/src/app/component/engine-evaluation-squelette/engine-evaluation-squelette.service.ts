@@ -1,9 +1,9 @@
 import {ElementRef, Injectable, NgZone, OnDestroy} from '@angular/core';
 import * as THREE from 'three';
-import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {AnimationClip, AnimationMixer, Clock, VectorKeyframeTrack} from 'three';
+import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
-import {ExplorationService} from '../../module/exploration/exploration.service';
+import {EvaluationService} from '../../module/evaluation/evaluation.service';
 import {BddService} from '../../service/bdd.service';
 
 interface MaScene {
@@ -21,7 +21,7 @@ interface MaSceneElement {
 @Injectable({
   providedIn: 'root'
 })
-export class EngineExplorationService implements OnDestroy {
+export class EngineEvaluationSqueletteService implements OnDestroy {
   private listElementHtmlRefresh: Array<ElementRef<HTMLCanvasElement>> = [];
   private canvas!: HTMLCanvasElement;
   private renderer!: THREE.WebGLRenderer;
@@ -33,8 +33,8 @@ export class EngineExplorationService implements OnDestroy {
   public facteurGrossissement = 1.5;
   public facteurScale = 1;
 
-  constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public bddService: BddService) {
-    this.explorationServ.pauseAction = true;
+  constructor(private ngZone: NgZone, public evaluationServ: EvaluationService, public bddService: BddService) {
+    this.evaluationServ.pauseAction = true;
   }
 
   public ngOnDestroy(): void {
@@ -48,7 +48,7 @@ export class EngineExplorationService implements OnDestroy {
     this.sceneElements = [];
     this.frameId = 0;
 
-    if (refresh === false && canvas !== undefined) {
+    if (!refresh && canvas !== undefined) {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
@@ -56,15 +56,11 @@ export class EngineExplorationService implements OnDestroy {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
-    const s = this.bddService.sequenceCourante;
-    if (s !== undefined) {
-      this.explorationServ.sequenceCurrent = s;
-    }
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
-        if (this.explorationServ.sequenceCurrent !== undefined) {
+        if (this.evaluationServ.sequenceCurrent !== undefined) {
           const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
 
           const tabPosX: Array<number> = [];
@@ -74,7 +70,7 @@ export class EngineExplorationService implements OnDestroy {
           let averageY: number;
           let averageZ: number;
 
-          for (const frame of this.explorationServ.sequenceCurrent.traceNormal[0]) {
+          for (const frame of this.evaluationServ.sequenceCurrent.traceNormal[0]) {
             tabPosX.push(frame[0]);
             tabPosY.push(frame[1]);
             tabPosZ.push(frame[2]);
@@ -86,20 +82,20 @@ export class EngineExplorationService implements OnDestroy {
 
 
           this.squelette.initialize();
-          for (let i = 0; i < this.explorationServ.sequenceCurrent.traceNormal.length; i++) {
+          for (let i = 0; i < this.evaluationServ.sequenceCurrent.traceNormal.length; i++) {
             const tabPosXYZ: Array<number> = [];
             const tabTime: Array<number> = [];
             this.squelette.addArticulation();
 
-            for (const frame of this.explorationServ.sequenceCurrent.traceNormal[i]) {
+            for (const frame of this.evaluationServ.sequenceCurrent.traceNormal[i]) {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3]  / this.facteurScale);
+              tabTime.push(frame[3] / this.facteurScale);
             }
 
             if (i === 0) {
-              this.explorationServ.tabTimeCurrent = tabTime;
+              this.evaluationServ.tabTimeCurrent = tabTime;
             }
 
             const positionArticulation = new VectorKeyframeTrack(
@@ -108,10 +104,10 @@ export class EngineExplorationService implements OnDestroy {
               tabPosXYZ,
             );
             tabPositionArticulation.push(positionArticulation);
-            this.explorationServ.tempsTotal = tabTime[tabTime.length - 1];
+            this.evaluationServ.tempsTotal = tabTime[tabTime.length - 1];
           }
 
-          console.log('temps total : ' + this.explorationServ.tempsTotal);
+          console.log('temps total : ' + this.evaluationServ.tempsTotal);
           this.clip = new AnimationClip('move', -1, tabPositionArticulation);
 
           /*
@@ -138,16 +134,16 @@ export class EngineExplorationService implements OnDestroy {
 
         scene.add(this.squelette.root);
         const mixer = new AnimationMixer(this.squelette.root);
-        this.explorationServ.action = mixer.clipAction(this.clip);
-        this.explorationServ.action.loop = THREE.LoopOnce;
-        this.explorationServ.action.clampWhenFinished = true;
+        this.evaluationServ.action = mixer.clipAction(this.clip);
+        this.evaluationServ.action.loop = THREE.LoopOnce;
+        this.evaluationServ.action.clampWhenFinished = true;
         // this.action.time = 4;
         // this.clip.duration = this.action.time;
         this.stopToStart();
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.explorationServ.draw();
+          this.evaluationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;
@@ -178,7 +174,7 @@ export class EngineExplorationService implements OnDestroy {
       },*/
     };
 
-    if (refresh === false && listElementHtml !== undefined) {
+    if (!refresh && listElementHtml !== undefined) {
       for (const element of listElementHtml) {
         this.listElementHtmlRefresh.push(element);
         // console.log(this.listElementHtmlRefresh);
@@ -283,8 +279,7 @@ export class EngineExplorationService implements OnDestroy {
     this.renderer.clear(true, true);
     this.renderer.setScissorTest(true);
 
-    const transform = `translateY(${window.scrollY}px)`;
-    this.renderer.domElement.style.transform = transform;
+    this.renderer.domElement.style.transform = `translateY(${window.scrollY}px)`;
 
     for (const {elem, fn} of this.sceneElements) {
       // get the viewport relative position of this element
@@ -331,72 +326,64 @@ export class EngineExplorationService implements OnDestroy {
   }
 
   public play(): void {
-    if (this.explorationServ.pauseAction === true) {
+    if (this.evaluationServ.pauseAction) {
       this.playForward();
     } else {
-      this.explorationServ.action.timeScale = 1;
-      this.explorationServ.pauseAction = true;
-      this.clip.duration = this.explorationServ.action.time;
-      this.explorationServ.action.play();
+      this.evaluationServ.action.timeScale = 1;
+      this.evaluationServ.pauseAction = true;
+      this.clip.duration = this.evaluationServ.action.time;
+      this.evaluationServ.action.play();
     }
   }
 
   public playForward(): void {
-    this.explorationServ.pauseAction = false;
-    const t = this.explorationServ.action.time;
-    this.explorationServ.action.stop();
-    this.explorationServ.action.time = t;
-    this.clip.duration = this.explorationServ.tempsTotal;
-    this.explorationServ.action.timeScale = 1;
-    this.explorationServ.action.play();
+    this.evaluationServ.pauseAction = false;
+    const t = this.evaluationServ.action.time;
+    this.evaluationServ.action.stop();
+    this.evaluationServ.action.time = t;
+    this.clip.duration = this.evaluationServ.tempsTotal;
+    this.evaluationServ.action.timeScale = 1;
+    this.evaluationServ.action.play();
   }
 
   public playBackward(): void {
-    this.explorationServ.pauseAction = false;
-    const t = this.explorationServ.action.time;
-    this.explorationServ.action.stop();
-    this.explorationServ.action.time = t;
-    this.clip.duration = this.explorationServ.tempsTotal;
+    this.evaluationServ.pauseAction = false;
+    const t = this.evaluationServ.action.time;
+    this.evaluationServ.action.stop();
+    this.evaluationServ.action.time = t;
+    this.clip.duration = this.evaluationServ.tempsTotal;
     // this.annotationServ.action.setLoop(THREE.LoopOnce);
-    this.explorationServ.action.timeScale = -1;
-    this.explorationServ.action.play();
+    this.evaluationServ.action.timeScale = -1;
+    this.evaluationServ.action.play();
   }
 
   public stopToStart(): void {
-    this.explorationServ.action.timeScale = 1;
-    this.explorationServ.action.stop();
-    this.explorationServ.action.time = 0;
+    this.evaluationServ.action.timeScale = 1;
+    this.evaluationServ.action.stop();
+    this.evaluationServ.action.time = 0;
     this.clip.duration = 0;
-    this.explorationServ.action.play();
-    this.explorationServ.pauseAction = true;
+    this.evaluationServ.action.play();
+    this.evaluationServ.pauseAction = true;
   }
 
   public stopToEnd(): void {
-    this.explorationServ.action.timeScale = 1;
-    this.explorationServ.action.stop();
-    this.explorationServ.action.time = this.explorationServ.tempsTotal;
-    this.clip.duration = this.explorationServ.tempsTotal;
-    this.explorationServ.action.play();
-    this.explorationServ.pauseAction = true;
+    this.evaluationServ.action.timeScale = 1;
+    this.evaluationServ.action.stop();
+    this.evaluationServ.action.time = this.evaluationServ.tempsTotal;
+    this.clip.duration = this.evaluationServ.tempsTotal;
+    this.evaluationServ.action.play();
+    this.evaluationServ.pauseAction = true;
   }
 
   public pause(): void {
-    this.explorationServ.pauseAction = true;
-    this.clip.duration = this.explorationServ.action.time;
-    this.explorationServ.action.play();
+    this.evaluationServ.pauseAction = true;
+    this.clip.duration = this.evaluationServ.action.time;
+    this.evaluationServ.action.play();
   }
-
-  updateActionFrame(event: any): void {
-    const frameEditText = Number(event.target.value);
-    if (frameEditText >= 0 && frameEditText < this.explorationServ.tabTimeCurrent.length) {
-      this.explorationServ.action.time = this.explorationServ.convertFrameToTime(frameEditText);
-    }
-  }
-
   updateActionTime(event: any): void {
     const timeEditText = Number(event.target.value);
-    if (timeEditText >= 0 && timeEditText <= this.explorationServ.tempsTotal) {
-      this.explorationServ.action.time = timeEditText;
+    if (timeEditText >= 0 && timeEditText <= this.evaluationServ.tempsTotal) {
+      this.evaluationServ.action.time = timeEditText;
     }
   }
 

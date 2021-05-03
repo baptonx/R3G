@@ -10,7 +10,7 @@ import {AnimationAction} from 'three';
   providedIn: 'root'
 })
 export class EvaluationService {
-
+  public cursorSize!: number;
   public tempsTotal!: number;
   public sizeIndicatorTime!: number;
   public margeTimeline!: number;
@@ -47,6 +47,7 @@ export class EvaluationService {
     this.sizeIndicatorTime = 20;
     this.margeTimeline = 20;
     this.marge = 25;
+    this.cursorSize = 6;
     this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
     this.modelEval1.add('Vérité terrain');
@@ -104,6 +105,10 @@ export class EvaluationService {
         this.draw_tmp(230, 2);
 
       }
+      // cursor
+      this.ctx.fillStyle = 'red';
+      this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
+
     }
   }
 
@@ -161,7 +166,6 @@ export class EvaluationService {
       if (k === 2) {
         tmp = this.gesteIA2;
       }
-      const geste = '';
       let nbCorrect = 0;
       const nbFrame = this.convertTimeToFrame(Number(this.tempsTotal));
       for (let i = 0; i < this.veriteTerrain.length; i++) {
@@ -305,4 +309,20 @@ export class EvaluationService {
     return time * this.unit + this.margeTimeline;
   }
 
+  mouseOnCursor(posX: number): boolean {
+    const posCursor = this.timeToPos(this.action.time);
+    return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
+  }
+  onMouseMove(event: MouseEvent): void {
+    if (this.sequenceCurrent !== undefined) {
+      const posX = event.offsetX;
+      const newValueTime = this.posToTime(posX);
+
+      if (newValueTime > 0 && newValueTime < this.tempsTotal) {
+        this.action.time = newValueTime;
+      }
+
+      this.mousePosJustBefore = posX;
+    }
+  }
 }
