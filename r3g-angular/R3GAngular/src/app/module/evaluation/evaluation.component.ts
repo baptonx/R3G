@@ -26,9 +26,6 @@ export class EvaluationComponent implements OnInit {
   getTempsTotal(): number {
     const tabTime: Array<number> = [];
     for (let i = 0; i < this.evalServ.sequenceCurrent.traceNormal.length; i++) {
-
-
-
       for (const frame of this.evalServ.sequenceCurrent.traceNormal[i]) {
         tabTime.push(frame[3]);
       }

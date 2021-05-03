@@ -304,7 +304,7 @@ def route_get_donnee_voxel(bdd, namefichier):
                         for yit in range(0, dim[1]*dim[0], dim[1]):
                             list2d = []
                             for zit in range(0, dim[1], 1):
-                                list2d.append(list(map(int, lines[xit+yit+zit].split(','))))
+                                list2d.append(list(map(float, lines[xit+yit+zit].split(','))))
                             list3d.append(list2d)
                         boxes.append(list3d)
                     file.close()
@@ -315,6 +315,7 @@ def route_get_donnee_voxel(bdd, namefichier):
 @APP.route('/models/saveAnnot/<bdd>/<namefichier>/<annotationsstr>')
 def route_save_annot(bdd, namefichier, annotationsstr):
     # pylint: disable-msg=too-many-branches
+    # pylint: disable-msg=too-many-statements
     """Permet de sauvegarder les annotations de cette sequence"""
     annotations = json.loads(annotationsstr)
     listsuprimer = []
