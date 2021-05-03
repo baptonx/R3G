@@ -48,6 +48,10 @@ export class EngineEvaluationComponent implements OnInit {
     }
   }
 
+  play(): void{
+    this.engServ.playSeq();
+  }
+
   getPoids(): void {
     if (this.engServ.modelSelected !== undefined) {
       this.engServ.layerSelected = '';

@@ -1,6 +1,7 @@
 <canvas #rendererCanvas id="renderCanvas"></canvas>
 <span #box data-diagram="box"></span>
-
+<mat-tab-group animationDuration="0ms" dynamicHeight>
+  <mat-tab class="ongletBDD" label="Poids du réseau">
     <div class="tab-container">
       <mat-form-field appearance="fill">
         <mat-label>Choisir un modèle</mat-label>
@@ -32,4 +33,21 @@
         </mat-select>
       </mat-form-field></div>
     </div>
+  </mat-tab>
+  <mat-tab class="ongletBDD" label="Squelette voxelisé">
+    <div class="tab-container">
+    <div><mat-form-field appearance="fill">
+      <mat-label>Choisir la séquence</mat-label>
+      <mat-select (valueChange)="changeSeq($event)">
+
+        <mat-option *ngFor="let elt of this.engServ.sequencesChargeesService.sequences1" [value]="elt.id">
+          {{elt.id}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field></div>
+    <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="getPoids()">Reset caméra</button>
+      <button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="play()">Visualiser</button></span>
+    </div>
+  </mat-tab>
+</mat-tab-group>
 
