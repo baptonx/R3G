@@ -104,9 +104,10 @@ def start_wandb_v2():
     """v2 pour l'autre depot"""
     param = {}
     for run in RUNS:
-        param[run.id] = []
-        model = Model(run.id, run.name, param[run.id])
-        MODEL_LIST.append(model.__dict__)
+        if run.state == 'finished' and run.tags.count('ChalearnSubSet') == 0:
+            param[run.id] = []
+            model = Model(run.id, run.name, param[run.id])
+            MODEL_LIST.append(model.__dict__)
 
 
 def get_class_geste(name):
@@ -137,8 +138,8 @@ def load_config(path_model) -> dict:
 @APP.route('/models/getGesteZero/<name_bdd>')
 def get_geste_zero(name_bdd):
     """ on recup le geste identifié par 0 dans la bdd"""
-    if os.path.exists('./'+name_bdd+'/Actions.csv'):
-        with open('./'+name_bdd+'/Actions.csv') as file_content:
+    if os.path.exists(LISTE_PATH_BDD[name_bdd]+'/Actions.csv'):
+        with open(LISTE_PATH_BDD[name_bdd]+'/Actions.csv') as file_content:
             for line in file_content:
                 if line.split(';')[0] == '0':
                     return json.dumps(line.split(';')[1].replace('\n', ''))
@@ -220,13 +221,17 @@ def upload_file(name):
 @APP.route('/models/evaluation/<name>/<sequences>/<model>')
 def evaluation(name, sequences, model):
     """ on fait l'evaluation de sequences avec le model passé en param"""
+    global CLASSES
     download_weights(model)
-    get_class_geste(name)
+    CLASSES = LISTE_GESTE_BDD_ACTION[name]
+    pathbdd = LISTE_PATH_BDD[name]
     seq = sequences.split(',')
     if len(CLASSES) == 0:
         return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
    # remise à zéro des séquences à évaluer
+    if not os.path.exists('./Sequences'):
+        os.mkdir('./Sequences')
     for fichier in os.listdir('./Sequences'):
         if os.path.exists('./Sequences/'+fichier):
             os.remove('./Sequences/'+fichier)
@@ -235,13 +240,13 @@ def evaluation(name, sequences, model):
     # run SequenceEvaluator.py pour évaluer
     file_to_convert = {}
     for iid,elt in enumerate(seq):
-        if not os.path.exists('./' + name + '/Data/' + elt.replace('inkml','txt')):
-            file_to_convert[iid]='./' + name + '/Inkml/' + elt
+        if not os.path.exists(pathbdd + '/Data/' + elt.replace('inkml','txt')):
+            file_to_convert[iid]= pathbdd + '/Inkml/' + elt
 
-    write_data(file_to_convert, './' + name)
+    write_data(file_to_convert, pathbdd)
 
     for elt in seq:
-        copyfile('./' + name + '/Data/' + elt.replace('.inkml', '') + '.txt', './Sequences/' + \
+        copyfile(pathbdd + '/Data/' + elt.replace('.inkml', '') + '.txt', './Sequences/' + \
         elt.replace('.inkml', '') + '.txt')
 
     subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"\
@@ -645,7 +650,7 @@ def route_add_bdd():
             if namebdd not in LISTE_PATH_BDD:
                 LISTE_GESTE_BDD[namebdd] = []
                 LISTE_PATH_BDD[namebdd] = path
-                LISTE_GESTE_BDD_ACTION = []
+                LISTE_GESTE_BDD_ACTION[namebdd] = []
                 if ajout_fichiers_inkml_in(path, namebdd):
                     rechercher_action_csv(path, namebdd)
                     save_config()
@@ -975,6 +980,7 @@ if __name__ == "__main__":
     start_wandb_v2()
     APP.run(host='0.0.0.0')
     save_config()
+
 
 
 #    F = open("donneeSample.txt", "w")

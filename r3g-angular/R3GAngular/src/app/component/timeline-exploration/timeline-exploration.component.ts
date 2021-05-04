@@ -1,5 +1,4 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {TimelineService} from '../timeline/timeline.service';
 import {TimelineExplorationService} from './timeline-exploration.service';
 
 @Component({

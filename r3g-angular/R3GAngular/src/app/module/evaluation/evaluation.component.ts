@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 import { EvaluationService } from './evaluation.service';
+import {EngineEvaluationSqueletteService} from '../../component/engine-evaluation-squelette/engine-evaluation-squelette.service';
 
 @Component({
   selector: 'app-evaluation',
@@ -12,7 +13,8 @@ export class EvaluationComponent implements OnInit {
 
 
   sequencesList: Array<string>;
-  constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public evalServ: EvaluationService) {
+  constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
+              public bdd: BddService, public evalServ: EvaluationService) {
     this.sequencesList = [];
     this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
@@ -56,6 +58,9 @@ export class EvaluationComponent implements OnInit {
         });
       }
     });
+    if (this.evalServ.sequenceCurrent !== undefined) {
+      this.engineSqueletteService.refreshInitialize();
+    }
   }
 
   change_timeline_1(value: any): void{

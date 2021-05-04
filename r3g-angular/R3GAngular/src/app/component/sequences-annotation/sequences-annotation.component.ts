@@ -40,7 +40,6 @@ export class SequencesAnnotationComponent implements OnInit {
   changeValue(value: any): void{
     this.serviceSequence.sequences1.forEach(seq => {
       if (seq.id === value) {
-        console.log(seq);
         this.engineService.refreshInitialize(seq);
         this.engineService.annotationServ.initializeClasseGesteEditeur();
         this.serviceSequence.evaluation.forEach(ev => {
@@ -54,16 +53,13 @@ export class SequencesAnnotationComponent implements OnInit {
 
   eval(): void{
     if (this.modelSelected !== null && this.engineService.annotationServ.sequenceCurrent !== undefined){
-      console.log('Evaluation en cours, veuillez patienter.');
       const arraySequence: Array<string> = [];
       arraySequence.push(this.engineService.annotationServ.sequenceCurrent.id);
       this.http.get<Array<Eval>>('/models/evaluation/' + this.engineService.annotationServ.sequenceCurrent.bdd + '/' + arraySequence +
         '/' + this.modelSelected).subscribe(
         (returnedData: Array<Eval>) => {
-          console.log('Evaluation terminée');
-          if (returnedData.length !== 1) {
-            console.log('Attention returnedData !== 1, taille : ' + returnedData.length);
-          }
+          // if (returnedData.length !== 1) {
+          // }
           if (returnedData.length > 0) {
             for (const a of returnedData[0].annotation) {
               a.t1 = a.t1 !== undefined ? a.t1 : 0;
@@ -94,7 +90,6 @@ export class SequencesAnnotationComponent implements OnInit {
            */
         },
         () => {
-          console.log('Echec de l\'évaluation');
         });
     }
   }

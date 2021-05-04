@@ -95,7 +95,7 @@ export class EngineExplorationService implements OnDestroy {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3] * this.facteurScale);
+              tabTime.push(frame[3]  / this.facteurScale);
             }
 
             if (i === 0) {

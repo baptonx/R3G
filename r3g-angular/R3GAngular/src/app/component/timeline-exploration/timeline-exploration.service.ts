@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {AnnotationService} from '../../module/annotation/annotation.service';
 import {ExplorationService} from '../../module/exploration/exploration.service';
 
 @Injectable({

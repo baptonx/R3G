@@ -85,8 +85,8 @@ export class EngineEvaluationService implements OnDestroy {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
@@ -124,7 +124,7 @@ export class EngineEvaluationService implements OnDestroy {
                 const tabTemps: Array<number> = [];
                 const opacityKF: Array<number> = [];
                 for (let temps = 0; temps < this.traceVoxel.length; temps++) {
-                  tabTemps.push(temps/10);
+                  tabTemps.push(temps / 10);
                   if (this.traceVoxel[temps][x][y][z] === 0) {
                     tabColor.push(1);
                     tabColor.push(1);
@@ -142,7 +142,7 @@ export class EngineEvaluationService implements OnDestroy {
                   }
                 }
 
-                  if (tabColor.indexOf(0) > -1){
+                if (tabColor.indexOf(0) > -1){
                     const positionArticulation1 = new ColorKeyframeTrack(
                       '.material.color',
                       tabTemps,
@@ -263,8 +263,6 @@ export class EngineEvaluationService implements OnDestroy {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.squelette = new SqueletteAnimation();
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
@@ -475,6 +473,11 @@ export class EngineEvaluationService implements OnDestroy {
       this.renderer.setSize(width, height, false);
     }
     return needResize;
+  }
+
+  public stopAnim(): void{
+    this.resetCamera();
+    this.initPoids(undefined, undefined, true);
   }
 
   public render(): void {
