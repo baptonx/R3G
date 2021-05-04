@@ -2,6 +2,9 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {EngineEvaluationService} from './engine-evaluation.service';
 import {HttpClient} from '@angular/common/http';
 import {Poids} from '../../class/evaluation/poids';
+import {EvaluationService} from '../../module/evaluation/evaluation.service';
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
+import {Sequence} from '../../class/commun/sequence';
 
 @Component({
   selector: 'app-engine-evaluation',
@@ -19,8 +22,11 @@ export class EngineEvaluationComponent implements OnInit {
   public box!: ElementRef<HTMLCanvasElement>;
 
   public listElementHTML: Array<ElementRef<HTMLCanvasElement>> = [];
-
-  constructor(public engServ: EngineEvaluationService, public http: HttpClient) { }
+  public lastSeqVoxel: Sequence | undefined;
+  constructor(public engServ: EngineEvaluationService,
+              public evalServ: EvaluationService,
+              public seqChargeServ: SequencesChargeesService,
+              public http: HttpClient) { }
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
