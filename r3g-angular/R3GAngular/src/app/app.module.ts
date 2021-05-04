@@ -26,6 +26,7 @@ import { TableauExplComponent } from './component/tableau-expl/tableau-expl.comp
 import { NavigationModulesComponent } from './component/navigation-modules/navigation-modules.component';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {EngineComponent} from './component/engine/engine.component';
@@ -118,6 +119,7 @@ const appRoutes: Routes = [
         MatProgressBarModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatSlideToggleModule,
 
 
         RouterModule.forRoot(appRoutes),

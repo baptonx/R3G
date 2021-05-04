@@ -32,6 +32,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   public controls!: TrackballControls;
   public facteurGrossissement = 1.5;
   public facteurScale = 1;
+  private lastCameraPosition = 0;
 
   constructor(private ngZone: NgZone, public evaluationServ: EvaluationService, public bddService: BddService) {
     this.evaluationServ.pauseAction = true;
@@ -60,7 +61,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem);
-        if (this.evaluationServ.sequenceCurrent !== undefined) {
+        if (this.evaluationServ.sequenceCurrent !== undefined && this.evaluationServ.showSquelette === true) {
           const tabPositionArticulation: Array<VectorKeyframeTrack> = [];
 
           const tabPosX: Array<number> = [];
@@ -405,7 +406,32 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   }
 
   public resetCamera(): void {
+    this.controls.position0 = new THREE.Vector3(0, 1, -8) ;
+    this.lastCameraPosition = 0;
+    this.controls.update();
     this.controls.reset();
+  }
+
+  public changeCameraSpot(): void{
+    if (this.lastCameraPosition === 0) {
+      this.controls.position0 = new THREE.Vector3(-8, this.controls.position0.y, 0);
+      this.lastCameraPosition = 1;
+    }
+    else if (this.lastCameraPosition === 1) {
+      this.controls.position0 = new THREE.Vector3(0, this.controls.position0.y, 8);
+      this.lastCameraPosition = 2;
+    }
+    else if (this.lastCameraPosition === 2) {
+      this.controls.position0 = new THREE.Vector3(8, this.controls.position0.y, 0);
+      this.lastCameraPosition = 3;
+    }
+    else{
+      this.controls.position0 = new THREE.Vector3(0, this.controls.position0.y, -8) ;
+      this.lastCameraPosition = 0;
+    }
+    this.controls.update();
+    this.controls.reset();
+
   }
 
   public calculateAverage(tab: Array<number>): number {

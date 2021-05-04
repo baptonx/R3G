@@ -13,7 +13,12 @@ export class TimelineEvaluationService {
     this.evalServ.ctx = c;
     this.evalServ.onResize();
   }
-  onMouseMove(event: MouseEvent): void {
-    this.evalServ.onMouseMove(event);
+  onMouseMove($event: MouseEvent): void {
+    this.evalServ.onMouseMove($event);
+  }
+
+  onWheelMove($event: WheelEvent): void {
+    $event.preventDefault();
+    this.evalServ.onWheelMove($event);
   }
 }

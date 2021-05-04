@@ -29,7 +29,7 @@ export class SequencesChargeesService {
       }
       this.getList(selection).add(seq);
     }
-    this.bdd.getDonnee(listseqs);
+    // this.bdd.getDonnee(listseqs);
   }
   getList(selection: string): Set<Sequence> {
     if (selection === 'select1') {
@@ -39,7 +39,10 @@ export class SequencesChargeesService {
       return this.sequences2;
     }
   }
-
+  unloadSequence(sequence: Sequence): void{
+    sequence.traceNormal = new Array<Array<Array<number>>>();
+    sequence.traceVoxel = new Array<Array<Array<Array<number>>>>();
+  }
   deleteFromList(sequence: Sequence): void {
     sequence.traceNormal = [];
     this.sequences1.delete(sequence);

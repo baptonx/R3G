@@ -97,7 +97,7 @@ export class EngineEvaluationService implements OnDestroy {
         this.squelette.initialize();
         this.arr3 = [];
         const mixers: Array<THREE.AnimationMixer> = [];
-        if (this.sequenceCurrent !== undefined) {
+        if (this.sequenceCurrent !== undefined && this.evalService.showSquelette !== true) {
           this.traceVoxel = this.sequenceCurrent.traceVoxel;
           const numberX = this.traceVoxel[0].length;
           const numberY = this.traceVoxel[0][0].length;

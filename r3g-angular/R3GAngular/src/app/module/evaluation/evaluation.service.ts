@@ -4,6 +4,7 @@ import {Annotation} from 'src/app/class/commun/annotation/annotation';
 import {Sequence} from 'src/app/class/commun/sequence';
 import {Eval} from 'src/app/class/evaluation/eval';
 import {AnimationAction} from 'three';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Injectable({
@@ -36,6 +37,11 @@ export class EvaluationService {
   public gesteIA2: string[] = [];
   public timeline1: string;
   public timeline2: string;
+  public scale = 1;
+  public sequenceSquelette!: Sequence;
+  public sequenceSqueletteVoxel!: Sequence;
+  public showSquelette = true;
+  public observableShowSquelette: BehaviorSubject<boolean>;
 
 
   // Timeline
@@ -54,6 +60,7 @@ export class EvaluationService {
     this.modelEval2.add('Vérité terrain');
     this.timeline1 = '';
     this.timeline2 = '';
+    this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
   }
 
   reset(): void {
@@ -312,9 +319,10 @@ export class EvaluationService {
     const posCursor = this.timeToPos(this.action.time);
     return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
   }
-  onMouseMove(event: MouseEvent): void {
+
+  onMouseMove($event: MouseEvent): void {
     if (this.sequenceCurrent !== undefined) {
-      const posX = event.offsetX;
+      const posX = $event.offsetX;
       const newValueTime = this.posToTime(posX);
 
       if (newValueTime > 0 && newValueTime < this.tempsTotal && this.action !== undefined) {
@@ -323,5 +331,10 @@ export class EvaluationService {
 
       this.mousePosJustBefore = posX;
     }
+  }
+
+  onWheelMove($event: WheelEvent): void {
+    this.scale += $event.deltaY * -0.01;
+    console.log(this.scale);
   }
 }

@@ -31,13 +31,15 @@ export class EngineEvaluationComponent implements OnInit {
   changeFilter(value: any): void {
     this.engServ.filtreSelected = value;
   }
-  changeSeq(value: any): void{
-    this.engServ.sequences.forEach(seq => {
-      if (seq.id === value){
-        this.engServ.sequenceCurrent = seq;
-        this.engServ.refreshInitialize();
-      }
+  changeSeq(seq: Sequence): void{
+    if (this.lastSeqVoxel !== undefined) {
+      this.seqChargeServ.unloadSequence(this.lastSeqVoxel);
+    }
+    this.engServ.bddService.getSingleDonneeVoxel(seq).add(() => {
+      this.engServ.refreshInitialize();
+      this.lastSeqVoxel = seq;
     });
+    this.engServ.sequenceCurrent = seq;
   }
   view(): void{
     if (this.engServ.modelSelected !== undefined && this.engServ.layerSelected !== undefined

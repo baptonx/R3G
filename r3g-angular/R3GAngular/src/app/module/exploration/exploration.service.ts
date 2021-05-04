@@ -30,6 +30,7 @@ export class ExplorationService {
   public sequenceCurrent!: Sequence;
   public tabTimeCurrent!: Array<number>;
 
+
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
 

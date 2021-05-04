@@ -46,9 +46,11 @@ export class AnnotationService {
   public dataSource!: MatTableDataSource<string>;
   public observableData: BehaviorSubject<MatTableDataSource<string>>;
 
-
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
+
+  // Annotation
+  public sequenceAnnot!: Sequence;
 
   constructor(private eventManager: EventManager, public bddService: BddService) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));

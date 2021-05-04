@@ -4,8 +4,8 @@
         <mat-form-field appearance="fill">
           <mat-label>Choisir une séquence</mat-label>
           <mat-select (valueChange)="changeValue($event)">
-            <mat-option *ngFor="let s of sequencesList" [value]="s" >
-              {{s}}
+            <mat-option *ngFor="let s of serviceSequence.sequences1" [value]="s" >
+              {{s.id}}
             </mat-option>
         </mat-select>
         </mat-form-field>
@@ -35,8 +35,19 @@
 
 
 <app-timeline-evaluation></app-timeline-evaluation>
-<app-engine-evaluation-squelette></app-engine-evaluation-squelette>
-<div style="margin-bottom: 100px">
+
+<mat-slide-toggle
+  [(ngModel)]="this.evalServ.showSquelette"
+  Menu inférieur>
+</mat-slide-toggle>
+<div style="margin-bottom: 100px" *ngIf="this.evalServ.showSquelette;then squelette else voxel">
 </div>
-<app-engine-evaluation></app-engine-evaluation>
+
+<ng-template #squelette >
+  <app-engine-evaluation-squelette></app-engine-evaluation-squelette>
+</ng-template>
+
+<ng-template #voxel>
+  <app-engine-evaluation></app-engine-evaluation>
+</ng-template>
 <app-navigation-modules></app-navigation-modules>

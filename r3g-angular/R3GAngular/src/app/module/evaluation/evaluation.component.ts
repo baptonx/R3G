@@ -3,22 +3,20 @@ import { BddService } from 'src/app/service/bdd.service';
 import { SequencesChargeesService } from 'src/app/service/sequences-chargees.service';
 import { EvaluationService } from './evaluation.service';
 import {EngineEvaluationSqueletteService} from '../../component/engine-evaluation-squelette/engine-evaluation-squelette.service';
+import {Sequence} from '../../class/commun/sequence';
 
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
   styleUrls: ['./evaluation.component.css']
 })
+
 export class EvaluationComponent implements OnInit {
+  public lastSeqSquelette: Sequence | undefined;
 
 
-  sequencesList: Array<string>;
   constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
               public bdd: BddService, public evalServ: EvaluationService) {
-    this.sequencesList = [];
-    this.serviceSequence.sequences1.forEach(elt => {
-      this.sequencesList.push(elt.id);
-    });
     this.evalServ.reset();
   }
 
@@ -44,18 +42,23 @@ export class EvaluationComponent implements OnInit {
     this.evalServ.modelEval1.delete(value);
   }
 
-  changeValue(value: any): void{
-    this.serviceSequence.sequences1.forEach(seq => {
-      if (seq.id === value) {
-        this.evalServ.sequenceCurrent = seq;
-        this.evalServ.tempsTotal = this.getTempsTotal();
-        // this.evalServ.onResize.bind(this.evalServ)
-        this.evalServ.draw();
-        this.serviceSequence.evaluation.forEach(ev => {
-          if (ev.name === this.bdd.sequenceCourante?.id) {
-            this.serviceSequence.evaluatedSelected = ev.annotation;
-          }
-        });
+
+
+  changeValue(seq: Sequence): void {
+    this.evalServ.sequenceCurrent = seq;
+    if (this.lastSeqSquelette !== undefined) {
+      this.serviceSequence.unloadSequence(this.lastSeqSquelette);
+    }
+    this.bdd.getSingleDonnee(seq).add(() => this.changeAfterLoad(seq));
+    this.lastSeqSquelette = seq;
+  }
+  changeAfterLoad(seq: Sequence): void {
+    this.evalServ.sequenceSquelette = seq;
+    this.evalServ.tempsTotal = this.getTempsTotal();
+    this.evalServ.draw();
+    this.serviceSequence.evaluation.forEach(ev => {
+      if (ev.name === this.bdd.sequenceCourante?.id) {
+        this.serviceSequence.evaluatedSelected = ev.annotation;
       }
     });
     if (this.evalServ.sequenceCurrent !== undefined) {
