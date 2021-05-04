@@ -104,9 +104,10 @@ def start_wandb_v2():
     """v2 pour l'autre depot"""
     param = {}
     for run in RUNS:
-        param[run.id] = []
-        model = Model(run.id, run.name, param[run.id])
-        MODEL_LIST.append(model.__dict__)
+        if run.state == 'finished' and run.tags.count('ChalearnSubSet') == 0:
+            param[run.id] = []
+            model = Model(run.id, run.name, param[run.id])
+            MODEL_LIST.append(model.__dict__)
 
 
 def get_class_geste(name):
@@ -979,6 +980,7 @@ if __name__ == "__main__":
     start_wandb_v2()
     APP.run(host='0.0.0.0')
     save_config()
+
 
 
 #    F = open("donneeSample.txt", "w")

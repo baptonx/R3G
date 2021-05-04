@@ -11,10 +11,10 @@ from Tools.Voxelizer.Voxelizer2sqCWM_CuDi_JointsAsVector_SkId import Voxelizer2s
 from Tools.Voxelizer.VoxelizerCWM_CuDi_JointsAsVector import VoxelizerCWMSoupler_CuDi_JointsAsVector
 from matplotlib import pyplot
 
+
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if len(physical_devices) > 0:
     configtmp = tf.config.experimental.set_memory_growth(physical_devices[0], True)
-physical_devices = tf.config.experimental.list_physical_devices('GPU')
 pathFolder = sys.argv[1]
 pathFolderOut = sys.argv[2]
 pathModel = sys.argv[3]
