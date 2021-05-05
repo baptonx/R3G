@@ -63,6 +63,9 @@ export class TableauExplService {
   // tous les attributs du tableau de sequencesTab
   allAttributes: string[] = [];
 
+  // mode de selection a une ou deux colonnes
+  modeSelection = 'annotation';
+
   // Filtres
   // filtres est un tableau de filtres (fonction qui renvoient un booleen)
   filtres: Array<(seqtab: SequencesTab) => boolean> = [];

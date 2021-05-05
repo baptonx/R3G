@@ -14,9 +14,7 @@ table{
 }
 
 .align-right{
-  display: inline-block;
-  position: absolute;
-  right:0px;
+  display: block;
   text-align: right;
   margin-right:10px;
   margin-bottom:10px;
@@ -55,8 +53,16 @@ notRotatedButton{
 .boutons-aligne {
   margin: 10px;
 }
-.boutons-centre {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+.boutons-select {
+  text-align: left;
+  margin: 10px;
+}
+.align-left {
+  position: absolute;
+  left: 0;
+  margin-left: 10px;
+  margin-bottom:10px;
+}
+mat-radio-button {
+  margin-right: 10px;
 }

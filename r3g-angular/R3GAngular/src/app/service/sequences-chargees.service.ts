@@ -47,5 +47,6 @@ export class SequencesChargeesService {
 
   clear(): void {
     this.sequences1.clear();
+    this.sequences2.clear();
   }
 }

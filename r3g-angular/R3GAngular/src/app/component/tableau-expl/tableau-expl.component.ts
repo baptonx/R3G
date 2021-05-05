@@ -30,7 +30,6 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
 
   allComplete1 = false;
   allComplete2 = false;
-  modeSelection = '';
 
 
   constructor(public explService: TableauExplService,
@@ -56,10 +55,10 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
     this.allColumns = Object.assign([], this.explService.displayedColumns);
     if (this.explService.displayedColumns.length > 0) {
       this.allColumns.push('visualisation');
-      if (this.modeSelection === 'annotation' || this.modeSelection === 'evaluation') {
+      if (this.explService.modeSelection === 'annotation' || this.explService.modeSelection === 'evaluation') {
         this.allColumns.push('checkbox1');
       }
-      if (this.modeSelection === 'evaluation') {
+      if (this.explService.modeSelection === 'evaluation') {
         this.allColumns.push('checkbox2');
       }
       this.dataSource.data = this.explService.filteredList;
@@ -114,8 +113,8 @@ export class TableauExplComponent implements AfterViewInit, OnInit {
   }
 
   ajouterSequencesSelectionnees(): void {
-    this.sequenceChargees.mode = this.modeSelection;
-    if (this.modeSelection === 'annotation') {
+    this.sequenceChargees.mode = this.explService.modeSelection;
+    if (this.explService.modeSelection === 'annotation') {
       const seqSelectionee = this.bddService.chercherSequenceTableau(this.explService.selectionListe1);
       // this.bddService.getDonnee(seqSelectionee);
       this.sequenceChargees.addToList('select1', seqSelectionee);

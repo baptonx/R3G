@@ -23,20 +23,21 @@
   </div>
   <div class="boutons-aligne">
     <button (click)="choisirColonne()" mat-button><mat-icon>subject</mat-icon> Colonnes</button>
-    <span class="boutons-centre">
-      <mat-button-toggle-group [(ngModel)]="modeSelection" (click)="updateAll()">
-        <mat-button-toggle value="annotation">Annotation</mat-button-toggle>
-        <mat-button-toggle value="evaluation">Évaluation</mat-button-toggle>
-      </mat-button-toggle-group>
-      <button (click)="ajouterSequencesSelectionnees()" mat-button>Importer les séquences sélectionnées</button>
-    </span>
   </div>
 
 
 <div class="tab-container">
   <div>
-    <div class="align-right"><button mat-raised-button id="ajouter-un-filtre" (click)="openDialogFilter()">Ajouter un filtre</button></div>
-    <mat-chip-list #listeFiltres aria-label="Filtres">
+    <mat-radio-group class="align-left" [(ngModel)]="explService.modeSelection" (ngModelChange)="updateAll()">
+      <mat-radio-button value="annotation">Annotation</mat-radio-button>
+      <mat-radio-button value="evaluation">Évaluation</mat-radio-button>
+    </mat-radio-group>
+    <div class="align-right">
+      <button (click)="ajouterSequencesSelectionnees()" mat-raised-button>Importer les séquences</button>
+    </div>
+  </div>
+  <div>
+    <mat-chip-list class="align-left" #listeFiltres aria-label="Filtres">
       <span>Filtres : </span>
       <mat-chip
         *ngFor="let filtre of explService.filtres; let i=index;"
@@ -46,7 +47,7 @@
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
     </mat-chip-list>
-
+    <div class="align-right"><button mat-raised-button id="ajouter-un-filtre" (click)="openDialogFilter()">Ajouter un filtre</button></div>
   </div>
   <table mat-table [dataSource]="dataSource" matSort>
 
