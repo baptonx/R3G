@@ -85,8 +85,8 @@ export class EngineEvaluationService implements OnDestroy {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
         const {scene, camera, controls} = this.makeScene('rgb(30,30,30)', elem, 1);
@@ -97,7 +97,7 @@ export class EngineEvaluationService implements OnDestroy {
         this.squelette.initialize();
         this.arr3 = [];
         const mixers: Array<THREE.AnimationMixer> = [];
-        if (this.sequenceCurrent !== undefined) {
+        if (this.sequenceCurrent !== undefined && this.evalService.showSquelette !== true) {
           this.traceVoxel = this.sequenceCurrent.traceVoxel;
           const numberX = this.traceVoxel[0].length;
           const numberY = this.traceVoxel[0][0].length;
@@ -124,7 +124,7 @@ export class EngineEvaluationService implements OnDestroy {
                 const tabTemps: Array<number> = [];
                 const opacityKF: Array<number> = [];
                 for (let temps = 0; temps < this.traceVoxel.length; temps++) {
-                  tabTemps.push(temps);
+                  tabTemps.push(temps / 10);
                   if (this.traceVoxel[temps][x][y][z] === 0) {
                     tabColor.push(1);
                     tabColor.push(1);
@@ -141,25 +141,28 @@ export class EngineEvaluationService implements OnDestroy {
                     opacityKF.push(0.8);
                   }
                 }
-                const positionArticulation1 = new ColorKeyframeTrack(
-                  '.material.color',
-                  tabTemps,
-                  tabColor,
-                );
-                const positionArticulation2 = new NumberKeyframeTrack(
-                  '.material.opacity',
-                  tabTemps,
-                  opacityKF,
-                );
+
+                if (tabColor.indexOf(0) > -1){
+                    const positionArticulation1 = new ColorKeyframeTrack(
+                      '.material.color',
+                      tabTemps,
+                      tabColor,
+                    );
+                    const positionArticulation2 = new NumberKeyframeTrack(
+                      '.material.opacity',
+                      tabTemps,
+                      opacityKF,
+                    );
 
 
-                const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
-                const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
-                const mixer = new THREE.AnimationMixer(arr2[index]);
+                    const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
+                    const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
+                    const mixer = new THREE.AnimationMixer(arr2[index]);
+                    mixers.push(mixer);
+                    const ac = mixer.clipAction(colorClip);
+                    this.arr3.push(ac);
+                  }
                 index++;
-                mixers.push(mixer);
-                const ac = mixer.clipAction(colorClip);
-                this.arr3.push(ac);
               }
             }
           }
@@ -260,8 +263,6 @@ export class EngineEvaluationService implements OnDestroy {
       this.canvas = canvas.nativeElement;
     }
     this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.squelette = new SqueletteAnimation();
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
@@ -472,6 +473,11 @@ export class EngineEvaluationService implements OnDestroy {
       this.renderer.setSize(width, height, false);
     }
     return needResize;
+  }
+
+  public stopAnim(): void{
+    this.resetCamera();
+    this.initPoids(undefined, undefined, true);
   }
 
   public render(): void {

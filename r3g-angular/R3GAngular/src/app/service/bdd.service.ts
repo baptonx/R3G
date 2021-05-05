@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Sequence} from '../class/commun/sequence';
 import {SequencesTab, TableauExplService} from './tableau-expl.service';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {Annotation} from '../class/commun/annotation/annotation';
 import {NodeCol, NodeColImpl} from '../class/exploration/node-col-impl';
 
@@ -35,8 +35,6 @@ export class BddService {
   observableSequences: BehaviorSubject<Map<string, Array<Sequence>>>;
   node: NodeCol = new NodeColImpl();
   waitanswer = true;
-  inwaiting = 0;
-  counterfloor = 0;
   classesGestes: Array<string> = [];
   listGesteBDD: Map<string, Array<string>> = new Map<string, Array<string>>();
   public sequenceCourante: Sequence|undefined;
@@ -260,41 +258,31 @@ export class BddService {
         this.answerHere();
       });
   }
-  getDonnee(listSequence: Array<Sequence>): void{
-    this.inwaiting = listSequence.length * 2;
-    let counter = this.inwaiting;
-    this.counterfloor = 0;
-    for (const sequence of listSequence){
-      this.http
-        .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
-        .subscribe((returnedData: any) => {
-          if (sequence !== undefined){
-            sequence.traceNormal = (returnedData);
+  // getDonnee(listSequence: Array<Sequence>): void{
+  //   for (const sequence of listSequence){
+  //     this.getSingleDonneeVoxel(sequence);
+  //   }
+  // }
+  getSingleDonnee(sequence: Sequence): Subscription {
+    return this.http
+      .get<object>(`/models/getDonnee/${sequence.bdd}/${sequence.id}` , {})
+      .subscribe((returnedData: any) => {
+        if (sequence !== undefined){
+          sequence.traceNormal = (returnedData);
+        }
+      });
+  }
+  getSingleDonneeVoxel(sequence: Sequence): Subscription {
+    this.getSingleDonnee(sequence);
+    return this.http
+      .get<object>(`/models/getDonneeVoxel/${sequence.bdd}/${sequence.id}` , {})
+      .subscribe((returnedData: any) => {
+        if (returnedData !== undefined){
+          if (returnedData !== 'NoFileExist'){
+            sequence.traceVoxel = (returnedData);
           }
-          counter--;
-          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
-          if (counter === 0){
-            this.inwaiting = 0;
-          }
-        });
-    }
-    for (const sequence of listSequence){
-      this.http
-        .get<object>(`/models/getDonneeVoxel/${sequence.bdd}/${sequence.id}` , {})
-        .subscribe((returnedData: any) => {
-          if (returnedData !== undefined){
-            if (returnedData !== 'NoFileExist'){
-              sequence.traceVoxel = (returnedData);
-            }
-          }
-          counter--;
-          this.counterfloor = Math.floor(this.inwaiting / 2 - counter / 2);
-          if (counter === 0){
-            this.inwaiting = 0;
-          }
-        });
-    }
-
+        }
+      });
   }
 
   // recherche tous les attributs des sequences de geste et les conserve dans l'objet recursif NodeCol

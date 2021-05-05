@@ -26,6 +26,7 @@ import { TableauExplComponent } from './component/tableau-expl/tableau-expl.comp
 import { NavigationModulesComponent } from './component/navigation-modules/navigation-modules.component';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {EngineComponent} from './component/engine/engine.component';
@@ -55,6 +56,7 @@ import { SingleFilterComponent } from './component/single-filter/single-filter.c
 import { PopUpBddTxtToInkmlComponent } from './component/pop-up-bdd-txt-to-inkml/pop-up-bdd-txt-to-inkml.component';
 import { EngineEvaluationComponent } from './component/engine-evaluation/engine-evaluation.component';
 import { PopUpBddInkmlToTxtComponent } from './component/pop-up-bdd-inkml-to-txt/pop-up-bdd-inkml-to-txt.component';
+import { EngineEvaluationSqueletteComponent} from './component/engine-evaluation-squelette/engine-evaluation-squelette.component';
 
 const appRoutes: Routes = [
   { path: 'annotation', component: AnnotationComponent },
@@ -91,6 +93,7 @@ const appRoutes: Routes = [
     PopUpBddTxtToInkmlComponent,
     EngineEvaluationComponent,
     PopUpBddInkmlToTxtComponent,
+    EngineEvaluationSqueletteComponent
   ],
     imports: [
         BrowserModule,
@@ -116,6 +119,7 @@ const appRoutes: Routes = [
         MatProgressBarModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatSlideToggleModule,
 
 
         RouterModule.forRoot(appRoutes),

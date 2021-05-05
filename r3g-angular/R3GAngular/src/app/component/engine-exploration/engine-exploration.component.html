@@ -4,6 +4,7 @@
 
 <div class="barButtonsEngine">
   <button mat-raised-button (click)="engServ.resetCamera()" class="resetCameraButton">Reset camera</button>
+  <button mat-raised-button (click)="engServ.changeCameraSpot()">Change Camera position</button>
   <button mat-raised-button (click)="engServ.stopToStart()"><<</button>
   <button mat-raised-button (click)="engServ.playBackward()"><</button>
   <button mat-raised-button (click)="engServ.play()">Play</button>
@@ -14,7 +15,7 @@
     <input class="inputTextActionTime" matInput (keyup.enter)="updateSizeCube($event)" value="1">
   </mat-form-field>
   <mat-form-field class="inputActionTime">
-    <mat-label>Time scale :</mat-label>
+    <mat-label>Speed rate :</mat-label>
     <input class="inputTextActionTime" matInput (keyup.enter)="updateTimeScale($event)" value="1">
   </mat-form-field>
 </div>

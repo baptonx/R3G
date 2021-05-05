@@ -5,6 +5,8 @@ import {BddService} from '../../service/bdd.service';
 import {Model} from '../../class/evaluation/model';
 import {HttpClient} from '@angular/common/http';
 import {Eval} from '../../class/evaluation/eval';
+import {Sequence} from '../../class/commun/sequence';
+import {AnnotationService} from '../../module/annotation/annotation.service';
 
 @Component({
   selector: 'app-sequences-annotation',
@@ -16,8 +18,9 @@ export class SequencesAnnotationComponent implements OnInit {
   modelList: Array<Model> = [];
   modelSelected = '';
   sequencesList: Array<string>;
+  lastSequence: Sequence | undefined;
   constructor(public serviceSequence: SequencesChargeesService, public bdd: BddService, public engineService: EngineService
-            , public http: HttpClient) {
+            , public http: HttpClient, public annotation: AnnotationService) {
     this.sequencesList = [];
     this.serviceSequence.sequences1.forEach(elt => {
       this.sequencesList.push(elt.id);
@@ -37,16 +40,19 @@ export class SequencesAnnotationComponent implements OnInit {
     );
   }
 
-  changeValue(value: any): void{
-    this.serviceSequence.sequences1.forEach(seq => {
-      if (seq.id === value) {
-        this.engineService.refreshInitialize(seq);
-        this.engineService.annotationServ.initializeClasseGesteEditeur();
-        this.serviceSequence.evaluation.forEach(ev => {
-          if (ev.name === seq.id) {
-            this.serviceSequence.evaluatedSelected = ev.annotation;
-          }
-        });
+  changeValue(seq: Sequence): void{
+    if (this.lastSequence !== undefined){
+      this.serviceSequence.unloadSequence(this.lastSequence);
+    }
+    this.serviceSequence.bdd.getSingleDonnee(seq).add(() => this.changeValueAfterload(seq));
+  }
+  changeValueAfterload(seq: Sequence): void{
+    this.engineService.refreshInitialize(seq);
+    this.lastSequence = seq;
+    this.engineService.annotationServ.initializeClasseGesteEditeur();
+    this.serviceSequence.evaluation.forEach(ev => {
+      if (ev.name === seq.id) {
+        this.serviceSequence.evaluatedSelected = ev.annotation;
       }
     });
   }

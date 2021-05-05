@@ -12,7 +12,7 @@ export class VisualisationExploService {
     this.componentHidden = true;
   }
 
-  show(element: any): void{
+  show(element: any): void {
     if (this.bddService.sequenceCourante !== undefined) {
       this.bddService.sequenceCourante.traceNormal = new Array<Array<Array<number>>>();
     }
@@ -20,24 +20,22 @@ export class VisualisationExploService {
     this.bddService.sequenceCourante = this.bddService.chercherSequence(element);
     if (this.bddService.sequenceCourante !== undefined) {
       console.log('sequences trouvees');
-      this.bddService.getDonnee([this.bddService.sequenceCourante]);
-      console.log('getDonnees');
+      this.bddService.getSingleDonnee(this.bddService.sequenceCourante).add(() => this.showAfterLoad(element));
       // this.sequenceChargees.addToList(seqSelectionee);
       // console.log("added to list");
-      setTimeout(() => {
-        this.engineExplorationService.refreshInitialize();
-        console.log(element);
-        this.engineExplorationService.explorationServ.action.time = Number
-        (Number(this.engineExplorationService.explorationServ.
-        convertFrameToTime(Number(element['annotation.f1']))).toFixed(2));
-        console.log(this.engineExplorationService.explorationServ.action.time );
-        this.engineExplorationService.play();
-        this.engineExplorationService.pause();
-        // console.log('time : ' + this.engineExplorationService.explorationServ.action.time);
-      }, 1500);
+      // this.componentHidden = false;
     }
-    // this.componentHidden = false;
   }
+  showAfterLoad(element: any): void{
+    this.engineExplorationService.refreshInitialize();
+    this.engineExplorationService.explorationServ.action.time = Number
+    (Number(this.engineExplorationService.explorationServ.
+    convertFrameToTime(Number(element['annotation.f1']))).toFixed(2));
+    this.engineExplorationService.play();
+    this.engineExplorationService.pause();
+    // console.log('time : ' + this.engineExplorationService.explorationServ.action.time);
+  }
+
   hide(): void{
     this.componentHidden = true;
   }

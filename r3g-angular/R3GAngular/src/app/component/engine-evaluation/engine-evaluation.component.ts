@@ -1,9 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {EngineExplorationService} from '../engine-exploration/engine-exploration.service';
 import {EngineEvaluationService} from './engine-evaluation.service';
 import {HttpClient} from '@angular/common/http';
 import {Poids} from '../../class/evaluation/poids';
-import {Model} from '../../class/evaluation/model';
+import {EvaluationService} from '../../module/evaluation/evaluation.service';
+import {SequencesChargeesService} from '../../service/sequences-chargees.service';
+import {Sequence} from '../../class/commun/sequence';
 
 @Component({
   selector: 'app-engine-evaluation',
@@ -21,8 +22,11 @@ export class EngineEvaluationComponent implements OnInit {
   public box!: ElementRef<HTMLCanvasElement>;
 
   public listElementHTML: Array<ElementRef<HTMLCanvasElement>> = [];
-
-  constructor(public engServ: EngineEvaluationService, public http: HttpClient) { }
+  public lastSeqVoxel: Sequence | undefined;
+  constructor(public engServ: EngineEvaluationService,
+              public evalServ: EvaluationService,
+              public seqChargeServ: SequencesChargeesService,
+              public http: HttpClient) { }
 
   ngOnInit(): void {
     this.listElementHTML.push(this.box);
@@ -33,13 +37,15 @@ export class EngineEvaluationComponent implements OnInit {
   changeFilter(value: any): void {
     this.engServ.filtreSelected = value;
   }
-  changeSeq(value: any): void{
-    this.engServ.sequences.forEach(seq => {
-      if (seq.id === value){
-        this.engServ.sequenceCurrent = seq;
-        this.engServ.refreshInitialize();
-      }
+  changeSeq(seq: Sequence): void{
+    if (this.lastSeqVoxel !== undefined) {
+      this.seqChargeServ.unloadSequence(this.lastSeqVoxel);
+    }
+    this.engServ.bddService.getSingleDonneeVoxel(seq).add(() => {
+      this.engServ.refreshInitialize();
+      this.lastSeqVoxel = seq;
     });
+    this.engServ.sequenceCurrent = seq;
   }
   view(): void{
     if (this.engServ.modelSelected !== undefined && this.engServ.layerSelected !== undefined
@@ -50,6 +56,9 @@ export class EngineEvaluationComponent implements OnInit {
 
   play(): void{
     this.engServ.playSeq();
+  }
+  resetCamera(): void{
+    this.engServ.stopAnim();
   }
 
   getPoids(): void {

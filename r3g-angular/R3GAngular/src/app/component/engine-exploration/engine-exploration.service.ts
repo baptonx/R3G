@@ -32,6 +32,7 @@ export class EngineExplorationService implements OnDestroy {
   public controls!: TrackballControls;
   public facteurGrossissement = 1.5;
   public facteurScale = 1;
+  public lastCameraPosition = 0;
 
   constructor(private ngZone: NgZone, public explorationServ: ExplorationService, public bddService: BddService) {
     this.explorationServ.pauseAction = true;
@@ -95,7 +96,7 @@ export class EngineExplorationService implements OnDestroy {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3] * this.facteurScale);
+              tabTime.push(frame[3]  / this.facteurScale);
             }
 
             if (i === 0) {
@@ -386,13 +387,6 @@ export class EngineExplorationService implements OnDestroy {
     this.explorationServ.action.play();
   }
 
-  updateActionFrame(event: any): void {
-    const frameEditText = Number(event.target.value);
-    if (frameEditText >= 0 && frameEditText < this.explorationServ.tabTimeCurrent.length) {
-      this.explorationServ.action.time = this.explorationServ.convertFrameToTime(frameEditText);
-    }
-  }
-
   updateActionTime(event: any): void {
     const timeEditText = Number(event.target.value);
     if (timeEditText >= 0 && timeEditText <= this.explorationServ.tempsTotal) {
@@ -418,7 +412,31 @@ export class EngineExplorationService implements OnDestroy {
   }
 
   public resetCamera(): void {
+    this.controls.position0 = new THREE.Vector3(0, this.controls.position0.y, -8);
+    this.controls.update();
     this.controls.reset();
+  }
+
+  public changeCameraSpot(): void{
+    if (this.lastCameraPosition === 0) {
+      this.controls.position0 = new THREE.Vector3(-8, this.controls.position0.y, 0);
+      this.lastCameraPosition = 1;
+    }
+    else if (this.lastCameraPosition === 1) {
+      this.controls.position0 = new THREE.Vector3(0, this.controls.position0.y, 8);
+      this.lastCameraPosition = 2;
+    }
+    else if (this.lastCameraPosition === 2) {
+      this.controls.position0 = new THREE.Vector3(8, this.controls.position0.y, 0);
+      this.lastCameraPosition = 3;
+    }
+    else{
+      this.controls.position0 = new THREE.Vector3(0, this.controls.position0.y, -8) ;
+      this.lastCameraPosition = 0;
+    }
+    this.controls.update();
+    this.controls.reset();
+
   }
 
   public calculateAverage(tab: Array<number>): number {

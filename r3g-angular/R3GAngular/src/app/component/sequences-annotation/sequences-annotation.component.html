@@ -1,5 +1,5 @@
 <div class="tab-container">
-  <mat-vertical-stepper [linear]="isLinear" position='absolute'>
+  <mat-vertical-stepper [linear]="isLinear" >
 
     <mat-step>
       <form>
@@ -7,8 +7,8 @@
         <mat-form-field appearance="fill">
           <mat-label>Choisir une séquence</mat-label>
           <mat-select (valueChange)="changeValue($event)">
-            <mat-option *ngFor="let s of sequencesList" [value]="s" >
-              {{s}}
+            <mat-option *ngFor="let s of serviceSequence.sequences1" [value]="s" >
+              {{s.id}}
             </mat-option>
           </mat-select>
         </mat-form-field>

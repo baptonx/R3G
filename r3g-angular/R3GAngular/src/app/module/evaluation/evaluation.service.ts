@@ -4,13 +4,14 @@ import {Annotation} from 'src/app/class/commun/annotation/annotation';
 import {Sequence} from 'src/app/class/commun/sequence';
 import {Eval} from 'src/app/class/evaluation/eval';
 import {AnimationAction} from 'three';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EvaluationService {
-
+  public cursorSize!: number;
   public tempsTotal!: number;
   public sizeIndicatorTime!: number;
   public margeTimeline!: number;
@@ -36,6 +37,11 @@ export class EvaluationService {
   public gesteIA2: string[] = [];
   public timeline1: string;
   public timeline2: string;
+  public scale = 1;
+  public sequenceSquelette!: Sequence;
+  public sequenceSqueletteVoxel!: Sequence;
+  public showSquelette = true;
+  public observableShowSquelette: BehaviorSubject<boolean>;
 
 
   // Timeline
@@ -47,12 +53,14 @@ export class EvaluationService {
     this.sizeIndicatorTime = 20;
     this.margeTimeline = 20;
     this.marge = 25;
+    this.cursorSize = 6;
     this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
     this.modelEval1.add('Vérité terrain');
     this.modelEval2.add('Vérité terrain');
     this.timeline1 = '';
     this.timeline2 = '';
+    this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
   }
 
   reset(): void {
@@ -102,7 +110,10 @@ export class EvaluationService {
         this.draw_ia_recouvrement(230, 2);
       } else if (this.timeline2.includes('Classes')) {
         this.draw_tmp(230, 2);
-
+      }
+      if (this.action !== undefined) {
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
       }
     }
   }
@@ -135,14 +146,10 @@ export class EvaluationService {
           if (color != null) {
             this.ctx.fillStyle = color;
           } else {
-            this.ctx.fillStyle = 'black';
-          }
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          if (color != null) {
-            this.ctx.fillStyle = 'black';
-          } else {
             this.ctx.fillStyle = 'white';
           }
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillStyle = 'black';
           if (geste !== name && name !== undefined && (k === 0 || k === 1 || k === 2)) {
             this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
             geste = name;
@@ -161,57 +168,86 @@ export class EvaluationService {
       if (k === 2) {
         tmp = this.gesteIA2;
       }
-      const geste = '';
-      let nbCorrect = 0;
+      let vraiPositif = 0;
+      let fauxPositif = 0;
+      let vraiNegatifOrange = 0;
+      let vraiNegatifRouge = 0;
+      let fauxNegatif = 0;
       const nbFrame = this.convertTimeToFrame(Number(this.tempsTotal));
+      if (tmp.length > 0){
       for (let i = 0; i < this.veriteTerrain.length; i++) {
-        if (Number(i) < nbFrame){
-        const t1 = this.convertFrameToTime(Number(i));
-        const t2 = this.convertFrameToTime(Number(i + 1));
-        if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
-          this.ctx.fillStyle = 'green';
-          nbCorrect++;
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          this.ctx.fillStyle = 'black';
-        }
-        else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
-          && tmp[i] === this.classZero) {
-          console.log(this.veriteTerrain[i]);
-          this.ctx.fillStyle = 'gray';
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          this.ctx.fillStyle = 'black';
-        }
-        else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
-          && tmp[i] !== this.classZero) {
-          this.ctx.fillStyle = 'red';
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          this.ctx.fillStyle = 'black';
-        }
-        else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero){
-          this.ctx.fillStyle = 'orange';
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          this.ctx.fillStyle = 'black';
-        }
-        else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
-          this.ctx.fillStyle = 'lime';
-          nbCorrect++;
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
-          this.ctx.fillStyle = 'black';
-        }
+        if (Number(i) < nbFrame) {
+          const t1 = this.convertFrameToTime(Number(i));
+          const t2 = this.convertFrameToTime(Number(i + 1));
+          if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
+            this.ctx.fillStyle = 'green';
+            vraiPositif++;
+            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillStyle = 'black';
+          } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
+            && tmp[i] === this.classZero) {
+            console.log(this.veriteTerrain[i]);
+            this.ctx.fillStyle = 'lightgray';
+            fauxNegatif++;
+            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillStyle = 'black';
+          } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
+            && tmp[i] !== this.classZero) {
+            this.ctx.fillStyle = 'red';
+            vraiNegatifRouge++;
+            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillStyle = 'black';
+          } else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero) {
+            this.ctx.fillStyle = 'orange';
+            vraiNegatifOrange++;
+            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillStyle = 'black';
+          } else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
+            this.ctx.fillStyle = 'lightgreen';
+            fauxPositif++;
+            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillStyle = 'black';
+          }
         }
       }
-
-      if (nbCorrect > 0) {
-        const pourcentage = (nbCorrect / nbFrame * 100).toFixed(2);
-        let nb = 0;
-        if (k === 2) {
-          nb = this.timeToPos(Number(this.tempsTotal)) / 2;
-        }
-        this.ctx.font = '14px Arial';
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText('Taux de recouvrement : ' + pourcentage + '%', nb, 50);
+      const pourcentage1 = (vraiPositif / nbFrame * 100).toFixed(2);
+      const pourcentage2 = (fauxPositif / nbFrame * 100).toFixed(2);
+      const pourcentage3 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
+      const pourcentage4 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
+      const pourcentage5 = (fauxNegatif / nbFrame * 100).toFixed(2);
+      let yVal = 0;
+      if (k === 1) {
+        yVal = 50;
+      }
+      else if (k === 2){
+        yVal = 350;
       }
       this.ctx.font = '12px Arial';
+      this.ctx.fillStyle = 'black';
+      this.underline('green', 'Vrai Positif : ' + pourcentage1 + '%', 200, yVal);
+      this.underline('lightgreen', 'Faux Positif : ' + pourcentage2 + '%', 400, yVal);
+      this.underline('red', 'Vrai Négatif sur actions : ' + pourcentage3 + '%', 600, yVal);
+      this.underline('orange', 'Vrai Négatif sur geste 0 : ' + pourcentage4 + '%', 800, yVal);
+      this.underline('lightgray', 'Faux Négatif : ' + pourcentage5 + '%', 1000, yVal);
+    }
+
+  }
+  }
+
+  public underline(color: string, text: string, x: number, y: number): void{
+    if (this.ctx !== null && this.ctx !== undefined) {
+      const metrics = this.ctx.measureText(text);
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = color;
+      this.ctx.lineWidth = 24;
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(x + metrics.width, y);
+      this.ctx.stroke();
+      this.ctx.restore();
+      this.ctx.font = '12px Arial';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText(text, x, y);
     }
   }
 
@@ -305,4 +341,26 @@ export class EvaluationService {
     return time * this.unit + this.margeTimeline;
   }
 
+  mouseOnCursor(posX: number): boolean {
+    const posCursor = this.timeToPos(this.action.time);
+    return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
+  }
+
+  onMouseMove($event: MouseEvent): void {
+    if (this.sequenceCurrent !== undefined) {
+      const posX = $event.offsetX;
+      const newValueTime = this.posToTime(posX);
+
+      if (newValueTime > 0 && newValueTime < this.tempsTotal && this.action !== undefined) {
+        this.action.time = newValueTime;
+      }
+
+      this.mousePosJustBefore = posX;
+    }
+  }
+
+  onWheelMove($event: WheelEvent): void {
+    this.scale += $event.deltaY * -0.01;
+    console.log(this.scale);
+  }
 }

@@ -62,9 +62,6 @@ export class EngineService implements OnDestroy {
     if (newSequence !== undefined) {
       this.annotationServ.sequenceCurrent = newSequence;
     }
-    else if (this.annotationServ.sequenceCurrent === undefined) {
-      this.annotationServ.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences1.values())[0];
-    }
 
     const sceneInitFunctionsByName = {
       ['box']: (elem: HTMLCanvasElement) => {
