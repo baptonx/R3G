@@ -2,7 +2,7 @@
 <mat-label>Filtrer</mat-label>
 <input #inputFiltre matInput placeholder="Ex. Sequence 1">
 </mat-form-field>
-<button mat-button *ngIf="seqChargeesService.sequences1.size > 0 && seqChargeesService.sequences2.size > 0" (click)="seqChargeesService.clear()">Tout supprimer</button>
+<button mat-button *ngIf="seqChargeesService.sequences1.size > 0 || seqChargeesService.sequences2.size > 0" (click)="seqChargeesService.clear()">Tout supprimer</button>
 <div *ngIf="seqChargeesService.mode === 'annotation'" id="sequencesChargeesContainer" [style.height]="100*this.seqChargeesService.sequences1.size+'px'">
   <mat-list>
     <ng-container *ngFor="let sequence of this.seqChargeesService.sequences1, let i = index">
