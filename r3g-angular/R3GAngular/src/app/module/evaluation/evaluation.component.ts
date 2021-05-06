@@ -18,6 +18,9 @@ export class EvaluationComponent implements OnInit {
   constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
               public bdd: BddService, public evalServ: EvaluationService) {
     this.evalServ.reset();
+    this.evalServ.observableShowSquelette.subscribe(() => {
+      this.engineSqueletteService.refreshInitialize();
+    });
   }
 
   ngOnInit(): void {
