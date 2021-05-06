@@ -36,8 +36,11 @@ ng serve
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 cd r3g-flask
 docker build -t r3g-flask .
-docker run -d -p 0.0.0.0:5000:5000 r3g-flask
 cd ../r3g-angular/R3GAngular
 docker build -t r3g-angular .
+```
+- Une fois que l'image docker est installée, l'utilisateur peut exécuter le projet facilement :
+```bash
+docker run -d -p 0.0.0.0:5000:5000 r3g-flask
 docker run -d -p 0.0.0.0:8080:8080 r3g-angular
 ```
