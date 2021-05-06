@@ -21,4 +21,12 @@ export class TimelineEvaluationService {
     $event.preventDefault();
     this.evalServ.onWheelMove($event);
   }
+
+  onMouseDown(event: MouseEvent): void {
+    this.evalServ.onMouseDown(event);
+  }
+
+  onMouseUp(event: MouseEvent): void {
+    this.evalServ.onMouseUp(event);
+  }
 }

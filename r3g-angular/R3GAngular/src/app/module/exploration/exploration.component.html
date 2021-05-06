@@ -2,11 +2,11 @@
 <mat-toolbar>
   <button mat-icon-button aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menuExplo"><!--(click)="drawerExplo.toggle()"-->
     <mat-menu #menuExplo="matMenu">
-      <button mat-menu-item [matMenuTriggerFor]="addPath">Importer une BDD au format INKML</button>
+      <button mat-menu-item [matMenuTriggerFor]="addPath">Importer une BDD au format InkML</button>
       <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listbddreload">Recharger une BDD</button>
       <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listclosebdd">Fermer une BDD</button>
-      <button mat-menu-item (click)="openDialogTXTtoINKML()">BDD Txt -> Inkml</button>
-      <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listexporter">BDD Inkml -> Txt</button>
+      <button mat-menu-item (click)="openDialogTXTtoINKML()">BDD Txt -> InkML</button>
+      <button mat-menu-item *ngIf="this.bdd.bddnames.length !== 0" [matMenuTriggerFor]="listexporter">BDD InkML -> Txt</button>
     </mat-menu>
     <mat-menu #addPath="matMenu">
       <button mat-menu-item (click)="openDialogINKML()">A partir d'un path</button>

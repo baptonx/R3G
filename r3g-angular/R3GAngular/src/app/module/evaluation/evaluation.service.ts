@@ -42,6 +42,8 @@ export class EvaluationService {
   public sequenceSqueletteVoxel!: Sequence;
   public showSquelette = true;
   public observableShowSquelette: BehaviorSubject<boolean>;
+  public mouseDown!: boolean;
+  public mouseDownCursor!: boolean;
 
 
   // Timeline
@@ -347,7 +349,7 @@ export class EvaluationService {
   }
 
   onMouseMove($event: MouseEvent): void {
-    if (this.sequenceCurrent !== undefined) {
+    if (this.sequenceCurrent !== undefined && this.mouseDownCursor) {
       const posX = $event.offsetX;
       const newValueTime = this.posToTime(posX);
 
@@ -362,5 +364,17 @@ export class EvaluationService {
   onWheelMove($event: WheelEvent): void {
     this.scale += $event.deltaY * -0.01;
     console.log(this.scale);
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    const posX = event.offsetX;
+    this.mouseDown = true;
+    if (this.mouseOnCursor(posX)) {
+      this.mouseDownCursor = true;
+    }
+  }
+  onMouseUp(event: MouseEvent): void {
+    this.mouseDown = false;
+    this.mouseDownCursor = false;
   }
 }
