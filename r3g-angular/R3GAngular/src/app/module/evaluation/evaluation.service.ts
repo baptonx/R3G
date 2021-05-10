@@ -214,8 +214,8 @@ export class EvaluationService {
       }
       const pourcentage1 = (vraiPositif / nbFrame * 100).toFixed(2);
       const pourcentage2 = (fauxPositif / nbFrame * 100).toFixed(2);
-      const pourcentage3 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
-      const pourcentage4 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
+      const pourcentage4 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
+      const pourcentage3 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
       const pourcentage5 = (fauxNegatif / nbFrame * 100).toFixed(2);
       let yVal = 0;
       if (k === 1) {
@@ -227,9 +227,9 @@ export class EvaluationService {
       this.ctx.font = '12px Arial';
       this.ctx.fillStyle = 'black';
       this.underline('green', 'Vrai Positif : ' + pourcentage1 + '%', 200, yVal);
-      this.underline('lightgreen', 'Faux Positif : ' + pourcentage2 + '%', 400, yVal);
-      this.underline('red', 'Vrai Négatif sur actions : ' + pourcentage3 + '%', 600, yVal);
-      this.underline('orange', 'Vrai Négatif sur geste 0 : ' + pourcentage4 + '%', 800, yVal);
+      this.underline('lightgreen', 'Vrai Négatif : ' + pourcentage2 + '%', 400, yVal);
+      this.underline('red', 'Faux Positif sur actions : ' + pourcentage3 + '%', 600, yVal);
+      this.underline('orange', 'Faux Positif sur geste 0 : ' + pourcentage4 + '%', 800, yVal);
       this.underline('lightgray', 'Faux Négatif : ' + pourcentage5 + '%', 1000, yVal);
     }
 
