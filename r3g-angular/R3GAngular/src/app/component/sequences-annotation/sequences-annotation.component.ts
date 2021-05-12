@@ -49,6 +49,7 @@ export class SequencesAnnotationComponent implements OnInit {
   changeValueAfterload(seq: Sequence): void{
     this.engineService.refreshInitialize(seq);
     this.lastSequence = seq;
+    this.engineService.annotationServ.sequenceCurrent = seq;
     this.engineService.annotationServ.initializeClasseGesteEditeur();
     this.serviceSequence.evaluation.forEach(ev => {
       if (ev.name === seq.id) {
