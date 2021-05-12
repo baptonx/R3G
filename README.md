@@ -29,6 +29,18 @@ ng serve
 ```
 - npm install --save three permet d'installer les dépendances liées au projet, ng serve permet de lancer le projet.
 
+# Installation manuelle avec Windows
+- Télécharger NodeJS (https://nodejs.dev/download/)
+- Dans un terminal, entrer les commandes suivantes (à la racine du projet) :
+```bash
+npm install -g @angular/cli
+npm install --save three
+```
+- Une fois l'installation réalisée, on peut lancer l'appli avec la commande suivante :
+```bash
+ng serve
+```
+
 # Installation automatisée avec Docker
 - Docker est un logiciel libre permettant de lancer des applications dans des conteneurs logiciels. Il permet de déployer facilement des microservices, ce qui est idéal pour installer notre application web. Il faut suivre les commandes ci-dessous pour installer et lancer le projet.
 
