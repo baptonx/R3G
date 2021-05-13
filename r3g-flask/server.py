@@ -104,7 +104,7 @@ def start_wandb_v2():
     """v2 pour l'autre depot"""
     param = {}
     for run in RUNS:
-        if run.state == 'finished' and run.tags.count('ChalearnSubSet') == 0:
+        if run.state == 'finished':
             param[run.id] = []
             model = Model(run.id, run.name, param[run.id])
             MODEL_LIST.append(model.__dict__)
