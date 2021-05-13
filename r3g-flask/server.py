@@ -120,11 +120,12 @@ def get_class_geste(name):
 
 def delete_eval():
     """supression des anciennes eval """
-    if not os.path.exists('./EvaluationSequences'):
-        os.mkdir('./EvaluationSequences')
-    for fichier in os.listdir('./EvaluationSequences'):
-        if os.path.exists('./EvaluationSequences/'+fichier):
-            os.remove('./EvaluationSequences/'+fichier)
+    if os.path.exists('./EvaluationSequences'):
+        shutil.rmtree('./EvaluationSequences')
+    os.mkdir('./EvaluationSequences')
+    #for fichier in os.listdir('./EvaluationSequences'):
+     #   if os.path.exists('./EvaluationSequences/'+fichier):
+      #      os.remove('./EvaluationSequences/'+fichier)
 
 def load_config(path_model) -> dict:
     # pylint: disable-msg=eval-used
@@ -220,15 +221,17 @@ def upload_file(name):
 
 @APP.route('/models/evaluation/<name>/<sequences>/<model>')
 def evaluation(name, sequences, model):
+    # pylint: disable=too-many-branches
     """ on fait l'evaluation de sequences avec le model passé en param"""
     global CLASSES
+    global EVALUATION
+    EVALUATION = []
     download_weights(model)
     CLASSES = LISTE_GESTE_BDD_ACTION[name]
     pathbdd = LISTE_PATH_BDD[name]
     seq = sequences.split(',')
     if len(CLASSES) == 0:
         return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-
    # remise à zéro des séquences à évaluer
     if not os.path.exists('./Sequences'):
         os.mkdir('./Sequences')
@@ -239,32 +242,41 @@ def evaluation(name, sequences, model):
 
     # run SequenceEvaluator.py pour évaluer
     file_to_convert = {}
+    ## attention on supprime les fichiers existant de data mauvaise optimisation mais pour proteger les erreurs provenant de l'acquisition
+    #
+    #
+    for iid,elt in enumerate(seq):
+        if os.path.exists(pathbdd + '/Data/' + elt.replace('inkml','txt')):
+            os.remove(pathbdd + '/Data/' + elt.replace('inkml','txt'))
+    #
+    #
+    #
+    # fin de la partie optionnel
     for iid,elt in enumerate(seq):
         if not os.path.exists(pathbdd + '/Data/' + elt.replace('inkml','txt')):
             file_to_convert[iid]= pathbdd + '/Inkml/' + elt
-
     write_data(file_to_convert, pathbdd)
 
     for elt in seq:
         copyfile(pathbdd + '/Data/' + elt.replace('.inkml', '') + '.txt', './Sequences/' + \
         elt.replace('.inkml', '') + '.txt')
-
-    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"\
+    if not os.path.exists('./EvaluationSequences/'+ name):
+        os.mkdir('./EvaluationSequences/'+ name)
+    subprocess.call([sys.executable, "SequenceEvaluator.py", "Sequences/", "EvaluationSequences/"+ name +"/"\
     + model, "Weigths/"+model+'/weights/'])
-
-
-    for file in os.listdir('./EvaluationSequences/'):
-        liste_annotation = []
-        with open('./EvaluationSequences/' + file) as file_content:
-            for line in file_content:
-                tab = line.split(',')
-                id_geste = int(tab[0])
-                debut = int(tab[1])
-                fin = int(tab[2])
-                annotation = Annotation(debut, fin, 0, CLASSES[id_geste])
-                liste_annotation.append(annotation.__dict__)
-        EVALUATION.append(Eval(file.replace('txt', 'inkml').replace(model, ''),\
-        liste_annotation, model).__dict__)
+    for folder in os.listdir('./EvaluationSequences/'):
+        for file in os.listdir('./EvaluationSequences/' + folder + '/'):
+            liste_annotation = []
+            with open('./EvaluationSequences/' + folder + '/' + file) as file_content:
+                for line in file_content:
+                    tab = line.split(',')
+                    id_geste = int(tab[0])
+                    debut = int(tab[1])
+                    fin = int(tab[2])
+                    annotation = Annotation(debut, fin, 0, CLASSES[id_geste])
+                    liste_annotation.append(annotation.__dict__)
+            EVALUATION.append(Eval(file.replace('txt', 'inkml').replace(model, ''),\
+            liste_annotation, model).__dict__)
 
     return json.dumps(EVALUATION)
 
@@ -588,12 +600,10 @@ def add_listgeste_metadonne():
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste par bdd et les Metadonnee"""
     return [LISTE_GESTE_BDD, LISTE_GESTE_BDD_ACTION, METADONNEE]
-
 def add_listgeste_metadonnee_one(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
     return [LISTE_GESTE_BDD[name], LISTE_GESTE_BDD_ACTION[name], METADONNEE[name]]
-
 def add_listgeste_metadonnee_one_and_name(name):
     """Construit la structure a envoyer au serveur contenant
     et les liste de geste pour une bdd et ses Metadonnee"""
@@ -980,7 +990,6 @@ if __name__ == "__main__":
     start_wandb_v2()
     APP.run(host='0.0.0.0')
     save_config()
-
 
 
 #    F = open("donneeSample.txt", "w")
