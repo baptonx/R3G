@@ -24,14 +24,14 @@ test-front:
   stage: test
   script:
     - cd r3g-angular/R3GAngular
-    - docker build -t Angular .
+    - docker build -t angular .
 
 test-back:
   image: docker:latest
   stage: test
   script:
     - cd r3g-flask
-    - docker build -t Flask .
+    - docker build -t flask .
 
 
 
