@@ -19,19 +19,5 @@ build-back:
     - pip install matplotlib
     - pylint server.py --disable=global-statement
 
-test-front:
-  image: docker:latest
-  stage: test
-  script:
-    - cd r3g-angular/R3GAngular
-    - docker build -t angular .
-
-test-back:
-  image: docker:latest
-  stage: test
-  script:
-    - cd r3g-flask
-    - docker build -t flask .
-
 
 
