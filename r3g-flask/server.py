@@ -878,6 +878,8 @@ def generate_database(liste_data, liste_label, tableau_classe, inkml_path_dossie
                                inkml_path_dossier + "/Inkml/" + file_data[:-3] + "inkml", fps)
 def copy_file_tabclass_to_inkml(inkml_path_dossier, path_class):
     """copier et renommer le fichier tabclass"""
+    if not os.path.exists(inkml_path_dossier):
+        os.mkdir(inkml_path_dossier)
     shutil.copy(path_class, os.path.join(inkml_path_dossier, 'Actions.csv'))
 
 #############Route CREER Base de Donnée txt depuis inkml :##############
