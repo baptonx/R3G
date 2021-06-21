@@ -767,7 +767,7 @@ def add_labels(inkmltree, labels, dictclass):
     with open(labels, 'r') as filelabels:
         unit = SubElement(root, 'unit')
         for line in filelabels:
-            label = line[:-1].split(',')
+            label = line.strip().split(',')
             annotation_xml = SubElement(unit, 'annotationXML')
             annotation_xml.set('type', 'actions')
             annotation = SubElement(annotation_xml, 'annotation')
@@ -779,6 +779,10 @@ def add_labels(inkmltree, labels, dictclass):
             annotation = SubElement(annotation_xml, 'annotation')
             annotation.set('type', 'end')
             annotation.text = label[2]
+            if len(labels)>3:
+                annotation = SubElement(annotation_xml, 'annotation')
+                annotation.set('type', 'ActionPoint')
+                annotation.text = label[3]
         filelabels.close()
 
 def add_data(inkmltree, data, fps):
