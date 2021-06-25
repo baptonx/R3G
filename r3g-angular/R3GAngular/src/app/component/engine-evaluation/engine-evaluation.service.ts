@@ -60,6 +60,7 @@ export class EngineEvaluationService implements OnDestroy {
     this.sequences = this.sequencesChargeesService.sequences1;
     this.pauseAction = true;
     this.rootVoxel = new Object3D()
+    evalService.callForUpdateTimeScal = ()=>this.initialize(undefined, undefined, true);
 
   }
 
@@ -174,7 +175,7 @@ export class EngineEvaluationService implements OnDestroy {
                   let valueP1 = this.traceVoxel[temps+1][x][y][z];
                   if (value !== lastTime_Value || value!==valueP1) { //https://stackoverflow.com/questions/40434314/threejs-animationclip-example-needed
                   //probleme d'interpolation,ça interpole doucement
-                    tabTemps.push(this.evalService.convertFrameToTime(cumulativeSumRepeat[temps]));
+                    tabTemps.push(this.evalService.convertFrameToTime(cumulativeSumRepeat[temps])/ this.evalService.facteurScale);
                     if (value === 0) {
                       tabColor.push(1);
                       tabColor.push(1);

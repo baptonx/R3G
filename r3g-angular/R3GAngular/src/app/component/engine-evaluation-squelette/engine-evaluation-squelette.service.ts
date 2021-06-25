@@ -31,7 +31,6 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   public squelette: SqueletteAnimation = new SqueletteAnimation();
   public controls!: TrackballControls;
   public facteurGrossissement = 1.5;
-  public facteurScale = 1;
   private lastCameraPosition = 0;
 
   constructor(private ngZone: NgZone, public evaluationServ: EvaluationService, public bddService: BddService) {
@@ -92,7 +91,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
               tabPosXYZ.push((frame[0] - averageX) * this.facteurGrossissement);
               tabPosXYZ.push((frame[1] - averageY) * this.facteurGrossissement);
               tabPosXYZ.push((frame[2] - averageZ) * this.facteurGrossissement);
-              tabTime.push(frame[3] / this.facteurScale);
+              tabTime.push(frame[3] / this.evaluationServ.facteurScale);
             }
 
             if (i === 0) {
@@ -144,7 +143,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          // this.evaluationServ.draw();
+          this.evaluationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;
@@ -368,8 +367,10 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   updateTimeScale(event: any): void {
     const scale = Number(event.target.value);
     if (scale > 0) {
-      this.facteurScale = scale;
+      this.evaluationServ.facteurScale = scale;
       this.refreshInitialize();
+
+      this.evaluationServ.refreshAlsoVoxelization();
     }
   }
 

@@ -47,6 +47,9 @@ export class EvaluationService {
   public pauseAction!: boolean;
   private posTimelineY: Array<number> ;
   public timelines: Array<string>;
+  public facteurScale: number;
+  public callForUpdateTimeScal: (() => void) | undefined;
+  public anyChange: Boolean=false;
 
   constructor(private eventManager: EventManager) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
@@ -56,7 +59,7 @@ export class EvaluationService {
     this.cursorSize = 6;
     this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
-
+    this.facteurScale = 1;
 
     this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
     let nbTimeline = 6
@@ -75,8 +78,14 @@ export class EvaluationService {
   }
 
   draw(): void {
+
     if (this.ctx !== null && this.ctx !== undefined) {
       const canvas = this.ctx.canvas;
+      // if(!this.anyChange)
+      //   return;
+      //
+
+      this.anyChange=false;
       this.widthCanvas = this.ctx.canvas.width;
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
 
@@ -121,14 +130,12 @@ export class EvaluationService {
         }
 
       }
-
-
-
-
       if (this.action !== undefined) {
         this.ctx.fillStyle = 'red';
         this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
       }
+
+
     }
   }
 
@@ -581,6 +588,7 @@ export class EvaluationService {
       }
 
       this.mousePosJustBefore = posX;
+      this.draw();
     }else if (this.sequenceCurrent !== undefined )
     {
       const posX = $event.offsetX;
@@ -714,5 +722,8 @@ export class EvaluationService {
   }
 
 
-
+  refreshAlsoVoxelization() {
+      if(this.callForUpdateTimeScal!==undefined)
+        this.callForUpdateTimeScal();
+  }
 }

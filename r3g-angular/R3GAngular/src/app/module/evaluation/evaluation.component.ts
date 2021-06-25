@@ -57,6 +57,7 @@ export class EvaluationComponent implements OnInit {
 
 
   changeValue(seq: Sequence): void {
+    this.evalServ.anyChange=true;
     this.evalServ.sequenceCurrent = seq;
     if (this.lastSeqSquelette !== undefined) {
       this.serviceSequence.unloadSequence(this.lastSeqSquelette);
@@ -81,10 +82,12 @@ export class EvaluationComponent implements OnInit {
   change_timeline_i(value: any,i:number): void{
     this.evalServ.timelines[i] = value;
     console.log(this.evalServ);
+    this.evalServ.anyChange=true;
     this.evalServ.draw();
   }
 
   DefaultTimelines() {
+    this.evalServ.anyChange=true;
     if (this.questionerForm===undefined)
       return;
     let vals = [
