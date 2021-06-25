@@ -59,7 +59,7 @@ export class EvaluationService {
 
 
     this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
-    let nbTimeline = 5
+    let nbTimeline = 6
     this.posTimelineY = Array.from(Array(nbTimeline)).map((_, i) => 20 + i * (this.heightStd+5));
     this.timelines = Array.from(Array(nbTimeline)).map((_, i) => '');
     for (let i = 0; i < nbTimeline; i++) {
@@ -116,6 +116,8 @@ export class EvaluationService {
           this.draw_brut(i,true);
         }  else if (this.timelines[i].includes('Reject')) {
           this.draw_reject(i);
+        }else if (this.timelines[i].includes('Repeat')) {
+          this.draw_repeat(i);
         }
 
       }
@@ -182,6 +184,64 @@ export class EvaluationService {
 
         }
       });
+    }
+  }
+
+  public draw_repeat(idTimeline: number): void {
+    if (this.sequenceCurrent !== undefined) {
+      let repeat:Array<number>=[] ;
+        if(idTimeline==null)
+        {
+          alert("idTimeline ne doit pas être null")
+          return;
+        }
+        this.annotationIA.forEach(ev => {
+            if (ev.name === this.sequenceCurrent.id) {
+              if (ev.idModel === this.timelines[idTimeline].replace('Repeat ', '')) {
+                // this.modelAnnot[ev.idModel] = ev.annotation;
+                repeat = ev.listRepeat;
+              }
+            }
+          }
+        );
+        if(repeat.length==0)
+        {
+          alert("No result for this Data")
+          return;
+        }
+      let cumulativeSumRepeat:Array<number> = [];
+      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      let geste = '';
+      if (this.ctx !== null && this.ctx !== undefined) {
+        let frame1 = 0;
+        for (let i = 0; i < cumulativeSumRepeat.length; i++) {
+
+          const name = repeat[i]+"";
+          const frame2 = cumulativeSumRepeat[i];
+
+
+          const t1 = this.convertFrameToTime(Number(frame1));
+          const t2 = this.convertFrameToTime(Number(frame2));
+          // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+          // const color = localStorage.getItem(name);
+          if (i%2==0) {
+            this.ctx.fillStyle = "black";
+          } else {
+            this.ctx.fillStyle = 'white';
+          }
+          this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+          this.ctx.font = '10px Arial';
+          this.ctx.fillStyle = 'red';
+          if (geste !== name && name !== undefined) {
+            this.ctx.fillText(name, this.timeToPos(t1) + 5, this.posTimelineY[idTimeline] + this.heightStd/2);
+            geste = name;
+          }
+          frame1=frame2;
+
+        }
+      }
+
+
     }
   }
   public draw_brut(idTimeline:number,simplified:boolean): void {
@@ -336,7 +396,7 @@ export class EvaluationService {
           const t1 = this.convertFrameToTime(Number(i));
           const t2 = this.convertFrameToTime(Number(i + 1));
           if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
-            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'green';
             vraiPositif++;
             this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
@@ -344,26 +404,26 @@ export class EvaluationService {
           } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
             && tmp[i] === this.classZero) {
             // console.log(this.veriteTerrain[i]);
-            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'lightgray';
             fauxNegatif++;
             this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
             && tmp[i] !== this.classZero) {
-            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'red';
             vraiNegatifRouge++;
-            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+            // this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero) {
-            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'orange';
             vraiNegatifOrange++;
             this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
-            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'lightgreen';
             fauxPositif++;
             this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
@@ -564,6 +624,11 @@ export class EvaluationService {
       // this.clip.duration = this.action.time;
       this.action.play();
       this.action.paused = true;
+      for (const animationAction of this.actionsVoxel) {
+        animationAction.timeScale = 1;
+        animationAction.play();
+        animationAction.paused = true;
+      }
 
     }
   }
@@ -577,6 +642,13 @@ export class EvaluationService {
     // this.clip.duration = this.tempsTotal;
     this.action.timeScale = 1;
     this.action.play();
+    for (const animationAction of this.actionsVoxel) {
+      animationAction.timeScale = 1;
+      animationAction.stop();
+      animationAction.time = t;
+      animationAction.paused = false;
+      animationAction.play();
+    }
   }
 
   public playBackward(): void {
@@ -588,6 +660,14 @@ export class EvaluationService {
     // this.annotationServ.action.setLoop(THREE.LoopOnce);
     this.action.timeScale = -1;
     this.action.play();
+
+    for (const animationAction of this.actionsVoxel) {
+      animationAction.timeScale = -1;
+      animationAction.stop();
+      animationAction.time = t;
+      animationAction.paused = false;
+      animationAction.play();
+    }
   }
 
   public stopToStart(): void {
@@ -598,6 +678,14 @@ export class EvaluationService {
     this.action.play();
     this.action.paused = true;
     this.pauseAction = true;
+
+    for (const animationAction of this.actionsVoxel) {
+      animationAction.timeScale = 1;
+      animationAction.stop();
+      animationAction.time = 0;
+      animationAction.play();
+      animationAction.paused = true;
+    }
   }
 
   public stopToEnd(): void {
@@ -607,12 +695,22 @@ export class EvaluationService {
     // this.clip.duration = this.tempsTotal;
     this.action.play();
     this.pauseAction = true;
+    for (const animationAction of this.actionsVoxel) {
+      animationAction.timeScale = 1;
+      animationAction.stop();
+      animationAction.time = this.tempsTotal;
+      animationAction.play();
+      animationAction.paused = true;
+    }
   }
 
   public pause(): void {
     this.pauseAction = true;
     // this.clip.duration = this.action.time;
     this.action.play();
+    for (const animationAction of this.actionsVoxel) {
+      animationAction.play();
+    }
   }
 
 

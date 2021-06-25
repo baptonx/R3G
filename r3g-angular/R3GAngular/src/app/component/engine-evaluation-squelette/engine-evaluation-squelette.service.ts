@@ -144,7 +144,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.evaluationServ.draw();
+          // this.evaluationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;

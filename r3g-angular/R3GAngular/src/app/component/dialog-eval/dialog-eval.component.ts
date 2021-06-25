@@ -52,6 +52,7 @@ export class DialogEvalComponent implements OnInit {
           this.evalServ.modelEval[i].add('Brutt ' + this.model);
           this.evalServ.modelEval[i].add('BrutSimplified ' + this.model);
           this.evalServ.modelEval[i].add('Reject ' + this.model);
+          this.evalServ.modelEval[i].add('Repeat ' + this.model);
 
         }
         this.evalServ.draw();

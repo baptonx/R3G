@@ -11,6 +11,7 @@ import {SequencesChargeesService} from '../../service/sequences-chargees.service
 import {Model} from '../../class/evaluation/model';
 import {HttpClient} from '@angular/common/http';
 import {Sequence} from '../../class/commun/sequence';
+import {Object3D} from "three/src/core/Object3D";
 
 interface MaScene {
   scene: THREE.Scene;
@@ -51,12 +52,14 @@ export class EngineEvaluationService implements OnDestroy {
   public arr3: Array<AnimationAction> = [];
   private useEvalVoxel: boolean=true;
   public facteurScale:number=1;
+  private rootVoxel: Object3D;
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
     this.layerList = new Set<string>();
     this.sequences = this.sequencesChargeesService.sequences1;
     this.pauseAction = true;
+    this.rootVoxel = new Object3D()
 
   }
 
@@ -126,13 +129,33 @@ export class EngineEvaluationService implements OnDestroy {
           for (let k = 0; k < numberX; k++) {
             for (let j = 0; j < numberY; j++) {
               for (let i = 0; i < numberZ; i++) {
-                const material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.2, transparent: true});
+                let material;
+                let found = false;
+
+                if(k==0 || k==numberX-1 || j==numberY-1 || i==numberZ-1 )
+                {
+                  material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.2, transparent: true});
+                }
+                else
+                  material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
+                for (let l = 0; l < this.traceVoxel.length; l++) {
+                  if (this.traceVoxel[l][k][j][i]===1) {
+                    found=true
+                    console.log("FOUND")
+                    break;
+                  }
+                }
+                if(!found && !(k==0 || k==numberX-1 || j==numberY-1 || i==numberZ-1))
+                  continue
+
                 const object = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), material);
 
                 object.position.x = k;
                 object.position.y = j;
                 object.position.z = i;
-                scene.add(object);
+                if(found || (k==0 || k==numberX-1 || j==numberY-1 || i==numberZ-1) )
+                  scene.add(object);
+                if(found )
                 arr2.push(object);
 
               }
@@ -156,9 +179,9 @@ export class EngineEvaluationService implements OnDestroy {
                       tabColor.push(1);
                       tabColor.push(1);
                       tabColor.push(1);
-                      opacityKF.push(0.2);
-                      opacityKF.push(0.2);
-                      opacityKF.push(0.2);
+                      opacityKF.push(0);
+                      opacityKF.push(0);
+                      opacityKF.push(0);
                     } else {
                       tabColor.push(0);
                       tabColor.push(0);
@@ -171,19 +194,24 @@ export class EngineEvaluationService implements OnDestroy {
                   lastTime_Value = value;
                 }
                 if (tabColor.indexOf(0) > -1) {
-                  const positionArticulation1 = new ColorKeyframeTrack(
+                  let positionArticulation1 = new ColorKeyframeTrack(
                     '.material.color',
                     tabTemps,
                     tabColor,
+                    THREE.InterpolateDiscrete
                   );
-                  const positionArticulation2 = new NumberKeyframeTrack(
+                  let positionArticulation2 = new NumberKeyframeTrack(
                     '.material.opacity',
                     tabTemps,
                     opacityKF,
+                    THREE.InterpolateDiscrete
                   );
+                  positionArticulation1= positionArticulation1.optimize();
+                  positionArticulation2 = positionArticulation2.optimize();
 
 
-                  const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
+                  let colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
+                  colorClip = colorClip.optimize();
                   const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
                   const mixer = new THREE.AnimationMixer(arr2[index]);
                   mixers.push(mixer);
@@ -191,10 +219,10 @@ export class EngineEvaluationService implements OnDestroy {
                   this.arr3.push(ac);
                   ac.loop = THREE.LoopOnce;
                   ac.clampWhenFinished = true;
-                  this.evalService.actionsVoxel.push(ac);
+                  // this.evalService.actionsVoxel.push(ac);
+                  index++;
 
                 }
-                index++;
               }
             }
           }
@@ -206,7 +234,7 @@ export class EngineEvaluationService implements OnDestroy {
         // this.stopToStart();
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.evalService.draw();
+          // this.evalService.draw();
           const delta = clock.getDelta();
           for ( let i = 0, l = mixers.length; i < l; i ++ ) {
 
@@ -281,6 +309,7 @@ export class EngineEvaluationService implements OnDestroy {
   public playSeq(): void{
     this.refreshInitialize();
     this.evalService.actionsVoxel = this.arr3;
+    console.log(this.evalService)
 
     this.arr3.forEach(elt => {
       elt.play()
@@ -370,7 +399,7 @@ export class EngineEvaluationService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.evalService.draw();
+          // this.evalService.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;
@@ -467,8 +496,9 @@ export class EngineEvaluationService implements OnDestroy {
       camera.lookAt(0, 0, 0);
     }
     else if (x === 1) {
-      camera.position.set(8, 30, -30);
-      camera.lookAt(16, 50, 16);
+      camera.position.set(4, 15, -15);
+      if(this.traceVoxel!==undefined && this.traceVoxel!==null &&  this.traceVoxel.length>0)
+      camera.lookAt(this.traceVoxel[0].length/2, this.traceVoxel[0][0].length/2, this.traceVoxel[0][0][0].length/2);
     }
 
     scene.add(camera);

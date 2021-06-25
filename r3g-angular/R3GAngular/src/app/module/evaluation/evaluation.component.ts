@@ -4,6 +4,7 @@ import { SequencesChargeesService } from 'src/app/service/sequences-chargees.ser
 import { EvaluationService } from './evaluation.service';
 import {EngineEvaluationSqueletteService} from '../../component/engine-evaluation-squelette/engine-evaluation-squelette.service';
 import {Sequence} from '../../class/commun/sequence';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-evaluation',
@@ -14,12 +15,20 @@ import {Sequence} from '../../class/commun/sequence';
 export class EvaluationComponent implements OnInit {
   public lastSeqSquelette: Sequence | undefined;
 
-
+  public questionerForm: FormGroup | undefined ;
   constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
               public bdd: BddService, public evalServ: EvaluationService) {
     this.evalServ.reset();
     this.evalServ.observableShowSquelette.subscribe(() => {
       this.engineSqueletteService.refreshInitialize();
+      this.questionerForm = new FormGroup({
+        GT: new FormControl(),
+        Repeat: new FormControl(),
+        Brutt: new FormControl(),
+        BrutSimplified: new FormControl(),
+        Reject: new FormControl(),
+        Result: new FormControl(),
+      });
     });
   }
 
@@ -73,5 +82,30 @@ export class EvaluationComponent implements OnInit {
     this.evalServ.timelines[i] = value;
     console.log(this.evalServ);
     this.evalServ.draw();
+  }
+
+  DefaultTimelines() {
+    if (this.questionerForm===undefined)
+      return;
+    let vals = [
+      'Vérité terrain',
+      'Repeat '+this.evalServ.selectedModel,
+       'Brutt '+this.evalServ.selectedModel,
+      'BrutSimplified '+this.evalServ.selectedModel,
+      'Reject '+this.evalServ.selectedModel,
+      'Classes '+this.evalServ.selectedModel,
+    ]
+    this.questionerForm.setValue({
+      GT: vals[0],
+      Repeat: vals[1],
+      Brutt: vals[2],
+      BrutSimplified: vals[3],
+      Reject: vals[4],
+      Result: vals[5],
+    });
+    for (let i = 0; i < this.evalServ.timelines.length; i++) {
+        this.change_timeline_i(vals[i],i);
+
+    }
   }
 }
