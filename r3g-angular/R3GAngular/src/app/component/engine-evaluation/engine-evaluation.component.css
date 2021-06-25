@@ -1,11 +1,11 @@
 #renderCanvas {
   padding-top: 30px;
   position: absolute;
-  left: 0;
+  right: 0;
   top: 0;
-  width: 80%;
+  width: 100%;
   height: 100%;
-  display: block;
+  display: inline;
   z-index: -1;
 }
 
@@ -27,10 +27,10 @@
 
 *[data-diagram] {
   display: inline-block;
-  width: 70em;
+  width: 40em;
   height: 30em;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  /*margin-left: 50%;*/
+  /*transform: translateX(-50%);*/
 }
 
 /*

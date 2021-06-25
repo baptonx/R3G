@@ -232,6 +232,7 @@ export class BddService {
         annot.classeGeste = annotation.type;
         annot.f1 = parseFloat(annotation.start);
         annot.f2 = parseFloat(annotation.end);
+        annot.pointAction = parseFloat(annotation.ActionPoint);
         listannot.push(annot);
       }
       for (const directive of Object.values(sequence.directives)){

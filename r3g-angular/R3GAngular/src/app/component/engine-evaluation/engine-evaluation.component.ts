@@ -58,7 +58,7 @@ export class EngineEvaluationComponent implements OnInit {
     this.engServ.playSeq();
   }
   resetCamera(): void{
-    this.engServ.stopAnim();
+    //this.engServ.stopAnim();
   }
 
   getPoids(): void {

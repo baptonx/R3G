@@ -36,17 +36,27 @@
   </mat-tab>
   <mat-tab class="ongletBDD" label="Squelette voxelisé">
     <div class="tab-container">
-    <div><mat-form-field appearance="fill">
-      <mat-label>Choisir la séquence</mat-label>
-      <mat-select (valueChange)="changeSeq($event)">
+<!--    <div><mat-form-field appearance="fill">-->
+<!--      <mat-label>Choisir la séquence</mat-label>-->
+<!--      <mat-select (valueChange)="changeSeq($event)">-->
 
-        <mat-option *ngFor="let elt of this.engServ.sequencesChargeesService.sequences1" [value]="elt">
-          {{elt.id}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field></div>
+<!--        <mat-option *ngFor="let elt of this.engServ.sequencesChargeesService.sequences1" [value]="elt">-->
+<!--          {{elt.id}}-->
+<!--        </mat-option>-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
+
+<!--      <mat-form-field appearance="fill">-->
+<!--        <mat-label>Choisir un modèle</mat-label>-->
+<!--        <mat-select (valueChange)="changeModel($event)">-->
+<!--          <mat-option *ngFor="let m of this.engServ.modelesList" [value]="m.idM">-->
+<!--            {{m.idM}}-->
+<!--          </mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field></div>-->
     <span><button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="resetCamera()">Reset caméra</button>
-      <button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="play()">Visualiser</button></span>
+      <button mat-flat-button class='btn' style="margin-left: 50px;" class="btn" (click)="play()">Visualiser</button>
+    </span>
     </div>
   </mat-tab>
 </mat-tab-group>

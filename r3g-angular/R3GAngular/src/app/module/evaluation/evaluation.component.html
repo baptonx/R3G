@@ -12,42 +12,70 @@
         <div>
         <mat-form-field appearance="fill">
           <mat-label>Affichage timeline 1</mat-label>
-          <mat-select (valueChange)="change_timeline_1($event)">
-            <mat-option *ngFor="let an of evalServ.modelEval1" [value]="an" >
+          <mat-select (valueChange)="change_timeline_i($event,0)">
+            <mat-option *ngFor="let an of evalServ.modelEval[0]" [value]="an" >
               {{an}}
             </mat-option>
 
         </mat-select>
         </mat-form-field>
-        </div>
-        <div>
           <mat-form-field appearance="fill">
             <mat-label>Affichage timeline 2</mat-label>
-            <mat-select  (valueChange)="change_timeline_2($event)">
-              <mat-option *ngFor="let an of evalServ.modelEval2" [value]="an" >
+            <mat-select  (valueChange)="change_timeline_i($event,1)">
+              <mat-option *ngFor="let an of evalServ.modelEval[1]" [value]="an" >
                 {{an}}
               </mat-option>
           </mat-select>
           </mat-form-field>
           </div>
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Affichage timeline 3</mat-label>
+          <mat-select  (valueChange)="change_timeline_i($event,2)">
+            <mat-option *ngFor="let an of evalServ.modelEval[2]" [value]="an" >
+              {{an}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Affichage timeline 4</mat-label>
+          <mat-select  (valueChange)="change_timeline_i($event,3)">
+            <mat-option *ngFor="let an of evalServ.modelEval[3]" [value]="an" >
+              {{an}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Affichage timeline 5</mat-label>
+          <mat-select  (valueChange)="change_timeline_i($event,4)">
+            <mat-option *ngFor="let an of evalServ.modelEval[4]" [value]="an" >
+              {{an}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 </div>
 
 
 <app-timeline-evaluation></app-timeline-evaluation>
 
-<mat-slide-toggle
-  [(ngModel)]="this.evalServ.showSquelette"
-  Menu inférieur>
-</mat-slide-toggle>
-<div style="margin-bottom: 100px" *ngIf="this.evalServ.showSquelette;then squelette else voxel">
+<!--<mat-slide-toggle-->
+<!--  [(ngModel)]="this.evalServ.showSquelette"-->
+<!--  Menu inférieur>-->
+<!--</mat-slide-toggle>-->
+<div style="margin-bottom: 100px" >
+  <div style="width: 50%;float: left">
+    <app-engine-evaluation-squelette></app-engine-evaluation-squelette>
+  </div>
+  <div style="width: 50%;float: right">
+    <app-engine-evaluation></app-engine-evaluation>
+  </div>
+
 </div>
 
-<ng-template #squelette >
-  <app-engine-evaluation-squelette></app-engine-evaluation-squelette>
-</ng-template>
 
-<ng-template #voxel>
-  <app-engine-evaluation></app-engine-evaluation>
-</ng-template>
 <app-navigation-modules></app-navigation-modules>

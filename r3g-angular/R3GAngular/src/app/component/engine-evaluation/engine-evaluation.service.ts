@@ -1,7 +1,7 @@
 import {ElementRef, Injectable, NgZone, OnDestroy, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {AnimationAction, AnimationClip, AnimationMixer, BoxGeometry, Clock, ColorKeyframeTrack,
-        VectorKeyframeTrack, NumberKeyframeTrack} from 'three';
+  VectorKeyframeTrack, NumberKeyframeTrack} from 'three';
 import {SqueletteAnimation} from '../../class/ThreeJS/squelette-animation';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls';
 import {BddService} from '../../service/bdd.service';
@@ -17,7 +17,6 @@ interface MaScene {
   camera: THREE.PerspectiveCamera;
   controls: TrackballControls;
 }
-
 interface MaSceneElement {
   elem: ElementRef<HTMLCanvasElement>;
   fn: (rect: DOMRect) => void;
@@ -50,6 +49,8 @@ export class EngineEvaluationService implements OnDestroy {
   public pauseAction: boolean;
   public traceVoxel: Array<Array<Array<Array<number>>>> = [];
   public arr3: Array<AnimationAction> = [];
+  private useEvalVoxel: boolean=true;
+  public facteurScale:number=1;
 
   constructor(private ngZone: NgZone, public evalService: EvaluationService, public bddService: BddService,
               public sequencesChargeesService: SequencesChargeesService, public http: HttpClient) {
@@ -64,6 +65,7 @@ export class EngineEvaluationService implements OnDestroy {
     this.modelesList.forEach(elt => {
         if (elt.idM === value) {
           this.modelSelected = elt.idM;
+          this.evalService.selectedModel=elt.idM;
         }
       }
     );
@@ -77,7 +79,7 @@ export class EngineEvaluationService implements OnDestroy {
 
 
   public initialize(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
-                  , refresh: boolean): void {
+    , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
@@ -96,17 +98,37 @@ export class EngineEvaluationService implements OnDestroy {
         this.squelette = new SqueletteAnimation();
         this.squelette.initialize();
         this.arr3 = [];
+        let repeat:Array<number>=[];
         const mixers: Array<THREE.AnimationMixer> = [];
-        if (this.sequenceCurrent !== undefined && this.evalService.showSquelette !== true) {
-          this.traceVoxel = this.sequenceCurrent.traceVoxel;
+        if (this.evalService.sequenceCurrent !== undefined && this.evalService.selectedModel !== "") {
+          if (this.useEvalVoxel)
+            this.evalService.annotationIA.forEach(ev => {
+                if (ev.name === this.evalService.sequenceCurrent.id) {
+                  if (ev.idModel === this.evalService.selectedModel) {
+                    // this.modelAnnot[ev.idModel] = ev.annotation;
+                    this.traceVoxel = ev.voxels;
+                    repeat = ev.listRepeat
+                    console.log("traceVoxel affected")
+                  }
+                }
+              }
+            );
+          else {
+            this.traceVoxel = this.sequenceCurrent.traceVoxel;
+          }
+          let cumulativeSumRepeat:Array<number> = [];
+          repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+
           const numberX = this.traceVoxel[0].length;
           const numberY = this.traceVoxel[0][0].length;
           const numberZ = this.traceVoxel[0][0][0].length;
+          // const material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.2, transparent: true});
           for (let k = 0; k < numberX; k++) {
             for (let j = 0; j < numberY; j++) {
               for (let i = 0; i < numberZ; i++) {
                 const material = new THREE.MeshPhongMaterial({color: 0xffffff, opacity: 0.2, transparent: true});
                 const object = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), material);
+
                 object.position.x = k;
                 object.position.y = j;
                 object.position.z = i;
@@ -123,45 +145,55 @@ export class EngineEvaluationService implements OnDestroy {
                 const tabColor: Array<number> = [];
                 const tabTemps: Array<number> = [];
                 const opacityKF: Array<number> = [];
-                for (let temps = 0; temps < this.traceVoxel.length; temps++) {
-                  tabTemps.push(temps / 10);
-                  if (this.traceVoxel[temps][x][y][z] === 0) {
-                    tabColor.push(1);
-                    tabColor.push(1);
-                    tabColor.push(1);
-                    opacityKF.push(0.2);
-                    opacityKF.push(0.2);
-                    opacityKF.push(0.2);
-                  } else {
-                    tabColor.push(0);
-                    tabColor.push(0);
-                    tabColor.push(0);
-                    opacityKF.push(0.8);
-                    opacityKF.push(0.8);
-                    opacityKF.push(0.8);
+                let lastTime_Value = -1;
+                for (let temps = 0; temps < this.traceVoxel.length-1; temps++) {
+                  let value = this.traceVoxel[temps][x][y][z];
+                  let valueP1 = this.traceVoxel[temps+1][x][y][z];
+                  if (value !== lastTime_Value || value!==valueP1) { //https://stackoverflow.com/questions/40434314/threejs-animationclip-example-needed
+                  //probleme d'interpolation,ça interpole doucement
+                    tabTemps.push(this.evalService.convertFrameToTime(cumulativeSumRepeat[temps]));
+                    if (value === 0) {
+                      tabColor.push(1);
+                      tabColor.push(1);
+                      tabColor.push(1);
+                      opacityKF.push(0.2);
+                      opacityKF.push(0.2);
+                      opacityKF.push(0.2);
+                    } else {
+                      tabColor.push(0);
+                      tabColor.push(0);
+                      tabColor.push(0);
+                      opacityKF.push(0.8);
+                      opacityKF.push(0.8);
+                      opacityKF.push(0.8);
+                    }
                   }
+                  lastTime_Value = value;
                 }
+                if (tabColor.indexOf(0) > -1) {
+                  const positionArticulation1 = new ColorKeyframeTrack(
+                    '.material.color',
+                    tabTemps,
+                    tabColor,
+                  );
+                  const positionArticulation2 = new NumberKeyframeTrack(
+                    '.material.opacity',
+                    tabTemps,
+                    opacityKF,
+                  );
 
-                if (tabColor.indexOf(0) > -1){
-                    const positionArticulation1 = new ColorKeyframeTrack(
-                      '.material.color',
-                      tabTemps,
-                      tabColor,
-                    );
-                    const positionArticulation2 = new NumberKeyframeTrack(
-                      '.material.opacity',
-                      tabTemps,
-                      opacityKF,
-                    );
 
+                  const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
+                  const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
+                  const mixer = new THREE.AnimationMixer(arr2[index]);
+                  mixers.push(mixer);
+                  const ac = mixer.clipAction(colorClip);
+                  this.arr3.push(ac);
+                  ac.loop = THREE.LoopOnce;
+                  ac.clampWhenFinished = true;
+                  this.evalService.actionsVoxel.push(ac);
 
-                    const colorClip = new THREE.AnimationClip(undefined, -1, [positionArticulation1, positionArticulation2]);
-                    const id = x + y * this.traceVoxel[0].length + z * this.traceVoxel[0].length * this.traceVoxel[0][0].length;
-                    const mixer = new THREE.AnimationMixer(arr2[index]);
-                    mixers.push(mixer);
-                    const ac = mixer.clipAction(colorClip);
-                    this.arr3.push(ac);
-                  }
+                }
                 index++;
               }
             }
@@ -169,25 +201,25 @@ export class EngineEvaluationService implements OnDestroy {
         }
 
 
-          // this.action.time = 4;
-          // this.clip.duration = this.action.time;
-          // this.stopToStart();
+        // this.action.time = 4;
+        // this.clip.duration = this.action.time;
+        // this.stopToStart();
         const clock = new Clock();
         return (rect: DOMRect) => {
-            this.evalService.draw();
-            const delta = clock.getDelta();
-            for ( let i = 0, l = mixers.length; i < l; i ++ ) {
+          this.evalService.draw();
+          const delta = clock.getDelta();
+          for ( let i = 0, l = mixers.length; i < l; i ++ ) {
 
 
             mixers[ i ].update( delta );
 
           }
-            camera.aspect = rect.width / rect.height;
-            camera.updateProjectionMatrix();
-            controls.handleResize();
-            controls.update();
-            this.renderer.render(scene, camera);
-          };
+          camera.aspect = rect.width / rect.height;
+          camera.updateProjectionMatrix();
+          controls.handleResize();
+          controls.update();
+          this.renderer.render(scene, camera);
+        };
 
       }/*,
       ['pyramid']: () => {
@@ -247,15 +279,19 @@ export class EngineEvaluationService implements OnDestroy {
   }
 
   public playSeq(): void{
+    this.refreshInitialize();
+    this.evalService.actionsVoxel = this.arr3;
+
     this.arr3.forEach(elt => {
-      elt.play();
+      elt.play()
+      elt.paused = true;
     });
   }
 
 
 
   public initPoids(canvas: ElementRef<HTMLCanvasElement> | undefined, listElementHtml: Array<ElementRef<HTMLCanvasElement>> | undefined
-                 , refresh: boolean): void {
+    , refresh: boolean): void {
     this.sceneElements = [];
     this.frameId = 0;
 
@@ -565,6 +601,14 @@ export class EngineEvaluationService implements OnDestroy {
 
   public resetCamera(): void {
     this.controls.reset();
+  }
+
+  updateTimeScale(event: any): void {
+    const scale = Number(event.target.value);
+    if (scale > 0) {
+      this.facteurScale = scale;
+      this.refreshInitialize();
+    }
   }
 
   public calculateAverage(tab: Array<number>): number {

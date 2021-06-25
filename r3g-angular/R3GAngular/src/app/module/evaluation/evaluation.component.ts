@@ -42,7 +42,7 @@ export class EvaluationComponent implements OnInit {
   }
 
   delete(value: any): void{
-    this.evalServ.modelEval1.delete(value);
+    // this.evalServ.modelEval1.delete(value);
   }
 
 
@@ -69,16 +69,9 @@ export class EvaluationComponent implements OnInit {
     }
   }
 
-  change_timeline_1(value: any): void{
-    this.evalServ.timeline1 = value;
+  change_timeline_i(value: any,i:number): void{
+    this.evalServ.timelines[i] = value;
     console.log(this.evalServ);
     this.evalServ.draw();
   }
-
-  change_timeline_2(value: any): void{
-    this.evalServ.timeline2 = value;
-    console.log(this.evalServ);
-    this.evalServ.draw();
-  }
-
 }

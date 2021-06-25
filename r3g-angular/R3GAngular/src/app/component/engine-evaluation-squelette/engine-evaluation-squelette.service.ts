@@ -327,59 +327,27 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   }
 
   public play(): void {
-    if (this.evaluationServ.pauseAction) {
-      this.playForward();
-    } else {
-      this.evaluationServ.action.timeScale = 1;
-      this.evaluationServ.pauseAction = true;
-      this.clip.duration = this.evaluationServ.action.time;
-      this.evaluationServ.action.play();
-    }
+    this.evaluationServ.play();
   }
 
   public playForward(): void {
-    this.evaluationServ.pauseAction = false;
-    const t = this.evaluationServ.action.time;
-    this.evaluationServ.action.stop();
-    this.evaluationServ.action.time = t;
-    this.clip.duration = this.evaluationServ.tempsTotal;
-    this.evaluationServ.action.timeScale = 1;
-    this.evaluationServ.action.play();
+    this.evaluationServ.playForward()
   }
 
   public playBackward(): void {
-    this.evaluationServ.pauseAction = false;
-    const t = this.evaluationServ.action.time;
-    this.evaluationServ.action.stop();
-    this.evaluationServ.action.time = t;
-    this.clip.duration = this.evaluationServ.tempsTotal;
-    // this.annotationServ.action.setLoop(THREE.LoopOnce);
-    this.evaluationServ.action.timeScale = -1;
-    this.evaluationServ.action.play();
+    this.evaluationServ.playBackward()
   }
 
   public stopToStart(): void {
-    this.evaluationServ.action.timeScale = 1;
-    this.evaluationServ.action.stop();
-    this.evaluationServ.action.time = 0;
-    this.clip.duration = 0;
-    this.evaluationServ.action.play();
-    this.evaluationServ.pauseAction = true;
+    this.evaluationServ.stopToStart();
   }
 
   public stopToEnd(): void {
-    this.evaluationServ.action.timeScale = 1;
-    this.evaluationServ.action.stop();
-    this.evaluationServ.action.time = this.evaluationServ.tempsTotal;
-    this.clip.duration = this.evaluationServ.tempsTotal;
-    this.evaluationServ.action.play();
-    this.evaluationServ.pauseAction = true;
+    this.evaluationServ.stopToEnd();
   }
 
   public pause(): void {
-    this.evaluationServ.pauseAction = true;
-    this.clip.duration = this.evaluationServ.action.time;
-    this.evaluationServ.action.play();
+    this.evaluationServ.pause();
   }
   updateActionTime(event: any): void {
     const timeEditText = Number(event.target.value);

@@ -39,16 +39,21 @@ export class DialogEvalComponent implements OnInit {
       (returnedData: Array<Eval>) => {
         this.chargement = 'Evaluation terminée';
         // this.annot.annotationIA = returnedData;
-        this.evalServ.annotationIA = returnedData;
+        returnedData.forEach(ret=>this.evalServ.annotationIA.push(ret));
+
         this.http.get<string>('/models/getGesteZero/' + this.bddSelected).subscribe(
           (returnedData2: string) => {
             this.evalServ.classZero = returnedData2;
           }
         );
-        this.evalServ.modelEval1.add('Recouvrement ' + this.model);
-        this.evalServ.modelEval1.add('Classes ' + this.model);
-        this.evalServ.modelEval2.add('Recouvrement ' + this.model);
-        this.evalServ.modelEval2.add('Classes ' + this.model);
+        for (let i=0;i< this.evalServ.modelEval.length;i++) {
+            this.evalServ.modelEval[i].add('Recouvrement ' + this.model);
+          this.evalServ.modelEval[i].add('Classes ' + this.model);
+          this.evalServ.modelEval[i].add('Brutt ' + this.model);
+          this.evalServ.modelEval[i].add('BrutSimplified ' + this.model);
+          this.evalServ.modelEval[i].add('Reject ' + this.model);
+
+        }
         this.evalServ.draw();
       },
       () => {

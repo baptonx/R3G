@@ -5,7 +5,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  display: block;
+  display: inline;
   z-index: -1;
 }
 
@@ -26,7 +26,7 @@
 
 *[data-diagram] {
   display: inline-block;
-  width: 70em;
+  width: 40em;
   height: 30em;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -45,7 +45,6 @@
  */
 
 .barButtonsEngine {
-  position: absolute;
   margin-left: 50%;
   transform: translateX(-50%);
   padding-bottom: 10em;

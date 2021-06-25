@@ -18,25 +18,21 @@ export class EvaluationService {
   public marge!: number;
   public unit!: number;
   public action!: AnimationAction;
+  public actionsVoxel: Array<AnimationAction>=[];
   public widthCanvas!: number;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
   public annotationCurrent!: Annotation;
-  public modelAnnot1: Array<Annotation> = [];
-  public modelAnnot2: Array<Annotation> = [];
   public indiceAnnotationSelected!: number;
   public mousePosJustBefore!: number;
   public annotationIA: Array<Eval> = [];
   public classZero = '';
-  public modelEval1: Set<string> = new Set<string>();
-  public modelEval2: Set<string> = new Set<string>();
+  public modelEval: Array<Set<string>> = []
+  public selectedModel:string = "";
   public sequenceCurrent!: Sequence;
   public tabTimeCurrent!: Array<number>;
   public veriteTerrain: string[] = [];
-  public gesteIA1: string[] = [];
-  public gesteIA2: string[] = [];
-  public timeline1: string;
-  public timeline2: string;
+  public gesteIA: Array<string[]> = [];
   public scale = 1;
   public sequenceSquelette!: Sequence;
   public sequenceSqueletteVoxel!: Sequence;
@@ -44,11 +40,13 @@ export class EvaluationService {
   public observableShowSquelette: BehaviorSubject<boolean>;
   public mouseDown!: boolean;
   public mouseDownCursor!: boolean;
-
+  public heightStd:number = 40
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
   public pauseAction!: boolean;
+  private posTimelineY: Array<number> ;
+  public timelines: Array<string>;
 
   constructor(private eventManager: EventManager) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
@@ -58,16 +56,22 @@ export class EvaluationService {
     this.cursorSize = 6;
     this.indiceAnnotationSelected = -1;
     this.mousePosJustBefore = -1;
-    this.modelEval1.add('Vérité terrain');
-    this.modelEval2.add('Vérité terrain');
-    this.timeline1 = '';
-    this.timeline2 = '';
+
+
     this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
-  }
+    let nbTimeline = 5
+    this.posTimelineY = Array.from(Array(nbTimeline)).map((_, i) => 20 + i * (this.heightStd+5));
+    this.timelines = Array.from(Array(nbTimeline)).map((_, i) => '');
+    for (let i = 0; i < nbTimeline; i++) {
+      this.modelEval.push(new Set<string>());
+      this.modelEval[i].add('Vérité terrain');
+      this.gesteIA.push(new Array<string>());
+    }
+
+
+    }
 
   reset(): void {
-    this.timeline1 = '';
-    this.timeline2 = '';
   }
 
   draw(): void {
@@ -75,11 +79,13 @@ export class EvaluationService {
       const canvas = this.ctx.canvas;
       this.widthCanvas = this.ctx.canvas.width;
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
+
+
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-      this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
-      this.ctx.fillRect(this.margeTimeline, 230, this.unit * this.tempsTotal, 100);
-      this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
-      this.ctx.fillRect(this.margeTimeline, 100, this.unit * this.tempsTotal, 100);
+      for (let i = 0; i < this.posTimelineY.length; i++) {
+        this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        this.ctx.fillRect(this.margeTimeline, this.posTimelineY[i], this.unit * this.tempsTotal, this.heightStd);
+      }
 
       // IndicatorTime
       this.ctx.fillStyle = 'black';
@@ -97,22 +103,26 @@ export class EvaluationService {
       this.get_verite();
       this.ctx.font = '12px Arial';
 
-
-      if (this.timeline1 === 'Vérité terrain') {
-        this.draw_tmp(100, 0);
-      } else if (this.timeline1.includes('Recouvrement')) {
-        this.draw_ia_recouvrement(100, 1);
-      } else if (this.timeline1.includes('Classes')) {
-        this.draw_tmp(100, 1);
+      for (let i = 0; i < this.timelines.length ; i++) {
+        if (this.timelines[i] === 'Vérité terrain') {
+          this.draw_tmp(this.posTimelineY[i], true,null);
+        } else if (this.timelines[i].includes('Recouvrement')) {
+          this.draw_ia_recouvrement(i);
+        } else if (this.timelines[i].includes('Classes')) {
+          this.draw_tmp(this.posTimelineY[i],false ,i);
+        } else if (this.timelines[i].includes('Brutt')) {
+          this.draw_brut(i,false);
+        }  else if (this.timelines[i].includes('BrutSimplified')) {
+          this.draw_brut(i,true);
+        }  else if (this.timelines[i].includes('Reject')) {
+          this.draw_reject(i);
+        }
 
       }
-      if (this.timeline2 === 'Vérité terrain') {
-        this.draw_tmp(230, 0);
-      } else if (this.timeline2.includes('Recouvrement')) {
-        this.draw_ia_recouvrement(230, 2);
-      } else if (this.timeline2.includes('Classes')) {
-        this.draw_tmp(230, 2);
-      }
+
+
+
+
       if (this.action !== undefined) {
         this.ctx.fillStyle = 'red';
         this.ctx.fillRect(this.action.time * this.unit + this.margeTimeline, 0, this.cursorSize, canvas.height);
@@ -120,21 +130,33 @@ export class EvaluationService {
     }
   }
 
-  public draw_tmp(j: number, k: number): void {
+  private drawBorder(ctx:CanvasRenderingContext2D,xPos:number, yPos:number, width:number, height:number, thickness:number = 1)
+  {
+    ctx.fillStyle='#000';
+    ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
+  }
+
+  public draw_tmp(j: number, GT:boolean,idTimeline:number|null): void {
     if (this.sequenceCurrent !== undefined) {
       let list = this.sequenceCurrent.listAnnotation;
-      this.annotationIA.forEach(ev => {
-          if (ev.name === this.sequenceCurrent.id) {
-            if (k === 1 && ev.idModel === this.timeline1.replace('Classes ', '')) {
-              this.modelAnnot1 = ev.annotation;
-              list = ev.annotation;
-            } else if (k === 2 && ev.idModel === this.timeline2.replace('Classes ', '')) {
-              this.modelAnnot2 = ev.annotation;
-              list = ev.annotation;
+      if (! GT)
+      {
+        if(idTimeline==null)
+        {
+          alert("idTimeline ne doit pas être null")
+          return;
+        }
+        this.annotationIA.forEach(ev => {
+            if (ev.name === this.sequenceCurrent.id) {
+              if (ev.idModel === this.timelines[idTimeline].replace('Classes ', '')) {
+                // this.modelAnnot[ev.idModel] = ev.annotation;
+                list = ev.annotation;
+              }
             }
           }
-        }
-      );
+        );
+      }
+
       let geste = '';
       list.forEach(an => {
         if (this.ctx !== null && this.ctx !== undefined) {
@@ -144,16 +166,17 @@ export class EvaluationService {
 
           const t1 = this.convertFrameToTime(Number(frame1));
           const t2 = this.convertFrameToTime(Number(frame2));
+          this.drawBorder(this.ctx,this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
           const color = localStorage.getItem(name);
           if (color != null) {
             this.ctx.fillStyle = color;
           } else {
             this.ctx.fillStyle = 'white';
           }
-          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+          this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
           this.ctx.fillStyle = 'black';
-          if (geste !== name && name !== undefined && (k === 0 || k === 1 || k === 2)) {
-            this.ctx.fillText(name, this.timeToPos(t1) + 5, j + 50);
+          if (geste !== name && name !== undefined) {
+            this.ctx.fillText(name, this.timeToPos(t1) + 5, j + this.heightStd/2);
             geste = name;
           }
 
@@ -161,15 +184,146 @@ export class EvaluationService {
       });
     }
   }
+  public draw_brut(idTimeline:number,simplified:boolean): void {
+    if (this.sequenceCurrent !== undefined) {
+      let listPred:Array<string> = [];
+      let repeat : Array<number>= [];
 
-
-  public draw_ia_recouvrement(j: number, k: number): void {
-    if (this.ctx !== null && this.ctx !== undefined) {
-      this.get_ia(k);
-      let tmp = this.gesteIA1;
-      if (k === 2) {
-        tmp = this.gesteIA2;
+      this.annotationIA.forEach(ev => {
+            if (ev.name === this.sequenceCurrent.id) {
+              if (ev.idModel === this.timelines[idTimeline].replace('Brutt ', '').replace('BrutSimplified ', '')) {
+                // this.modelAnnot[ev.idModel] = ev.annotation;
+                listPred = ev.brutResultPred;
+                repeat = ev.listRepeat;
+              }
+            }
+          }
+        );
+      if (listPred.length==0)
+      {
+        console.error("list is 0 for result brute pred");
+        return;
       }
+
+      if(listPred.length!=repeat.length)
+      {
+        alert("ERREUR list length pred != repeat, pred:"+listPred.length+ " rep :"+repeat.length)
+        return ;
+      }
+      if (this.ctx === null) {
+        return;
+      }
+      let cumulativeSumRepeat:Array<number> = [];
+      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      let i = 0
+      while (i < listPred.length-1) {
+        let pred = listPred[i];
+        let rep = cumulativeSumRepeat[i]
+        let start = this.convertFrameToTime(rep)
+        let end = this.convertFrameToTime(rep+1)
+
+        if(simplified)
+        {
+          while (listPred[i+1]===pred && i+1<listPred.length-1)
+          {
+            i+=1
+          }
+          end = this.convertFrameToTime(cumulativeSumRepeat[i+1])//end will be i+1
+        }
+
+        this.drawBorder(this.ctx,this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd)
+        const color = localStorage.getItem(pred);
+        if (color != null) {
+          this.ctx.fillStyle = color;
+        } else {
+          this.ctx.fillStyle = 'white';
+        }
+        this.ctx.fillRect(this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd);
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(pred, this.timeToPos(start) + 2, this.posTimelineY[idTimeline] + this.heightStd/2);
+        i+=1;
+      }
+    }
+  }
+
+
+  private draw_reject(idTimeline: number) {
+    if (this.sequenceCurrent !== undefined) {
+      let listRej:Array<number> = [];
+      let listPred:Array<string> = [];
+      let repeat : Array<number>= [];
+
+      this.annotationIA.forEach(ev => {
+          if (ev.name === this.sequenceCurrent.id) {
+            if (ev.idModel === this.timelines[idTimeline].replace('Reject ', '')) {
+              // this.modelAnnot[ev.idModel] = ev.annotation;
+              listRej = ev.brutResultReject;
+              listPred = ev.brutResultPred;
+              repeat = ev.listRepeat;
+            }
+          }
+        }
+      );
+      if (listRej.length==0)
+      {
+        console.error("list is 0 for result brute pred");
+        return;
+      }
+
+      if(listRej.length!=repeat.length)
+      {
+        alert("ERREUR list length pred != repeat, pred:"+listPred.length+ " rep :"+repeat.length)
+        return ;
+      }
+      if (this.ctx === null) {
+        return;
+      }
+      let cumulativeSumRepeat:Array<number> = [];
+      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      let offsetY = this.posTimelineY[idTimeline];
+      let pos0 =this.timeToPos(this.convertFrameToTime(0))
+      this.ctx.fillStyle = "rgba(250,20,20,0.5)";
+      this.ctx.fillRect(pos0,offsetY+this.heightStd/2,this.timeToPos(this.tempsTotal)-pos0,1)
+      let oldPosX = this.timeToPos(this.convertFrameToTime(cumulativeSumRepeat[0]))
+      let oldPosY= offsetY+this.heightStd
+
+      this.ctx.moveTo(oldPosX,oldPosY)
+
+      for (let j = 0; j < listRej.length; j++) {
+        let rejI:number = listRej[j];
+        let correspondingFrame = cumulativeSumRepeat[j]
+        let correspondingTime = this.convertFrameToTime(correspondingFrame)
+        let posX = this.timeToPos(correspondingTime)
+
+        let posY = offsetY+(1-rejI)*this.heightStd;
+        let color;
+        if(j>0)
+           color = localStorage.getItem(listPred[j-1]); //return null if unknown
+        else
+            color = null
+        this.ctx.beginPath();
+        this.ctx.moveTo(oldPosX,oldPosY)
+        this.ctx.lineTo(posX, posY);
+        if (color != null) {
+          this.ctx.strokeStyle = color;
+          this.ctx.lineWidth = 2;
+        } else {
+          this.ctx.strokeStyle = 'black';
+        }
+        this.ctx.stroke();
+        oldPosX= posX;
+        oldPosY= posY;
+
+      }
+
+
+    }
+  }
+
+  public draw_ia_recouvrement(idTimeline:number): void {
+    if (this.ctx !== null && this.ctx !== undefined) {
+      this.get_ia(idTimeline);
+      let tmp = this.gesteIA[idTimeline];
       let vraiPositif = 0;
       let fauxPositif = 0;
       let vraiNegatifOrange = 0;
@@ -182,32 +336,37 @@ export class EvaluationService {
           const t1 = this.convertFrameToTime(Number(i));
           const t2 = this.convertFrameToTime(Number(i + 1));
           if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
+            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'green';
             vraiPositif++;
-            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
             && tmp[i] === this.classZero) {
-            console.log(this.veriteTerrain[i]);
+            // console.log(this.veriteTerrain[i]);
+            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'lightgray';
             fauxNegatif++;
-            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
             && tmp[i] !== this.classZero) {
+            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'red';
             vraiNegatifRouge++;
-            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero) {
+            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'orange';
             vraiNegatifOrange++;
-            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           } else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
+            this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
             this.ctx.fillStyle = 'lightgreen';
             fauxPositif++;
-            this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), 100);
+            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
             this.ctx.fillStyle = 'black';
           }
         }
@@ -217,13 +376,8 @@ export class EvaluationService {
       const pourcentage4 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
       const pourcentage3 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
       const pourcentage5 = (fauxNegatif / nbFrame * 100).toFixed(2);
-      let yVal = 0;
-      if (k === 1) {
-        yVal = 50;
-      }
-      else if (k === 2){
-        yVal = 350;
-      }
+      let yVal = this.posTimelineY[this.posTimelineY.length-1];
+      console.log("yVal",yVal)
       this.ctx.font = '12px Arial';
       this.ctx.fillStyle = 'black';
       this.underline('green', 'Vrai Positif : ' + pourcentage1 + '%', 200, yVal);
@@ -265,19 +419,12 @@ export class EvaluationService {
 
 
   public get_ia(i: number): void {
-    this.annotationIA.forEach(list => {
-      if (list.name === this.sequenceCurrent.id) {
-        if (i === 1 && list.idModel === this.timeline1.replace('Recouvrement ', '')) {
-          this.gesteIA1 = [];
-          list.annotation.forEach(an => {
+    this.annotationIA.forEach(ev => {
+      if (ev.name === this.sequenceCurrent.id) {
+        if (ev.idModel === this.timelines[i].replace('Classes ', '').replace('Recouvrement ', '')) {
+          ev.annotation.forEach(an => {
             for (let j = an.f1; j <= an.f2; j++) {
-              this.gesteIA1[j] = an.classeGeste;
-            }
-          });
-        } else if (i === 2 && list.idModel === this.timeline2.replace('Recouvrement ', '')) {
-          list.annotation.forEach(an => {
-            for (let j = an.f1; j <= an.f2; j++) {
-              this.gesteIA2[j] = an.classeGeste;
+              this.gesteIA[i][j] = an.classeGeste;
             }
           });
         }
@@ -347,17 +494,47 @@ export class EvaluationService {
     const posCursor = this.timeToPos(this.action.time);
     return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
   }
+  public getTimeLineCorrrepondingTo(posY: number) {
+    if (this.posTimelineY==null)
+      return null  ;
+    for (let i = this.posTimelineY.length; i >= 0; i--) {
+      let posIM1:number = this.posTimelineY[i];
+      if(posY>=posIM1)
+        return i
+    }
+    return null;
+
+  }
 
   onMouseMove($event: MouseEvent): void {
+
+
     if (this.sequenceCurrent !== undefined && this.mouseDownCursor) {
       const posX = $event.offsetX;
       const newValueTime = this.posToTime(posX);
 
       if (newValueTime > 0 && newValueTime < this.tempsTotal && this.action !== undefined) {
         this.action.time = newValueTime;
+        for (const animationAction of this.actionsVoxel) {
+          animationAction.time = newValueTime;
+        }
       }
 
       this.mousePosJustBefore = posX;
+    }else if (this.sequenceCurrent !== undefined )
+    {
+      const posX = $event.offsetX;
+      const posY = $event.offsetY;
+
+      let index:number|null = this.getTimeLineCorrrepondingTo(posY)
+      if(index==null)
+        return;
+      const newValueTime = this.posToTime(posX);
+      // if (newValueTime > 0 && newValueTime < this.tempsTotal) {
+      //   this.findActionCorrespondingToFrame(this.convertTimeToFrame(newValueTime),index==0)
+      // }
+
+
     }
   }
 
@@ -377,4 +554,67 @@ export class EvaluationService {
     this.mouseDown = false;
     this.mouseDownCursor = false;
   }
+
+  public play(): void {
+    if (this.pauseAction) {
+      this.playForward();
+    } else {
+      this.action.timeScale = 1;
+      this.pauseAction = true;
+      // this.clip.duration = this.action.time;
+      this.action.play();
+      this.action.paused = true;
+
+    }
+  }
+
+  public playForward(): void {
+    this.pauseAction = false;
+    this.action.paused = false;
+    const t = this.action.time;
+    this.action.stop();
+    this.action.time = t;
+    // this.clip.duration = this.tempsTotal;
+    this.action.timeScale = 1;
+    this.action.play();
+  }
+
+  public playBackward(): void {
+    this.pauseAction = false;
+    const t = this.action.time;
+    this.action.stop();
+    this.action.time = t;
+    // this.clip.duration = this.tempsTotal;
+    // this.annotationServ.action.setLoop(THREE.LoopOnce);
+    this.action.timeScale = -1;
+    this.action.play();
+  }
+
+  public stopToStart(): void {
+    this.action.timeScale = 1;
+    this.action.stop();
+    this.action.time = 0;
+    // this.clip.duration = 0;
+    this.action.play();
+    this.action.paused = true;
+    this.pauseAction = true;
+  }
+
+  public stopToEnd(): void {
+    this.action.timeScale = 1;
+    this.action.stop();
+    this.action.time = this.tempsTotal;
+    // this.clip.duration = this.tempsTotal;
+    this.action.play();
+    this.pauseAction = true;
+  }
+
+  public pause(): void {
+    this.pauseAction = true;
+    // this.clip.duration = this.action.time;
+    this.action.play();
+  }
+
+
+
 }

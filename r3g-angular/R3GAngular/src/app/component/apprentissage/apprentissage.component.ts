@@ -39,6 +39,7 @@ export class ApprentissageComponent implements OnInit, AfterViewInit {
     this.modelesList.forEach(elt => {
         if (elt.idM === value) {
           this.modelSelected = elt.idM;
+          this.evall.selectedModel = elt.idM;
         }
       }
     );
