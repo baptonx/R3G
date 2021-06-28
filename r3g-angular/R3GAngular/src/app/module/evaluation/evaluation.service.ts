@@ -591,13 +591,14 @@ export class EvaluationService {
       this.draw();
     }else if (this.sequenceCurrent !== undefined )
     {
-      const posX = $event.offsetX;
-      const posY = $event.offsetY;
-
-      let index:number|null = this.getTimeLineCorrrepondingTo(posY)
-      if(index==null)
-        return;
-      const newValueTime = this.posToTime(posX);
+      // const posX = $event.offsetX;
+      // const posY = $event.offsetY;
+      //
+      //
+      // let index:number|null = this.getTimeLineCorrrepondingTo(posY)
+      // if(index==null)
+      //   return;
+      // const newValueTime = this.posToTime(posX);
       // if (newValueTime > 0 && newValueTime < this.tempsTotal) {
       //   this.findActionCorrespondingToFrame(this.convertTimeToFrame(newValueTime),index==0)
       // }

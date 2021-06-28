@@ -15,7 +15,8 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class EvaluationComponent implements OnInit {
   public lastSeqSquelette: Sequence | undefined;
 
-  public questionerForm: FormGroup | undefined ;
+  // @ts-ignore
+  public questionerForm: FormGroup;
   constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
               public bdd: BddService, public evalServ: EvaluationService) {
     this.evalServ.reset();
