@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {EngineEvaluationSqueletteService} from './engine-evaluation-squelette.service';
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-engine-evaluation-squelette',
@@ -34,5 +35,14 @@ export class EngineEvaluationSqueletteComponent implements OnInit {
   updateTimeScale(event: any): void {
     this.engServ.updateTimeScale(event);
   }
+
+  updateActionTime(event: any): void {
+    this.engServ.updateActionTime(event);
+  }
+
+  updateActionFrame(event: any): void {
+    this.engServ.updateActionFrame(event);
+  }
+
 
 }

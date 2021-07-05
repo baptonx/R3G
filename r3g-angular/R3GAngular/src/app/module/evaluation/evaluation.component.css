@@ -36,3 +36,9 @@ app-navigation-modules{
   background-color: #444444;
   color: white;
 }
+
+.labelTimeFrame{
+  color: white;
+  font-size: large;
+  margin-left: 30%;
+}

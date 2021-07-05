@@ -11,7 +11,7 @@ export class TimelineEvaluationService {
 
   initialize(c: CanvasRenderingContext2D | null): void {
     this.evalServ.ctx = c;
-    this.evalServ.onResize();
+    // this.evalServ.onResize();
   }
   onMouseMove($event: MouseEvent): void {
     this.evalServ.onMouseMove($event);

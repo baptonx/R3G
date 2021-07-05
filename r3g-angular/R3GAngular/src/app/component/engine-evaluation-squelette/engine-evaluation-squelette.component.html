@@ -11,6 +11,14 @@
   <button mat-raised-button (click)="engServ.playForward()">></button>
   <button mat-raised-button (click)="engServ.stopToEnd()">>></button>
   <mat-form-field class="inputActionTime">
+    <mat-label>Time (s) :</mat-label>
+    <input matInput (keyup.enter)="updateActionTime($event)">
+  </mat-form-field>
+  <mat-form-field class="inputActionTime">
+    <mat-label>Time (f) :</mat-label>
+    <input matInput (keyup.enter)="updateActionFrame($event)">
+  </mat-form-field>
+  <mat-form-field class="inputActionTime">
     <mat-label>Size cube :</mat-label>
     <input class="inputTextActionTime" matInput (keyup.enter)="updateSizeCube($event)" value="1">
   </mat-form-field>

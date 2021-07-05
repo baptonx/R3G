@@ -1,6 +1,6 @@
 canvas {
     margin-top: 6em;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    /*margin-left: 50%;*/
+    /*transform: translateX(-50%);*/
     background-color: white;
 }

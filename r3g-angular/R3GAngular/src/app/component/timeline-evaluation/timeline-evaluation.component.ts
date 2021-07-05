@@ -8,13 +8,19 @@ import { TimelineEvaluationService } from './timeline-evaluation.service';
 })
 export class TimelineEvaluationComponent implements OnInit {
 
-  @ViewChild('canvas', { static: true })
+  @ViewChild('canvas', { static: false })
   public canvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(public timelineServ: TimelineEvaluationService) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.timelineServ.initialize(this.canvas.nativeElement.getContext('2d'));
   }
 
+  ngOnInit(): void {
+  }
+
+  Number(value: string) {
+    return Number(value)
+  }
 }

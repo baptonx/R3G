@@ -348,12 +348,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
   public pause(): void {
     this.evaluationServ.pause();
   }
-  updateActionTime(event: any): void {
-    const timeEditText = Number(event.target.value);
-    if (timeEditText >= 0 && timeEditText <= this.evaluationServ.tempsTotal) {
-      this.evaluationServ.action.time = timeEditText;
-    }
-  }
+
 
   updateSizeCube(event: any): void {
     const size = Number(event.target.value);
@@ -409,5 +404,25 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
       average = average + Number(n);
     }
     return average / tab.length;
+  }
+
+  updateActionFrame(event: any): void {
+    const frameEditText = Number(event.target.value);
+    if (frameEditText >= 0 && frameEditText < this.evaluationServ.tabTimeCurrent.length) {
+      let toTime = this.evaluationServ.convertFrameToTime(frameEditText);
+      this.evaluationServ.action.time = toTime;
+      for (const animationAction of this.evaluationServ.actionsVoxel) {
+        animationAction.time = toTime;
+      }
+    }
+  }
+  updateActionTime(event: any): void {
+    const timeEditText = Number(event.target.value);
+    if (timeEditText >= 0 && timeEditText <= this.evaluationServ.tempsTotal) {
+      this.evaluationServ.action.time = timeEditText;
+      for (const animationAction of this.evaluationServ.actionsVoxel) {
+        animationAction.time = timeEditText;
+      }
+    }
   }
 }

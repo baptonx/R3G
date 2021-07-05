@@ -15,8 +15,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class EvaluationComponent implements OnInit {
   public lastSeqSquelette: Sequence | undefined;
 
-  // @ts-ignore
-  public questionerForm: FormGroup;
+  public  questionerForm!: FormGroup;
   constructor(public engineSqueletteService: EngineEvaluationSqueletteService, public serviceSequence: SequencesChargeesService,
               public bdd: BddService, public evalServ: EvaluationService) {
     this.evalServ.reset();
@@ -110,6 +109,42 @@ export class EvaluationComponent implements OnInit {
     for (let i = 0; i < this.evalServ.timelines.length; i++) {
         this.change_timeline_i(vals[i],i);
 
+    }
+  }
+
+  getTime():string {
+    try{
+      return this.evalServ.action.time.toFixed(2);
+
+    }catch (e:any)
+    {
+      // console.log("erreur ",e)
+      return "0";
+    }
+  }
+
+  getFrame():number {
+    try{
+      let time = this.evalServ.action.time;
+      return this.evalServ.convertTimeToFrame(time);
+    }catch (e:any)
+    {
+      // console.log("erreur ",e)
+      return 0;
+    }
+
+
+  }
+
+  getFrameCuDi() {
+    try{
+      let time = this.evalServ.action.time;
+      let frame = this.evalServ.convertTimeToFrame(time);
+      return this.evalServ.convertFrameToFrameCuDi(frame);
+    }catch (e:any)
+    {
+      // console.log("erreur ",e)
+      return 0;
     }
   }
 }

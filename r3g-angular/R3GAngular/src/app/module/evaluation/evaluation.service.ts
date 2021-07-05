@@ -18,7 +18,7 @@ export class EvaluationService {
   public marge!: number;
   public unit!: number;
   public action!: AnimationAction;
-  public actionsVoxel: Array<AnimationAction>=[];
+  public actionsVoxel: Array<AnimationAction> = [];
   public widthCanvas!: number;
   public mouseDownAnnotationRightEdge!: boolean;
   public mouseDownAnnotationLeftEdge!: boolean;
@@ -28,7 +28,7 @@ export class EvaluationService {
   public annotationIA: Array<Eval> = [];
   public classZero = '';
   public modelEval: Array<Set<string>> = []
-  public selectedModel:string = "";
+  public selectedModel: string = "";
   public sequenceCurrent!: Sequence;
   public tabTimeCurrent!: Array<number>;
   public veriteTerrain: string[] = [];
@@ -40,16 +40,16 @@ export class EvaluationService {
   public observableShowSquelette: BehaviorSubject<boolean>;
   public mouseDown!: boolean;
   public mouseDownCursor!: boolean;
-  public heightStd:number = 40
+  public heightStd: number = 40
 
   // Timeline
   public ctx!: CanvasRenderingContext2D | null;
   public pauseAction!: boolean;
-  private posTimelineY: Array<number> ;
+  private posTimelineY: Array<number>;
   public timelines: Array<string>;
   public facteurScale: number;
   public callForUpdateTimeScal: (() => void) | undefined;
-  public anyChange: Boolean=false;
+  public anyChange: Boolean = false;
 
   constructor(private eventManager: EventManager) {
     this.eventManager.addGlobalEventListener('window', 'resize', this.onResize.bind(this));
@@ -63,7 +63,7 @@ export class EvaluationService {
 
     this.observableShowSquelette = new BehaviorSubject<boolean>(this.showSquelette);
     let nbTimeline = 6
-    this.posTimelineY = Array.from(Array(nbTimeline)).map((_, i) => 20 + i * (this.heightStd+5));
+    this.posTimelineY = Array.from(Array(nbTimeline)).map((_, i) => 20 + i * (this.heightStd + 5));
     this.timelines = Array.from(Array(nbTimeline)).map((_, i) => '');
     for (let i = 0; i < nbTimeline; i++) {
       this.modelEval.push(new Set<string>());
@@ -72,7 +72,7 @@ export class EvaluationService {
     }
 
 
-    }
+  }
 
   reset(): void {
   }
@@ -85,7 +85,7 @@ export class EvaluationService {
       //   return;
       //
 
-      this.anyChange=false;
+      this.anyChange = false;
       this.widthCanvas = this.ctx.canvas.width;
       this.unit = (canvas.width - this.margeTimeline * 2) / this.tempsTotal;
 
@@ -112,21 +112,23 @@ export class EvaluationService {
       this.get_verite();
       this.ctx.font = '12px Arial';
 
-      for (let i = 0; i < this.timelines.length ; i++) {
+      for (let i = 0; i < this.timelines.length; i++) {
         if (this.timelines[i] === 'Vérité terrain') {
-          this.draw_tmp(this.posTimelineY[i], true,null);
+          this.draw_tmp(this.posTimelineY[i], true, null);
         } else if (this.timelines[i].includes('Recouvrement')) {
           this.draw_ia_recouvrement(i);
         } else if (this.timelines[i].includes('Classes')) {
-          this.draw_tmp(this.posTimelineY[i],false ,i);
+          this.draw_tmp(this.posTimelineY[i], false, i);
         } else if (this.timelines[i].includes('Brutt')) {
-          this.draw_brut(i,false);
-        }  else if (this.timelines[i].includes('BrutSimplified')) {
-          this.draw_brut(i,true);
-        }  else if (this.timelines[i].includes('Reject')) {
+          this.draw_brut(i, false);
+        } else if (this.timelines[i].includes('BrutSimplified')) {
+          this.draw_brut(i, true);
+        } else if (this.timelines[i].includes('Reject')) {
           this.draw_reject(i);
-        }else if (this.timelines[i].includes('Repeat')) {
+        } else if (this.timelines[i].includes('Repeat')) {
           this.draw_repeat(i);
+        } else if (this.timelines[i].includes('ERDetailed')) {
+          this.draw_ER_detailedResult(i);
         }
 
       }
@@ -139,19 +141,16 @@ export class EvaluationService {
     }
   }
 
-  private drawBorder(ctx:CanvasRenderingContext2D,xPos:number, yPos:number, width:number, height:number, thickness:number = 1)
-  {
-    ctx.fillStyle='#000';
+  private drawBorder(ctx: CanvasRenderingContext2D, xPos: number, yPos: number, width: number, height: number, thickness: number = 1) {
+    ctx.fillStyle = '#0008';
     ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
   }
 
-  public draw_tmp(j: number, GT:boolean,idTimeline:number|null): void {
+  public draw_tmp(j: number, GT: boolean, idTimeline: number | null): void {
     if (this.sequenceCurrent !== undefined) {
       let list = this.sequenceCurrent.listAnnotation;
-      if (! GT)
-      {
-        if(idTimeline==null)
-        {
+      if (!GT) {
+        if (idTimeline == null) {
           alert("idTimeline ne doit pas être null")
           return;
         }
@@ -175,7 +174,7 @@ export class EvaluationService {
 
           const t1 = this.convertFrameToTime(Number(frame1));
           const t2 = this.convertFrameToTime(Number(frame2));
-          this.drawBorder(this.ctx,this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+          this.drawBorder(this.ctx, this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
           const color = localStorage.getItem(name);
           if (color != null) {
             this.ctx.fillStyle = color;
@@ -185,9 +184,16 @@ export class EvaluationService {
           this.ctx.fillRect(this.timeToPos(t1), j, this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
           this.ctx.fillStyle = 'black';
           if (geste !== name && name !== undefined) {
-            this.ctx.fillText(name, this.timeToPos(t1) + 5, j + this.heightStd/2);
+            this.ctx.fillText(name, this.timeToPos(t1) + 5, j + this.heightStd / 2);
             geste = name;
           }
+          const actPoint = an.pointAction;
+          this.ctx.fillStyle = 'white';
+          this.ctx.fillRect(this.timeToPos(this.convertFrameToTime(actPoint)), j + 2, this.timeToPos(this.convertFrameToTime(actPoint+1))-this.timeToPos(this.convertFrameToTime(actPoint)), this.heightStd / 3);
+          this.ctx.fillStyle = 'black';
+          this.ctx.fillRect(this.timeToPos(this.convertFrameToTime(actPoint)), this.heightStd / 3 + j, this.timeToPos(this.convertFrameToTime(actPoint+1))-this.timeToPos(this.convertFrameToTime(actPoint)), this.heightStd / 3);
+          this.ctx.fillStyle = 'red';
+          this.ctx.fillRect(this.timeToPos(this.convertFrameToTime(actPoint)), 2 * this.heightStd / 3 + j - 2, this.timeToPos(this.convertFrameToTime(actPoint+1))-this.timeToPos(this.convertFrameToTime(actPoint)), this.heightStd / 3 - 2);
 
         }
       });
@@ -196,34 +202,34 @@ export class EvaluationService {
 
   public draw_repeat(idTimeline: number): void {
     if (this.sequenceCurrent !== undefined) {
-      let repeat:Array<number>=[] ;
-        if(idTimeline==null)
-        {
-          alert("idTimeline ne doit pas être null")
-          return;
-        }
-        this.annotationIA.forEach(ev => {
-            if (ev.name === this.sequenceCurrent.id) {
-              if (ev.idModel === this.timelines[idTimeline].replace('Repeat ', '')) {
-                // this.modelAnnot[ev.idModel] = ev.annotation;
-                repeat = ev.listRepeat;
-              }
+      let repeat: Array<number> = [];
+      if (idTimeline == null) {
+        alert("idTimeline ne doit pas être null")
+        return;
+      }
+      this.annotationIA.forEach(ev => {
+          if (ev.name === this.sequenceCurrent.id) {
+            if (ev.idModel === this.timelines[idTimeline].replace('Repeat ', '')) {
+              // this.modelAnnot[ev.idModel] = ev.annotation;
+              repeat = ev.listRepeat;
             }
           }
-        );
-        if(repeat.length==0)
-        {
-          alert("No result for this Data")
-          return;
         }
-      let cumulativeSumRepeat:Array<number> = [];
-      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      );
+      if (repeat.length == 0) {
+        alert("No result for this Data")
+        return;
+      }
+      let cumulativeSumRepeat: Array<number> = [];
+      repeat.reduce(function (a, b, i) {
+        return cumulativeSumRepeat[i] = a + b;
+      }, -1)
       let geste = '';
       if (this.ctx !== null && this.ctx !== undefined) {
         let frame1 = 0;
         for (let i = 0; i < cumulativeSumRepeat.length; i++) {
 
-          const name = repeat[i]+"";
+          const name = repeat[i] + "";
           const frame2 = cumulativeSumRepeat[i];
 
 
@@ -231,7 +237,7 @@ export class EvaluationService {
           const t2 = this.convertFrameToTime(Number(frame2));
           // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
           // const color = localStorage.getItem(name);
-          if (i%2==0) {
+          if (i % 2 == 0) {
             this.ctx.fillStyle = "black";
           } else {
             this.ctx.fillStyle = 'white';
@@ -240,10 +246,10 @@ export class EvaluationService {
           this.ctx.font = '10px Arial';
           this.ctx.fillStyle = 'red';
           if (geste !== name && name !== undefined) {
-            this.ctx.fillText(name, this.timeToPos(t1) + 5, this.posTimelineY[idTimeline] + this.heightStd/2);
+            this.ctx.fillText(name, this.timeToPos(t1) + 5, this.posTimelineY[idTimeline] + this.heightStd / 2);
             geste = name;
           }
-          frame1=frame2;
+          frame1 = frame2;
 
         }
       }
@@ -251,54 +257,53 @@ export class EvaluationService {
 
     }
   }
-  public draw_brut(idTimeline:number,simplified:boolean): void {
+
+  public draw_brut(idTimeline: number, simplified: boolean): void {
     if (this.sequenceCurrent !== undefined) {
-      let listPred:Array<string> = [];
-      let repeat : Array<number>= [];
+      let listPred: Array<string> = [];
+      let repeat: Array<number> = [];
 
       this.annotationIA.forEach(ev => {
-            if (ev.name === this.sequenceCurrent.id) {
-              if (ev.idModel === this.timelines[idTimeline].replace('Brutt ', '').replace('BrutSimplified ', '')) {
-                // this.modelAnnot[ev.idModel] = ev.annotation;
-                listPred = ev.brutResultPred;
-                repeat = ev.listRepeat;
-              }
+          if (ev.name === this.sequenceCurrent.id) {
+            if (ev.idModel === this.timelines[idTimeline].replace('Brutt ', '').replace('BrutSimplified ', '')) {
+              // this.modelAnnot[ev.idModel] = ev.annotation;
+              listPred = ev.brutResultPred;
+              repeat = ev.listRepeat;
             }
           }
-        );
-      if (listPred.length==0)
-      {
+        }
+      );
+      if (listPred.length == 0) {
         console.error("list is 0 for result brute pred");
         return;
       }
 
-      if(listPred.length!=repeat.length)
-      {
-        alert("ERREUR list length pred != repeat, pred:"+listPred.length+ " rep :"+repeat.length)
-        return ;
+      if (listPred.length != repeat.length) {
+        alert("ERREUR list length pred != repeat, pred:" + listPred.length + " rep :" + repeat.length)
+        return;
       }
       if (this.ctx === null) {
         return;
       }
-      let cumulativeSumRepeat:Array<number> = [];
-      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      let cumulativeSumRepeat: Array<number> = [];
+      repeat.reduce(function (a, b, i) {
+        return cumulativeSumRepeat[i] = a + b;
+      }, -1)
       let i = 0
-      while (i < listPred.length-1) {
+      while (i < listPred.length - 1) {
         let pred = listPred[i];
         let rep = cumulativeSumRepeat[i]
         let start = this.convertFrameToTime(rep)
-        let end = this.convertFrameToTime(rep+1)
+        let end = this.convertFrameToTime(rep + 1)
 
-        if(simplified)
-        {
-          while (listPred[i+1]===pred && i+1<listPred.length-1)
-          {
-            i+=1
+        if (simplified) {
+          while (listPred[i + 1] === pred && i + 1 < listPred.length - 1) {
+            i += 1
           }
-          end = this.convertFrameToTime(cumulativeSumRepeat[i+1])//end will be i+1
+          end = this.convertFrameToTime(cumulativeSumRepeat[i + 1])//end will be i+1
         }
 
-        this.drawBorder(this.ctx,this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd)
+        this.drawBorder(this.ctx, this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd)
         const color = localStorage.getItem(pred);
         if (color != null) {
           this.ctx.fillStyle = color;
@@ -307,8 +312,8 @@ export class EvaluationService {
         }
         this.ctx.fillRect(this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd);
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText(pred, this.timeToPos(start) + 2, this.posTimelineY[idTimeline] + this.heightStd/2);
-        i+=1;
+        this.ctx.fillText(pred, this.timeToPos(start) + 2, this.posTimelineY[idTimeline] + this.heightStd / 2);
+        i += 1;
       }
     }
   }
@@ -316,9 +321,9 @@ export class EvaluationService {
 
   private draw_reject(idTimeline: number) {
     if (this.sequenceCurrent !== undefined) {
-      let listRej:Array<number> = [];
-      let listPred:Array<string> = [];
-      let repeat : Array<number>= [];
+      let listRej: Array<number> = [];
+      let listPred: Array<string> = [];
+      let repeat: Array<number> = [];
 
       this.annotationIA.forEach(ev => {
           if (ev.name === this.sequenceCurrent.id) {
@@ -331,45 +336,45 @@ export class EvaluationService {
           }
         }
       );
-      if (listRej.length==0)
-      {
+      if (listRej.length == 0) {
         console.error("list is 0 for result brute pred");
         return;
       }
 
-      if(listRej.length!=repeat.length)
-      {
-        alert("ERREUR list length pred != repeat, pred:"+listPred.length+ " rep :"+repeat.length)
-        return ;
+      if (listRej.length != repeat.length) {
+        alert("ERREUR list length pred != repeat, pred:" + listPred.length + " rep :" + repeat.length)
+        return;
       }
       if (this.ctx === null) {
         return;
       }
-      let cumulativeSumRepeat:Array<number> = [];
-      repeat.reduce(function(a,b,i) { return cumulativeSumRepeat[i] = a+b; },-1)
+      let cumulativeSumRepeat: Array<number> = [];
+      repeat.reduce(function (a, b, i) {
+        return cumulativeSumRepeat[i] = a + b;
+      }, -1)
       let offsetY = this.posTimelineY[idTimeline];
-      let pos0 =this.timeToPos(this.convertFrameToTime(0))
+      let pos0 = this.timeToPos(this.convertFrameToTime(0))
       this.ctx.fillStyle = "rgba(250,20,20,0.5)";
-      this.ctx.fillRect(pos0,offsetY+this.heightStd/2,this.timeToPos(this.tempsTotal)-pos0,1)
+      this.ctx.fillRect(pos0, offsetY + this.heightStd / 2, this.timeToPos(this.tempsTotal) - pos0, 1)
       let oldPosX = this.timeToPos(this.convertFrameToTime(cumulativeSumRepeat[0]))
-      let oldPosY= offsetY+this.heightStd
+      let oldPosY = offsetY + this.heightStd
 
-      this.ctx.moveTo(oldPosX,oldPosY)
+      this.ctx.moveTo(oldPosX, oldPosY)
 
       for (let j = 0; j < listRej.length; j++) {
-        let rejI:number = listRej[j];
+        let rejI: number = listRej[j];
         let correspondingFrame = cumulativeSumRepeat[j]
         let correspondingTime = this.convertFrameToTime(correspondingFrame)
         let posX = this.timeToPos(correspondingTime)
 
-        let posY = offsetY+(1-rejI)*this.heightStd;
+        let posY = offsetY + (1 - rejI) * this.heightStd;
         let color;
-        if(j>0)
-           color = localStorage.getItem(listPred[j-1]); //return null if unknown
+        if (j > 0)
+          color = localStorage.getItem(listPred[j - 1]); //return null if unknown
         else
-            color = null
+          color = null
         this.ctx.beginPath();
-        this.ctx.moveTo(oldPosX,oldPosY)
+        this.ctx.moveTo(oldPosX, oldPosY)
         this.ctx.lineTo(posX, posY);
         if (color != null) {
           this.ctx.strokeStyle = color;
@@ -378,16 +383,14 @@ export class EvaluationService {
           this.ctx.strokeStyle = 'black';
         }
         this.ctx.stroke();
-        oldPosX= posX;
-        oldPosY= posY;
+        oldPosX = posX;
+        oldPosY = posY;
 
       }
-
-
     }
   }
 
-  public draw_ia_recouvrement(idTimeline:number): void {
+  public draw_ia_recouvrement(idTimeline: number): void {
     if (this.ctx !== null && this.ctx !== undefined) {
       this.get_ia(idTimeline);
       let tmp = this.gesteIA[idTimeline];
@@ -397,67 +400,121 @@ export class EvaluationService {
       let vraiNegatifRouge = 0;
       let fauxNegatif = 0;
       const nbFrame = this.convertTimeToFrame(Number(this.tempsTotal));
-      if (tmp.length > 0){
-      for (let i = 0; i < this.veriteTerrain.length; i++) {
-        if (Number(i) < nbFrame) {
-          const t1 = this.convertFrameToTime(Number(i));
-          const t2 = this.convertFrameToTime(Number(i + 1));
-          if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
-            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
-            this.ctx.fillStyle = 'green';
-            vraiPositif++;
-            this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
-            this.ctx.fillStyle = 'black';
-          } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
-            && tmp[i] === this.classZero) {
-            // console.log(this.veriteTerrain[i]);
-            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
-            this.ctx.fillStyle = 'lightgray';
-            fauxNegatif++;
-            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
-            this.ctx.fillStyle = 'black';
-          } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
-            && tmp[i] !== this.classZero) {
-            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
-            this.ctx.fillStyle = 'red';
-            vraiNegatifRouge++;
-            // this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
-            this.ctx.fillStyle = 'black';
-          } else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero) {
-            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
-            this.ctx.fillStyle = 'orange';
-            vraiNegatifOrange++;
-            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
-            this.ctx.fillStyle = 'black';
-          } else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
-            // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
-            this.ctx.fillStyle = 'lightgreen';
-            fauxPositif++;
-            this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
-            this.ctx.fillStyle = 'black';
+      if (tmp.length > 0) {
+        for (let i = 0; i < this.veriteTerrain.length; i++) {
+          if (Number(i) < nbFrame) {
+            const t1 = this.convertFrameToTime(Number(i));
+            const t2 = this.convertFrameToTime(Number(i + 1));
+            if (this.veriteTerrain[i] === tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero) {
+              // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+              this.ctx.fillStyle = 'green';
+              vraiPositif++;
+              this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+              this.ctx.fillStyle = 'black';
+            } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined
+              && tmp[i] === this.classZero) {
+              // console.log(this.veriteTerrain[i]);
+              // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+              this.ctx.fillStyle = 'lightgray';
+              fauxNegatif++;
+              this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+              this.ctx.fillStyle = 'black';
+            } else if (this.veriteTerrain[i] !== tmp[i] && this.veriteTerrain[i] !== undefined && this.veriteTerrain[i] !== this.classZero
+              && tmp[i] !== this.classZero) {
+              // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+              this.ctx.fillStyle = 'red';
+              vraiNegatifRouge++;
+              // this.ctx.fillRect(this.timeToPos(t1),  this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+              this.ctx.fillStyle = 'black';
+            } else if (this.veriteTerrain[i] === undefined && tmp[i] !== this.classZero) {
+              // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+              this.ctx.fillStyle = 'orange';
+              vraiNegatifOrange++;
+              this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+              this.ctx.fillStyle = 'black';
+            } else if (this.veriteTerrain[i] === undefined && tmp[i] === this.classZero) {
+              // this.drawBorder(this.ctx,this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd)
+              this.ctx.fillStyle = 'lightgreen';
+              fauxPositif++;
+              this.ctx.fillRect(this.timeToPos(t1), this.posTimelineY[idTimeline], this.timeToPos(t2) - this.timeToPos(t1), this.heightStd);
+              this.ctx.fillStyle = 'black';
+            }
           }
         }
+        const pourcentage1 = (vraiPositif / nbFrame * 100).toFixed(2);
+        const pourcentage2 = (fauxPositif / nbFrame * 100).toFixed(2);
+        const pourcentage4 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
+        const pourcentage3 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
+        const pourcentage5 = (fauxNegatif / nbFrame * 100).toFixed(2);
+        let yVal = this.posTimelineY[this.posTimelineY.length - 1];
+        console.log("yVal", yVal)
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = 'black';
+        this.underline('green', 'Vrai Positif : ' + pourcentage1 + '%', 200, yVal);
+        this.underline('lightgreen', 'Vrai Négatif : ' + pourcentage2 + '%', 400, yVal);
+        this.underline('red', 'Faux Positif sur actions : ' + pourcentage3 + '%', 600, yVal);
+        this.underline('orange', 'Faux Positif sur geste 0 : ' + pourcentage4 + '%', 800, yVal);
+        this.underline('lightgray', 'Faux Négatif : ' + pourcentage5 + '%', 1000, yVal);
       }
-      const pourcentage1 = (vraiPositif / nbFrame * 100).toFixed(2);
-      const pourcentage2 = (fauxPositif / nbFrame * 100).toFixed(2);
-      const pourcentage4 = (vraiNegatifOrange / nbFrame * 100).toFixed(2);
-      const pourcentage3 = (vraiNegatifRouge / nbFrame * 100).toFixed(2);
-      const pourcentage5 = (fauxNegatif / nbFrame * 100).toFixed(2);
-      let yVal = this.posTimelineY[this.posTimelineY.length-1];
-      console.log("yVal",yVal)
-      this.ctx.font = '12px Arial';
-      this.ctx.fillStyle = 'black';
-      this.underline('green', 'Vrai Positif : ' + pourcentage1 + '%', 200, yVal);
-      this.underline('lightgreen', 'Vrai Négatif : ' + pourcentage2 + '%', 400, yVal);
-      this.underline('red', 'Faux Positif sur actions : ' + pourcentage3 + '%', 600, yVal);
-      this.underline('orange', 'Faux Positif sur geste 0 : ' + pourcentage4 + '%', 800, yVal);
-      this.underline('lightgray', 'Faux Négatif : ' + pourcentage5 + '%', 1000, yVal);
+
     }
-
-  }
   }
 
-  public underline(color: string, text: string, x: number, y: number): void{
+  public draw_ER_detailedResult(idTimeline: number): void {
+    if (this.sequenceCurrent !== undefined) {
+      let detailResult: Array<Array<number>> = []
+      let actionsPoint: Array<number> = this.sequenceCurrent.listAnnotation.map<number>(v => v.pointAction);
+
+      this.annotationIA.forEach(ev => {
+          if (ev.name === this.sequenceCurrent.id) {
+            if (ev.idModel === this.timelines[idTimeline].replace('ERDetailed ', '')) {
+              // this.modelAnnot[ev.idModel] = ev.annotation;
+              detailResult = ev.detailResults;
+            }
+          }
+        }
+      );
+      if (actionsPoint.length != detailResult.length) {
+        console.error("AIE AIE AIE, detail results does not correponds to the number of actionPoint");
+        return;
+      }
+
+      if (this.ctx === null) {
+        return;
+      }
+
+      for (let i = 0; i < detailResult.length; i++) {
+        let actPointFrame = actionsPoint[i];
+        let listOfFrameForThisActPoint = detailResult[i];
+
+        for (let f = 0; f < listOfFrameForThisActPoint.length; f++) {
+          let res: number = listOfFrameForThisActPoint[f];
+          //   -5 : the corresponding frame is before the action start
+          //   -4 : the corresponding frame is not an action (0)
+          //  -3 : no CuDi frame in this ratio
+          //   -2 : FP or FN
+          //   -1 : no starts found between action start and observed frame
+          //   0  : Reject prediction
+          //   1  : TP
+          let colors = ["white", "#FFA", "#AAA", "red", "AAF", "777", "green"]
+          let indexFrame = listOfFrameForThisActPoint.length - f - 1 // 25
+          let start = actPointFrame - indexFrame;
+          let time = this.convertFrameToTime(start)
+          let timeEnd = this.convertFrameToTime(start + 1)
+
+          this.ctx.fillStyle = colors[res + 5];
+          // this.drawBorder(this.ctx,this.timeToPos(start), this.posTimelineY[idTimeline], this.timeToPos(end) - this.timeToPos(start), this.heightStd)
+          this.ctx.fillRect(this.timeToPos(time), this.posTimelineY[idTimeline], this.timeToPos(timeEnd) - this.timeToPos(time), this.heightStd);
+          this.ctx.font = '9px Arial';
+          this.ctx.fillStyle = 'black';
+          this.ctx.fillText("-" + indexFrame, this.timeToPos(time), this.posTimelineY[idTimeline] + this.heightStd);
+        }
+
+      }
+    }
+  }
+
+  public underline(color: string, text: string, x: number, y: number): void {
     if (this.ctx !== null && this.ctx !== undefined) {
       const metrics = this.ctx.measureText(text);
       this.ctx.save();
@@ -561,12 +618,13 @@ export class EvaluationService {
     const posCursor = this.timeToPos(this.action.time);
     return (posCursor - this.cursorSize < posX) && (posCursor + this.cursorSize > posX);
   }
+
   public getTimeLineCorrrepondingTo(posY: number) {
-    if (this.posTimelineY==null)
-      return null  ;
+    if (this.posTimelineY == null)
+      return null;
     for (let i = this.posTimelineY.length; i >= 0; i--) {
-      let posIM1:number = this.posTimelineY[i];
-      if(posY>=posIM1)
+      let posIM1: number = this.posTimelineY[i];
+      if (posY >= posIM1)
         return i
     }
     return null;
@@ -589,8 +647,7 @@ export class EvaluationService {
 
       this.mousePosJustBefore = posX;
       this.draw();
-    }else if (this.sequenceCurrent !== undefined )
-    {
+    } else if (this.sequenceCurrent !== undefined) {
       // const posX = $event.offsetX;
       // const posY = $event.offsetY;
       //
@@ -619,6 +676,7 @@ export class EvaluationService {
       this.mouseDownCursor = true;
     }
   }
+
   onMouseUp(event: MouseEvent): void {
     this.mouseDown = false;
     this.mouseDownCursor = false;
@@ -679,6 +737,7 @@ export class EvaluationService {
     }
   }
 
+
   public stopToStart(): void {
     this.action.timeScale = 1;
     this.action.stop();
@@ -724,7 +783,36 @@ export class EvaluationService {
 
 
   refreshAlsoVoxelization() {
-      if(this.callForUpdateTimeScal!==undefined)
-        this.callForUpdateTimeScal();
+    if (this.callForUpdateTimeScal !== undefined)
+      this.callForUpdateTimeScal();
+  }
+
+  convertFrameToFrameCuDi(frame: number) {
+    if (this.sequenceCurrent !== undefined) {
+      let repeat: Array<number> = [];
+
+      this.annotationIA.forEach(ev => {
+          if (ev.name === this.sequenceCurrent.id) {
+            if (ev.idModel === this.selectedModel) {
+              repeat = ev.listRepeat;
+            }
+          }
+        }
+      );
+
+      let cumulativeSumRepeat: Array<number> = [];
+      repeat.reduce(function (a, b, i) {
+        return cumulativeSumRepeat[i] = a + b;
+      }, -1)
+
+      for (let i = 1; i < cumulativeSumRepeat.length; i++) {
+        const numberM1 = cumulativeSumRepeat[i - 1];
+        const number = cumulativeSumRepeat[i];
+        if (numberM1 <= frame && frame <= number) {
+          return i;
+        }
+      }
+    }
+    return 0
   }
 }
