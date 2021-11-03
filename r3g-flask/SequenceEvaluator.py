@@ -50,12 +50,26 @@ voxels = []
 config = loadConfig()
 dimensionsOutputImage = np.array(list(config["dimensionImage"]))
 thresholdCuDi = config["thresholdCuDi"]
-thresholdToleranceCuDi = config["thresholdToleranceCuDi"]
+thresholdToleranceCuDi = config["toleranceMoveThreshold"]
 thresholdToleranceDrawing = config["thresholdToleranceDrawing"]
 jointsSelected = config["jointSelection"]
 device: str = config["device"]
 nbSkeleton = config["nbSkeleton"]
 morph: Morphology = MorphologyGetter.getMorphologyFromDeviceName(device)
+device:str = DBinfos["device"]
+morph: Morphology = MorphologyGetter.getMorphologyFromDeviceName(device)
+voxelized : Tuple[np.ndarray,List[int]]
+
+if nbSkeleton==1 :
+    voxelizer = MapperIdVoxelizer.map1sq(idVoxelisation,dimensionsOutputImage,toleranceMoveThreshold,
+                                                                    thresholdCuDi,thresholdToleranceDrawing,
+                                                                    jointsSelected)
+    voxelizationGesture,numberPosturePerSegment =voxelizer.voxelizeTrajectories(gesture.postures1)
+else:
+    voxelizer = MapperIdVoxelizer.map2sq(idVoxelisation,dimensionsOutputImage,toleranceMoveThreshold,
+                                                                    thresholdCuDi,thresholdToleranceDrawing,
+                                                                    jointsSelected)
+    voxelizationGesture,numberPosturePerSegment = voxelizer.voxelizeTrajectories(gesture.postures1,gesture.postures2)
 
 if nbSkeleton == 2:
     voxelizer = Voxelizer2sqCWMSoupler_CuDi_JointsAsVector_SkId(dimensionsOutputImage, thresholdToleranceCuDi,

@@ -51,6 +51,17 @@ export class SingleFilterComponent implements OnInit {
     this.changeName.emit();
   }
 
+  public majNameSingleFilterCustom(operandeInput:string,operateurInput:string,resultInput:string): void {
+    this.nameSingleFilter = this.isFirstFilter ? '' : ' ' + this.andOr + ' ';
+    this.nameSingleFilter +=operandeInput
+      + ' ' + operateurInput
+      + ' ' + resultInput;
+    this.operandeInput.nativeElement.value =operandeInput;
+    this.operateurInput.nativeElement.value = operateurInput;
+    this.resultInput.nativeElement.value = resultInput;
+    this.changeName.emit();
+  }
+
   // Filtre le nom des noms recommandes
   private _filter(value: string, options: string[]): string[] {
     const filterValue = value.toLowerCase();

@@ -26,7 +26,8 @@ export class EvaluationComponent implements OnInit {
         Repeat: new FormControl(),
         Brutt: new FormControl(),
         BrutSimplified: new FormControl(),
-        Reject: new FormControl(),
+        RejectConf: new FormControl(),
+        RejectDist: new FormControl(),
         Result: new FormControl(),
       });
     });
@@ -95,7 +96,8 @@ export class EvaluationComponent implements OnInit {
       'Repeat '+this.evalServ.selectedModel,
        'Brutt '+this.evalServ.selectedModel,
       'BrutSimplified '+this.evalServ.selectedModel,
-      'Reject '+this.evalServ.selectedModel,
+      'RejectConf '+this.evalServ.selectedModel,
+      'RejectDist '+this.evalServ.selectedModel,
       'Classes '+this.evalServ.selectedModel,
     ]
     this.questionerForm.setValue({
@@ -103,7 +105,8 @@ export class EvaluationComponent implements OnInit {
       Repeat: vals[1],
       Brutt: vals[2],
       BrutSimplified: vals[3],
-      Reject: vals[4],
+      RejectConf: vals[4],
+      RejectDist: vals[4],
       Result: vals[5],
     });
     for (let i = 0; i < this.evalServ.timelines.length; i++) {

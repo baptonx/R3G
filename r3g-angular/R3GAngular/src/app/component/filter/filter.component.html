@@ -1,4 +1,6 @@
 <!--       value="{{operandeInput.value + ' ' + operateurInput.value + ' ' + resultInput.value}}"-->
+<textarea #sequencesNames class = "w100" type="text" placeholder="Noms des sequences séparées par des virgules" (change)="sequencesFilterCalled()"></textarea>
+
 <input #nomFiltreInput class = "w100" type="text"
        placeholder="Nom du filtre"
        value="{{nameFilter}}"

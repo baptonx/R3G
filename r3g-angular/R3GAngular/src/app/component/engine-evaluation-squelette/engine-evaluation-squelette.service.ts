@@ -51,9 +51,9 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
     if (!refresh && canvas !== undefined) {
       this.canvas = canvas.nativeElement;
     }
-    this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: true});
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, alpha: true, antialias: false});
+    this.renderer.shadowMap.enabled = false;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // this.sequenceCurrent = Array.from(this.sequencesChargeesService.sequences.values())[0];
 
@@ -143,7 +143,7 @@ export class EngineEvaluationSqueletteService implements OnDestroy {
 
         const clock = new Clock();
         return (rect: DOMRect) => {
-          this.evaluationServ.draw();
+          // this.evaluationServ.draw();
           const delta = clock.getDelta();
           mixer.update(delta);
           camera.aspect = rect.width / rect.height;

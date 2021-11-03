@@ -142,7 +142,7 @@ export class EngineEvaluationService implements OnDestroy {
                 for (let l = 0; l < this.traceVoxel.length; l++) {
                   if (this.traceVoxel[l][k][j][i]===1) {
                     found=true
-                    console.log("FOUND")
+                    // console.log("FOUND")
                     break;
                   }
                 }
@@ -174,7 +174,7 @@ export class EngineEvaluationService implements OnDestroy {
                   let value = this.traceVoxel[temps][x][y][z];
                   let valueP1 = this.traceVoxel[temps+1][x][y][z];
                   if (value !== lastTime_Value || value!==valueP1) { //https://stackoverflow.com/questions/40434314/threejs-animationclip-example-needed
-                  //probleme d'interpolation,ça interpole doucement
+                  //probleme d'interpolation,ça interpole doucement résolut avec value!==valueP1
                     tabTemps.push(this.evalService.convertFrameToTime(cumulativeSumRepeat[temps])/ this.evalService.facteurScale);
                     if (value === 0) {
                       tabColor.push(1);

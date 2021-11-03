@@ -9,6 +9,7 @@ import {SingleFilterComponent} from '../single-filter/single-filter.component';
   styleUrls: ['./filter.component.css']
 })
 export class FilterComponent implements OnInit {
+  @ViewChild('sequencesNames') sequencesNames!: ElementRef;
   @ViewChild('nomFiltreInput') nomFiltreInput!: ElementRef;
   // Tableau de boolean binde dans le template html avec les components SingleFiltres. Le booleen indique si c'est le premier filtre ou non.
   filters: boolean[] = [true];
@@ -63,5 +64,21 @@ export class FilterComponent implements OnInit {
       i++;
     }
     this.nameFilter = name;
+  }
+
+  sequencesFilterCalled() {
+    if(this.childrenFilters==undefined || this.childrenFilters.get(this.childrenFilters.length-1) ==undefined)
+      return
+    let text:string = this.sequencesNames.nativeElement.value;
+    let seqs = text.split(",");
+    for (let i = 0; i < seqs.length; i++) {
+      this.addSingleFilter();
+      let j = i;
+      setTimeout(() => {
+        // @ts-ignore
+        this.childrenFilters.get(j).majNameSingleFilterCustom("id","contient",seqs[i])
+      }, 50);
+
+    }
   }
 }

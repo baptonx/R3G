@@ -1,26 +1,43 @@
-<?xml version='1.0' encoding = 'utf-8'?>
-<ink xmlns='http://www.w3.org/2003/InkML'>
+<?xml version='1.0' encoding='UTF-8'?>
+<ink xmlns="http://www.w3.org/2003/InkML">
 	<traceFormat>
-		<channel name='X' type='decimal'/>
-		<channel name='Y' type='decimal'/>
-		<channel name='Z' type='decimal'/>
-		<channel name='T' type='decimal'/>
+		<channel name="X" type="decimal" />
+		<channel name="Y" type="decimal" />
+		<channel name="Z" type="decimal" />
+		<channel name="T" type="decimal" />
 	</traceFormat>
-	<annotationXML type='sensor'>
-		<annotation type='sensorModel'>KinectV2</annotation>
+	<annotationXML type="sensor">
+		<annotation type="sensorModel">KinectV2</annotation>
 	</annotationXML>
-	<annotationXML type='user'>
-		<annotation type='lastName'>James​</annotation>
-		<annotation type='firstName'>Lebron​</annotation>
-		<annotation type='age'>30</annotation>
-		<annotation type='weight'>183</annotation>
-		<annotation type='size'>72</annotation>
-		<annotation type='hand'>right</annotation>
-		<annotation type='userId'>c83bc0a11c854736a2b3ab33be70f80d</annotation>
+	<annotationXML type="user">
+		<annotation type="lastName">James​</annotation>
+		<annotation type="firstName">Lebron​</annotation>
+		<annotation type="age">30</annotation>
+		<annotation type="weight">183</annotation>
+		<annotation type="size">72</annotation>
+		<annotation type="hand">right</annotation>
+		<annotation type="userId">c83bc0a11c854736a2b3ab33be70f80d</annotation>
 	</annotationXML>
-	<annotationXML type='directive'>
-		<annotation type='gesture'>Fortnite</annotation>
-		<annotation type='gesture'>James Celebration</annotation>
+	<unit>
+		<annotationXML type="actions">
+			<annotation type="type">test1</annotation>
+			<annotation type="start">13</annotation>
+			<annotation type="end">41</annotation>
+		</annotationXML>
+		<annotationXML type="actions">
+			<annotation type="type">test1</annotation>
+			<annotation type="start">54</annotation>
+			<annotation type="end">81</annotation>
+		</annotationXML>
+		<annotationXML type="actions">
+			<annotation type="type">test1</annotation>
+			<annotation type="start">99</annotation>
+			<annotation type="end">118</annotation>
+		</annotationXML>
+	</unit>
+	<annotationXML type="directive">
+		<annotation type="gesture">Fortnite</annotation>
+		<annotation type="gesture">James Celebration</annotation>
 	</annotationXML>
 	<traceGroup>
 		<trace>

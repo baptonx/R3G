@@ -24,7 +24,7 @@
         </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Affichage timeline 2</mat-label>
-            <mat-select formControlName="Repeat" (valueChange)="change_timeline_i($event,1)">
+            <mat-select formControlName="RejectConf" (valueChange)="change_timeline_i($event,1)">
               <mat-option *ngFor="let an of evalServ.modelEval[1]" [value]="an" >
                 {{an}}
               </mat-option>
@@ -34,7 +34,7 @@
       <div>
         <mat-form-field appearance="fill">
           <mat-label>Affichage timeline 3</mat-label>
-          <mat-select formControlName="Brutt" (valueChange)="change_timeline_i($event,2)">
+          <mat-select formControlName="RejectDist" (valueChange)="change_timeline_i($event,2)">
             <mat-option *ngFor="let an of evalServ.modelEval[2]" [value]="an" >
               {{an}}
             </mat-option>
@@ -53,7 +53,7 @@
       <div>
         <mat-form-field appearance="fill">
           <mat-label>Affichage timeline 5</mat-label>
-          <mat-select formControlName="Reject" (valueChange)="change_timeline_i($event,4)">
+          <mat-select formControlName="Result " (valueChange)="change_timeline_i($event,4)">
             <mat-option *ngFor="let an of evalServ.modelEval[4]" [value]="an" >
               {{an}}
             </mat-option>
@@ -68,6 +68,18 @@
           </mat-select>
         </mat-form-field>
       </div>
+
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Affichage timeline 7</mat-label>
+            <mat-select formControlName="Result" (valueChange)="change_timeline_i($event,6)">
+              <mat-option *ngFor="let an of evalServ.modelEval[6]" [value]="an" >
+                {{an}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
       </form>
     </div>
 </div>

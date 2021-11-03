@@ -23,11 +23,13 @@
 			<annotation type="type">Fortnite</annotation>
 			<annotation type="start">1</annotation>
 			<annotation type="end">83</annotation>
+			<annotation type="ActionPoint">15</annotation>
 		</annotationXML>
 		<annotationXML type="actions">
 			<annotation type="type">James Celebration</annotation>
 			<annotation type="start">85</annotation>
 			<annotation type="end">207</annotation>
+			<annotation type="ActionPoint">100</annotation>
 		</annotationXML>
 	</unit>
 	<annotationXML type="directive">
