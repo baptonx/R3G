@@ -1,3 +1,9 @@
+# Recognition of 3D gestures - Projet commun INSA / IRISA
+
+Ce projet est une collaboration entre William Mocaër, doctorant à l'IRISA et un groupe d'étudiants de l'INSA Rennes. La présentation du projet est disponible sur la page web de R3G disponible à l'adresse suivante : https://projets-info.insa-rennes.fr/
+
+# Consignes d'installation
+
 L'utilisateur doit cloner le dépôt git pour utiliser la suite logicielle R3G.
 
 ## Installation manuelle (utilisation de WSL ou de Linux recommandée)
